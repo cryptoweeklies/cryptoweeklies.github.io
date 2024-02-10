@@ -1,2 +1,2 @@
-# cryptoweeklies.github.io
+# cryptoweeklies
 Crypto forecast using AI
