@@ -21,7 +21,7 @@ Disclaimer: Forecasts are not financial advice. The are the output of our AI mod
 <body>
     <div class="container">
         <div class="header">
-            <h1>Your Project Name</h1>
+            <h1>Crypto Forecasts</h1>
         </div>
 
         <div class="menu">
