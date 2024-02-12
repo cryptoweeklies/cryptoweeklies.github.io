@@ -33,16 +33,20 @@ Disclaimer: Forecasts are not financial advice. The are the output of our AI mod
         <div class="main-content">
             <h2 id="section1">Section 1</h2>
             <p>Your content goes here...</p>
+            <p>For Chainlink's (LINK) Forecast for 2024: <a href="https://cryptoweeklies.com/LINK_figure%20(1).html">Click here</a></p>
+            <p>Table: <a href="https://cryptoweeklies.com/LINK_Table.html">Click here</a></p>
 
             <h2 id="section2">Section 2</h2>
             <p>More content...</p>
+            <p>For RONIN's (RON-USD) Forecast for 2024: <a href="https://cryptoweeklies.com/RONIN_figure.html">Click here</a></p>
+            <p>Table: <a href="https://cryptoweeklies.com/RONIN_Table.html">Click here</a></p>
 
             <h2 id="section3">Section 3</h2>
             <p>Even more content...</p>
         </div>
 
         <div class="footer">
-            <p>© 2024 Your Project | Made with ❤️</p>
+            <p>© 2024 Crypto Weeklies | Made with ❤️</p>
         </div>
     </div>
 </body>
