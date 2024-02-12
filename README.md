@@ -6,3 +6,5 @@ Table: [Click here](https://cryptoweeklies.com/LINK_Table.html)
 
 For RONIN's (RON-USD) Forecast for 2024: [Click here](https://cryptoweeklies.com/RONIN_figure.html)
 Table: [Click here](https://cryptoweeklies.com/RONIN_Table.html)
+
+Disclaimer: Forecasts are not financial advice. The are the output of our AI model.
