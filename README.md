@@ -40,9 +40,6 @@ Disclaimer: Forecasts are not financial advice. The are the output of our AI mod
 </head>
 <body>
 
-    # Your Project
-
-![Project Logo](https://drive.google.com/file/d/1Guo--qx6GyBNxMk_BZAzjfkHE4uGtlLJ/view?usp=sharing)
     <div class="container">
         <div class="header">
             <h1>Crypto Forecasts</h1>
