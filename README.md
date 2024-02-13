@@ -20,8 +20,29 @@ Disclaimer: Forecasts are not financial advice. The are the output of our AI mod
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>Crypto Forecasts</title>
+     <style>
+        body {
+            background-color: black; /* Set the background color to black */
+            color: white; /* Set text color to white for better visibility */
+        }
+        table {
+            background-color: black; /* Set the background color of the table to black */
+            color: white; /* Set text color in the table to white */
+            width: 100%; /* Make the table take the full width of the container */
+            border-collapse: collapse; /* Collapse borders for a cleaner look */
+        }
+        th, td {
+            border: 1px solid white; /* Set border color for table cells */
+            padding: 8px; /* Add padding for better spacing */
+            text-align: left; /* Align text to the left */
+        }
+    </style>
 </head>
 <body>
+
+    # Your Project
+
+![Project Logo](https://drive.google.com/file/d/1Guo--qx6GyBNxMk_BZAzjfkHE4uGtlLJ/view?usp=sharing)
     <div class="container">
         <div class="header">
             <h1>Crypto Forecasts</h1>
