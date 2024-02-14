@@ -3,6 +3,9 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
+Bitcoin (BTC) Forecast: [Graph](https://cryptoweeklies.com/BTC_figure.html)&
+[Table](https://cryptoweeklies.com/BTC_Table.html)
+
 Chainlink's (LINK) Forecast: [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html)&
 [Table](https://cryptoweeklies.com/LINK_Table.html)
 
@@ -25,7 +28,9 @@ RONIN's (RON-USD) Forecast: [Click here](https://cryptoweeklies.com/RONIN_figure
 Disclaimer: Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
 # For Questions: cryptoweeklies@gmail.com
 # About me: Data Scientist worked at most FAANG firms. Avid crypto lover.
-          <p>© 2024 Crypto Weeklies | Made with ❤️</p>
+<p>© 2024 Crypto Weeklies | Made with ❤️</p>
+
+
 # Undeveloped section (Please ignore)
 
 
