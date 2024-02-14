@@ -3,20 +3,21 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
-Chainlink's (LINK) Forecast: [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html)
+Chainlink's (LINK) Forecast: [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html)&
 [Table](https://cryptoweeklies.com/LINK_Table.html)
 
-Cardano (ADA) Forecast: [Graph](https://cryptoweeklies.com/ADA_figure.html)
+Cardano (ADA) Forecast: [Graph](https://cryptoweeklies.com/ADA_figure.html)&
 [Table](https://cryptoweeklies.com/ADA_Table.html)
 
 # Top 100 Crypto (Outside top 20)
 
-Ethereum Classic(ETC) Forecast:[Graph](https://cryptoweeklies.com/ETC_figure.html)
+Ethereum Classic(ETC) Forecast:[Graph](https://cryptoweeklies.com/ETC_figure.html)&
 [Table](https://cryptoweeklies.com/ETC_Table.html)
-Stacks (STX) Forecast: [Graph](https://cryptoweeklies.com/Stacks_figure.html)
+
+Stacks (STX) Forecast: [Graph](https://cryptoweeklies.com/Stacks_figure.html)&
 [Table](https://cryptoweeklies.com/Stacks_Table.html)
 
-RONIN's (RON-USD) Forecast: [Click here](https://cryptoweeklies.com/RONIN_figure.html)
+RONIN's (RON-USD) Forecast: [Click here](https://cryptoweeklies.com/RONIN_figure.html)&
 [Table](https://cryptoweeklies.com/RONIN_Table.html)
 
 # Out of Top 100 Crypto (Degen Plays)
