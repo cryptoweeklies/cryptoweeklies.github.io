@@ -10,13 +10,10 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 | --------------- | -------------- | -------------- |
 | Bitcoin (BTC)  | [Graph](https://cryptoweeklies.com/BTC_figure.html) | [Table](https://cryptoweeklies.com/BTC_Table.html) |
 | Chainlink (LINK) | [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html) | [Table](https://cryptoweeklies.com/LINK_Table.html) |
-| Cardano (ADA) | [Graph](https://cryptoweeklies.com/ADA_figure.html) | [Table](https://cryptoweeklies.com/ADA_Table.html) |
-<style>
+| Cardano (ADA) | [Graph](https://cryptoweeklies.com/ADA_figure.html) | [Table](https://cryptoweeklies.com/ADA_Table.html) |<style>
   table {
     background-color: black;
     color: white;
-    width: 100%;
-    border-collapse: collapse;
   }
   th, td {
     border: 1px solid white;
@@ -24,6 +21,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     text-align: left;
   }
 </style>
+
 
 # Top 100 Crypto (Outside top 20)
 
@@ -36,8 +34,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
   table {
     background-color: black;
     color: white;
-    width: 100%;
-    border-collapse: collapse;
   }
   th, td {
     border: 1px solid white;
@@ -45,6 +41,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     text-align: left;
   }
 </style>
+
 
 
 # Out of Top 100 Crypto (Degen Plays)
