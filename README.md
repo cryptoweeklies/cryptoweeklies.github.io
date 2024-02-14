@@ -74,9 +74,7 @@ Disclaimer: Forecasts are not financial advice. They are the output of our AI mo
 
 
 
-# Undeveloped section (Please ignore)
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
