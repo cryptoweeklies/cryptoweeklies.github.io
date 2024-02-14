@@ -16,7 +16,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 | ----------------------- | ------------------------------------------------ | ------------------------------------------------ |
 | Ethereum Classic (ETC)  | [Graph](https://cryptoweeklies.com/ETC_figure.html) | [Table](https://cryptoweeklies.com/ETC_Table.html) |
 | Stacks (STX)            | [Graph](https://cryptoweeklies.com/Stacks_figure.html) | [Table](https://cryptoweeklies.com/Stacks_Table.html) |
-| RONIN's (RON-USD)       | [Graph](https://cryptoweeklies.com/RONIN_figure.html) | [Table](https://cryptoweeklies.com/RONIN_Table.html) |
+| Ronin (RON-USD)       | [Graph](https://cryptoweeklies.com/RONIN_figure.html) | [Table](https://cryptoweeklies.com/RONIN_Table.html) |
 
 
 # Out of Top 100 Crypto (Degen Plays)
