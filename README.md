@@ -25,8 +25,15 @@ RONIN's (RON-USD) Forecast: [Click here](https://cryptoweeklies.com/RONIN_figure
 Disclaimer: Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
 # For Questions: cryptoweeklies@gmail.com
 # About me: Data Scientist worked at most FAANG firms. Avid crypto lover.
-  <p>© 2024 Crypto Weeklies | Made with ❤️</p>
+          <p>© 2024 Crypto Weeklies | Made with ❤️</p>
 # Undeveloped section (Please ignore)
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
