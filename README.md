@@ -67,7 +67,10 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 Disclaimer: Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
 # For Questions: cryptoweeklies@gmail.com
 # About me: Data Scientist worked at most FAANG firms. Avid crypto lover.
-<p>© 2024 Crypto Weeklies | Made with ❤️</p>
+
+        <div class="footer">
+            <p>© 2024 Crypto Weeklies | Made with ❤️</p>
+        </div>
 
 
 # Undeveloped section (Please ignore)
