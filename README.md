@@ -69,7 +69,7 @@ Disclaimer: Forecasts are not financial advice. They are the output of our AI mo
 # About me: Data Scientist worked at most FAANG firms. Avid crypto lover.
 
      
-            <p>© 2024 Crypto Weeklies | Made with ❤️</p>
+   <p>© 2024 Crypto Weeklies | Made with ❤️</p>
      
 
 
