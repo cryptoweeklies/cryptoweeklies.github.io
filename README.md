@@ -6,7 +6,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
-<style>
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
