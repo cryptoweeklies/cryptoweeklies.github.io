@@ -6,11 +6,23 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
+<style>
+  table {
+    color: black;
+    background-color: black;
+  }
+
+  th, td {
+    color: black;
+  }
+</style>
+
 | Cryptocurrency | Forecast Graph | Forecast Table |
 | --------------- | -------------- | -------------- |
-| Bitcoin (BTC)   | <span style="color: black;">[Graph](https://cryptoweeklies.com/BTC_figure.html)</span> | <span style="color: black;">[Table](https://cryptoweeklies.com/BTC_Table.html)</span> |
-| Chainlink (LINK)| <span style="color: black;">[Graph](https://cryptoweeklies.com/LINK_figure%20(1).html)</span> | <span style="color: black;">[Table](https://cryptoweeklies.com/LINK_Table.html)</span> |
-| Cardano (ADA)   | <span style="color: black;">[Graph](https://cryptoweeklies.com/ADA_figure.html)</span> | <span style="color: black;">[Table](https://cryptoweeklies.com/ADA_Table.html)</span> |
+| Bitcoin (BTC)   | [Graph](https://cryptoweeklies.com/BTC_figure.html) | [Table](https://cryptoweeklies.com/BTC_Table.html) |
+| Chainlink (LINK)| [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html) | [Table](https://cryptoweeklies.com/LINK_Table.html) |
+| Cardano (ADA)   | [Graph](https://cryptoweeklies.com/ADA_figure.html) | [Table](https://cryptoweeklies.com/ADA_Table.html) |
+
 
 
 # Top 100 Crypto (Outside top 20)
