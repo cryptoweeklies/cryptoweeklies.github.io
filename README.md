@@ -4,7 +4,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png)
 
 
-# Top 20 Cryptos by market cap (not an exhaustive list) 
+# Top 20 Cryptos by market cap (not an exhausstive list) 
 
 <style>
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
