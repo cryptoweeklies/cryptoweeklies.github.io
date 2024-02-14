@@ -1,6 +1,9 @@
 # Crypto Forecasts by Cryptoweeklies
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
+![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png)
+
+
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
 | Cryptocurrency | Forecast Graph | Forecast Table |
