@@ -11,7 +11,9 @@ Cardano (ADA) Forecast: [Graph](https://cryptoweeklies.com/ADA_figure.html)
 
 # Top 100 Crypto (Outside top 20)
 
-Stacks (STX) Forecast [Graph](https://cryptoweeklies.com/Stacks_figure.html)
+Ethereum Classic(ETC) Forecast:[Graph](https://cryptoweeklies.com/ETC_figure.html)
+[Table](https://cryptoweeklies.com/ETC_Table.html)
+Stacks (STX) Forecast: [Graph](https://cryptoweeklies.com/Stacks_figure.html)
 [Table](https://cryptoweeklies.com/Stacks_Table.html)
 
 RONIN's (RON-USD) Forecast: [Click here](https://cryptoweeklies.com/RONIN_figure.html)
@@ -20,8 +22,8 @@ RONIN's (RON-USD) Forecast: [Click here](https://cryptoweeklies.com/RONIN_figure
 # Out of Top 100 Crypto (Degen Plays)
 
 Disclaimer: Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
-For Questions: cryptoweeklies@gmail.com
-About me: Data Scientist worked at most FAANG firms. Avid crypto lover.
+# For Questions: cryptoweeklies@gmail.com
+# About me: Data Scientist worked at most FAANG firms. Avid crypto lover.
   <p>© 2024 Crypto Weeklies | Made with ❤️</p>
 # Undeveloped section (Please ignore)
 <!DOCTYPE html>
