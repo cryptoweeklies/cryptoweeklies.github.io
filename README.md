@@ -29,8 +29,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Table.html">Table</a></td>
   </tr>
 </table>
-
-
 | Cryptocurrency | Forecast Graph | Forecast Table |
 | --------------- | -------------- | -------------- |
 | Bitcoin (BTC)   | [Graph](https://cryptoweeklies.com/BTC_figure.html) | [Table](https://cryptoweeklies.com/BTC_Table.html) |
