@@ -29,21 +29,33 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Table.html">Table</a></td>
   </tr>
 </table>
-| Cryptocurrency | Forecast Graph | Forecast Table |
-| --------------- | -------------- | -------------- |
-| Bitcoin (BTC)   | [Graph](https://cryptoweeklies.com/BTC_figure.html) | [Table](https://cryptoweeklies.com/BTC_Table.html) |
-| Chainlink (LINK)| [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html) | [Table](https://cryptoweeklies.com/LINK_Table.html) |
-| Cardano (ADA)   | [Graph](https://cryptoweeklies.com/ADA_figure.html) | [Table](https://cryptoweeklies.com/ADA_Table.html) |
-
 
 
 # Top 100 Crypto (Outside top 20)
 
-| Cryptocurrency         | Forecast Graph                                   | Forecast Table                                   |
-| ----------------------- | ------------------------------------------------ | ------------------------------------------------ |
-| Ethereum Classic (ETC)  | [Graph](https://cryptoweeklies.com/ETC_figure.html) | [Table](https://cryptoweeklies.com/ETC_Table.html) |
-| Stacks (STX)            | [Graph](https://cryptoweeklies.com/Stacks_figure.html) | [Table](https://cryptoweeklies.com/Stacks_Table.html) |
-| Ronin (RON-USD)       | [Graph](https://cryptoweeklies.com/RONIN_figure.html) | [Table](https://cryptoweeklies.com/RONIN_Table.html) |
+<table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
+  <tr>
+    <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
+    <th style="color: black; border: 1px solid white;">Forecast Graph</th>
+    <th style="color: black; border: 1px solid white;">Forecast Table</th>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Ethereum Classic (ETC)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Stacks (STX)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Ronin (RON-USD)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_Table.html">Table</a></td>
+  </tr>
+</table>
+
 
 
 # Out of Top 100 Crypto (Degen Plays)
