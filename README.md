@@ -1,18 +1,26 @@
-# cryptoweeklies
-Crypto forecast using AI
+# Crypto Forecasts by Cryptoweeklies
+Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
-Chainlink's (LINK) Forecast for 2024: [Click here](https://cryptoweeklies.com/LINK_figure%20(1).html)
-Table: [Click here](https://cryptoweeklies.com/LINK_Table.html)
+# Top 20 Cryptos
+
+Chainlink's (LINK) Forecast: [Graph](https://cryptoweeklies.com/LINK_figure%20(1).html)
+[Table](https://cryptoweeklies.com/LINK_Table.html)
+
+Cardano (ADA) Forecast: [Graph](https://cryptoweeklies.com/ADA_figure.html)
+[Table](https://cryptoweeklies.com/ADA_Table.html)
+
+# Top 100 Crypto
+
+Stacks (STX) Forecast [Graph](https://cryptoweeklies.com/Stacks_figure.html)
+[Table](https://cryptoweeklies.com/Stacks_Table.html)
 
 RONIN's (RON-USD) Forecast for 2024: [Click here](https://cryptoweeklies.com/RONIN_figure.html)
 Table: [Click here](https://cryptoweeklies.com/RONIN_Table.html)
 
-Cardano (ADA) Forecast: [Click here](https://cryptoweeklies.com/ADA_figure.html)
-Table:[Click here](https://cryptoweeklies.com/ADA_Table.html)
 
 Disclaimer: Forecasts are not financial advice. The are the output of our AI model.
 
-
+# Undeveloped section (Please ignore)
 <!DOCTYPE html>
 <html lang="en">
 <head>
