@@ -7,15 +7,29 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
 <style>
-  table {
-    color: black;
-    background-color: black;
-  }
+  <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
+  <tr>
+    <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
+    <th style="color: black; border: 1px solid white;">Forecast Graph</th>
+    <th style="color: black; border: 1px solid white;">Forecast Table</th>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Chainlink (LINK)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_figure%20(1).html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Cardano (ADA)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Table.html">Table</a></td>
+  </tr>
+</table>
 
-  th, td {
-    color: black;
-  }
-</style>
 
 | Cryptocurrency | Forecast Graph | Forecast Table |
 | --------------- | -------------- | -------------- |
