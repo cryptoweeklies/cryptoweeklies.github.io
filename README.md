@@ -9,7 +9,7 @@ Chainlink's (LINK) Forecast: [Graph](https://cryptoweeklies.com/LINK_figure%20(1
 Cardano (ADA) Forecast: [Graph](https://cryptoweeklies.com/ADA_figure.html)
 [Table](https://cryptoweeklies.com/ADA_Table.html)
 
-# Top 100 Crypto
+# Top 100 Crypto (Outside top 20)
 
 Stacks (STX) Forecast [Graph](https://cryptoweeklies.com/Stacks_figure.html)
 [Table](https://cryptoweeklies.com/Stacks_Table.html)
