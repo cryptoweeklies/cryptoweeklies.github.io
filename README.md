@@ -59,9 +59,14 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_Table.html">Table</a></td>
   </tr>
   <tr>
-    <td style="color: black; border: 1px solid white;">Ronin (RON-USD)</td>
+    <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_Table.html">Table</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">VeChain (VET)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_Table.html">Table</a></td>
   </tr>
 </table>
 
@@ -78,6 +83,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">DOT/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Table.html">Table</a></td>
+  </tr>
+ <tr>
+    <td style="color: black; border: 1px solid white;">VET/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_Table.html">Table</a></td>
   </tr>
 </table>
 
