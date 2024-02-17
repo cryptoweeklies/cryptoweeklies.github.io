@@ -8,7 +8,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
         <li><a href="#top-20-cryptos">Top 20 Cryptos</a></li>
         <li><a href="#top-100-crypto">Top 100 Crypto</a></li>
         <li><a href="#crypto-pairs">Crypto Pairs</a></li>
-        <li><a href="#out-of-top-100-crypto">Out of Top 100 Crypto</a></li>
+        <li><a href="#out-of-top-100-crypto">Exotic Cryptos</a></li>
         <li><a href="#disclaimer">Disclaimer</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="#about-me">About Me</a></li>
