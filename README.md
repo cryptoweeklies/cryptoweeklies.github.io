@@ -2,7 +2,18 @@
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png)
-
+<nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#top-20-cryptos">Top 20 Cryptos</a></li>
+        <li><a href="#top-100-crypto">Top 100 Crypto</a></li>
+        <li><a href="#crypto-pairs">Crypto Pairs</a></li>
+        <li><a href="#out-of-top-100-crypto">Out of Top 100 Crypto</a></li>
+        <li><a href="#disclaimer">Disclaimer</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#about-me">About Me</a></li>
+    </ul>
+</nav>
 
 # Top 20 Cryptos by market cap (not an exhaustive list) 
 
@@ -143,3 +154,14 @@ Disclaimer: Forecasts are not financial advice. They are the output of our AI mo
     </style>
 </head>
 <body>
+
+
+[Home](#crypto-forecasts-by-cryptoweeklies)
+[Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)
+[Top 100 Crypto](#top-100-crypto-outside-top-20)
+[Crypto Pairs](#crypto-pairs)
+[Out of Top 100 Crypto](#out-of-top-100-crypto-degen-plays)
+[Disclaimer](#disclaimer)
+[Contact](#for-questions-cryptoweekliesgmailcom)
+[About Me](#about-me)
+
