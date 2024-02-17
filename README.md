@@ -106,7 +106,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
   </tr>
 
 Disclaimer: Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
-#For Questions: [cryptoweeklies@gmail.com](mailto:cryptoweeklies@gmail.com)
+# For Questions: [cryptoweeklies@gmail.com](mailto:cryptoweeklies@gmail.com)
 
 # About me: *Data Scientist. Worked at multiple FAANG firms. Avid crypto lover.*
 
