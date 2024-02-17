@@ -1,15 +1,15 @@
 # Crypto Forecasts by Cryptoweeklies
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
-![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png)
-[Home](#crypto-forecasts-by-cryptoweeklies)
-[Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)
-[Top 100 Crypto](#top-100-crypto-outside-top-20)
-[Crypto Pairs](#crypto-pairs)
-[Out of Top 100 Crypto](#out-of-top-100-crypto-degen-plays)
-[Disclaimer](#disclaimer)
-[Contact](#for-questions-cryptoweekliesgmailcom)
-[About Me](#about-me)
+![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
+
+- [Home](#crypto-forecasts-by-cryptoweeklies)
+- [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)
+- [Top 100 Crypto](#top-100-crypto-outside-top-20)
+- [Crypto Pairs](#crypto-pairs)
+- [Exotic Cryptos](#out-of-top-100-crypto-degen-plays)
+
+
 # Crypto Forecasts by Cryptoweeklies
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
