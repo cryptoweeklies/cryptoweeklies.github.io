@@ -93,10 +93,22 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 # Out of Top 100 Crypto (Degen Plays)
 
+<table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
+  <tr>
+    <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
+    <th style="color: black; border: 1px solid white;">Forecast Graph</th>
+    <th style="color: black; border: 1px solid white;">Forecast Table</th>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Livepeer (LPT)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_Table.html">Table</a></td>
+  </tr>
+
 Disclaimer: Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
 #For Questions: [cryptoweeklies@gmail.com](mailto:cryptoweeklies@gmail.com)
 
-# About me: *Data Scientist worked at most FAANG firms. Avid crypto lover.*
+# About me: *Data Scientist. Worked at multiple FAANG firms. Avid crypto lover.*
 
 
      
