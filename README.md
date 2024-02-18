@@ -101,6 +101,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_ETH_Table.html">Table</a></td>
   </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/ATOM </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ATOM_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ATOM_Table.html">Table</a></td>
+  </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">VET/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_figure.html">Graph</a></td>
