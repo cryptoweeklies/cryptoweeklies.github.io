@@ -55,6 +55,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
   </tr>
+ <tr>
+    <td style="color: black; border: 1px solid white;">Cosmos (ATOM)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_Table.html">Table</a></td>
+  </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum Classic (ETC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_figure.html">Graph</a></td>
@@ -90,6 +95,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">DOT/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ATOM/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_ETH_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_ETH_Table.html">Table</a></td>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">VET/ETH </td>
