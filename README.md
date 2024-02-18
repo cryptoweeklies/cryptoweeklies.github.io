@@ -131,21 +131,6 @@ Forecasts are not financial advice. They are the output of our AI model with 1 s
 ## About Me
 *Data Scientist. Worked at multiple FAANG firms. Avid crypto lover.*
 
-<nav>
-    <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#top-20-cryptos">Top 20 Cryptos</a></li>
-        <li><a href="#top-100-crypto">Top 100 Crypto</a></li>
-        <li><a href="#crypto-pairs">Crypto Pairs</a></li>
-        <li><a href="#out-of-top-100-crypto">Exotic Cryptos</a></li>
-        <li><a href="#disclaimer">Disclaimer</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#about-me">About Me</a></li>
-    </ul>
-</nav>
-
-
-
 
      
    <p>© 2024 Crypto Weeklies | Made with ❤️</p>
