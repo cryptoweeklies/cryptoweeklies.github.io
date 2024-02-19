@@ -4,7 +4,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
- [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays)
+# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays)
 
 
 
@@ -78,6 +78,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_Table.html">Table</a></td>
   </tr>
+ <tr>
+    <td style="color: black; border: 1px solid white;">Fetch.ai (FET)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_Table.html">Table</a></td>
+  </tr>
 </table>
 
 
@@ -109,6 +114,17 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_Table.html">Table</a></td>
   </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">FET/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_ETH_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_ETH_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/FET </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FET_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FET_Table.html">Table</a></td>
+  </tr>
+ <tr>
 </table>
 
 
