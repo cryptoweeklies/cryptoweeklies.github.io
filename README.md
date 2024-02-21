@@ -115,7 +115,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_ETH_Table.html">Table</a></td>
   </tr>
   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/FET </td>
+    <td style="color: black; border: 1px solid white;">ETH/MATIC </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_Table.html">Table</a></td>
   </tr>
