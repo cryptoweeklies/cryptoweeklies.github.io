@@ -88,6 +88,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Render (RNDR)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Table.html">Table</a></td>
+  </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">Fetch.ai (FET)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_figure.html">Graph</a></td>
@@ -143,6 +148,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">VET/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/RNDR </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">FET/ETH </td>
