@@ -48,6 +48,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Table.html">Table</a></td>
   </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Uniswap (UNI)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Table.html">Table</a></td>
+  </tr>
 </table>
 
 
@@ -128,6 +133,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/MATIC </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/UNI </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_UNI_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_UNI_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">ATOM/ETH </td>
