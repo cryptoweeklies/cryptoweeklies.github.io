@@ -179,6 +179,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_JASMY_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_JASMY_Table.html">Table</a></td>
   </tr>
+ <tr>
+    <td style="color: black; border: 1px solid white;">ETH/COTI </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_COTI_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_COTI_Table.html">Table</a></td>
+  </tr>
 </table>
 
 
@@ -194,6 +199,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">COTI (COTI)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COTI_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COTI_Table.html">Table</a></td>
+  </tr> 
 </table>
 
 ## Disclaimer
