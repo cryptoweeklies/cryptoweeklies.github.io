@@ -28,6 +28,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Table.html">Table</a></td>
   </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Table.html">Table</a></td>
+  </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">XRP (XRP)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_figure.html">Graph</a></td>
@@ -124,6 +129,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
   </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/SOL </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_SOL_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_SOL_Table.html">Table</a></td>
+  </tr> 
    <tr>
     <td style="color: black; border: 1px solid white;">ETH/XRP </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XRP_figure.html">Graph</a></td>
@@ -222,7 +232,7 @@ Forecasts are not financial advice. They are the output of our AI model with 1 s
 ## For Questions: [cryptoweeklies@gmail.com](mailto:cryptoweeklies@gmail.com)
 
 ## About Me
-*Data Scientist. Worked at multiple FAANG firms. Avid crypto lover.*
+*Data Scientist - AI Developer, ML-Based Forecaster. Worked at multiple FAANG firms. Avid crypto lover.*
 
 
      
