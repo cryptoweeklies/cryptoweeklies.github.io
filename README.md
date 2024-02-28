@@ -1,4 +1,4 @@
-# Crypto Forecasts by Cryptoweeklies
+ Crypto Forecasts by Cryptoweeklies
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
