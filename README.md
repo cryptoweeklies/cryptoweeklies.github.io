@@ -4,7 +4,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) -[Crypto Heatmap](https://github.com/cryptoweeklies/cryptoweeklies.github.io/blob/main/figure%20(1).png)
+# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) -[Crypto Heatmap](https://cryptoweeklies.com/figure%20(1).png)
 
 
 
