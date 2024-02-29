@@ -44,7 +44,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Table.html">Table</a></td>
   </tr>
    <tr>
-    <td style="color: black; border: 1px solid white;">Dogecoin (Dogecoin)</td>
+    <td style="color: black; border: 1px solid white;">Dogecoin (DOGE)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Table.html">Table</a></td>
   </tr>
