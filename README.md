@@ -43,6 +43,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Dogecoin (Dogecoin)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Table.html">Table</a></td>
+  </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Chainlink (LINK)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_figure%20(1).html">Graph</a></td>
@@ -143,6 +148,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/XRP </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XRP_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XRP_Table.html">Table</a></td>
+  </tr> 
+     <tr>
+    <td style="color: black; border: 1px solid white;">ETH/DOGE </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_DOGE_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_DOGE_Table.html">Table</a></td>
   </tr> 
   <tr>
     <td style="color: black; border: 1px solid white;">DOT/ETH </td>
