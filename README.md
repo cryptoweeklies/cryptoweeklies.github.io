@@ -29,6 +29,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Table.html">Table</a></td>
   </tr>
   <tr>
+    <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Table.html">Table</a></td>
+  </tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Table.html">Table</a></td>
@@ -139,6 +144,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ETH/BNB </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BNB_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BNB_Table.html">Table</a></td>
+  </tr> 
   <tr>
     <td style="color: black; border: 1px solid white;">ETH/SOL </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_SOL_figure.html">Graph</a></td>
