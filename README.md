@@ -103,6 +103,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Hedera (HBAR)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Table.html">Table</a></td>
+  </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
@@ -199,6 +204,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FIL_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FIL_ETH_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ETH/HBAR </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_HBAR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_HBAR_Table.html">Table</a></td>
+  </tr> 
  <tr>
     <td style="color: black; border: 1px solid white;">VET/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_figure.html">Graph</a></td>
