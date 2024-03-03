@@ -123,7 +123,12 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Table.html">Table</a></td>
   </tr>
-     <tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Algorand (ALGO)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_Table.html">Table</a></td>
+  </tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Arweave (AR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_Table.html">Table</a></td>
@@ -219,7 +224,12 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_Table.html">Table</a></td>
   </tr>
-    <tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ETH/ALGO </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ALGO_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ALGO_Table.html">Table</a></td>
+  </tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">ETH/AR </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AR_Table.html">Table</a></td>
