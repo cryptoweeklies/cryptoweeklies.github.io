@@ -108,11 +108,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Table.html">Table</a></td>
   </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_Table.html">Table</a></td>
-  </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">VeChain (VET)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_figure.html">Graph</a></td>
@@ -132,6 +127,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">Arweave (AR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_Table.html">Table</a></td>
+  </tr>
+<tr>
+    <td style="color: black; border: 1px solid white;">Fantom (FTM)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FTM_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FTM_Table.html">Table</a></td>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">Fetch.ai (FET)</td>
@@ -234,6 +234,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AR_Table.html">Table</a></td>
   </tr>
+ <tr>
+    <td style="color: black; border: 1px solid white;">ETH/FTM </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FTM_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FTM_Table.html">Table</a></td>
+  </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">FET/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_ETH_figure.html">Graph</a></td>
@@ -263,6 +268,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Livepeer (LPT)</td>
