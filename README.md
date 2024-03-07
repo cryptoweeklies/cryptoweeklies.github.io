@@ -84,6 +84,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
   </tr>
  <tr>
+    <td style="color: black; border: 1px solid white;">NEAR Protocol (NEAR)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/NEAR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/NEAR_Table.html">Table</a></td>
+  </tr>
+ <tr>
     <td style="color: black; border: 1px solid white;">Cosmos (ATOM)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_Table.html">Table</a></td>
@@ -203,6 +208,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/UNI </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_UNI_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_UNI_Table.html">Table</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ETH/NEAR </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_NEAR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_NEAR_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">ATOM/ETH </td>
