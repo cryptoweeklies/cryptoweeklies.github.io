@@ -284,6 +284,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_JASMY_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_JASMY_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ETH/OSMO </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_OSMO_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_OSMO_Table.html">Table</a></td>
+  </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">ETH/COTI </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_COTI_figure.html">Graph</a></td>
@@ -303,6 +308,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_Table.html">Table</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Osmosis (OSMO)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OSMO_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OSMO_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Livepeer (LPT)</td>
