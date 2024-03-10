@@ -158,6 +158,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_Table.html">Table</a></td>
   </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Akash Network (AKT)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AKT_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AKT_Table.html">Table</a></td>
+  </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">JasmyCoin (JASMY)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/JASMY_figure.html">Graph</a></td>
@@ -288,6 +293,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/QNT </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_QNT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_QNT_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/AKT </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AKT_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AKT_Table.html">Table</a></td>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">ETH/JASMY </td>
