@@ -4,7 +4,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) - [Crypto Heatmap](https://cryptoweeklies.com/Heatmap.html) - [Market Highlights](https://cryptoweeklies.com/Market%20Highlights.html) - [Sentiment](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html)
+# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) - [Crypto Heatmap](https://cryptoweeklies.com/Heatmap.html) - [Market Highlights](https://cryptoweeklies.com/Market%20Highlights.html) - [Sentiment](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(1).html)
 
 
 
@@ -67,6 +67,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">Polkadot (DOT)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_Table.html">Table</a></td>
+  </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Toncoin (TON)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON_Table.html">Table</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Polygon (MATIC)</td>
@@ -213,6 +218,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">DOT/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Table.html">Table</a></td>
+  </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">ETH/TON </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_TON_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_TON_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">MATIC/ETH </td>
