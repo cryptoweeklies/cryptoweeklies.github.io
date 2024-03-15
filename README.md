@@ -4,7 +4,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) - [Crypto Heatmap](https://cryptoweeklies.com/Heatmap.html) - [Market Highlights](https://cryptoweeklies.com/Market%20Highlights.html) - [Sentiment](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(1).html)
+# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) - [Crypto Heatmap](https://cryptoweeklies.com/Heatmap.html) - [Market Highlights](https://cryptoweeklies.com/Market%20Highlights.html) - [Sentiment](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(2).html)
 
 ## Top 20 Cryptos by market cap (not an exhaustive list)
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -118,6 +118,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Stacks_Table.html">Table</a></td>
   </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Render (RNDR)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Table.html">Table</a></td>
+  </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Hedera (HBAR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_figure.html">Graph</a></td>
@@ -133,10 +138,10 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/THETA_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/THETA_Table.html">Table</a></td>
   </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">Render (RNDR)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Table.html">Table</a></td>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Maker (MKR)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MKR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MKR_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Algorand (ALGO)</td>
@@ -273,6 +278,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/THETA </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_THETA_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_THETA_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/MKR </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MKR_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MKR_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">ETH/RNDR </td>
