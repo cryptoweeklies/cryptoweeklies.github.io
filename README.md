@@ -4,7 +4,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) - [Crypto Heatmap](https://cryptoweeklies.com/Heatmap.html) - [Market Highlights](https://cryptoweeklies.com/Market%20Highlights.html) - [Sentiment](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(2).html)
+# - [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [Top 100 Crypto](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic Cryptos](#out-of-top-100-crypto-degen-plays) - [Crypto Heatmap](https://cryptoweeklies.com/Heatmap.html) - [Market Highlights](https://cryptoweeklies.com/Market%20Highlights.html) - [Sentiment](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(3).html)
 
 ## Top 20 Cryptos by market cap (not an exhaustive list)
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -122,6 +122,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">Render (RNDR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Table.html">Table</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">Injective (INJ)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_Table.html">Table</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Hedera (HBAR)</td>
@@ -288,6 +293,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/RNDR </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/INJ </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_INJ_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_INJ_Table.html">Table</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">ETH/ALGO </td>
