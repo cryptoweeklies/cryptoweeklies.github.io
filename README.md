@@ -1,3 +1,4 @@
+<meta name="google-site-verification" content="7MD-ZQWv2tv9toy64K2q1upVIKI9MtSHtV40HnQpeks" />
 # Crypto Forecasts by Cryptoweeklies
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 
