@@ -76,6 +76,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Table.html">Table</a></td>
   </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Internet Computer (ICP)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_Table.html">Table</a></td>
+  </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Uniswap (UNI)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_figure.html">Graph</a></td>
@@ -256,6 +261,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
     <td style="color: black; border: 1px solid white;">ETH/MATIC </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_Table.html">Table</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/ICP </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ICP_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ICP_Table.html">Table</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">ETH/UNI </td>
