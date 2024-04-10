@@ -1,15 +1,15 @@
 <meta name="google-site-verification" content="7MD-ZQWv2tv9toy64K2q1upVIKI9MtSHtV40HnQpeks" />
-# Crypto Forecasts by Cryptoweeklies
-Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
+# Crypto Analytics & Forecasts
+Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indicators to assist your Crypto journey.
 
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
 # Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-crypto-degen-plays)
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(27).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(17).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(12).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(9).html) - [CryptoRetirer](https://cryptoweeklies.com/btc_prices_combined%20(8).html)
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(28).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(18).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(13).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(9).html) - [CryptoRetirer](https://cryptoweeklies.com/btc_prices_combined%20(8).html)
 
-## Top 20 Cryptos by market cap (not an exhaustive list)
+## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
@@ -445,7 +445,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS.
 </table>
 
 
-## Out of Top 100 Crypto (Degen Plays)
+## Out of Top 100 Crypto (Exotic)
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
