@@ -21,13 +21,13 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined%20(40).html">CAGR</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined%20(40).html">CAGR Model</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Table.html">Table</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined%20(1).html">CAGR</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined%20(1).html">CAGR Model</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
