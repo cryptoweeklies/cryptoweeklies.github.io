@@ -7,7 +7,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 
 # Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-crypto-degen-plays)
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(28).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(18).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(13).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(9).html) - [CryptoRetirer](https://cryptoweeklies.com/btc_prices_combined%20(40).html)
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(29).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(19).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(14).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(10).html) - [CryptoRetirer](https://cryptoweeklies.com/btc_prices_combined%20(40).html)
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -15,16 +15,19 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
+    <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined%20(40).html">CAGR</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined%20(1).html">CAGR</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
