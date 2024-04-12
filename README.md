@@ -7,7 +7,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 
 # Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-crypto-degen-plays)
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(29).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(19).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(14).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(10).html) 
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(30).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(20).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(15).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(11).html) 
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -38,6 +38,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_prices_combined.html">CAGR Model</a></td>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">XRP (XRP)</td>
