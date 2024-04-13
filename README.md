@@ -16,12 +16,14 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
+    <th style="color: black; border: 1px solid white;">MVRV Z-Score</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined%20(40).html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bitcoin_mvrv_z_score%20(12).html">Discernment</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
