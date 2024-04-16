@@ -7,7 +7,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 
 # Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-crypto-degen-plays)
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(33).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(23).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(18).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(13).html) 
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(34).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text%20(24).html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores%20(19).html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud%20(14).html) 
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -17,6 +17,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
     <th style="color: black; border: 1px solid white;">MVRV Z-Score</th>
+    <th style="color: black; border: 1px solid white;">HeatBands</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
@@ -24,6 +25,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined%20(40).html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bitcoin_mvrv_z_score%20(12).html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Log_Reg (5).html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
@@ -98,6 +100,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Uniswap (UNI)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Uniswap_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Log_Reg (1).html">Regression</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Litecoin (LTC)</td>
