@@ -25,8 +25,8 @@ Out of Top 100 Crypto (Exotic)
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined.html">CAGR Model</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bitcoin_mvrv_z_score%20(12).html">Discernment</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Log_Reg (5).html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bitcoin_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
@@ -106,7 +106,7 @@ Out of Top 100 Crypto (Exotic)
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNddI_Table.html">NA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Uniswap_mvrv_z_score.html">Discernment</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Log_Reg (1).html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Log_Reg.html">Regression</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Litecoin (LTC)</td>
