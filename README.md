@@ -5,9 +5,10 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-crypto-degen-plays)
+# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-crypto-(Exotic))
+Out of Top 100 Crypto (Exotic)
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis%20(35).html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) 
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) 
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -23,7 +24,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Table.html">Table</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined%20(40).html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bitcoin_mvrv_z_score%20(12).html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Log_Reg (5).html">Regression</a></td>
   </tr>
@@ -31,7 +32,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Table.html">Table</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined%20(1).html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined.html">CAGR Model</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
