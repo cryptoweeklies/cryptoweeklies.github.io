@@ -5,8 +5,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap-not-an-exhaustive-list)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#Out-of-top-100-crypto-(Exotic))
-  
+# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-Crypto-exotic)
+
 
 # Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) 
 
@@ -474,6 +474,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
+    <th style="color: black; border: 1px solid white;">MVRV Z-Score</th>
+    <th style="color: black; border: 1px solid white;">HeatBands</th>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
@@ -509,6 +511,13 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Ampleforth Governance Token (FORTH)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_Table.html">Table</a></td>
+  </tr> 
+   <tr>
+    <td style="color: black; border: 1px solid white;">DIA (DIA)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Log_Reg.html">Regression</a></td>
   </tr> 
 </table>
 
