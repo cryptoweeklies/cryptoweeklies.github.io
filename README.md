@@ -5,10 +5,10 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 ![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
 
 
-# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#out-of-top-100-Crypto-exotic)
+# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#Exotic)
 
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) 
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) - [HeatMap](https://cryptoweeklies.com/combined_crypto_heatmaps.html)
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -468,7 +468,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 </table>
 
 
-## Out of Top 100 Crypto (Exotic)
+## Exotic
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
