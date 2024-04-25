@@ -17,7 +17,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
-    <th style="color: black; border: 1px solid white;">MVRV Z-Score</th>
+    <th style="color: black; border: 1px solid white;">CryptoEval</th>
     <th style="color: black; border: 1px solid white;">HeatBands</th>
   </tr>
   <tr>
@@ -128,6 +128,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
+    <th style="color: black; border: 1px solid white;">CryptoEval</th>
+    <th style="color: black; border: 1px solid white;">HeatBands</th>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">NEAR Protocol (NEAR)</td>
@@ -178,6 +180,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Hedera (HBAR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">The Graph (GRT)</td>
