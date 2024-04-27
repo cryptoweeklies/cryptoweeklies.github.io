@@ -63,6 +63,14 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Table.html">Table</a></td>
   </tr>
      <tr>
+    <td style="color: black; border: 1px solid white;">Shiba Inu (SHIB)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_prices_combined.html">NA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_Log_Reg.html">Regression</a></td>
+  </tr>
+     <tr>
     <td style="color: black; border: 1px solid white;">Avalanche (AVAX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_Table.html">Table</a></td>
