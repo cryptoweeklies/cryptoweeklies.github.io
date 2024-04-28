@@ -8,7 +8,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
 # Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#exotic)
 
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) - [HeatMap](https://cryptoweeklies.com/combined_crypto_heatmaps.html) -[PortfolioBuilder](https://cryptoweeklies.com/optimal_portfolio_c.html)
+# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) - [HeatMap](https://cryptoweeklies.com/combined_crypto_heatmaps.html) -[PortfolioBuilder](https://cryptoweeklies.com/combined_portfolio_allocation.html)
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
