@@ -226,6 +226,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Arweave (AR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_Log_Reg.html">Regression</a></td>
   </tr>
 <tr>
     <td style="color: black; border: 1px solid white;">Fantom (FTM)</td>
