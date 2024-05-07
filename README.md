@@ -40,6 +40,9 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
