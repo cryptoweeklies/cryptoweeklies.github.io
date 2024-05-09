@@ -2,7 +2,7 @@
 # Crypto Analytics & Forecasts
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indicators to assist your Crypto journey.
 
-![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="50%" width="50%"}
+![Cryptoweeklies Logo](cryptoweeklies_logo_v8.png){:height="25%" width="25%"}
 
 
 # Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	  - [Crypto Pairs](#crypto-pairs)	  - [Exotic](#exotic)
@@ -545,6 +545,12 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_Table.html">Table</a></td>
   </tr> 
+  <tr>
+    <td style="color: black; border: 1px solid white;">Tellor (TRB)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRB_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRB_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRB_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRB_Log_Reg.html">Regression</a></td>
    <tr>
     <td style="color: black; border: 1px solid white;">DIA (DIA)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_figure.html">Graph</a></td>
