@@ -72,7 +72,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Dogecoin (DOGE)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Table.html">Table</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_prices_combined.html">NA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Log_Reg.html">Regression</a></td>
   </tr>
