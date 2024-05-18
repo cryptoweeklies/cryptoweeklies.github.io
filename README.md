@@ -150,6 +150,9 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Litecoin (LTC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Log_Reg.html">Regression</a></td>
   </tr>
 </table>
 
