@@ -120,6 +120,9 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Toncoin (TON)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_Log_Reg.html">Regression</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Polygon (MATIC)</td>
