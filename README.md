@@ -256,6 +256,12 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_Table.html">Table</a></td>
   </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">AAVE (AAVE)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_Log_Reg.html">Regression</a></td>
   <tr>
     <td style="color: black; border: 1px solid white;">Arweave (AR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_figure.html">Graph</a></td>
