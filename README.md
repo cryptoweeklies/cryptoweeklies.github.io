@@ -255,6 +255,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Algorand (ALGO)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_Log_Reg.html">Regression</a></td>
   </tr>
     <tr>
     <td style="color: black; border: 1px solid white;">AAVE (AAVE)</td>
