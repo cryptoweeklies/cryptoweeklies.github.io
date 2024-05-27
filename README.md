@@ -76,7 +76,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Log_Reg.html">Regression</a></td>
   </tr>
-     <tr>
+   <tr>
     <td style="color: black; border: 1px solid white;">Shiba Inu (SHIB)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_Table.html">Table</a></td>
@@ -131,7 +131,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Log_Reg.html">Regression</a></td>
-     
   </tr>
     <tr>
     <td style="color: black; border: 1px solid white;">Internet Computer (ICP)</td>
@@ -158,7 +157,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Log_Reg.html">Regression</a></td>
   </tr>
 </table>
-
 
 ## Top 100 Crypto (Outside top 20)
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
@@ -309,6 +307,13 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">AIOZ Network (AIOZ)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_Table.html">Table</a></td>
+  </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Ethereum Name Service (ENS)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_Log_Reg.html">Regression</a></td>
   </tr>
 </table>
 
