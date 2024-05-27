@@ -312,8 +312,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
 </table>
 
-
-
 ## Crypto Pairs
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
@@ -532,7 +530,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FORTH_Table.html">Table</a></td>
   </tr>
 </table>
-
 
 ## Exotic
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
