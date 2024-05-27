@@ -180,8 +180,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Cosmos_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_Log_Reg.html">Regression</a></td>
-  </tr>
-   <tr>
+ </tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Stellar (XLM)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XLM_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XLM_Table.html">Table</a></td>
@@ -196,7 +196,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_Table.html">Table</a></td>
   </tr>
-    <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Immutable (IMX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IMX_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IMX_Table.html">Table</a></td>
@@ -213,7 +213,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Log_Reg.html">Regression</a></td>
   </tr>
-   <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Injective (INJ)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_Table.html">Table</a></td>
@@ -234,12 +234,12 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GRT6719_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GRT6719_Log_Reg.html">Regression</a></td>
   </tr>
-   <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">VeChain (VET)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_Table.html">Table</a></td>
   </tr>
-   <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Theta Network (THETA)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/THETA_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/THETA_Table.html">Table</a></td>
@@ -256,7 +256,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_Log_Reg.html">Regression</a></td>
   </tr>
-    <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">AAVE (AAVE)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_Table.html">Table</a></td>
@@ -269,29 +269,29 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AR_Log_Reg.html">Regression</a></td>
   </tr>
-<tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Fantom (FTM)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FTM_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FTM_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FTM_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FTM_Log_Reg.html">Regression</a></td>
   </tr>
- <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Fetch.ai (FET)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_Table.html">Table</a></td>
   </tr>
-   <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Quant (QNT)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_Table.html">Table</a></td>
   </tr>
-    <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">SingularityNET (AGIX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AGIX_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AGIX_Table.html">Table</a></td>
   </tr>
-   <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Akash Network (AKT)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AKT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AKT_Table.html">Table</a></td>
@@ -303,12 +303,12 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/JASMY_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/JASMY_Table.html">Table</a></td>
   </tr>
-   <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">AIOZ Network (AIOZ)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_Table.html">Table</a></td>
   </tr>
-    <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Ethereum Name Service (ENS)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_Table.html">Table</a></td>
