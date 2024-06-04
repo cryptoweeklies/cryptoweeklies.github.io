@@ -96,11 +96,11 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Chainlink (LINK)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_figure%20(1).html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_Table.html">Table</a></td>
-       <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Chainlink_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_Log_Reg.html">Regression</a></td>
   </tr>
-      <tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Bitcoin Cash (BCH)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_Table.html">Table</a></td>
