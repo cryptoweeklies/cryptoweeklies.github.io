@@ -315,6 +315,13 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENS_Log_Reg.html">Regression</a></td>
   </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Kaspa (KAS)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KAS_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KAS_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KAS_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KAS_Log_Reg.html">Regression</a></td>
+  </tr>
 </table>
 
 ## Crypto Pairs
