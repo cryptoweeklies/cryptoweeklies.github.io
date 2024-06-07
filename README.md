@@ -18,6 +18,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
     <th style="color: black; border: 1px solid white;">CryptoEval</th>
     <th style="color: black; border: 1px solid white;">HeatBands</th>
+    <th style="color: black; border: 1px solid white;">RiskColor</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Bitcoin (BTC)</td>
@@ -26,6 +27,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bitcoin_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/btc_price_with_risk.html">SMA</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
@@ -34,6 +36,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Ethereum_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/eth_price_with_risk.html">SMA</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
