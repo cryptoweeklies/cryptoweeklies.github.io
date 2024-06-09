@@ -170,6 +170,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">Forecast Table</th>
     <th style="color: black; border: 1px solid white;">CryptoEval</th>
     <th style="color: black; border: 1px solid white;">HeatBands</th>
+    <th style="color: black; border: 1px solid white;">DCA</th>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">NEAR Protocol (NEAR)</td>
@@ -223,6 +224,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/INJ_lin_reg_price_with_risk.html">DCA</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Hedera (HBAR)</td>
