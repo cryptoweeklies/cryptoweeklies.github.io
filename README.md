@@ -347,7 +347,10 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">AIOZ Network (AIOZ)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_Table.html">Table</a></td>
-     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/aioz-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/aioz-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AIOZ_lin_reg_price_with_risk.html">DCA</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum Name Service (ENS)</td>
