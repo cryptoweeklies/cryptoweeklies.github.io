@@ -221,6 +221,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Stellar (XLM)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XLM_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XLM_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XLM_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Filecoin (FIL)</td>
@@ -231,6 +232,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Ethereum Classic (ETC)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETC_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Immutable (IMX)</td>
@@ -278,6 +280,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">VeChain (VET)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Theta Network (THETA)</td>
@@ -331,6 +334,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Quant (QNT)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_Log_Reg.html">Regression</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">SingularityNET (AGIX)</td>
@@ -616,6 +620,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">0x (ZRX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ZRX_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ZRX_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ZRX_Log_Reg.html">Regression</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Osmosis (OSMO)</td>
