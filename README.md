@@ -174,7 +174,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNddI_Table.html">NA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Uniswap_mvrv_z_score.html">Discernment</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI7083_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/uni7083-usd_price_with_risk.html">SMA</a></td>
   </tr>
    <tr>
