@@ -318,6 +318,15 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ALGO_lin_reg_price_with_risk.html">DCA</a></td>
   </tr>
   <tr>
+    <td style="color: black; border: 1px solid white;">MultiversX (EGLD)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/EGLD_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/EGLD_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/EGLD_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/EGLD_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/egld-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/EGLD_lin_reg_price_with_risk.html">DCA</a></td>
+  </tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">AAVE (AAVE)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_figure.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AAVE_Table.html">Table</a></td>
