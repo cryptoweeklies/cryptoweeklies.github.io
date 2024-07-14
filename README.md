@@ -54,7 +54,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bnb-usd_price_with_risk.html">SMA</a></td>
-        <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
@@ -97,6 +98,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/doge-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
    <tr>
@@ -171,6 +173,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/matic-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
     <tr>
