@@ -16,7 +16,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
-    <th style="color: black; border: 1px solid white;">Forecast Table</th>
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
     <th style="color: black; border: 1px solid white;">CryptoEval</th>
     <th style="color: black; border: 1px solid white;">HeatBands</th>
