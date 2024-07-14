@@ -44,6 +44,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/eth-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
@@ -53,6 +54,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bnb-usd_price_with_risk.html">SMA</a></td>
+        <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
@@ -63,6 +65,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/sol-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">XRP (XRP)</td>
@@ -73,6 +76,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/xrp-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Cardano (ADA)</td>
@@ -83,6 +87,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ada-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Dogecoin (DOGE)</td>
@@ -92,6 +97,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/doge-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Shiba Inu (SHIB)</td>
@@ -111,6 +117,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/avax-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Chainlink (LINK)</td>
@@ -121,6 +128,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/link-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Bitcoin Cash (BCH)</td>
@@ -130,6 +138,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bch-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Polkadot (DOT)</td>
@@ -140,6 +149,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/dot-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
     <tr>
     <td style="color: black; border: 1px solid white;">Toncoin (TON)</td>
@@ -150,6 +160,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ton11419-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
      
   </tr>
    <tr>
@@ -160,6 +171,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/matic-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
     <tr>
     <td style="color: black; border: 1px solid white;">Internet Computer (ICP)</td>
@@ -170,6 +182,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/icp-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Uniswap (UNI)</td>
@@ -180,6 +193,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI7083_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/uni7083-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI7083_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/UNI7083_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Litecoin (LTC)</td>
@@ -190,6 +204,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ltc-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
 </table>
 
