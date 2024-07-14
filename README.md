@@ -179,7 +179,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
     <tr>
     <td style="color: black; border: 1px solid white;">Internet Computer (ICP)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_prices_combined.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_mvrv_z_score.html">Discernment</a></td>
