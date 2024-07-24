@@ -236,7 +236,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <td style="color: black; border: 1px solid white;">Filecoin (FIL)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FIL_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FIL_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/fil-usd_price_with_risk.html">SMA</a></td>
   </tr>
   <tr>
@@ -285,6 +284,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/hbar-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">The Graph (GRT)</td>
