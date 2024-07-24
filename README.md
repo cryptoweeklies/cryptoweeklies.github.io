@@ -279,7 +279,6 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
    <tr>
     <td style="color: black; border: 1px solid white;">Hedera (HBAR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/HBAR_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/hbar-usd_price_with_risk.html">SMA</a></td>
