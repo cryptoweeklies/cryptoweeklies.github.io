@@ -298,7 +298,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RUNE_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RUNE_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RUNE_Log_Reg.html">Regression</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RUNE-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/rune-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RUNE_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RUNE_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
@@ -307,7 +307,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OP_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OP_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OP_Log_Reg.html">Regression</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OP-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/op-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OP_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OP_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
