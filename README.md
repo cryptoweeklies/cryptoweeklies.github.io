@@ -259,13 +259,13 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XLM_mvrv_z_score.html">Discernment</a></td>
   </tr>
   <tr>
-    <td style="color: black; border: 1px solid white;">Render (RNDR)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;">Render (RENDER)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RENDER_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_mvrv_z_score.html">Discernment</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Log_Reg.html">Regression</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/rndr-usd_price_with_risk.html">SMA</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_lin_reg_price_with_risk.html">DCA</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RNDR_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RENDER_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/render-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RENDER_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RENDER_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Injective (INJ)</td>
