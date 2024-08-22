@@ -101,6 +101,16 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SHIB_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/shib-usd_price_with_risk.html">SMA</a></td>
   </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Tron (TRX)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/trx-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
      <tr>
     <td style="color: black; border: 1px solid white;">Avalanche (AVAX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_Price_Forecast_And_Analysis.html">Graph</a></td>
