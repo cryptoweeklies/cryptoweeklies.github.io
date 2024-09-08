@@ -395,6 +395,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/qnt-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QNT_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Akash Network (AKT)</td>
