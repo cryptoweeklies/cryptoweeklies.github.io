@@ -1,8 +1,11 @@
 <meta name="google-site-verification" content="7MD-ZQWv2tv9toy64K2q1upVIKI9MtSHtV40HnQpeks" />
 # Crypto Analytics & Forecasts
 Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indicators to assist your Crypto journey.
-# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	  
+
+# Forecast: [Top 20 Cryptos](#top-20-cryptos-by-market-cap)  	- [21-100](#top-100-crypto-outside-top-20)	 
+
 # Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_with_text_normalized.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) - [HeatMap](https://cryptoweeklies.com/combined_crypto_heatmaps.html) -[PortfolioBuilder](https://cryptoweeklies.com/combined_portfolio_allocation.html) -[7Gems](https://cryptoweeklies.com/7Gems.html) -[SMA Risk](https://cryptoweeklies.com/btc_eth_risk_with_text_normalized.html) -[ROI](https://cryptoweeklies.com/yearly_roi1.html) -[Correlation(BETA)](https://cryptoweeklies.com/monthly_correlation.html)
+
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
