@@ -449,9 +449,9 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">BNB/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_ETH_Price_Forecast_And_Analysis.html>Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr> 
-  <tr>
+   <tr>
     <td style="color: black; border: 1px solid white;">SOL/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr> 
