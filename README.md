@@ -442,217 +442,54 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
-    <th style="color: black; border: 1px solid white;">Forecast Table</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BTC/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_ETH_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
    <tr>
-    <td style="color: black; border: 1px solid white;">ETH/BNB </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BNB_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BNB_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">BNB/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_ETH_Price_Forecast_And_Analysis.html>Graph</a></td>
   </tr> 
   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/SOL </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_SOL_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_SOL_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">SOL/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr> 
    <tr>
-    <td style="color: black; border: 1px solid white;">ETH/XRP </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XRP_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XRP_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">XRP/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr> 
      <tr>
-    <td style="color: black; border: 1px solid white;">ETH/DOGE </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_DOGE_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_DOGE_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">DOGE/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr> 
    <tr>
-   <td style="color: black; border: 1px solid white;">ETH/AVAX </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AVAX_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AVAX_Table.html">Table</a></td>
+   <td style="color: black; border: 1px solid white;">AVAX/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr> 
   <tr>
-    <td style="color: black; border: 1px solid white;">DOT/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">DOT/AVAX </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
    <tr>
-    <td style="color: black; border: 1px solid white;">ETH/BCH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BCH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BCH_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">BCH/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ICP/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">LTC/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ADA/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
     <tr>
-    <td style="color: black; border: 1px solid white;">ETH/TON </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_TON_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_TON_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">MATIC/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MATIC_ETH_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/MATIC </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MATIC_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/ICP </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ICP_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ICP_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/UNI </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_UNI_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_UNI_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/NEAR </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_NEAR_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_NEAR_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/LTC </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_LTC_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_LTC_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ATOM/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ATOM_ETH_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/ATOM </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ATOM_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ATOM_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/IMX </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_IMX_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_IMX_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/XLM </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XLM_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_XLM_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">FIL/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FIL_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FIL_ETH_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/HBAR </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_HBAR_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_HBAR_Table.html">Table</a></td>
-  </tr> 
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/GRT </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_GRT_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_GRT_Table.html">Table</a></td>
-  </tr> 
- <tr>
-    <td style="color: black; border: 1px solid white;">VET/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/VET_ETH_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/THETA </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_THETA_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_THETA_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/MKR </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MKR_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_MKR_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/RNDR </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_RNDR_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/INJ </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_INJ_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_INJ_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/ALGO </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ALGO_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ALGO_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/AR </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AR_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AR_Table.html">Table</a></td>
-  </tr>
- <tr>
-    <td style="color: black; border: 1px solid white;">ETH/FTM </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FTM_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FTM_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">FET/ETH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_ETH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FET_ETH_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/FET </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FET_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FET_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/QNT </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_QNT_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_QNT_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/AKT </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AKT_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AKT_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/AGIX </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AGIX_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AGIX_Table.html">Table</a></td>
-  </tr>
- <tr>
-    <td style="color: black; border: 1px solid white;">ETH/JASMY </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_JASMY_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_JASMY_Table.html">Table</a></td>
-  </tr>
-    <tr>
-    <td style="color: black; border: 1px solid white;">ETH/LRC </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_LRC_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_LRC_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/AIOZ </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AIOZ_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_AIOZ_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/ZRX </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ZRX_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_ZRX_Table.html">Table</a></td>
-  </tr>
-   <tr>
-    <td style="color: black; border: 1px solid white;">ETH/OSMO </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_OSMO_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_OSMO_Table.html">Table</a></td>
-  </tr>
- <tr>
-    <td style="color: black; border: 1px solid white;">ETH/COTI </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_COTI_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_COTI_Table.html">Table</a></td>
-  </tr>
-  <tr>
-    <td style="color: black; border: 1px solid white;">ETH/FORTH </td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FORTH_figure.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_FORTH_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;">LINK/ETH </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
 </table>
 ##Exotic
