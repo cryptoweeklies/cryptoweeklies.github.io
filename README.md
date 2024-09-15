@@ -442,54 +442,67 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
+    <th style="color: black; border: 1px solid white;">OHLC</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">BTC/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BTC_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">BNB/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+        <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr> 
    <tr>
     <td style="color: black; border: 1px solid white;">SOL/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr> 
    <tr>
     <td style="color: black; border: 1px solid white;">XRP/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr> 
      <tr>
     <td style="color: black; border: 1px solid white;">DOGE/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr> 
    <tr>
    <td style="color: black; border: 1px solid white;">AVAX/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr> 
   <tr>
     <td style="color: black; border: 1px solid white;">DOT/AVAX </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">BCH/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">ICP/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">LTC/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">ADA/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
     <tr>
     <td style="color: black; border: 1px solid white;">LINK/ETH </td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
 </table>
 ##Exotic
