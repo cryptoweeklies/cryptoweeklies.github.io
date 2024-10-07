@@ -26,9 +26,10 @@
     }
     table.dataTable thead th.sorting, /* Column header when sorted */
     table.dataTable thead th.sorting_asc,
-    table.dataTable thead th.sorting_desc {
-        background-color: #333; /* Dark gray background when clicked/sorted */
-        color: black; /* Ensure text color remains white */
+    table.dataTable thead th.sorting_desc,
+    table.dataTable tbody td.selected-column {
+        background-color: #333; /* Dark gray background for sorted or clicked column */
+        color: white; /* Ensure text color remains white */
     }
     .yellow-text {
         color: yellow;
@@ -41,16 +42,12 @@
     $(document).ready(function() {
         var table = $('#riskTable').DataTable();
         
-        $('#riskTable tbody').on('click', 'tr', function () {
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-            } else {
-                table.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-            }
-            table.rows().every(function () {
-                this.visible($(this.node()).hasClass('selected'));
-            });
+        $('#riskTable tbody').on('click', 'td', function () {
+            var columnIdx = table.cell(this).index().column;
+            // Remove existing column highlights
+            $('#riskTable tbody td').removeClass('selected-column');
+            // Highlight clicked column
+            table.column(columnIdx).nodes().to$().addClass('selected-column');
         });
     });
 </script>
@@ -81,21 +78,12 @@
     </tr>
     <tr>
       <td>MKR</td>
-      <td>$1404.23</td>
+      <td>$1406.58</td>
       <td>0.05</td>
       <td>0.12</td>
       <td>0.06</td>
       <td>0.07</td>
-      <td>$18555.19</td>
-    </tr>
-    <tr>
-      <td>ETC</td>
-      <td>$18.82</td>
-      <td>0.09</td>
-      <td>0.00</td>
-      <td>0.14</td>
-      <td>0.08</td>
-      <td>$236.88</td>
+      <td>$18403.83</td>
     </tr>
     <tr>
       <td>HBAR</td>
@@ -107,13 +95,22 @@
       <td>$0.63</td>
     </tr>
     <tr>
+      <td>ETC</td>
+      <td>$18.89</td>
+      <td>0.09</td>
+      <td>0.00</td>
+      <td>0.14</td>
+      <td>0.08</td>
+      <td>$236.76</td>
+    </tr>
+    <tr>
       <td>LTC</td>
-      <td>$65.62</td>
+      <td>$65.65</td>
       <td>0.03</td>
       <td>0.00</td>
       <td>0.24</td>
       <td>0.09</td>
-      <td>$724.97</td>
+      <td>$725.02</td>
     </tr>
     <tr>
       <td>MATIC</td>
@@ -125,67 +122,58 @@
       <td>$3.60</td>
     </tr>
     <tr>
+      <td>AR</td>
+      <td>$19.34</td>
+      <td>0.01</td>
+      <td>0.10</td>
+      <td>0.25</td>
+      <td>0.11</td>
+      <td>$171.63</td>
+    </tr>
+    <tr>
       <td>ALGO</td>
       <td>$0.13</td>
       <td>0.00</td>
       <td>0.00</td>
       <td>0.37</td>
       <td>0.11</td>
-      <td>$1.09</td>
-    </tr>
-    <tr>
-      <td>AR</td>
-      <td>$19.26</td>
-      <td>0.01</td>
-      <td>0.10</td>
-      <td>0.25</td>
-      <td>0.11</td>
-      <td>$173.94</td>
-    </tr>
-    <tr>
-      <td>ENS</td>
-      <td>$17.03</td>
-      <td>0.06</td>
-      <td>0.05</td>
-      <td>0.30</td>
-      <td>0.13</td>
-      <td>$125.42</td>
+      <td>$1.10</td>
     </tr>
     <tr>
       <td>HNT</td>
-      <td>$6.92</td>
+      <td>$6.94</td>
       <td>0.06</td>
       <td>0.00</td>
       <td>0.37</td>
       <td>0.13</td>
-      <td>$48.79</td>
+      <td>$48.84</td>
     </tr>
     <tr>
-      <td>OP</td>
-      <td>$1.69</td>
-      <td>0.01</td>
-      <td>0.08</td>
-      <td>0.38</td>
-      <td>0.14</td>
-      <td>$11.10</td>
+      <td>ENS</td>
+      <td>$17.09</td>
+      <td>0.06</td>
+      <td>0.05</td>
+      <td>0.30</td>
+      <td>0.13</td>
+      <td>$122.67</td>
     </tr>
     <tr>
       <td>EGLD</td>
-      <td>$25.87</td>
+      <td>$25.93</td>
       <td>0.13</td>
       <td>0.00</td>
       <td>0.31</td>
       <td>0.14</td>
-      <td>$170.35</td>
+      <td>$170.50</td>
     </tr>
     <tr>
-      <td>LINK</td>
-      <td>$11.28</td>
+      <td>ATOM</td>
+      <td>$4.62</td>
+      <td>0.09</td>
       <td>0.00</td>
-      <td>0.17</td>
-      <td>0.34</td>
+      <td>0.38</td>
       <td>0.15</td>
-      <td>$69.30</td>
+      <td>$29.11</td>
     </tr>
     <tr>
       <td>ZRX</td>
@@ -197,22 +185,31 @@
       <td>$1.98</td>
     </tr>
     <tr>
-      <td>ATOM</td>
-      <td>$4.61</td>
+      <td>OP</td>
+      <td>$1.70</td>
+      <td>0.01</td>
       <td>0.09</td>
-      <td>0.00</td>
-      <td>0.38</td>
+      <td>0.39</td>
       <td>0.15</td>
-      <td>$29.09</td>
+      <td>$10.99</td>
     </tr>
     <tr>
       <td>QNT</td>
-      <td>$68.16</td>
+      <td>$68.24</td>
       <td>0.16</td>
       <td>0.00</td>
       <td>0.32</td>
       <td>0.16</td>
-      <td>$409.11</td>
+      <td>$409.23</td>
+    </tr>
+    <tr>
+      <td>LINK</td>
+      <td>$11.31</td>
+      <td>0.00</td>
+      <td>0.17</td>
+      <td>0.34</td>
+      <td>0.16</td>
+      <td>$69.02</td>
     </tr>
     <tr>
       <td>DOGE</td>
@@ -224,22 +221,13 @@
       <td>$0.62</td>
     </tr>
     <tr>
-      <td>AVAX</td>
-      <td>$27.01</td>
-      <td>0.16</td>
+      <td>BCH</td>
+      <td>$329.19</td>
+      <td>0.05</td>
       <td>0.00</td>
-      <td>0.37</td>
+      <td>0.49</td>
       <td>0.17</td>
-      <td>$147.02</td>
-    </tr>
-    <tr>
-      <td>XRP</td>
-      <td>$0.54</td>
-      <td>0.20</td>
-      <td>0.03</td>
-      <td>0.28</td>
-      <td>0.17</td>
-      <td>$2.96</td>
+      <td>$1866.86</td>
     </tr>
     <tr>
       <td>ADA</td>
@@ -251,13 +239,13 @@
       <td>$2.04</td>
     </tr>
     <tr>
-      <td>BCH</td>
-      <td>$328.22</td>
-      <td>0.05</td>
-      <td>0.00</td>
-      <td>0.49</td>
+      <td>XRP</td>
+      <td>$0.54</td>
+      <td>0.20</td>
+      <td>0.03</td>
+      <td>0.28</td>
       <td>0.17</td>
-      <td>$1864.35</td>
+      <td>$2.94</td>
     </tr>
     <tr>
       <td>XLM</td>
@@ -269,17 +257,26 @@
       <td>$0.48</td>
     </tr>
     <tr>
+      <td>AVAX</td>
+      <td>$27.10</td>
+      <td>0.16</td>
+      <td>0.00</td>
+      <td>0.37</td>
+      <td>0.18</td>
+      <td>$147.09</td>
+    </tr>
+    <tr>
       <td>DOT</td>
-      <td>$4.20</td>
+      <td>$4.22</td>
       <td>0.22</td>
       <td>0.00</td>
       <td>0.35</td>
       <td>0.19</td>
-      <td>$20.76</td>
+      <td>$20.77</td>
     </tr>
     <tr>
       <td>UNI7083</td>
-      <td>$7.31</td>
+      <td>$7.34</td>
       <td>0.24</td>
       <td>0.00</td>
       <td>0.34</td>
@@ -288,39 +285,39 @@
     </tr>
     <tr>
       <td>TRB</td>
-      <td>$64.23</td>
+      <td>$64.58</td>
       <td>0.03</td>
       <td>0.44</td>
       <td>0.20</td>
       <td>0.21</td>
-      <td>$297.26</td>
+      <td>$296.38</td>
     </tr>
     <tr>
       <td>ONDO</td>
-      <td>$0.72</td>
-      <td>0.39</td>
+      <td>$0.73</td>
+      <td>0.40</td>
       <td>0.00</td>
-      <td>0.16</td>
+      <td>0.17</td>
       <td>0.21</td>
-      <td>$3.33</td>
-    </tr>
-    <tr>
-      <td>NEAR</td>
-      <td>$5.18</td>
-      <td>0.13</td>
-      <td>0.14</td>
-      <td>0.41</td>
-      <td>0.22</td>
-      <td>$22.65</td>
+      <td>$3.26</td>
     </tr>
     <tr>
       <td>RUNE</td>
-      <td>$5.19</td>
+      <td>$5.21</td>
       <td>0.01</td>
       <td>0.34</td>
       <td>0.37</td>
       <td>0.22</td>
-      <td>$22.76</td>
+      <td>$22.70</td>
+    </tr>
+    <tr>
+      <td>NEAR</td>
+      <td>$5.22</td>
+      <td>0.13</td>
+      <td>0.15</td>
+      <td>0.42</td>
+      <td>0.22</td>
+      <td>$22.45</td>
     </tr>
     <tr>
       <td>AIOZ</td>
@@ -335,37 +332,19 @@
       <td>FTM</td>
       <td>$0.68</td>
       <td>0.06</td>
-      <td>0.40</td>
       <td>0.41</td>
+      <td>0.42</td>
       <td>0.27</td>
       <td>$2.39</td>
     </tr>
     <tr>
-      <td>TON11419</td>
-      <td>$5.28</td>
-      <td>0.12</td>
-      <td>0.63</td>
-      <td>0.12</td>
-      <td>0.27</td>
-      <td>$18.25</td>
-    </tr>
-    <tr>
-      <td>STX4847</td>
-      <td>$1.78</td>
-      <td>0.01</td>
-      <td>0.54</td>
-      <td>0.39</td>
-      <td>0.28</td>
-      <td>$5.98</td>
-    </tr>
-    <tr>
       <td>ETH</td>
-      <td>$2447.79</td>
+      <td>$2448.99</td>
       <td>0.15</td>
       <td>0.47</td>
       <td>0.26</td>
       <td>0.28</td>
-      <td>$8297.82</td>
+      <td>$8295.19</td>
     </tr>
     <tr>
       <td>JASMY</td>
@@ -377,13 +356,31 @@
       <td>$0.07</td>
     </tr>
     <tr>
+      <td>TON11419</td>
+      <td>$5.29</td>
+      <td>0.12</td>
+      <td>0.63</td>
+      <td>0.13</td>
+      <td>0.28</td>
+      <td>$18.21</td>
+    </tr>
+    <tr>
       <td>ICP</td>
-      <td>$8.25</td>
+      <td>$8.27</td>
       <td>0.15</td>
       <td>0.00</td>
       <td>0.76</td>
       <td>0.29</td>
-      <td>$27.39</td>
+      <td>$27.42</td>
+    </tr>
+    <tr>
+      <td>STX4847</td>
+      <td>$1.79</td>
+      <td>0.01</td>
+      <td>0.54</td>
+      <td>0.39</td>
+      <td>0.29</td>
+      <td>$5.97</td>
     </tr>
     <tr>
       <td>KAS</td>
@@ -396,12 +393,12 @@
     </tr>
     <tr>
       <td>SOL</td>
-      <td>$146.38</td>
+      <td>$146.71</td>
       <td>0.03</td>
       <td>0.63</td>
       <td>0.34</td>
       <td>0.30</td>
-      <td>$459.26</td>
+      <td>$459.14</td>
     </tr>
     <tr>
       <td>DIA</td>
@@ -409,17 +406,8 @@
       <td>0.46</td>
       <td>0.00</td>
       <td>0.47</td>
-      <td>0.33</td>
+      <td>0.32</td>
       <td>$2.19</td>
-    </tr>
-    <tr>
-      <td>FET</td>
-      <td>$1.50</td>
-      <td>0.00</td>
-      <td>0.79</td>
-      <td>0.35</td>
-      <td>0.34</td>
-      <td>$4.15</td>
     </tr>
     <tr>
       <td>GRT6719</td>
@@ -428,43 +416,52 @@
       <td>0.00</td>
       <td>0.67</td>
       <td>0.35</td>
-      <td>$0.45</td>
+      <td>$0.46</td>
+    </tr>
+    <tr>
+      <td>FET</td>
+      <td>$1.51</td>
+      <td>0.00</td>
+      <td>0.79</td>
+      <td>0.36</td>
+      <td>0.35</td>
+      <td>$4.16</td>
     </tr>
     <tr>
       <td>AKT</td>
-      <td>$2.55</td>
-      <td>0.53</td>
-      <td>0.28</td>
-      <td>0.26</td>
+      <td>$2.54</td>
+      <td>0.52</td>
+      <td>0.27</td>
+      <td>0.25</td>
       <td>0.37</td>
-      <td>$6.54</td>
+      <td>$6.56</td>
     </tr>
     <tr>
       <td>BNB</td>
-      <td>$571.79</td>
+      <td>$573.10</td>
       <td>0.21</td>
       <td>0.68</td>
       <td>0.28</td>
       <td>0.37</td>
-      <td>$1464.86</td>
+      <td>$1463.89</td>
     </tr>
     <tr>
       <td>BTC</td>
-      <td>$63194.58</td>
+      <td>$63278.24</td>
       <td>0.09</td>
       <td>0.77</td>
       <td>0.37</td>
       <td>0.38</td>
-      <td>$159069.89</td>
+      <td>$158990.43</td>
     </tr>
     <tr>
       <td>AAVE</td>
-      <td>$148.53</td>
-      <td>0.62</td>
+      <td>$148.86</td>
+      <td>0.63</td>
       <td>0.00</td>
       <td>0.47</td>
       <td>0.39</td>
-      <td>$360.60</td>
+      <td>$360.71</td>
     </tr>
     <tr>
       <td>TRX</td>
@@ -477,21 +474,21 @@
     </tr>
     <tr>
       <td>AERO29270</td>
-      <td>$1.23</td>
+      <td>$1.24</td>
       <td>0.32</td>
       <td>0.39</td>
-      <td>0.97</td>
+      <td>0.98</td>
       <td>0.54</td>
       <td>$2.18</td>
     </tr>
     <tr>
       <td>INJ</td>
-      <td>$21.12</td>
-      <td>0.81</td>
+      <td>$21.28</td>
+      <td>0.82</td>
       <td>0.56</td>
       <td>0.29</td>
       <td>0.58</td>
-      <td>$34.65</td>
+      <td>$34.59</td>
     </tr>
   </tbody>
 </table>
