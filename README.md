@@ -61,8 +61,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/sol-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Summary_Risk_Analysis.html">Summary</a></td>
-    
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Summary_Risk_Analysis.html">Summary</a></td>   
   </tr>
  <tr>
     <td style="color: black; border: 1px solid white;">XRP (XRP)</td>
@@ -213,7 +212,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
-</table>
+  
 ## Top 100 Crypto (Outside top 20)
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
@@ -467,7 +466,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KAS_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KAS_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
-</table>
+  
 ## Crypto Pairs
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
@@ -535,8 +534,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
-</table>
-
+  
 ## Top 100 Crypto (New cryptos)
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
@@ -725,7 +723,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XDC_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XDC_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
-##Exotic
+  
+## Exotic
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
