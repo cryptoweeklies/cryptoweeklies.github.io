@@ -617,6 +617,49 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FLOW_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FLOW_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Conflux (CFX)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/cfx-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/CFX_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/CFX_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">GateToken (GT)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/gt-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GT_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GT_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Wormhole (W)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/w-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/W_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/W_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Ethena (ENA)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ena-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENA_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ENA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Starknet (STRK)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/strk-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/STRK_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/STRK_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Flare (FLR)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/flr-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FLR_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FLR_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Gala (GALA)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/gala-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GALA_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GALA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  
 ##Exotic
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
