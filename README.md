@@ -659,7 +659,72 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GALA_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GALA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
-  
+  <tr>
+    <td style="color: black; border: 1px solid white;">Axie Infinity (AXS)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/axs-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AXS_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AXS_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Tezos (XTZ)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/xtz-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XTZ_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XTZ_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Nervos Network (CKB)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ckb-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/CKB_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/CKB_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">The Sandbox (SAND)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/sand-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SAND_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SAND_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Pendle (PENDLE)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/pendle-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/PENDLE_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/PENDLE_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Nexo (NEXO)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/nexo-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/NEXO_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/NEXO_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Decentraland (MANA)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/mana-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MANA_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MANA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Klaytn (KLAY)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/klay-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KLAY_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/KLAY_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ApeCoin (APE)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ape18876-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/APE18876_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/APE18876_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Gnosis (GNO)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/gno-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GNO_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/GNO_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">XDC Network (XDC)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/xdc-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XDC_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XDC_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
 ##Exotic
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
@@ -674,12 +739,17 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Ronin (RON)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RON14101_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RONIN_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRB_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RON14101_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ron14101-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RON14101_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RON14101_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">0x (ZRX)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ZRX_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ZRX_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ZRX_Log_Reg.html">Regression</a></td>
   </tr>
@@ -690,8 +760,33 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Livepeer (LPT)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/lpt-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LPT_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">IOTA (IOTA)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/iota-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">Compound (COMP)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COMP5692_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/IOTA_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COMP5692_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/comp5692-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COMP5692_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COMP5692_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Loopring (LRC)</td>
@@ -705,8 +800,13 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr> 
   <tr>
     <td style="color: black; border: 1px solid white;">Ampleforth Governance Token (FORTH)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_Table.html">Table</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRB_mvrv_z_score.html">Discernment</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/forth-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/FORTH_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr> 
   <tr>
     <td style="color: black; border: 1px solid white;">Tellor (TRB)</td>
@@ -724,6 +824,9 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Table.html">Table</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/dia-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr> 
 </table>
 ## Disclaimer
