@@ -536,6 +536,74 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_ETH_Summary_Risk_Analysis.html">Summary</a></td>
   </tr>
   </table>
+
+  <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
+  <tr>
+    <th style="color: black; border: 1px solid white;">Cryptocurrency</th>
+    <th style="color: black; border: 1px solid white;">Forecast Graph</th>
+    <th style="color: black; border: 1px solid white;">OHLC</th>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ETH/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">BNB/BTC</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+        <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr> 
+   <tr>
+    <td style="color: black; border: 1px solid white;">SOL/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr> 
+   <tr>
+    <td style="color: black; border: 1px solid white;">XRP/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr> 
+     <tr>
+    <td style="color: black; border: 1px solid white;">DOGE/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr> 
+   <tr>
+   <td style="color: black; border: 1px solid white;">AVAX/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr> 
+  <tr>
+    <td style="color: black; border: 1px solid white;">DOT/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOT_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">BCH/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BCH_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">ICP/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ICP_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+  <tr>
+    <td style="color: black; border: 1px solid white;">LTC/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LTC_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+   <tr>
+    <td style="color: black; border: 1px solid white;">ADA/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">LINK/BTC </td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_BTC_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LINK_BTC_Summary_Risk_Analysis.html">Summary</a></td>
+  </tr>
+  </table>
   
 ## Top 100 Crypto (New cryptos)
 <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
