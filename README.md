@@ -33,7 +33,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <td style="color: black; border: 1px solid white;">Ethereum (ETH)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Ethereum_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ETH_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/eth-usd_price_with_risk.html">SMA</a></td>
@@ -44,7 +44,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <td style="color: black; border: 1px solid white;">BNB (BNB)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/BNB_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/bnb-usd_price_with_risk.html">SMA</a></td>
@@ -55,7 +55,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <td style="color: black; border: 1px solid white;">Solana (SOL)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Solana_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SOL_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/sol-usd_price_with_risk.html">SMA</a></td>
@@ -66,7 +66,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
  <tr>
     <td style="color: black; border: 1px solid white;">XRP (XRP)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/XRP_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/xrp-usd_price_with_risk.html">SMA</a></td>
@@ -77,7 +77,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <td style="color: black; border: 1px solid white;">Cardano (ADA)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Cardano_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ADA_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ada-usd_price_with_risk.html">SMA</a></td>
@@ -88,7 +88,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
    <tr>
     <td style="color: black; border: 1px solid white;">Dogecoin (DOGE)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DOGE_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/doge-usd_price_with_risk.html">SMA</a></td>
@@ -107,7 +107,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <tr>
     <td style="color: black; border: 1px solid white;">Tron (TRX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TRX_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/trx-usd_price_with_risk.html">SMA</a></td>
@@ -118,7 +118,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
      <tr>
     <td style="color: black; border: 1px solid white;">Avalanche (AVAX)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/Avalanche_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/AVAX_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/avax-usd_price_with_risk.html">SMA</a></td>
@@ -162,7 +162,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <tr>
     <td style="color: black; border: 1px solid white;">Toncoin (TON)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_Price_Forecast_And_Analysis.html">Graph</a></td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_prices_combined.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419-USD_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_mvrv_z_score.html">Discernment</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/TON11419_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/ton11419-usd_price_with_risk.html">SMA</a></td>
