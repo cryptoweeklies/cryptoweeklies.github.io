@@ -612,6 +612,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <th style="color: black; border: 1px solid white;">SMA</th>
     <th style="color: black; border: 1px solid white;">DCA</th>
     <th style="color: black; border: 1px solid white;">TWAP</th>
+    <th style="color: black; border: 1px solid white;">Forecast Graph</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Aerodrome Finance (AERO)</td>
@@ -672,6 +673,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/om-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OM_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OM_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OM_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Worldcoin (WLD)</td>
