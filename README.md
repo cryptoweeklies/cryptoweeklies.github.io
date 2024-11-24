@@ -753,6 +753,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/sand-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SAND_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SAND_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SAND_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Pendle (PENDLE)</td>
@@ -771,6 +772,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/mana-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MANA_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MANA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MANA_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Klaytn (KLAY)</td>
