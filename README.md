@@ -800,7 +800,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Osmosis (OSMO)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OSMO_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OSMO_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OSMO_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/osmo-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/OSMO_lin_reg_price_with_risk.html">DCA</a></td>
@@ -832,7 +832,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">Loopring (LRC)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LRC_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LRC_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LRC_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/lrc-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/LRC_lin_reg_price_with_risk.html">DCA</a></td>
@@ -840,7 +840,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   </tr>
    <tr>
     <td style="color: black; border: 1px solid white;">COTI (COTI)</td>
-    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COTI_figure.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COTI_Price_Forecast_And_Analysis.html">Graph</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COTI_Log_Reg.html">Regression</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/coti-usd_price_with_risk.html">SMA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/COTI_lin_reg_price_with_risk.html">DCA</a></td>
