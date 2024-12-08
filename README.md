@@ -880,8 +880,8 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
   <tr>
     <td style="color: black; border: 1px solid white;">Microstrategy (MSTR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MSTR_Retirer.html">CAGR Model</a></td>
-
-
+  </tr>
+</table>
 ## Disclaimer
 Forecasts are not financial advice. They are the output of our AI model with 1 stdev accuracy.
 
