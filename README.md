@@ -871,15 +871,17 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr> 
 </table>
-## Retirement Model 
+## Proxies
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Proxy</th>
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
+    <th style="color: black; border: 1px solid white;">Forecast Graph</th>
   </tr>
   <tr>
     <td style="color: black; border: 1px solid white;">Microstrategy (MSTR)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MSTR_Retirer.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MSTR_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
 </table>
 ## Disclaimer
