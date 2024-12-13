@@ -884,7 +884,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MSTR_Retirer.html">CAGR Model</a></td>
   </tr>
    <tr>
-    <td style="color: black; border: 1px solid white;">Marathon Holdings (MARA)</td>
+    <td style="color: black; border: 1px solid white;">Mara Holdings (MARA)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/MARA_Price_Forecast_And_Analysis.html">Graph</a></td>
 
   </tr>
