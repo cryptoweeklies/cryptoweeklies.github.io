@@ -890,7 +890,7 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;">Cleanspark (CLSK)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/CLSK_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
-  </tr>
+  <tr>
     <td style="color: black; border: 1px solid white;">Riot Platforms (RIOT)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RIOT_Price_Forecast_And_Analysis.html">Graph</a></td>
   </tr>
