@@ -876,6 +876,14 @@ Crypto forecast using AI, Stats and Machine Learning. No opinions, No BS. Indica
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_lin_reg_price_with_risk.html">DCA</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/DIA_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
   </tr> 
+    <tr>
+    <td style="color: black; border: 1px solid white;">WOO (WOO)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/WOO_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/WOO_Log_Reg.html">Regression</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/woo-usd_price_with_risk.html">SMA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/WOO_lin_reg_price_with_risk.html">DCA</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/WOO_Price_TWAP_Risk_Analysis.html">TWAP</a></td>
+  </tr> 
 </table>
 ## Proxies
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
