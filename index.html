@@ -239,7 +239,6 @@ window.addEventListener('load', () => {
     return true;
   }
 
-  // Intercept clicks on in-page links
   function wireInternalLinks() {
     document.querySelectorAll('nav a, .quicklinks a, a[href^="#"]').forEach(a => {
       if (!a._wired && a.hash) {
@@ -264,7 +263,6 @@ window.addEventListener('load', () => {
     function ensureId(el, id) {
       if (!el) return;
       if (el.id === id) return;
-      // Add a tiny invisible anchor before the heading to avoid clobbering existing IDs
       const mark = document.createElement('span');
       mark.id = id;
       mark.style.display = 'block';
@@ -332,19 +330,26 @@ window.addEventListener('load', () => {
       let targetTable = doc.querySelector('#riskTable') || doc.querySelector('table');
       if (!targetTable) throw new Error('No table found in analysis page.');
 
-      // Find column indexes for Base Peak, Bull Peak
+      // Find column indexes for Ticker, Base Peak, Bull Peak
       const headerCells = targetTable.querySelectorAll('thead th');
       let headTexts = headerCells.length
         ? Array.from(headerCells).map(th => th.textContent.trim())
         : Array.from(targetTable.querySelectorAll('tr:first-child th, tr:first-child td')).map(th => th.textContent.trim());
 
       const normalized = headTexts.map(t => t.toLowerCase().replace(/\s+/g,' ').trim());
+      const symColIdx  = (() => {
+        let i = normalized.findIndex(t => /^(cryptocurrency|symbol|ticker)$/.test(t));
+        return i !== -1 ? i : 0; // fallback to first column
+      })();
       const baseColIdx = normalized.findIndex(t => /base\s*peak/.test(t));
       const bullColIdx = normalized.findIndex(t => /bull\s*peak/.test(t));
+
       if (baseColIdx === -1) throw new Error('No "Base Peak" column found.');
       if (bullColIdx === -1) throw new Error('No "Bull Peak" column found.');
 
-      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr')).filter(r => r.querySelectorAll('td').length);
+      // Collect data rows
+      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr'))
+        .filter(r => r.querySelectorAll('td').length);
 
       function extractDollarInt(cellText){
         const m = (cellText || '').replace(/,/g,'').match(/-?\d+(\.\d+)?/);
@@ -354,10 +359,15 @@ window.addEventListener('load', () => {
         return '$' + fmtUSDInt(num);
       }
 
-      // Find row by the "(SYM)" token anywhere in the row text, e.g., "Bitcoin (BTC)"
+      // Match by exact ticker text in the symbol column (case-insensitive)
       function lookupPeaks(sym) {
-        const row = rows.find(r => new RegExp("\\(\\s*" + sym + "\\s*\\)", "i").test(r.textContent));
+        const row = rows.find(r => {
+          const cells = Array.from(r.children);
+          const cellText = (cells[symColIdx]?.textContent || '').trim().toUpperCase();
+          return cellText === sym.toUpperCase();
+        });
         if (!row) return { base:'—', bull:'—' };
+
         const cells = Array.from(row.children);
         const baseText = extractDollarInt((cells[baseColIdx]?.textContent || '').trim());
         const bullText = extractDollarInt((cells[bullColIdx]?.textContent || '').trim());
