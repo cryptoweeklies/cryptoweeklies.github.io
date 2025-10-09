@@ -260,7 +260,7 @@ window.addEventListener('load', () => {
     });
   }
 
-    // ====== TICKER (Base Peak) ======
+  // ====== TICKER (Base & Bull Peaks) ======
   (async function buildTicker(){
     const symbols = ["BTC","ETH","SOL","LINK","BNB","XRP"];
 
@@ -283,18 +283,23 @@ window.addEventListener('load', () => {
       } catch { return String(n); }
     }
 
-    function pill(sym, valText) {
+    function pill(sym, baseText, bullText) {
       const el = document.createElement('span');
       el.className = 'ticker__item';
+
       const img = document.createElement('img');
       img.loading = 'lazy';
       img.alt = sym + ' logo';
       img.src = logos[sym];
+
       const t = document.createElement('span');
       t.textContent = sym + ' ';
+
       const v = document.createElement('span');
       v.className = 'ticker__label';
-      v.textContent = 'Base: ' + valText;
+      // visual delimiter between values
+      v.textContent = `Base: ${baseText} • Bull: ${bullText}`;
+
       el.append(img, t, v);
       return el;
     }
@@ -309,58 +314,71 @@ window.addEventListener('load', () => {
       let targetTable = doc.querySelector('#riskTable') || doc.querySelector('table');
       if (!targetTable) throw new Error('No table found in analysis page.');
 
-      // Find column index for "Base Peak"
+      // Find column indexes for symbol, Base Peak, Bull Peak
       const headerCells = targetTable.querySelectorAll('thead th');
       let headTexts = headerCells.length
         ? Array.from(headerCells).map(th => th.textContent.trim())
         : Array.from(targetTable.querySelectorAll('tr:first-child th, tr:first-child td')).map(th => th.textContent.trim());
 
       const normalized = headTexts.map(t => t.toLowerCase().replace(/\s+/g,' ').trim());
-      const baseColIdx = normalized.findIndex(t => /base\s*peak/.test(t));
+
       const symColIdx  = normalized.findIndex(t => /^cryptocurrency$/.test(t)) !== -1
         ? normalized.findIndex(t => /^cryptocurrency$/.test(t))
-        : 0; // fallback to first column
+        : 0; // fallback to first column if header name differs
+
+      const baseColIdx = normalized.findIndex(t => /base\s*peak/.test(t));
+      const bullColIdx = normalized.findIndex(t => /bull\s*peak/.test(t));
 
       if (baseColIdx === -1) throw new Error('No "Base Peak" column found.');
+      if (bullColIdx === -1) throw new Error('No "Bull Peak" column found.');
 
-      // All rows (client-side DataTables keeps them in DOM)
+      // Rows (DataTables leaves them in DOM)
       const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr'))
         .filter(r => r.querySelectorAll('td').length);
 
-      // Lookup helper: match symbol exactly in the Cryptocurrency column
-      function lookupBase(sym) {
+      function extractDollarInt(cellText){
+        const m = (cellText || '').replace(/,/g,'').match(/-?\d+(\.\d+)?/);
+        if (!m) return '—';
+        const num = parseFloat(m[0]);
+        if (isNaN(num)) return '—';
+        return '$' + fmtUSDInt(num);
+      }
+
+      // Lookup both Base & Bull by exact symbol match in the symbol column
+      function lookupPeaks(sym) {
         const row = rows.find(r => {
           const cells = Array.from(r.children);
-          if (!cells.length) return false;
           const cellText = (cells[symColIdx]?.textContent || '').trim().toUpperCase();
           return cellText === sym.toUpperCase();
         });
-        if (!row) return null;
+        if (!row) return { base:'—', bull:'—' };
+
         const cells = Array.from(row.children);
-        let valRaw = (cells[baseColIdx]?.textContent || '').trim();
-        // Extract number even if "$" and commas are present
-        const m = valRaw.replace(/,/g,'').match(/-?\d+(\.\d+)?/);
-        if (!m) return valRaw || '—';
-        const num = parseFloat(m[0]);
-        if (isNaN(num)) return valRaw || '—';
-        return '$' + fmtUSDInt(num); // round to whole dollars
+        const baseText = extractDollarInt((cells[baseColIdx]?.textContent || '').trim());
+        const bullText = extractDollarInt((cells[bullColIdx]?.textContent || '').trim());
+        return { base: baseText, bull: bullText };
       }
 
-      const results = symbols.map(sym => ({ sym, val: lookupBase(sym) || '—' }));
+      const results = symbols.map(sym => {
+        const { base, bull } = lookupPeaks(sym);
+        return { sym, base, bull };
+      });
 
       // Render twice for seamless loop
-      const render = (arr) => arr.forEach(({sym, val}) => track.appendChild(pill(sym, val)));
+      const render = (arr) => arr.forEach(({sym, base, bull}) => track.appendChild(pill(sym, base, bull)));
       render(results);
       render(results);
 
     } catch (err) {
       console.error('Ticker error:', err);
-      const fallback = ["BTC","ETH","SOL","LINK","BNB","XRP"].map(s => ({sym:s, val:'—'}));
-      const render = (arr) => arr.forEach(({sym, val}) => track.appendChild(pill(sym, val)));
+      // Fallback: just logos with placeholders
+      const fallback = symbols.map(s => ({sym:s, base:'—', bull:'—'}));
+      const render = (arr) => arr.forEach(({sym, base, bull}) => track.appendChild(pill(sym, base, bull)));
       render(fallback);
       render(fallback);
     }
   })();
+
 
 
   // ====== README LOADER ======
