@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Crypto Weeklies — AI Crypto Forecasts</title>
+<title>CryptoWeeklies Forecasts</title>
 
 <!-- Plain meta description (no emojis for SEO snippet) -->
 <meta name="description" content="AI, Statistics, and Machine Learning powered crypto forecasts and indicators. Transparent, data-based insights. No opinions, no hype. Signals from ML models trained on public data." />
@@ -41,7 +41,7 @@
     display:inline-flex; gap:20px; align-items:center;
     animation: ticker-scroll 26s linear infinite;
     will-change: transform;
-    padding-left:100%; /* start off-screen for smoothness */
+    padding-left:100%;
   }
   .ticker__item {
     display:inline-flex; align-items:center; gap:8px;
@@ -55,11 +55,11 @@
   .ticker__label { color:var(--muted); font-weight:500; margin-left:2px; }
   @keyframes ticker-scroll {
     0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); } /* we’ll duplicate content so 50% is a full loop */
+    100% { transform: translateX(-50%); }
   }
 
   header {
-    position:sticky; top:40px; z-index:1000; /* sits below ticker */
+    position:sticky; top:40px; z-index:1000;
     background:#111; border-bottom:1px solid var(--border);
     display:flex; align-items:center; justify-content:space-between;
     padding:12px 20px;
@@ -126,10 +126,11 @@
   }
   .quicklinks a:hover { border-color:var(--accent); }
 
-  /* Make the YouTube link pop slightly */
+  /* YouTube link flare */
   a[href*="youtube.com"] { color:#ff4444; font-weight:600; }
   a[href*="youtube.com"]:hover { text-decoration:underline; }
 
+  /* Intro with logo on right */
   .intro-section {
     display: flex;
     align-items: center;
@@ -137,29 +138,17 @@
     gap: 20px;
     flex-wrap: wrap;
   }
-  
-  .intro-text {
-    flex: 1 1 420px;
-  }
-  
+  .intro-text { flex: 1 1 420px; }
   .intro-logo img {
-    width: 140px; /* adjust size as needed */
+    width: 140px;
     height: auto;
     border-radius: 10px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.25);
   }
-  
   @media (max-width: 700px) {
-    .intro-section {
-      flex-direction: column-reverse;
-      text-align: center;
-    }
-    .intro-logo img {
-      width: 120px;
-      margin-bottom: 12px;
-    }
+    .intro-section { flex-direction: column-reverse; text-align: center; }
+    .intro-logo img { width: 120px; margin-bottom: 12px; }
   }
-
 </style>
 </head>
 <body>
@@ -167,7 +156,7 @@
 <!-- === One-line scrolling screener === -->
 <div class="ticker" aria-label="Base Peak Screener">
   <div class="ticker__track" id="tickerTrack">
-    <!-- JS will populate items here and duplicate for seamless loop -->
+    <!-- JS populates and duplicates items for seamless loop -->
   </div>
 </div>
 
@@ -204,7 +193,6 @@
         ▶️ <a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">YouTube: @CryptoWeeklies</a>
       </div>
     </div>
-  
     <div class="intro-logo">
       <img src="cryptoweeklies_logo_v8.png" alt="Crypto Weeklies logo" loading="lazy">
     </div>
@@ -274,16 +262,15 @@ window.addEventListener('load', () => {
   // ====== TICKER (Base Peak) ======
   (async function buildTicker(){
     const symbols = ["BTC","ETH","SOL","LINK","BNB","XRP"];
-    const nameHints = {
-      "BTC":"(BTC)", "ETH":"(ETH)", "SOL":"(SOL)", "LINK":"(LINK)", "BNB":"(BNB)", "XRP":"(XRP)"
-    };
+
+    // Local logo file paths (XRP has a space in filename; URL-encode it)
     const logos = {
-      BTC: "https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=030",
-      ETH: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=030",
-      SOL: "https://cryptologos.cc/logos/solana-sol-logo.svg?v=030",
-      LINK:"https://cryptologos.cc/logos/chainlink-link-logo.svg?v=030",
-      BNB: "https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=030",
-      XRP: "https://cryptologos.cc/logos/xrp-xrp-logo.svg?v=030"
+      BTC: "bitcoin-btc-logo.png",
+      ETH: "ethereum_eth_logo.png",
+      SOL: "solana-sol-logo.png",
+      LINK:"chainlink-link-logo.png",
+      BNB: "bnb-bnb-logo.png",
+      XRP: "xrp%20reverse%20logo.png"
     };
 
     const track = document.getElementById('tickerTrack');
@@ -308,62 +295,57 @@ window.addEventListener('load', () => {
       const resp = await fetch('/crypto_comprehensive_forecast_risk_analysis.html', {cache:'no-store'});
       if (!resp.ok) throw new Error('Fetch failed: ' + resp.status);
       const html = await resp.text();
-
-      // Parse the HTML from the other page
       const doc = new DOMParser().parseFromString(html, 'text/html');
 
-      // Pick the first big table (or all tables and find the one with the header "Base Peak")
+      // Find the table that includes a "Base Peak" column
       const tables = Array.from(doc.querySelectorAll('table'));
       let targetTable = null, baseColIdx = -1;
 
       for (const tbl of tables) {
-        const headCells = Array.from(tbl.querySelectorAll('thead th, tr:first-child th, tr:first-child td'))
-          .map(th => th.textContent.trim().toLowerCase());
-        const idx = headCells.findIndex(t => t.replace(/\s+/g,' ').includes('base peak'));
+        // Try thead first, then first row as header fallback
+        const headerCells = tbl.querySelectorAll('thead th');
+        let headTexts = headerCells.length
+          ? Array.from(headerCells).map(th => th.textContent.trim())
+          : Array.from(tbl.querySelectorAll('tr:first-child th, tr:first-child td')).map(th => th.textContent.trim());
+
+        const normalized = headTexts.map(t => t.toLowerCase().replace(/\s+/g,' ').trim());
+        const idx = normalized.findIndex(t => /base\s*peak/.test(t));
         if (idx !== -1) { targetTable = tbl; baseColIdx = idx; break; }
       }
 
       if (!targetTable) throw new Error('No table with "Base Peak" header found.');
 
-      // Build a quick index of rows by ticker hint, searching row text
-      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr')).filter(r => r.querySelector('td'));
-      const out = [];
+      // Gather rows (works whether DataTables moved rows into <tbody> or not)
+      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr')).filter(r => r.querySelectorAll('td').length);
 
-      symbols.forEach(sym => {
-        const hint = nameHints[sym];
-        // find row that includes '(SYM)' anywhere
-        const row = rows.find(r => r.textContent.includes(hint));
-        if (!row) return;
-        const cells = Array.from(row.querySelectorAll('td,th'));
-        if (baseColIdx >= cells.length) return;
+      // Helper to lookup value for a given symbol by searching for '(SYM)' in the row text
+      function lookupBase(sym) {
+        const row = rows.find(r => new RegExp("\\(\\s*" + sym + "\\s*\\)", "i").test(r.textContent));
+        if (!row) return null;
+        const cells = Array.from(row.children);
+        if (baseColIdx >= cells.length) return null;
         let valRaw = (cells[baseColIdx].textContent || '').trim();
 
-        // Extract number (handle commas, percents, etc.)
-        let num = null;
+        // Extract first numeric token (handles commas, %, $)
         const m = valRaw.replace(/,/g,'').match(/-?\d+(\.\d+)?/);
-        if (m) num = parseFloat(m[0]);
+        if (!m) return valRaw || '—';
+        const num = parseFloat(m[0]);
+        if (isNaN(num)) return valRaw || '—';
+        return String(Math.round(num));
+      }
 
-        // Round to whole numbers if it’s numeric; otherwise keep raw
-        const valText = (num !== null && !isNaN(num)) ? Math.round(num).toString() : valRaw;
+      const results = symbols.map(sym => ({ sym, val: lookupBase(sym) || '—' }));
 
-        out.push({sym, valText});
-      });
-
-      // If nothing parsed, fall back:
-      const data = out.length ? out : symbols.map(s => ({sym:s, valText:'—'}));
-
-      // Render items twice for seamless loop (the CSS animation moves -50%)
-      const render = (arr) => {
-        arr.forEach(({sym, valText}) => track.appendChild(pill(sym, valText)));
-      };
-      render(data);
-      render(data);
+      // Render twice for seamless loop
+      const render = (arr) => arr.forEach(({sym, val}) => track.appendChild(pill(sym, val)));
+      render(results);
+      render(results);
 
     } catch (err) {
       console.error('Ticker error:', err);
       // Fallback static pills
-      const fallback = ["BTC","ETH","SOL","LINK","BNB","XRP"].map(s => ({sym:s, valText:'—'}));
-      const render = (arr) => arr.forEach(({sym, valText}) => track.appendChild(pill(sym, valText)));
+      const fallback = symbols.map(s => ({sym:s, val:'—'}));
+      const render = (arr) => arr.forEach(({sym, val}) => track.appendChild(pill(sym, val)));
       render(fallback);
       render(fallback);
     }
