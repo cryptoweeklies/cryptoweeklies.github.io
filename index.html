@@ -7,19 +7,26 @@
 <meta name="description" content="AI, statistics, and machine-learning based crypto forecasts and indicators." />
 <link rel="canonical" href="https://cryptoweeklies.com/" />
 
+<!-- ✅ Load the Markdown parser BEFORE our script -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <style>
-  :root{
+  :root {
     color-scheme: dark;
     --bg:#1b1b1b; --panel:#212121; --ink:#f2f2f2; --muted:#bdbdbd;
     --accent:#58a6ff; --border:#2a2a2a; --ink-weak:#d6d6d6;
   }
-  * { box-sizing: border-box; }
-  html,body { margin:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.6; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  * { box-sizing:border-box; }
+  html,body {
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+  }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
 
   header {
-    position: sticky; top: 0; z-index: 1000;
+    position:sticky; top:0; z-index:1000;
     background:#111; border-bottom:1px solid var(--border);
     display:flex; align-items:center; justify-content:space-between;
     padding:12px 20px;
@@ -29,54 +36,61 @@
   nav a { margin-left:16px; font-weight:600; color:var(--ink-weak); }
   nav a:hover { color:var(--accent); }
 
-  main { max-width: 1150px; margin: 0 auto; padding: 22px; }
+  main { max-width:1150px; margin:0 auto; padding:22px; }
 
   .card {
-    background: var(--panel); border:1px solid var(--border);
-    padding:16px; border-radius:10px; margin: 0 0 18px 0;
+    background:var(--panel); border:1px solid var(--border);
+    padding:16px; border-radius:10px; margin-bottom:18px;
   }
-  .muted { color: var(--muted); }
+  .muted { color:var(--muted); }
 
-  /* README content surface */
   .content :is(h1,h2,h3,h4) {
-    color: var(--accent);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 4px;
-    margin-top: 28px;
+    color:var(--accent);
+    border-bottom:1px solid var(--border);
+    padding-bottom:4px;
+    margin-top:28px;
   }
-  .content h1 { font-size: 28px; }
-  .content h2 { font-size: 22px; }
-  .content h3 { font-size: 18px; }
+  .content h1 { font-size:28px; }
+  .content h2 { font-size:22px; }
+  .content h3 { font-size:18px; }
 
-  /* Table polish */
-  .content table { width:100%; border-collapse: collapse; margin: 14px 0; }
-  .content th, .content td { border:1px solid var(--border); padding:8px 10px; text-align:left; }
+  .content table { width:100%; border-collapse:collapse; margin:14px 0; }
+  .content th, .content td {
+    border:1px solid var(--border);
+    padding:8px 10px;
+    text-align:left;
+  }
   .content thead th { background:#242424; }
   .content tr:hover { background:#262626; }
 
-  /* Fix README’s inline black styles */
-  .content [style*="color: black"] { color: var(--ink) !important; }
-  .content [style*="background-color: black"] { background-color: transparent !important; }
-  .content [style*="border: 1px solid white"] { border: 1px solid var(--border) !important; }
+  .content [style*="color: black"] { color:var(--ink)!important; }
+  .content [style*="background-color: black"] { background-color:transparent!important; }
+  .content [style*="border: 1px solid white"] { border:1px solid var(--border)!important; }
 
-  /* Make wide tables usable on mobile */
   .table-wrap { overflow-x:auto; }
-  .content table { min-width: 640px; } /* allows horizontal scroll when needed */
+  .content table { min-width:640px; }
 
-  footer { border-top:1px solid var(--border); text-align:center; padding:24px; color:var(--muted); }
+  footer {
+    border-top:1px solid var(--border);
+    text-align:center;
+    padding:24px;
+    color:var(--muted);
+  }
 
-  /* Back-to-top */
   #topBtn {
-    position: fixed; right: 24px; bottom: 24px; display:none;
-    background: var(--accent); color:#fff; border:0; border-radius:8px;
-    padding:10px 14px; font-weight:600; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,.25);
+    position:fixed; right:24px; bottom:24px; display:none;
+    background:var(--accent); color:#fff; border:0; border-radius:8px;
+    padding:10px 14px; font-weight:600; cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.25);
   }
   #topBtn:hover { opacity:.9; }
 
-  /* Subtle link buttons for quick anchors injected above README */
   .quicklinks { display:flex; flex-wrap:wrap; gap:10px; }
-  .quicklinks a{ border:1px solid var(--border); background:var(--panel); padding:6px 10px; border-radius:8px; }
-  .quicklinks a:hover{ border-color: var(--accent); }
+  .quicklinks a {
+    border:1px solid var(--border); background:var(--panel);
+    padding:6px 10px; border-radius:8px;
+  }
+  .quicklinks a:hover { border-color:var(--accent); }
 </style>
 </head>
 <body>
@@ -99,14 +113,12 @@
 </header>
 
 <main>
-  <!-- Intro card -->
   <section class="card">
     <strong>AI-Driven Crypto Analytics & Forecasts.</strong>
     <div class="muted">No opinions, no BS. Transparent indicators to assist your crypto journey.</div>
     <div>📧 <a href="mailto:cryptoweeklies@gmail.com">cryptoweeklies@gmail.com</a></div>
   </section>
 
-  <!-- Optional quicklinks (anchors expected to be in README headings) -->
   <div class="quicklinks card">
     <a href="#indicators">Indicators</a>
     <a href="#top-20-cryptos-by-market-cap">Top-20</a>
@@ -117,49 +129,43 @@
     <a href="#disclaimer">Disclaimer</a>
   </div>
 
-  <!-- README goes here -->
   <article id="readme" class="content"></article>
 </main>
 
 <footer>
-  © <span id="yr"></span> Crypto Weeklies • Made with ❤️
+  © <span id="yr"></span> Crypto Weeklies • Made with ❤️<br>
+  <small class="muted">Content auto-synced from README.md</small>
 </footer>
 
 <button id="topBtn" aria-label="Back to top">↑ Top</button>
 
-<!-- Marked (Markdown parser) -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" integrity="sha384-B8kqk4yQ1aH5oF5o3xQbqV4Eo7M5xC4kN5Pq2Q9S6qg3YF8nH6y0Qe8r7C9d1c2G" crossorigin="anonymous"></script>
-
 <script>
-  // Footer year
+window.addEventListener('load', () => {
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  // Back-to-top
+  // Back-to-top visibility
   const topBtn = document.getElementById('topBtn');
   window.addEventListener('scroll', () => {
     topBtn.style.display = (document.documentElement.scrollTop > 240) ? 'block' : 'none';
   });
-  topBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+  topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
-  // Load README.md from this repo and render
+  // Load README.md from this repo
   async function loadREADME() {
-    // raw GitHub path to README in this repo
     const url = 'https://raw.githubusercontent.com/cryptoweeklies/cryptoweeklies.github.io/main/README.md';
     try {
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error('README fetch failed: ' + res.status);
       const md = await res.text();
 
-      // Render markdown (allows your inline HTML tables too)
+      // ✅ Convert Markdown → HTML (marked is now defined)
       const html = marked.parse(md, { mangle: false, headerIds: true });
       const host = document.getElementById('readme');
 
-      // Wrap tables to enable horizontal scroll on mobile
       const temp = document.createElement('div');
       temp.innerHTML = html;
 
-      // Some README had stray inline black styles; CSS overrides already handle most.
-      // Make big tables scrollable:
+      // Make wide tables scrollable on mobile
       temp.querySelectorAll('table').forEach(tbl => {
         const wrap = document.createElement('div');
         wrap.className = 'table-wrap';
@@ -171,13 +177,15 @@
       host.append(...temp.childNodes);
     } catch (e) {
       document.getElementById('readme').innerHTML =
-        '<div class="card">Could not load README.md automatically. Error: ' +
+        '<div class="card">Could not load README.md automatically.<br>Error: ' +
         (e && e.message ? e.message : e) +
-        '.<br/>Your site still works; commit a README.md in the root branch called <code>main</code>.</div>';
+        '<br><br>Your site still works; make sure a README.md exists in the main branch.</div>';
       console.error(e);
     }
   }
+
   loadREADME();
+});
 </script>
 
 </body>
