@@ -4,7 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Crypto Weeklies — AI Crypto Forecasts</title>
-<meta name="description" content="🤖 AI • Statistics • Machine Learning • Data-Driven Crypto Forecasts & Indicators. 🚀 Free daily AI-powered insights to guide your crypto journey. 📊 Transparent • Data-Based • No Opinions • No Hype. 🧠 Signals from ML models trained on public data." />
+
+<!-- Keep meta description text-only (no emojis) for SEO -->
+<meta name="description" content="AI • Statistics • Machine Learning • Data-Driven Crypto Forecasts & Indicators. Free daily AI-powered insights to guide your crypto journey. Transparent • Data-Based • No Opinions • No Hype. Signals from ML models trained on public data." />
 
 <link rel="canonical" href="https://cryptoweeklies.com/" />
 
@@ -52,6 +54,9 @@
     padding-bottom:4px;
     margin-top:28px;
   }
+  /* Make in-page anchor scrolling land below sticky header */
+  .content :is(h1,h2,h3) { scroll-margin-top: 72px; }
+
   .content h1 { font-size:28px; }
   .content h2 { font-size:22px; }
   .content h3 { font-size:18px; }
@@ -65,6 +70,7 @@
   .content thead th { background:#242424; }
   .content tr:hover { background:#262626; }
 
+  /* Clean up inline styles in README tables */
   .content [style*="color: black"] { color:var(--ink)!important; }
   .content [style*="background-color: black"] { background-color:transparent!important; }
   .content [style*="border: 1px solid white"] { border:1px solid var(--border)!important; }
@@ -110,14 +116,20 @@
     <a href="#top-20-cryptos-by-market-cap">Top-20</a>
     <a href="#top-100-crypto-outside-top-20">Top-100</a>
     <a href="#crypto-pairs">Pairs</a>
+    <a href="#proxies">Proxies</a>
+    <a href="#exotic">Exotic</a>
     <a href="#disclaimer">Disclaimer</a>
   </nav>
 </header>
 
 <main>
-  <section class="card">
-    <strong>AI-Driven Crypto Analytics & Forecasts.</strong>
-    <div class="muted">No opinions, no BS. Transparent indicators to assist your crypto journey.</div>
+  <section class="card" id="intro">
+    <strong>🤖 AI • 📊 Statistics • 🧠 Machine Learning — Data-Driven Crypto Forecasts & Indicators</strong>
+    <div class="muted">
+      🚀 Free daily AI-powered insights to guide your crypto journey.<br>
+      🔍 Transparent, data-based, and unbiased signals.<br>
+      📈 Models trained on public market data — no opinions, no hype.
+    </div>
     <div>📧 <a href="mailto:cryptoweeklies@gmail.com">cryptoweeklies@gmail.com</a></div>
   </section>
 
@@ -173,14 +185,31 @@ window.addEventListener('load', () => {
         a.addEventListener('click', (e) => {
           e.preventDefault();
           const h = a.hash;
-          // Update URL
           history.pushState(null, '', h);
-          // If content isn't ready yet, try again shortly
           if (!readmeReady || !scrollToHash(h)) {
             setTimeout(() => scrollToHash(h), 80);
             setTimeout(() => scrollToHash(h), 200);
           }
         });
+      }
+    });
+  }
+
+  // After README HTML is inserted, give key sections stable IDs
+  function normalizeSectionIds(root) {
+    const rules = [
+      { test: t => /^indicators\b/i.test(t),                          id: 'indicators' },
+      { test: t => /^top\s*20\s*cryptos\b/i.test(t),                  id: 'top-20-cryptos-by-market-cap' },
+      { test: t => /^top\s*100.*outside\s*top\s*20\b/i.test(t),       id: 'top-100-crypto-outside-top-20' },
+      { test: t => /^crypto\s*pairs\b/i.test(t),                      id: 'crypto-pairs' },
+      { test: t => /^proxies\b/i.test(t),                             id: 'proxies' },
+      { test: t => /^exotic\b/i.test(t),                              id: 'exotic' },
+      { test: t => /^disclaimer\b/i.test(t),                          id: 'disclaimer' },
+    ];
+    root.querySelectorAll('h1,h2,h3,h4').forEach(h => {
+      const t = h.textContent.trim();
+      for (const r of rules) {
+        if (r.test(t)) { h.id = r.id; break; }
       }
     });
   }
@@ -210,6 +239,9 @@ window.addEventListener('load', () => {
 
       host.innerHTML = '';
       host.append(...temp.childNodes);
+
+      // 🔧 Set friendly IDs so navbar hashes match
+      normalizeSectionIds(host);
 
       readmeReady = true;
 
