@@ -1,6 +1,27 @@
 <meta name="google-site-verification" content="7MD-ZQWv2tv9toy64K2q1upVIKI9MtSHtV40HnQpeks" />
 
-# Indicators: [CryptoTLDR](https://cryptoweeklies.com/crypto_news_sentiment_analysis.html) - [PeakValley](https://cryptoweeklies.com/crypto_risk_normalized.html) - [RiskMeter](https://cryptoweeklies.com/individual_crypto_risk_scores.html) - [NarrativeCloud](https://cryptoweeklies.com/wordcloud.html) - [HeatMap](https://cryptoweeklies.com/combined_crypto_heatmaps.html) -[PortfolioBuilder](https://cryptoweeklies.com/combined_portfolio_allocation.html) -[7Gems](https://cryptoweeklies.com/7Gems.html) -[SMA Risk](https://cryptoweeklies.com/btc_eth_risk_with_text_normalized.html) -[ROI](https://cryptoweeklies.com/yearly_roi1.html) -[Correlation(BETA)](https://cryptoweeklies.com/monthly_correlation.html) -[Estimated Bull Targets](https://cryptoweeklies.com/crypto_comprehensive_forecast_risk_analysis.html) 
+## Indicators
+
+<table>
+  <tr>
+    <td><a href="https://cryptoweeklies.com/crypto_news_sentiment_analysis.html">CryptoTLDR</a></td>
+    <td><a href="https://cryptoweeklies.com/crypto_risk_normalized.html">PeakValley</a></td>
+    <td><a href="https://cryptoweeklies.com/individual_crypto_risk_scores.html">RiskMeter</a></td>
+    <td><a href="https://cryptoweeklies.com/wordcloud.html">NarrativeCloud</a></td>
+    <td><a href="https://cryptoweeklies.com/combined_crypto_heatmaps.html">HeatMap</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://cryptoweeklies.com/combined_portfolio_allocation.html">PortfolioBuilder</a></td>
+    <td><a href="https://cryptoweeklies.com/7Gems.html">7Gems</a></td>
+    <td><a href="https://cryptoweeklies.com/btc_eth_risk_with_text_normalized.html">SMA Risk</a></td>
+    <td><a href="https://cryptoweeklies.com/yearly_roi1.html">ROI</a></td>
+    <td><a href="https://cryptoweeklies.com/monthly_correlation.html">Correlation (BETA)</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://cryptoweeklies.com/crypto_comprehensive_forecast_risk_analysis.html">Estimated Bull Targets</a></td>
+    <td></td><td></td><td></td><td></td>
+  </tr>
+</table>
 
 ## Top 20 Cryptos by market cap 
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
