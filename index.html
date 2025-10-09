@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Forecasts by Crypto Weeklies</title>
+<title>Crypto Weeklies — AI Crypto Forecasts</title>
 
-<!-- Keep meta description text-only (no emojis) for SEO -->
-<meta name="description" content="AI • Statistics • Machine Learning • Data-Driven Crypto Forecasts & Indicators. Free daily AI-powered insights to guide your crypto journey. Transparent • Data-Based • No Opinions • No Hype. Signals from ML models trained on public data." />
-
+<!-- Plain meta description (no emojis for SEO snippet) -->
+<meta name="description" content="AI, Statistics, and Machine Learning powered crypto forecasts and indicators. Transparent, data-based insights. No opinions, no hype. Signals from ML models trained on public data." />
 <link rel="canonical" href="https://cryptoweeklies.com/" />
 
-<!-- ✅ Load the Markdown parser BEFORE our script -->
+<!-- Markdown parser for README -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
@@ -19,6 +18,7 @@
     color-scheme: dark;
     --bg:#1b1b1b; --panel:#212121; --ink:#f2f2f2; --muted:#bdbdbd;
     --accent:#58a6ff; --border:#2a2a2a; --ink-weak:#d6d6d6;
+    --ticker-bg:#0f0f0f; --ticker-border:#222;
   }
   * { box-sizing:border-box; }
   html,body {
@@ -29,8 +29,37 @@
   a { color:var(--accent); text-decoration:none; }
   a:hover { text-decoration:underline; }
 
+  /* === Ticker (one-line screener) === */
+  .ticker {
+    position:sticky; top:0; z-index:1100;
+    background:var(--ticker-bg);
+    border-bottom:1px solid var(--ticker-border);
+    overflow:hidden; white-space:nowrap;
+    height:40px; display:flex; align-items:center;
+  }
+  .ticker__track {
+    display:inline-flex; gap:20px; align-items:center;
+    animation: ticker-scroll 26s linear infinite;
+    will-change: transform;
+    padding-left:100%; /* start off-screen for smoothness */
+  }
+  .ticker__item {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 10px; border-radius:999px;
+    border:1px solid var(--border); background:#161616;
+    font-weight:600; font-size:14px;
+  }
+  .ticker__item img {
+    width:18px; height:18px; display:block;
+  }
+  .ticker__label { color:var(--muted); font-weight:500; margin-left:2px; }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* we’ll duplicate content so 50% is a full loop */
+  }
+
   header {
-    position:sticky; top:0; z-index:1000;
+    position:sticky; top:40px; z-index:1000; /* sits below ticker */
     background:#111; border-bottom:1px solid var(--border);
     display:flex; align-items:center; justify-content:space-between;
     padding:12px 20px;
@@ -54,9 +83,6 @@
     padding-bottom:4px;
     margin-top:28px;
   }
-  /* Make in-page anchor scrolling land below sticky header */
-  .content :is(h1,h2,h3) { scroll-margin-top: 72px; }
-
   .content h1 { font-size:28px; }
   .content h2 { font-size:22px; }
   .content h3 { font-size:18px; }
@@ -70,7 +96,7 @@
   .content thead th { background:#242424; }
   .content tr:hover { background:#262626; }
 
-  /* Clean up inline styles in README tables */
+  /* Normalize inline-styled tables pasted into README */
   .content [style*="color: black"] { color:var(--ink)!important; }
   .content [style*="background-color: black"] { background-color:transparent!important; }
   .content [style*="border: 1px solid white"] { border:1px solid var(--border)!important; }
@@ -99,16 +125,51 @@
     padding:6px 10px; border-radius:8px;
   }
   .quicklinks a:hover { border-color:var(--accent); }
-  a[href*="youtube.com"] {
-    color: #ff4444; /* YouTube red accent */
-    font-weight: 600;
+
+  /* Make the YouTube link pop slightly */
+  a[href*="youtube.com"] { color:#ff4444; font-weight:600; }
+  a[href*="youtube.com"]:hover { text-decoration:underline; }
+
+  .intro-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
   }
-  a[href*="youtube.com"]:hover {
-    text-decoration: underline;
+  
+  .intro-text {
+    flex: 1 1 420px;
   }
+  
+  .intro-logo img {
+    width: 140px; /* adjust size as needed */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+  
+  @media (max-width: 700px) {
+    .intro-section {
+      flex-direction: column-reverse;
+      text-align: center;
+    }
+    .intro-logo img {
+      width: 120px;
+      margin-bottom: 12px;
+    }
+  }
+
 </style>
 </head>
 <body>
+
+<!-- === One-line scrolling screener === -->
+<div class="ticker" aria-label="Base Peak Screener">
+  <div class="ticker__track" id="tickerTrack">
+    <!-- JS will populate items here and duplicate for seamless loop -->
+  </div>
+</div>
 
 <header>
   <div class="brand">
@@ -130,18 +191,23 @@
 </header>
 
 <main>
-  <section class="card" id="intro">
-    Data-Driven Crypto Forecasts & Indicators using
-    <strong>🤖 AI • 📊 Statistics • 🧠 Machine Learning </strong>
-    <div class="muted">
-      🚀 Free daily insights to guide your crypto journey.<br>
-      🔍 Transparent, data-based, and unbiased summary on YouTube videos.<br>
-      📈 Models trained on public market data — no opinions, no hype.
+  <section class="card intro-section" id="intro">
+    <div class="intro-text">
+      <strong>🤖 AI • 📊 Statistics • 🧠 Machine Learning — Data-Driven Crypto Forecasts & Indicators</strong>
+      <div class="muted">
+        🚀 Free daily AI-powered insights to guide your crypto journey.<br>
+        🔍 Transparent, data-based, and unbiased signals.<br>
+        📈 Models trained on public market data — no opinions, no hype.
+      </div>
+      <div>
+        📧 <a href="mailto:cryptoweeklies@gmail.com">cryptoweeklies@gmail.com</a><br>
+        ▶️ <a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">YouTube: @CryptoWeeklies</a>
+      </div>
     </div>
-    <div>
-      📧 <a href="mailto:cryptoweeklies@gmail.com">cryptoweeklies@gmail.com</a><br>
-      ▶️ <a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">YouTube: @CryptoWeeklies</a>
-    </div>  
+  
+    <div class="intro-logo">
+      <img src="cryptoweeklies_logo_v8.png" alt="Crypto Weeklies logo" loading="lazy">
+    </div>
   </section>
 
   <div class="quicklinks card">
@@ -188,7 +254,6 @@ window.addEventListener('load', () => {
     return false;
   }
 
-  // Intercept clicks on in-page links so we can scroll after README loads
   function wireInternalLinks() {
     document.querySelectorAll('nav a, .quicklinks a, a[href^="#"]').forEach(a => {
       if (!a._wired && a.hash) {
@@ -206,26 +271,105 @@ window.addEventListener('load', () => {
     });
   }
 
-  // After README HTML is inserted, give key sections stable IDs
-  function normalizeSectionIds(root) {
-    const rules = [
-      { test: t => /^indicators\b/i.test(t),                          id: 'indicators' },
-      { test: t => /^top\s*20\s*cryptos\b/i.test(t),                  id: 'top-20-cryptos-by-market-cap' },
-      { test: t => /^top\s*100.*outside\s*top\s*20\b/i.test(t),       id: 'top-100-crypto-outside-top-20' },
-      { test: t => /^crypto\s*pairs\b/i.test(t),                      id: 'crypto-pairs' },
-      { test: t => /^proxies\b/i.test(t),                             id: 'proxies' },
-      { test: t => /^exotic\b/i.test(t),                              id: 'exotic' },
-      { test: t => /^disclaimer\b/i.test(t),                          id: 'disclaimer' },
-    ];
-    root.querySelectorAll('h1,h2,h3,h4').forEach(h => {
-      const t = h.textContent.trim();
-      for (const r of rules) {
-        if (r.test(t)) { h.id = r.id; break; }
-      }
-    });
-  }
+  // ====== TICKER (Base Peak) ======
+  (async function buildTicker(){
+    const symbols = ["BTC","ETH","SOL","LINK","BNB","XRP"];
+    const nameHints = {
+      "BTC":"(BTC)", "ETH":"(ETH)", "SOL":"(SOL)", "LINK":"(LINK)", "BNB":"(BNB)", "XRP":"(XRP)"
+    };
+    const logos = {
+      BTC: "https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=030",
+      ETH: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=030",
+      SOL: "https://cryptologos.cc/logos/solana-sol-logo.svg?v=030",
+      LINK:"https://cryptologos.cc/logos/chainlink-link-logo.svg?v=030",
+      BNB: "https://cryptologos.cc/logos/bnb-bnb-logo.svg?v=030",
+      XRP: "https://cryptologos.cc/logos/xrp-xrp-logo.svg?v=030"
+    };
 
-  // Load README.md from this repo
+    const track = document.getElementById('tickerTrack');
+
+    function pill(sym, valText) {
+      const el = document.createElement('span');
+      el.className = 'ticker__item';
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = sym + ' logo';
+      img.src = logos[sym];
+      const t = document.createElement('span');
+      t.textContent = sym + ' ';
+      const v = document.createElement('span');
+      v.className = 'ticker__label';
+      v.textContent = 'Base: ' + valText;
+      el.append(img, t, v);
+      return el;
+    }
+
+    try {
+      const resp = await fetch('/crypto_comprehensive_forecast_risk_analysis.html', {cache:'no-store'});
+      if (!resp.ok) throw new Error('Fetch failed: ' + resp.status);
+      const html = await resp.text();
+
+      // Parse the HTML from the other page
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      // Pick the first big table (or all tables and find the one with the header "Base Peak")
+      const tables = Array.from(doc.querySelectorAll('table'));
+      let targetTable = null, baseColIdx = -1;
+
+      for (const tbl of tables) {
+        const headCells = Array.from(tbl.querySelectorAll('thead th, tr:first-child th, tr:first-child td'))
+          .map(th => th.textContent.trim().toLowerCase());
+        const idx = headCells.findIndex(t => t.replace(/\s+/g,' ').includes('base peak'));
+        if (idx !== -1) { targetTable = tbl; baseColIdx = idx; break; }
+      }
+
+      if (!targetTable) throw new Error('No table with "Base Peak" header found.');
+
+      // Build a quick index of rows by ticker hint, searching row text
+      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr')).filter(r => r.querySelector('td'));
+      const out = [];
+
+      symbols.forEach(sym => {
+        const hint = nameHints[sym];
+        // find row that includes '(SYM)' anywhere
+        const row = rows.find(r => r.textContent.includes(hint));
+        if (!row) return;
+        const cells = Array.from(row.querySelectorAll('td,th'));
+        if (baseColIdx >= cells.length) return;
+        let valRaw = (cells[baseColIdx].textContent || '').trim();
+
+        // Extract number (handle commas, percents, etc.)
+        let num = null;
+        const m = valRaw.replace(/,/g,'').match(/-?\d+(\.\d+)?/);
+        if (m) num = parseFloat(m[0]);
+
+        // Round to whole numbers if it’s numeric; otherwise keep raw
+        const valText = (num !== null && !isNaN(num)) ? Math.round(num).toString() : valRaw;
+
+        out.push({sym, valText});
+      });
+
+      // If nothing parsed, fall back:
+      const data = out.length ? out : symbols.map(s => ({sym:s, valText:'—'}));
+
+      // Render items twice for seamless loop (the CSS animation moves -50%)
+      const render = (arr) => {
+        arr.forEach(({sym, valText}) => track.appendChild(pill(sym, valText)));
+      };
+      render(data);
+      render(data);
+
+    } catch (err) {
+      console.error('Ticker error:', err);
+      // Fallback static pills
+      const fallback = ["BTC","ETH","SOL","LINK","BNB","XRP"].map(s => ({sym:s, valText:'—'}));
+      const render = (arr) => arr.forEach(({sym, valText}) => track.appendChild(pill(sym, valText)));
+      render(fallback);
+      render(fallback);
+    }
+  })();
+
+  // ====== README LOADER ======
   async function loadREADME() {
     const url = 'https://raw.githubusercontent.com/cryptoweeklies/cryptoweeklies.github.io/main/README.md';
     try {
@@ -233,7 +377,6 @@ window.addEventListener('load', () => {
       if (!res.ok) throw new Error('README fetch failed: ' + res.status);
       const md = await res.text();
 
-      // Convert Markdown → HTML (marked is loaded via CDN)
       const html = marked.parse(md, { mangle: false, headerIds: true });
       const host = document.getElementById('readme');
 
@@ -250,9 +393,6 @@ window.addEventListener('load', () => {
 
       host.innerHTML = '';
       host.append(...temp.childNodes);
-
-      // 🔧 Set friendly IDs so navbar hashes match
-      normalizeSectionIds(host);
 
       readmeReady = true;
 
@@ -275,7 +415,6 @@ window.addEventListener('load', () => {
     }
   }
 
-  // Initial wiring for header links present in the static HTML
   wireInternalLinks();
   loadREADME();
 });
