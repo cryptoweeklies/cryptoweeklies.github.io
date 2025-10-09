@@ -11,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
+  html { scroll-behavior: smooth; }
   :root {
     color-scheme: dark;
     --bg:#1b1b1b; --panel:#212121; --ink:#f2f2f2; --muted:#bdbdbd;
@@ -143,12 +144,45 @@
 window.addEventListener('load', () => {
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  // Back-to-top visibility
+  // Back-to-top button
   const topBtn = document.getElementById('topBtn');
   window.addEventListener('scroll', () => {
     topBtn.style.display = (document.documentElement.scrollTop > 240) ? 'block' : 'none';
   });
   topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  let readmeReady = false;
+
+  function scrollToHash(hash) {
+    if (!hash) return false;
+    const id = decodeURIComponent(hash.replace('#',''));
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return true;
+    }
+    return false;
+  }
+
+  // Intercept clicks on in-page links so we can scroll after README loads
+  function wireInternalLinks() {
+    document.querySelectorAll('nav a, .quicklinks a, a[href^="#"]').forEach(a => {
+      if (!a._wired && a.hash) {
+        a._wired = true;
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const h = a.hash;
+          // Update URL
+          history.pushState(null, '', h);
+          // If content isn't ready yet, try again shortly
+          if (!readmeReady || !scrollToHash(h)) {
+            setTimeout(() => scrollToHash(h), 80);
+            setTimeout(() => scrollToHash(h), 200);
+          }
+        });
+      }
+    });
+  }
 
   // Load README.md from this repo
   async function loadREADME() {
@@ -158,7 +192,7 @@ window.addEventListener('load', () => {
       if (!res.ok) throw new Error('README fetch failed: ' + res.status);
       const md = await res.text();
 
-      // ✅ Convert Markdown → HTML (marked is now defined)
+      // Convert Markdown → HTML (marked is loaded via CDN)
       const html = marked.parse(md, { mangle: false, headerIds: true });
       const host = document.getElementById('readme');
 
@@ -175,6 +209,19 @@ window.addEventListener('load', () => {
 
       host.innerHTML = '';
       host.append(...temp.childNodes);
+
+      readmeReady = true;
+
+      // Re-wire any anchors that came from the README itself
+      wireInternalLinks();
+
+      // If user arrived with a hash, scroll to it now that sections exist
+      if (location.hash) {
+        if (!scrollToHash(location.hash)) {
+          setTimeout(() => scrollToHash(location.hash), 80);
+          setTimeout(() => scrollToHash(location.hash), 200);
+        }
+      }
     } catch (e) {
       document.getElementById('readme').innerHTML =
         '<div class="card">Could not load README.md automatically.<br>Error: ' +
@@ -184,6 +231,8 @@ window.addEventListener('load', () => {
     }
   }
 
+  // Initial wiring for header links present in the static HTML
+  wireInternalLinks();
   loadREADME();
 });
 </script>
