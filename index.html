@@ -49,9 +49,7 @@
     border:1px solid var(--border); background:#161616;
     font-weight:600; font-size:14px;
   }
-  .ticker__item img {
-    width:18px; height:18px; display:block;
-  }
+  .ticker__item img { width:18px; height:18px; display:block; }
   .ticker__label { color:var(--muted); font-weight:500; margin-left:2px; }
   @keyframes ticker-scroll {
     0%   { transform: translateX(0); }
@@ -59,7 +57,7 @@
   }
 
   header {
-    position:sticky; top:40px; z-index:1000;
+    position:sticky; top:40px; z-index:1000; /* sits below ticker */
     background:#111; border-bottom:1px solid var(--border);
     display:flex; align-items:center; justify-content:space-between;
     padding:12px 20px;
@@ -90,11 +88,13 @@
   .content table { width:100%; border-collapse:collapse; margin:14px 0; }
   .content th, .content td {
     border:1px solid var(--border);
-    padding:8px 10px;
-    text-align:left;
+    padding:8px 10px; text-align:left;
   }
   .content thead th { background:#242424; }
   .content tr:hover { background:#262626; }
+
+  /* Make anchors land below sticky header+ticker */
+  .content :is(h1,h2,h3,h4)[id] { scroll-margin-top: 96px; }
 
   /* Normalize inline-styled tables pasted into README */
   .content [style*="color: black"] { color:var(--ink)!important; }
@@ -106,9 +106,7 @@
 
   footer {
     border-top:1px solid var(--border);
-    text-align:center;
-    padding:24px;
-    color:var(--muted);
+    text-align:center; padding:24px; color:var(--muted);
   }
 
   #topBtn {
@@ -132,32 +130,25 @@
 
   /* Intro with logo on right */
   .intro-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:20px; flex-wrap:wrap;
   }
   .intro-text { flex: 1 1 420px; }
   .intro-logo img {
-    width: 140px;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    width:140px; height:auto; border-radius:10px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.25);
   }
-  @media (max-width: 700px) {
-    .intro-section { flex-direction: column-reverse; text-align: center; }
-    .intro-logo img { width: 120px; margin-bottom: 12px; }
+  @media (max-width:700px){
+    .intro-section { flex-direction:column-reverse; text-align:center; }
+    .intro-logo img { width:120px; margin-bottom:12px; }
   }
 </style>
 </head>
 <body>
 
 <!-- === One-line scrolling screener === -->
-<div class="ticker" aria-label="Base Peak Screener">
-  <div class="ticker__track" id="tickerTrack">
-    <!-- JS populates and duplicates items for seamless loop -->
-  </div>
+<div class="ticker" aria-label="Base & Bull Screener">
+  <div class="ticker__track" id="tickerTrack"></div>
 </div>
 
 <header>
@@ -183,11 +174,11 @@
   <section class="card intro-section" id="intro">
     <div class="intro-text">
        Data-Driven Crypto Forecasts & Indicators using
-      <strong>🤖 AI • 📊 Statistics • 🧠 Machine Learning </strong>
+      <strong>🤖 AI • 📊 Statistics • 🧠 Machine Learning</strong>
       <div class="muted">
-        🚀 Free daily <strong>insights </strong> to guide your crypto journey.<br>
-        🔍 Transparent, data-based, and unbiased summary on <strong>YouTube </strong> videos.<br>
-        📈 Models trained on public market data — <strong>no opinions, no hype </strong>.
+        🚀 Free daily <strong>insights</strong> to guide your crypto journey.<br>
+        🔍 Transparent, data-based, and unbiased summary on <strong>YouTube</strong> videos.<br>
+        📈 Models trained on public market data — <strong>no opinions, no hype</strong>.
       </div>
       <div>
         📧 <a href="mailto:cryptoweeklies@gmail.com">cryptoweeklies@gmail.com</a><br>
@@ -232,17 +223,23 @@ window.addEventListener('load', () => {
 
   let readmeReady = false;
 
+  // Smooth scroll with offset (ticker + header)
   function scrollToHash(hash) {
     if (!hash) return false;
     const id = decodeURIComponent(hash.replace('#',''));
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return true;
-    }
-    return false;
+    if (!el) return false;
+
+    const ticker = document.querySelector('.ticker');
+    const header = document.querySelector('header');
+    const offset = (ticker?.offsetHeight || 0) + (header?.offsetHeight || 0) + 6;
+
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    return true;
   }
 
+  // Intercept clicks on in-page links
   function wireInternalLinks() {
     document.querySelectorAll('nav a, .quicklinks a, a[href^="#"]').forEach(a => {
       if (!a._wired && a.hash) {
@@ -260,11 +257,34 @@ window.addEventListener('load', () => {
     });
   }
 
+  // Create stable alias IDs after README is inserted
+  function addAnchorAliases(root) {
+    const heads = Array.from(root.querySelectorAll('h1, h2, h3, h4'));
+    function byText(pred) { return heads.find(h => pred(h.textContent.trim().toLowerCase())); }
+    function ensureId(el, id) {
+      if (!el) return;
+      if (el.id === id) return;
+      // Add a tiny invisible anchor before the heading to avoid clobbering existing IDs
+      const mark = document.createElement('span');
+      mark.id = id;
+      mark.style.display = 'block';
+      mark.style.height = '0';
+      el.parentNode.insertBefore(mark, el);
+    }
+    ensureId(byText(t => t.startsWith('indicators')), 'indicators');
+    ensureId(byText(t => t.startsWith('top 20 cryptos')), 'top-20-cryptos-by-market-cap');
+    ensureId(byText(t => t.includes('top 100') && t.includes('outside top 20')), 'top-100-crypto-outside-top-20');
+    ensureId(byText(t => t.startsWith('crypto pairs')), 'crypto-pairs');
+    ensureId(byText(t => t.startsWith('proxies')), 'proxies');
+    ensureId(byText(t => t.startsWith('exotic')), 'exotic');
+    ensureId(byText(t => t.startsWith('disclaimer')), 'disclaimer');
+  }
+
   // ====== TICKER (Base & Bull Peaks) ======
   (async function buildTicker(){
     const symbols = ["BTC","ETH","SOL","LINK","BNB","XRP"];
 
-    // Local logo file paths (note the space in XRP is URL-encoded)
+    // Local logo file paths (XRP filename has spaces → URL-encode)
     const logos = {
       BTC: "bitcoin-btc-logo.png",
       ETH: "ethereum_eth_logo.png",
@@ -278,9 +298,8 @@ window.addEventListener('load', () => {
 
     // $12,345 formatting
     function fmtUSDInt(n){
-      try {
-        return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n);
-      } catch { return String(n); }
+      try { return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n); }
+      catch { return String(n); }
     }
 
     function pill(sym, baseText, bullText) {
@@ -297,7 +316,6 @@ window.addEventListener('load', () => {
 
       const v = document.createElement('span');
       v.className = 'ticker__label';
-      // visual delimiter between values
       v.textContent = `Base: ${baseText} • Bull: ${bullText}`;
 
       el.append(img, t, v);
@@ -310,31 +328,23 @@ window.addEventListener('load', () => {
       const html = await resp.text();
       const doc = new DOMParser().parseFromString(html, 'text/html');
 
-      // Prefer the table with id="riskTable" (your generator sets this)
+      // Prefer #riskTable generated by your script
       let targetTable = doc.querySelector('#riskTable') || doc.querySelector('table');
       if (!targetTable) throw new Error('No table found in analysis page.');
 
-      // Find column indexes for symbol, Base Peak, Bull Peak
+      // Find column indexes for Base Peak, Bull Peak
       const headerCells = targetTable.querySelectorAll('thead th');
       let headTexts = headerCells.length
         ? Array.from(headerCells).map(th => th.textContent.trim())
         : Array.from(targetTable.querySelectorAll('tr:first-child th, tr:first-child td')).map(th => th.textContent.trim());
 
       const normalized = headTexts.map(t => t.toLowerCase().replace(/\s+/g,' ').trim());
-
-      const symColIdx  = normalized.findIndex(t => /^cryptocurrency$/.test(t)) !== -1
-        ? normalized.findIndex(t => /^cryptocurrency$/.test(t))
-        : 0; // fallback to first column if header name differs
-
       const baseColIdx = normalized.findIndex(t => /base\s*peak/.test(t));
       const bullColIdx = normalized.findIndex(t => /bull\s*peak/.test(t));
-
       if (baseColIdx === -1) throw new Error('No "Base Peak" column found.');
       if (bullColIdx === -1) throw new Error('No "Bull Peak" column found.');
 
-      // Rows (DataTables leaves them in DOM)
-      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr'))
-        .filter(r => r.querySelectorAll('td').length);
+      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr')).filter(r => r.querySelectorAll('td').length);
 
       function extractDollarInt(cellText){
         const m = (cellText || '').replace(/,/g,'').match(/-?\d+(\.\d+)?/);
@@ -344,15 +354,10 @@ window.addEventListener('load', () => {
         return '$' + fmtUSDInt(num);
       }
 
-      // Lookup both Base & Bull by exact symbol match in the symbol column
+      // Find row by the "(SYM)" token anywhere in the row text, e.g., "Bitcoin (BTC)"
       function lookupPeaks(sym) {
-        const row = rows.find(r => {
-          const cells = Array.from(r.children);
-          const cellText = (cells[symColIdx]?.textContent || '').trim().toUpperCase();
-          return cellText === sym.toUpperCase();
-        });
+        const row = rows.find(r => new RegExp("\\(\\s*" + sym + "\\s*\\)", "i").test(r.textContent));
         if (!row) return { base:'—', bull:'—' };
-
         const cells = Array.from(row.children);
         const baseText = extractDollarInt((cells[baseColIdx]?.textContent || '').trim());
         const bullText = extractDollarInt((cells[bullColIdx]?.textContent || '').trim());
@@ -371,15 +376,12 @@ window.addEventListener('load', () => {
 
     } catch (err) {
       console.error('Ticker error:', err);
-      // Fallback: just logos with placeholders
-      const fallback = symbols.map(s => ({sym:s, base:'—', bull:'—'}));
+      const fallback = ["BTC","ETH","SOL","LINK","BNB","XRP"].map(s => ({sym:s, base:'—', bull:'—'}));
       const render = (arr) => arr.forEach(({sym, base, bull}) => track.appendChild(pill(sym, base, bull)));
       render(fallback);
       render(fallback);
     }
   })();
-
-
 
   // ====== README LOADER ======
   async function loadREADME() {
@@ -406,12 +408,15 @@ window.addEventListener('load', () => {
       host.innerHTML = '';
       host.append(...temp.childNodes);
 
+      // Add stable alias anchors so header links always work
+      addAnchorAliases(host);
+
       readmeReady = true;
 
-      // Re-wire any anchors that came from the README itself
+      // Re-wire in-page anchors that came from README
       wireInternalLinks();
 
-      // If user arrived with a hash, scroll to it now that sections exist
+      // If user arrived with a hash, scroll to it now
       if (location.hash) {
         if (!scrollToHash(location.hash)) {
           setTimeout(() => scrollToHash(location.hash), 80);
@@ -427,6 +432,7 @@ window.addEventListener('load', () => {
     }
   }
 
+  // Initial wiring for header links present in the static HTML
   wireInternalLinks();
   loadREADME();
 });
