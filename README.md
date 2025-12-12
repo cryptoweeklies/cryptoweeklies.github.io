@@ -903,7 +903,7 @@
   </tr> 
 </table>
 
-## ETFs & Proxies
+# ETFs & Proxies
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
     <th style="color: black; border: 1px solid white;">Stock</th>
@@ -943,7 +943,7 @@
 - Transparent, backtested performance tracking.
 - 💡 The site’s content is updated daily as new data becomes available.
 
-## Disclaimer
+# Disclaimer
 Forecasts published on [CryptoWeeklies.com](https://cryptoweeklies.com) are **not financial advice**.  
 They are the statistical output of AI models and are provided **for informational and educational purposes only**.  
 Accuracy estimates (±1 standard deviation) reflect backtested model performance and may change as models evolve.  
