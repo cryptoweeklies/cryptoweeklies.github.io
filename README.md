@@ -934,6 +934,12 @@
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SPY_Retirer.html">CAGR Model</a></td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SPY_lin_reg_price_with_risk.html">DCA</a></td>
   </tr>
+    <tr>
+    <td style="color: black; border: 1px solid white;">Invesco QQQ Trust (QQQ)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QQQ_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SPY_Retirer.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/QQQ_lin_reg_price_with_risk.html">DCA</a></td>
+  </tr>
 </table>
 
 ## 🧩 Proof of Work
