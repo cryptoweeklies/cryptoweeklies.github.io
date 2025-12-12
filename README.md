@@ -903,10 +903,10 @@
   </tr> 
 </table>
 
-## Proxies
+## ETFs & Proxies
   <table style="color: black; background-color: black; width: 100%; border-collapse: collapse;">
   <tr>
-    <th style="color: black; border: 1px solid white;">Proxy</th>
+    <th style="color: black; border: 1px solid white;">Stock</th>
     <th style="color: black; border: 1px solid white;">Forecast Graph</th>
     <th style="color: black; border: 1px solid white;">CryptoRetirer</th>
     <th style="color: black; border: 1px solid white;">DCA</th>
@@ -927,6 +927,12 @@
   <tr>
     <td style="color: black; border: 1px solid white;">Riot Platforms (RIOT)</td>
     <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/RIOT_Price_Forecast_And_Analysis.html">Graph</a></td>
+  </tr>
+     <tr>
+    <td style="color: black; border: 1px solid white;">S&P 500 ETF (SPY)</td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SPY_Price_Forecast_And_Analysis.html">Graph</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SPY_Retirer.html">CAGR Model</a></td>
+    <td style="color: black; border: 1px solid white;"><a href="https://cryptoweeklies.com/SPY_lin_reg_price_with_risk.html">DCA</a></td>
   </tr>
 </table>
 
