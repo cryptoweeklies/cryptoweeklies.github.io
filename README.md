@@ -19,6 +19,7 @@
   </tr>
   <tr>
     <td><a href="https://cryptoweeklies.com/crypto_comprehensive_forecast_risk_analysis.html">Estimated Bull Targets</a></td>
+    <td><a href="https://cryptoweeklies.com/crypto_bear_targets_analysis.html">Estimated Bear Market Bottoms</a></td>
     <td></td><td></td><td></td><td></td>
   </tr>
 </table>
