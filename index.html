@@ -164,7 +164,7 @@
   <div class="ticker__track" id="tickerTrackBull"></div>
 </div>
 
-<div class="ticker ticker-bear" aria-label="Panic & Blood Bear Screener">
+<div class="ticker ticker-bear" aria-label="Base & Panic Bear Screener">
   <div class="ticker__track" id="tickerTrackBear"></div>
 </div>
 
@@ -377,11 +377,11 @@ window.addEventListener('load', () => {
     }
   })();
 
-  // ====== TICKER 2: BEAR CASE ======
+  // ====== TICKER 2: BEAR CASE (UPDATED) ======
   (async function buildBearTicker(){
     const track = document.getElementById('tickerTrackBear');
 
-    function pill(sym, panicText, bloodText) {
+    function pill(sym, baseBearText, panicText) {
       const el = document.createElement('span');
       el.className = 'ticker__item';
       
@@ -391,8 +391,8 @@ window.addEventListener('load', () => {
       const t = document.createElement('span'); t.textContent = sym;
       const v = document.createElement('span'); 
       v.className = 'ticker__label';
-      // Distinct label style defined in CSS
-      v.textContent = `Panic: ${panicText} • Blood: ${bloodText}`;
+      // UPDATED LABEL: Base Bear and Panic
+      v.textContent = `Base: ${baseBearText} • Panic: ${panicText}`;
       
       el.append(img, t, v);
       return el;
@@ -411,23 +411,24 @@ window.addEventListener('load', () => {
 
       // Dynamic Column Detection
       const symIdx = headers.findIndex(h => h.includes('cryptocurrency') || h.includes('ticker')) || 0;
-      // Look for columns containing "Panic" and "Blood" and "$"
+      
+      // UPDATED: Find "Base Bear ($)" and "Panic Bear ($)"
+      const baseIdx = headers.findIndex(h => h.includes('base') && h.includes('$'));
       const panicIdx = headers.findIndex(h => h.includes('panic') && h.includes('$'));
-      const bloodIdx = headers.findIndex(h => h.includes('blood') && h.includes('$'));
 
       const rows = Array.from(targetTable.querySelectorAll('tbody tr'));
 
       const results = symbols.map(sym => {
         const row = rows.find(r => (r.children[symIdx]?.textContent || '').trim().toUpperCase() === sym.toUpperCase());
-        if(!row) return {sym, panic:'—', blood:'—'};
+        if(!row) return {sym, base:'—', panic:'—'};
         return {
           sym,
-          panic: extractDollarInt(row.children[panicIdx]?.textContent),
-          blood: extractDollarInt(row.children[bloodIdx]?.textContent)
+          base: extractDollarInt(row.children[baseIdx]?.textContent),
+          panic: extractDollarInt(row.children[panicIdx]?.textContent)
         };
       });
 
-      const render = (arr) => arr.forEach(d => track.appendChild(pill(d.sym, d.panic, d.blood)));
+      const render = (arr) => arr.forEach(d => track.appendChild(pill(d.sym, d.base, d.panic)));
       render(results); render(results); // Loop
 
     } catch (err) {
