@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>CryptoWeeklies Forecasts</title>
 
-<!-- Plain meta description (no emojis for SEO snippet) -->
-<meta name="description" content="AI, Statistics, and Machine Learning powered crypto forecasts and indicators. Transparent, data-based insights. No opinions, no hype. Signals from ML models trained on public data." />
+<meta name="description" content="AI, Statistics, and Machine Learning powered crypto forecasts and indicators. Transparent, data-based insights. No opinions, no hype." />
 <link rel="canonical" href="https://cryptoweeklies.com/" />
 
-<!-- Markdown parser for README -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
@@ -29,35 +27,54 @@
   a { color:var(--accent); text-decoration:none; }
   a:hover { text-decoration:underline; }
 
-  /* === Ticker (one-line screener) === */
+  /* === Tickers === */
   .ticker {
-    position:sticky; top:0; z-index:1100;
+    position:sticky; z-index:1100;
     background:var(--ticker-bg);
     border-bottom:1px solid var(--ticker-border);
     overflow:hidden; white-space:nowrap;
     height:40px; display:flex; align-items:center;
   }
+
+  /* Positioning for dual banners */
+  .ticker-bull { top: 0; }
+  .ticker-bear { top: 40px; border-bottom: 1px solid #3a1111; background: #0a0000; }
+
   .ticker__track {
     display:inline-flex; gap:20px; align-items:center;
     animation: ticker-scroll 26s linear infinite;
     will-change: transform;
     padding-left:100%;
   }
+  
+  /* Slower scroll for bear to differentiate visually */
+  .ticker-bear .ticker__track { animation-duration: 30s; }
+
   .ticker__item {
     display:inline-flex; align-items:center; gap:8px;
     padding:6px 10px; border-radius:999px;
     border:1px solid var(--border); background:#161616;
     font-weight:600; font-size:14px;
   }
+
+  /* Specific styling for bear items */
+  .ticker-bear .ticker__item {
+    border-color: #5c1818; 
+    background: #240a0a;
+  }
+  .ticker-bear .ticker__label { color: #ff9999; }
+
   .ticker__item img { width:18px; height:18px; display:block; }
   .ticker__label { color:var(--muted); font-weight:500; margin-left:2px; }
+
   @keyframes ticker-scroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
 
   header {
-    position:sticky; top:40px; z-index:1000; /* sits below ticker */
+    /* Sits below two 40px tickers = 80px */
+    position:sticky; top:80px; z-index:1000;
     background:#111; border-bottom:1px solid var(--border);
     display:flex; align-items:center; justify-content:space-between;
     padding:12px 20px;
@@ -93,10 +110,9 @@
   .content thead th { background:#242424; }
   .content tr:hover { background:#262626; }
 
-  /* Make anchors land below sticky header+ticker */
-  .content :is(h1,h2,h3,h4)[id] { scroll-margin-top: 96px; }
+  /* Scroll margin accounts for 2 tickers (80px) + header (~56px) */
+  .content :is(h1,h2,h3,h4)[id] { scroll-margin-top: 140px; }
 
-  /* Normalize inline-styled tables pasted into README */
   .content [style*="color: black"] { color:var(--ink)!important; }
   .content [style*="background-color: black"] { background-color:transparent!important; }
   .content [style*="border: 1px solid white"] { border:1px solid var(--border)!important; }
@@ -124,11 +140,9 @@
   }
   .quicklinks a:hover { border-color:var(--accent); }
 
-  /* YouTube link flare */
   a[href*="youtube.com"] { color:#ff4444; font-weight:600; }
   a[href*="youtube.com"]:hover { text-decoration:underline; }
 
-  /* Intro with logo on right */
   .intro-section {
     display:flex; align-items:center; justify-content:space-between;
     gap:20px; flex-wrap:wrap;
@@ -146,9 +160,12 @@
 </head>
 <body>
 
-<!-- === One-line scrolling screener === -->
-<div class="ticker" aria-label="Base & Bull Screener">
-  <div class="ticker__track" id="tickerTrack"></div>
+<div class="ticker ticker-bull" aria-label="Base & Bull Screener">
+  <div class="ticker__track" id="tickerTrackBull"></div>
+</div>
+
+<div class="ticker ticker-bear" aria-label="Panic & Blood Bear Screener">
+  <div class="ticker__track" id="tickerTrackBear"></div>
 </div>
 
 <header>
@@ -178,7 +195,7 @@
       <div class="muted">
         🚀 Free daily <strong>insights</strong> - educational, not financial advice. <br>
         🔍 Transparent, Quantitative, No sponsorships, and unbiased summary on <strong>YouTube</strong> videos.<br>
-        🧠 Forrecasts built on statistical models — <strong>no opinions, no hype, no shilling</strong>.
+        🧠 Forecasts built on statistical models — <strong>no opinions, no hype, no shilling</strong>.
       </div>
       <div>
         📧 <a href="mailto:cryptoweeklies@gmail.com">cryptoweeklies@gmail.com</a><br>
@@ -223,16 +240,18 @@ window.addEventListener('load', () => {
 
   let readmeReady = false;
 
-  // Smooth scroll with offset (ticker + header)
+  // Smooth scroll logic accounting for double ticker + header
   function scrollToHash(hash) {
     if (!hash) return false;
     const id = decodeURIComponent(hash.replace('#',''));
     const el = document.getElementById(id);
     if (!el) return false;
 
-    const ticker = document.querySelector('.ticker');
+    // Calculate total height of sticky elements
+    let offset = 0;
+    document.querySelectorAll('.ticker').forEach(t => offset += t.offsetHeight);
     const header = document.querySelector('header');
-    const offset = (ticker?.offsetHeight || 0) + (header?.offsetHeight || 0) + 6;
+    offset += (header?.offsetHeight || 0) + 6;
 
     const y = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
@@ -256,7 +275,6 @@ window.addEventListener('load', () => {
     });
   }
 
-  // Create stable alias IDs after README is inserted
   function addAnchorAliases(root) {
     const heads = Array.from(root.querySelectorAll('h1, h2, h3, h4'));
     function byText(pred) { return heads.find(h => pred(h.textContent.trim().toLowerCase())); }
@@ -278,118 +296,142 @@ window.addEventListener('load', () => {
     ensureId(byText(t => t.startsWith('disclaimer')), 'disclaimer');
   }
 
-  // ====== TICKER (Base & Bull Peaks) ======
-  (async function buildTicker(){
-    const symbols = ["BTC","ETH","SOL","LINK","BNB","XRP"];
+  // Shared Config
+  const symbols = ["BTC","ETH","SOL","LINK","BNB","XRP"];
+  const logos = {
+    BTC: "bitcoin-btc-logo.png",
+    ETH: "ethereum_eth_logo.png",
+    SOL: "solana-sol-logo.png",
+    LINK:"chainlink-link-logo.png",
+    BNB: "bnb-bnb-logo.png",
+    XRP: "xrp%20reverse%20logo.png"
+  };
 
-    // Local logo file paths (XRP filename has spaces → URL-encode)
-    const logos = {
-      BTC: "bitcoin-btc-logo.png",
-      ETH: "ethereum_eth_logo.png",
-      SOL: "solana-sol-logo.png",
-      LINK:"chainlink-link-logo.png",
-      BNB: "bnb-bnb-logo.png",
-      XRP: "xrp%20reverse%20logo.png"
-    };
+  // Helper formatting functions
+  function fmtUSDInt(n){
+    try { return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n); }
+    catch { return String(n); }
+  }
+  
+  function extractDollarInt(cellText){
+    const m = (cellText || '').replace(/,/g,'').match(/-?\d+(\.\d+)?/);
+    if (!m) return '—';
+    const num = parseFloat(m[0]);
+    if (isNaN(num)) return '—';
+    return '$' + fmtUSDInt(num);
+  }
 
-    const track = document.getElementById('tickerTrack');
-
-    // $12,345 formatting
-    function fmtUSDInt(n){
-      try { return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n); }
-      catch { return String(n); }
-    }
+  // ====== TICKER 1: BULL CASE ======
+  (async function buildBullTicker(){
+    const track = document.getElementById('tickerTrackBull');
 
     function pill(sym, baseText, bullText) {
       const el = document.createElement('span');
       el.className = 'ticker__item';
-
+      
       const img = document.createElement('img');
-      img.loading = 'lazy';
-      img.alt = sym + ' logo';
-      img.src = logos[sym];
+      img.loading = 'lazy'; img.alt = sym; img.src = logos[sym];
 
-      const t = document.createElement('span');
-      t.textContent = sym + ' ';
-
-      const v = document.createElement('span');
+      const t = document.createElement('span'); t.textContent = sym;
+      const v = document.createElement('span'); 
       v.className = 'ticker__label';
       v.textContent = `Base: ${baseText} • Bull: ${bullText}`;
-
+      
       el.append(img, t, v);
       return el;
     }
 
     try {
       const resp = await fetch('/crypto_comprehensive_forecast_risk_analysis.html', {cache:'no-store'});
-      if (!resp.ok) throw new Error('Fetch failed: ' + resp.status);
+      if (!resp.ok) throw new Error('Bull fetch failed');
       const html = await resp.text();
       const doc = new DOMParser().parseFromString(html, 'text/html');
 
-      // Prefer #riskTable generated by your script
-      let targetTable = doc.querySelector('#riskTable') || doc.querySelector('table');
-      if (!targetTable) throw new Error('No table found in analysis page.');
+      const targetTable = doc.querySelector('#riskTable') || doc.querySelector('table');
+      if (!targetTable) throw new Error('No Bull table found');
 
-      // Find column indexes for Ticker, Base Peak, Bull Peak
-      const headerCells = targetTable.querySelectorAll('thead th');
-      let headTexts = headerCells.length
-        ? Array.from(headerCells).map(th => th.textContent.trim())
-        : Array.from(targetTable.querySelectorAll('tr:first-child th, tr:first-child td')).map(th => th.textContent.trim());
+      const headers = Array.from(targetTable.querySelectorAll('thead th')).map(th => th.textContent.trim().toLowerCase());
+      
+      // Dynamic Column Detection
+      const symIdx = headers.findIndex(h => h.includes('cryptocurrency') || h.includes('ticker') || h.includes('symbol')) || 0;
+      const baseIdx = headers.findIndex(h => h.includes('base peak'));
+      const bullIdx = headers.findIndex(h => h.includes('bull peak'));
 
-      const normalized = headTexts.map(t => t.toLowerCase().replace(/\s+/g,' ').trim());
-      const symColIdx  = (() => {
-        let i = normalized.findIndex(t => /^(cryptocurrency|symbol|ticker)$/.test(t));
-        return i !== -1 ? i : 0; // fallback to first column
-      })();
-      const baseColIdx = normalized.findIndex(t => /base\s*peak/.test(t));
-      const bullColIdx = normalized.findIndex(t => /bull\s*peak/.test(t));
-
-      if (baseColIdx === -1) throw new Error('No "Base Peak" column found.');
-      if (bullColIdx === -1) throw new Error('No "Bull Peak" column found.');
-
-      // Collect data rows
-      const rows = Array.from(targetTable.querySelectorAll('tbody tr, tr'))
-        .filter(r => r.querySelectorAll('td').length);
-
-      function extractDollarInt(cellText){
-        const m = (cellText || '').replace(/,/g,'').match(/-?\d+(\.\d+)?/);
-        if (!m) return '—';
-        const num = parseFloat(m[0]);
-        if (isNaN(num)) return '—';
-        return '$' + fmtUSDInt(num);
-      }
-
-      // Match by exact ticker text in the symbol column (case-insensitive)
-      function lookupPeaks(sym) {
-        const row = rows.find(r => {
-          const cells = Array.from(r.children);
-          const cellText = (cells[symColIdx]?.textContent || '').trim().toUpperCase();
-          return cellText === sym.toUpperCase();
-        });
-        if (!row) return { base:'—', bull:'—' };
-
-        const cells = Array.from(row.children);
-        const baseText = extractDollarInt((cells[baseColIdx]?.textContent || '').trim());
-        const bullText = extractDollarInt((cells[bullColIdx]?.textContent || '').trim());
-        return { base: baseText, bull: bullText };
-      }
+      const rows = Array.from(targetTable.querySelectorAll('tbody tr'));
 
       const results = symbols.map(sym => {
-        const { base, bull } = lookupPeaks(sym);
-        return { sym, base, bull };
+        const row = rows.find(r => (r.children[symIdx]?.textContent || '').trim().toUpperCase() === sym.toUpperCase());
+        if(!row) return {sym, base:'—', bull:'—'};
+        return {
+          sym,
+          base: extractDollarInt(row.children[baseIdx]?.textContent),
+          bull: extractDollarInt(row.children[bullIdx]?.textContent)
+        };
       });
 
-      // Render twice for seamless loop
-      const render = (arr) => arr.forEach(({sym, base, bull}) => track.appendChild(pill(sym, base, bull)));
-      render(results);
-      render(results);
+      const render = (arr) => arr.forEach(d => track.appendChild(pill(d.sym, d.base, d.bull)));
+      render(results); render(results); // Loop
 
     } catch (err) {
-      console.error('Ticker error:', err);
-      const fallback = ["BTC","ETH","SOL","LINK","BNB","XRP"].map(s => ({sym:s, base:'—', bull:'—'}));
-      const render = (arr) => arr.forEach(({sym, base, bull}) => track.appendChild(pill(sym, base, bull)));
-      render(fallback);
-      render(fallback);
+      console.error(err);
+    }
+  })();
+
+  // ====== TICKER 2: BEAR CASE ======
+  (async function buildBearTicker(){
+    const track = document.getElementById('tickerTrackBear');
+
+    function pill(sym, panicText, bloodText) {
+      const el = document.createElement('span');
+      el.className = 'ticker__item';
+      
+      const img = document.createElement('img');
+      img.loading = 'lazy'; img.alt = sym; img.src = logos[sym];
+
+      const t = document.createElement('span'); t.textContent = sym;
+      const v = document.createElement('span'); 
+      v.className = 'ticker__label';
+      // Distinct label style defined in CSS
+      v.textContent = `Panic: ${panicText} • Blood: ${bloodText}`;
+      
+      el.append(img, t, v);
+      return el;
+    }
+
+    try {
+      const resp = await fetch('/crypto_bear_targets_analysis.html', {cache:'no-store'});
+      if (!resp.ok) throw new Error('Bear fetch failed');
+      const html = await resp.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const targetTable = doc.querySelector('#bearTable') || doc.querySelector('table');
+      if (!targetTable) throw new Error('No Bear table found');
+
+      const headers = Array.from(targetTable.querySelectorAll('thead th')).map(th => th.textContent.trim().toLowerCase());
+
+      // Dynamic Column Detection
+      const symIdx = headers.findIndex(h => h.includes('cryptocurrency') || h.includes('ticker')) || 0;
+      // Look for columns containing "Panic" and "Blood" and "$"
+      const panicIdx = headers.findIndex(h => h.includes('panic') && h.includes('$'));
+      const bloodIdx = headers.findIndex(h => h.includes('blood') && h.includes('$'));
+
+      const rows = Array.from(targetTable.querySelectorAll('tbody tr'));
+
+      const results = symbols.map(sym => {
+        const row = rows.find(r => (r.children[symIdx]?.textContent || '').trim().toUpperCase() === sym.toUpperCase());
+        if(!row) return {sym, panic:'—', blood:'—'};
+        return {
+          sym,
+          panic: extractDollarInt(row.children[panicIdx]?.textContent),
+          blood: extractDollarInt(row.children[bloodIdx]?.textContent)
+        };
+      });
+
+      const render = (arr) => arr.forEach(d => track.appendChild(pill(d.sym, d.panic, d.blood)));
+      render(results); render(results); // Loop
+
+    } catch (err) {
+      console.error(err);
     }
   })();
 
@@ -398,16 +440,13 @@ window.addEventListener('load', () => {
     const url = 'https://raw.githubusercontent.com/cryptoweeklies/cryptoweeklies.github.io/main/README.md';
     try {
       const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) throw new Error('README fetch failed: ' + res.status);
+      if (!res.ok) throw new Error('README fetch failed');
       const md = await res.text();
-
       const html = marked.parse(md, { mangle: false, headerIds: true });
       const host = document.getElementById('readme');
-
       const temp = document.createElement('div');
       temp.innerHTML = html;
 
-      // Make wide tables scrollable on mobile
       temp.querySelectorAll('table').forEach(tbl => {
         const wrap = document.createElement('div');
         wrap.className = 'table-wrap';
@@ -417,16 +456,10 @@ window.addEventListener('load', () => {
 
       host.innerHTML = '';
       host.append(...temp.childNodes);
-
-      // Add stable alias anchors so header links always work
       addAnchorAliases(host);
-
       readmeReady = true;
-
-      // Re-wire in-page anchors that came from README
       wireInternalLinks();
 
-      // If user arrived with a hash, scroll to it now
       if (location.hash) {
         if (!scrollToHash(location.hash)) {
           setTimeout(() => scrollToHash(location.hash), 80);
@@ -434,15 +467,11 @@ window.addEventListener('load', () => {
         }
       }
     } catch (e) {
-      document.getElementById('readme').innerHTML =
-        '<div class="card">Could not load README.md automatically.<br>Error: ' +
-        (e && e.message ? e.message : e) +
-        '<br><br>Your site still works; make sure a README.md exists in the main branch.</div>';
+      document.getElementById('readme').innerHTML = '<div class="card">Loading...</div>';
       console.error(e);
     }
   }
 
-  // Initial wiring for header links present in the static HTML
   wireInternalLinks();
   loadREADME();
 });
