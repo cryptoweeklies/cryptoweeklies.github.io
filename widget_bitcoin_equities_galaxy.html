@@ -1,0 +1,2793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lagrangian Galaxy for Bitcoin Equities</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+    :root {
+        --md-bg:#03050a;
+        --md-surface:#0b0e14;
+        --md-surface-high:#101620;
+        --md-outline:#263244;
+        --md-primary:#80d8ff;
+        --md-primary-container:#123545;
+        --md-secondary-container:#273141;
+        --md-tertiary:#00d4aa;
+        --md-on-surface:#e3e2e6;
+        --md-muted:#c4c7cf;
+        --md-shadow:0 8px 24px rgba(0,0,0,.34);
+    }
+    body, html { margin:0; padding:0; width:100%; min-height:100%; overflow-x:hidden; overflow-y:auto; background:var(--md-bg); color:var(--md-on-surface); font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; user-select:none; }
+    /* Sized to the frame it is embedded in. The 680px floor this used to carry
+       exceeded the embedded height on a short window, so the galaxy overflowed
+       its own frame and scrolled instead of fitting; 480px matches the floor
+       .galaxy-viewport uses on the page. Width is 100% rather than 100vw so a
+       vertical scrollbar cannot push the canvas sideways. */
+    #galaxy-section { position:relative; width:100%; height:100vh; min-height:480px; overflow:hidden; background:#03050a; }
+    #galaxy-canvas { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
+    #table-view { position:absolute; inset:68px 8px 56px 162px; z-index:16; display:none; overflow:auto; background:rgba(7,10,19,.96); border:1px solid var(--md-outline); border-radius:24px; box-shadow:var(--md-shadow); backdrop-filter:blur(10px); }
+    #table-view.active { display:block; }
+    #table-view.frameless-panel { inset:0; overflow:hidden; background:transparent; border:0; border-radius:0; box-shadow:none; backdrop-filter:none; }
+    #table-view.frameless-panel .story-panel { background:transparent; padding:0; }
+    #table-view.frameless-panel .story-svg-shell { border:0; border-radius:0; background:transparent; box-shadow:none; }
+    #table-view.frameless-panel .market-window-mode { background:transparent; }
+    .galaxy-hidden { opacity:0; pointer-events:none; }
+    #tooltip { position:absolute; opacity:0; background:var(--md-surface-high); border:1px solid var(--md-outline); border-radius:18px; padding:15px; color:#fff; pointer-events:none; z-index:100; box-shadow:var(--md-shadow); transition:opacity .1s ease; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; min-width:270px; }
+
+    .top-nav { display:none; }
+    #status-line { margin-top:8px; color:var(--md-muted); font-size:11px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    #chart-title { position:absolute; top:25px; left:28px; z-index:24; color:#00d4aa; font-size:18px; font-weight:950; letter-spacing:0; text-shadow:0 0 18px rgba(0,212,170,.34); }
+
+    #control-deck { position:absolute; top:62px; left:18px; right:auto; z-index:25; display:flex; flex-direction:column; align-items:flex-start; gap:9px; max-width:132px; }
+    .segmented-control { display:flex; align-items:center; gap:4px; background:rgba(11,14,20,.9); border:1px solid var(--md-outline); border-radius:24px; padding:4px; backdrop-filter:blur(10px); box-shadow:var(--md-shadow); }
+    .view-mode { background:rgba(5,13,18,.88); border-color:rgba(128,216,255,.34); }
+    #control-deck .segmented-control { flex-direction:column; align-items:stretch; width:126px; border-radius:18px; }
+    #control-deck .focus-btn { width:100%; justify-content:flex-start; min-height:32px; padding:0 10px; }
+    .focus-mode { padding-left:6px; }
+    .focus-btn { min-height:38px; border:0; background:transparent; color:var(--md-muted); padding:0 12px; border-radius:20px; font-size:11px; font-weight:900; cursor:pointer; transition:background .2s, color .2s, box-shadow .2s; letter-spacing:0; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; }
+    .focus-btn:hover { background:rgba(255,255,255,.07); color:#fff; }
+    .focus-btn.active { background:var(--md-secondary-container); color:#fff; box-shadow:0 0 16px currentColor, inset 0 0 0 1px rgba(255,255,255,.14); }
+    .focus-btn[data-view].active { background:var(--md-primary-container); color:#d9f5ff; box-shadow:0 0 18px rgba(128,216,255,.62), inset 0 0 0 1px rgba(128,216,255,.24); }
+    .focus-btn[data-focus="PRIMARY"] { color:#80d8ff; }
+    .focus-btn[data-focus="OUTER"] { color:#f97316; }
+    .reset-zone-btn { display:none; width:126px; justify-content:center; border:1px solid rgba(0,212,170,.38); background:rgba(0,212,170,.08); color:#dffcf5; box-shadow:0 0 16px rgba(0,212,170,.16); }
+    .reset-zone-btn.visible { display:inline-flex; }
+    .reset-zone-btn:hover { border-color:#00d4aa; color:#fff; box-shadow:0 0 20px rgba(0,212,170,.34); }
+    .report-link { color:#80d8ff; text-decoration:none; font-size:11px; font-weight:950; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; text-transform:uppercase; letter-spacing:0; }
+    #full-report-link { position:absolute; right:10px; bottom:54px; z-index:26; display:inline-flex; align-items:center; justify-content:center; min-height:30px; padding:0 12px; border:1px solid rgba(128,216,255,.44); border-radius:999px; background:rgba(11,14,20,.92); box-shadow:0 0 18px rgba(128,216,255,.18); backdrop-filter:blur(10px); }
+    #full-report-link:hover { color:#fff; border-color:#80d8ff; box-shadow:0 0 20px rgba(128,216,255,.36); }
+    .control-divider { width:1px; height:26px; background:var(--md-outline); opacity:.8; margin:0 2px 0 6px; }
+
+    #tier-panel { position:absolute; left:50%; bottom:24px; transform:translateX(-50%); width:min(760px, calc(100vw - 32px)); z-index:25; display:none; flex-wrap:wrap; justify-content:center; gap:8px; background:rgba(11,14,20,.92); border:1px solid var(--md-outline); border-radius:24px; padding:10px 12px; backdrop-filter:blur(10px); box-shadow:var(--md-shadow); }
+    .filter-pill { background:transparent; border:1px solid rgba(255,255,255,.08); padding:8px 12px; border-radius:18px; font-size:12px; font-weight:900; cursor:pointer; transition:background .2s, box-shadow .2s; outline:none; letter-spacing:0; }
+    .filter-pill[data-zone-filter="ALL"] { color:#fff; border-color:#475569; }
+    .filter-pill[data-zone-filter="Golden Breakout"] { color:#eab308; border-color:rgba(234,179,8,.44); }
+    .filter-pill[data-zone-filter="Deep Accumulation"] { color:#3b82f6; border-color:rgba(59,130,246,.44); }
+    .filter-pill[data-zone-filter="Euphoria"] { color:#a855f7; border-color:rgba(168,85,247,.44); }
+    .filter-pill[data-zone-filter="Value Trap"] { color:#ef4444; border-color:rgba(239,68,68,.44); }
+    .filter-pill:hover, .filter-pill.active { background:rgba(30,41,59,.92); box-shadow:0 0 16px currentColor, inset 0 0 0 1px currentColor; }
+
+    #orbit-description { display:none; }
+    #orbit-description strong { color:#fff; }
+    #zone-legend { position:absolute; right:0; bottom:34px; z-index:18; width:min(220px, calc(50vw - 8px)); background:rgba(11,14,20,.9); border:1px solid var(--md-outline); border-radius:18px; padding:12px; box-shadow:var(--md-shadow); backdrop-filter:blur(10px); }
+    .legend-title { color:#fff; font-size:11px; font-weight:900; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; text-transform:uppercase; letter-spacing:0; margin:0 0 9px 0; }
+    .legend-grid { display:grid; grid-template-columns:1fr; gap:7px; }
+    .legend-item { display:grid; grid-template-columns:16px 1fr; gap:8px; align-items:start; color:#cbd5e1; font-size:10px; line-height:1.18; border-radius:12px; padding:4px 5px; margin:0 -5px; cursor:pointer; transition:background .2s, box-shadow .2s, color .2s; }
+    .legend-item:hover, .legend-item.active { background:rgba(30,41,59,.72); box-shadow:inset 0 0 0 1px rgba(255,255,255,.10); }
+    .legend-item[data-zone-filter="ALL"] { --active-color:#80d8ff; }
+    .legend-item[data-zone-filter="Golden Breakout"] { --active-color:#eab308; }
+    .legend-item[data-zone-filter="Deep Accumulation"] { --active-color:#3b82f6; }
+    .legend-item[data-zone-filter="Euphoria"] { --active-color:#a855f7; }
+    .legend-item[data-zone-filter="Value Trap"] { --active-color:#ef4444; }
+    .legend-item[data-zone-filter]:hover, .legend-item[data-zone-filter].active { color:#fff; background:color-mix(in srgb, var(--active-color) 14%, rgba(30,41,59,.72)); box-shadow:0 0 16px color-mix(in srgb, var(--active-color) 45%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--active-color) 70%, transparent); }
+    .legend-item.legend-all { margin-top:4px; padding-top:9px; border-top:1px solid rgba(148,163,184,.16); }
+    .legend-swatch { width:13px; height:13px; border-radius:999px; margin-top:1px; box-shadow:0 0 14px currentColor; }
+    .all-zone-swatch { background:linear-gradient(135deg,#eab308,#3b82f6 40%,#a855f7 68%,#ef4444); color:#80d8ff; }
+    .legend-item strong { color:#fff; font-size:10.5px; display:block; margin-bottom:2px; }
+    .legend-code { color:#cbd5e1; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:800; white-space:nowrap; }
+
+    .well-core { cursor:pointer; }
+    .halo { display:none; }
+    .well-label { pointer-events:none; fill:#fff; font-weight:900; font-size:16px; text-anchor:middle; }
+    .well-sub { pointer-events:none; fill:#94a3b8; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:800; font-size:11px; text-anchor:middle; }
+    .orbit-label { pointer-events:none; fill:#64748b; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:800; text-anchor:middle; letter-spacing:0; }
+    .zone-orbit { fill:none; stroke-width:1.2; stroke-dasharray:7 8; opacity:.42; pointer-events:none; }
+    .coin-node { cursor:pointer; }
+    .coin-logo { pointer-events:none; }
+    .coin-logo.reverse-logo { filter:invert(1) brightness(1.35) drop-shadow(0 0 5px rgba(255,255,255,.35)); }
+    .coin-fallback { pointer-events:none; opacity:0; fill:#fff; font-weight:900; text-anchor:middle; dominant-baseline:middle; }
+    .coin-label, .coin-return { pointer-events:none; text-anchor:middle; dominant-baseline:middle; font-weight:900; text-shadow:0 2px 6px rgba(0,0,0,.9), 0 -1px 4px rgba(0,0,0,.8); }
+    .coin-label { fill:#e2e8f0; }
+    .coin-return { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .rag-core-foreign { pointer-events:none; overflow:visible; }
+    .market-well .rag-core-foreign, .market-well .rag-core-card { pointer-events:auto; }
+    .rag-core-card { width:100%; height:100%; border-radius:999px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; box-sizing:border-box; padding:24px 26px; color:#fff; background:radial-gradient(circle at 50% 34%, rgba(16,22,32,.98), rgba(3,5,10,.74)); border:1px solid rgba(128,216,255,.20); box-shadow:inset 0 0 34px rgba(0,212,170,.08); }
+    .rag-kicker, .rag-meta { display:none; }
+    .rag-headline, .rag-posture, .rag-statline, .rag-gemline, .rag-universe { font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
+    .rag-headline { color:#fff; font-size:15.5px; font-weight:900; line-height:1.12; max-width:238px; }
+    .rag-posture { color:#cbd5e1; font-size:10.5px; line-height:1.28; margin-top:8px; max-width:250px; }
+    .rag-statline, .rag-gemline { color:#e2e8f0; font-size:10px; line-height:1.2; margin-top:6px; font-weight:900; max-width:238px; }
+    .rag-gemline { color:#00d4aa; }
+    .rag-universe { color:#94a3b8; font-size:8px; line-height:1.05; margin-top:6px; font-weight:900; text-transform:uppercase; }
+    .rag-bullets { display:none; }
+    .rag-bullet { border-top:1px solid rgba(148,163,184,.16); padding-top:5px; }
+    .status-meter { width:min(190px, 72%); height:8px; border-radius:999px; overflow:hidden; background:rgba(148,163,184,.20); margin-top:9px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+    .status-meter-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#3b82f6,#eab308,#a855f7,#ef4444); }
+    .market-window-card { width:100%; height:100%; border-radius:999px; align-items:stretch; justify-content:center; text-align:center; padding:0; background:radial-gradient(circle at 50% 50%, rgba(0,212,170,.08), rgba(5,8,14,.76) 42%, rgba(3,5,10,.08) 72%); border:0; box-shadow:none; overflow:visible; }
+    .market-solar-system { position:relative; width:100%; height:100%; min-height:420px; }
+    .market-orbit-ring { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border:1px dashed rgba(128,216,255,.20); border-radius:999px; pointer-events:none; }
+    .market-orbit-ring.r1 { width:42%; height:42%; }
+    .market-orbit-ring.r2 { width:68%; height:68%; }
+    .market-orbit-ring.r3 { width:91%; height:91%; border-color:rgba(0,212,170,.18); }
+    .market-sun { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(240px, 30%); aspect-ratio:1; border-radius:999px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:22px; box-sizing:border-box; background:radial-gradient(circle at 50% 34%, rgba(0,212,170,.26), rgba(7,10,19,.98) 62%); border:2px solid rgba(0,212,170,.42); box-shadow:0 0 38px rgba(0,212,170,.23), inset 0 0 28px rgba(128,216,255,.08); }
+    .market-window-kicker { color:#00d4aa; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0; margin-bottom:6px; }
+    .market-window-title { color:#fff; font-size:20px; line-height:1.05; font-weight:950; margin-bottom:8px; }
+    .market-window-summary { color:#cbd5e1; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1.28; font-weight:900; }
+    .market-planet { position:absolute; left:var(--x); top:var(--y); transform:translate(-50%,-50%); width:112px; aspect-ratio:1; border-radius:999px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:12px; box-sizing:border-box; color:#fff; background:radial-gradient(circle at 35% 28%, rgba(255,255,255,.18), rgba(15,20,30,.96) 54%); border:2px solid var(--planet-color); box-shadow:0 0 18px color-mix(in srgb, var(--planet-color) 62%, transparent), inset 0 0 18px rgba(255,255,255,.06); cursor:help; animation:market-planet-orbit var(--orbit-duration, 18s) linear infinite, market-planet-glow 3.8s ease-in-out infinite alternate; animation-delay:var(--orbit-delay, 0s), var(--orbit-delay, 0s); }
+    .market-planet:hover { animation-play-state:paused; z-index:7; }
+    .market-planet-index { color:var(--planet-color); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:950; }
+    .market-planet-name { font-size:12px; line-height:1.02; font-weight:950; }
+    .market-planet-value { color:var(--planet-color); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:15px; line-height:1.05; font-weight:950; }
+    .market-planet-reading { color:#cbd5e1; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:8.5px; font-weight:800; }
+    .market-table td:nth-child(2) { color:#fff; font-weight:950; }
+
+    .focus-btn.hidden { display:none; }
+    .story-panel { min-height:100%; box-sizing:border-box; padding:28px; color:#e2e8f0; background:radial-gradient(circle at 50% 18%, rgba(0,212,170,.08), rgba(7,10,19,.96) 42%, rgba(3,5,10,.98)); }
+    .story-panel-header { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:22px; border-bottom:1px solid rgba(128,216,255,.18); padding-bottom:14px; }
+    .story-kicker { color:#00d4aa; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:950; text-transform:uppercase; letter-spacing:0; }
+    .story-title { color:#fff; font-size:24px; line-height:1.05; font-weight:950; margin-top:4px; }
+    .story-subtitle { color:#94a3b8; font-size:12px; line-height:1.35; max-width:560px; }
+    .story-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; }
+    .story-card { position:relative; overflow:hidden; border:1px solid rgba(128,216,255,.17); border-radius:22px; background:linear-gradient(145deg, rgba(16,22,32,.94), rgba(7,10,19,.92)); padding:16px; min-height:150px; box-shadow:0 10px 28px rgba(0,0,0,.32); }
+    .story-card::before { content:""; position:absolute; inset:auto -24px -42px auto; width:112px; aspect-ratio:1; border-radius:999px; border:1px dashed var(--card-color, #80d8ff); opacity:.28; }
+    .story-card::after { content:""; position:absolute; right:20px; top:18px; width:34px; aspect-ratio:1; border-radius:999px; background:var(--card-color, #80d8ff); opacity:.16; box-shadow:0 0 22px var(--card-color, #80d8ff); }
+    .story-card-name { color:#fff; font-size:14px; font-weight:950; max-width:150px; }
+    .story-card-value { color:var(--card-color, #80d8ff); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:23px; font-weight:950; margin-top:12px; }
+    .story-card-copy { color:#cbd5e1; font-size:12px; line-height:1.35; margin-top:10px; }
+    .story-card-meta { color:#94a3b8; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:900; margin-top:10px; }
+    .portfolio-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); gap:14px; }
+    .portfolio-card { border:1px solid rgba(128,216,255,.16); border-radius:24px; padding:16px; background:radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--card-color, #80d8ff) 18%, transparent), rgba(7,10,19,.95) 52%); box-shadow:0 10px 28px rgba(0,0,0,.32); }
+    .portfolio-name { color:#fff; font-size:16px; font-weight:950; }
+    .portfolio-meta { color:var(--card-color, #80d8ff); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:900; margin:5px 0 12px; }
+    .holding-row { display:grid; grid-template-columns:48px 1fr 42px; gap:10px; align-items:center; margin:8px 0; }
+    .holding-symbol { color:#fff; font-weight:950; }
+    .holding-track { height:8px; border-radius:999px; background:rgba(148,163,184,.18); overflow:hidden; }
+    .holding-fill { height:100%; border-radius:999px; background:linear-gradient(90deg, var(--card-color, #80d8ff), #00d4aa); }
+    .holding-weight { color:#cbd5e1; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:900; text-align:right; }
+    .frontier-wrap { display:grid; grid-template-columns:minmax(280px,1.5fr) minmax(220px,.8fr); gap:18px; align-items:stretch; }
+    .frontier-plot { position:relative; min-height:420px; border:1px solid rgba(128,216,255,.16); border-radius:26px; background:linear-gradient(180deg, rgba(16,22,32,.86), rgba(3,5,10,.96)); overflow:hidden; box-shadow:inset 0 0 40px rgba(0,212,170,.05); }
+    .frontier-plot::before { content:""; position:absolute; left:48px; right:22px; bottom:46px; height:1px; background:rgba(148,163,184,.35); }
+    .frontier-plot::after { content:""; position:absolute; left:48px; top:22px; bottom:46px; width:1px; background:rgba(148,163,184,.35); }
+    .frontier-axis-x, .frontier-axis-y { position:absolute; color:#94a3b8; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:900; text-transform:uppercase; }
+    .frontier-axis-x { right:24px; bottom:18px; }
+    .frontier-axis-y { left:14px; top:24px; writing-mode:vertical-rl; transform:rotate(180deg); }
+    .frontier-dot { position:absolute; width:42px; aspect-ratio:1; border-radius:999px; transform:translate(-50%,50%); border:2px solid var(--card-color, #80d8ff); background:#080c14; box-shadow:0 0 16px var(--card-color, #80d8ff); display:flex; align-items:center; justify-content:center; color:#fff; font-size:9px; font-weight:950; }
+    .frontier-list { display:grid; gap:10px; }
+    .risk-row { display:grid; grid-template-columns:58px 1fr 50px; gap:10px; align-items:center; padding:9px 0; border-bottom:1px solid rgba(148,163,184,.12); }
+    .risk-track { height:10px; border-radius:999px; background:rgba(148,163,184,.18); overflow:hidden; }
+    .risk-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#3b82f6,#eab308,#ef4444); }
+
+    body.presentation-mode,
+    body.presentation-mode.full-page,
+    body.presentation-mode.compact-page { width:100%; height:100%; min-height:0; overflow:hidden; background:#01030a; }
+    body.presentation-mode #galaxy-section { height:100dvh; min-height:0; background:#01030a; }
+    body.presentation-mode #control-deck,
+    body.presentation-mode #tier-panel,
+    body.presentation-mode #zone-legend,
+    body.presentation-mode #orbit-description,
+    body.presentation-mode #status-line,
+    body.presentation-mode #full-report-link { display:none !important; visibility:hidden !important; pointer-events:none !important; }
+    body.presentation-mode #chart-title { top:8px; left:10px; right:10px; max-width:calc(100vw - 20px); font-size:clamp(18px, 5.8vw, 34px); line-height:1; pointer-events:none; }
+    body.presentation-mode #table-view,
+    body.presentation-mode #table-view.active,
+    body.presentation-mode #table-view.frameless-panel { inset:0; border:0; border-radius:0; background:#01030a; box-shadow:none; backdrop-filter:none; }
+    body.presentation-mode .story-panel { min-height:100dvh; padding:14px; background:#01030a; }
+    body.presentation-mode .story-panel-header,
+    body.presentation-mode .story-mode-controls,
+    body.presentation-mode .story-legend,
+    body.presentation-mode .market-table-launch { display:none !important; }
+    body.presentation-mode .story-grid { height:calc(100dvh - 28px); align-content:center; grid-template-columns:repeat(auto-fit, minmax(min(46vw, 230px), 1fr)); gap:12px; }
+    body.presentation-mode .story-card { min-height:clamp(150px, 26vh, 250px); padding:18px; border-radius:24px; }
+    body.presentation-mode .story-card-name { font-size:clamp(16px, 4.6vw, 24px); max-width:none; }
+    body.presentation-mode .story-card-value { font-size:clamp(28px, 8vw, 52px); }
+    body.presentation-mode .story-card-copy { font-size:clamp(13px, 3.4vw, 18px); }
+    body.presentation-mode .portfolio-grid { height:calc(100dvh - 28px); align-content:center; grid-template-columns:repeat(auto-fit, minmax(min(48vw, 260px), 1fr)); gap:12px; }
+    body.presentation-mode .portfolio-card { border-radius:24px; padding:18px; }
+    body.presentation-mode .portfolio-name { font-size:clamp(17px, 4.8vw, 26px); }
+    body.presentation-mode .holding-symbol { font-size:clamp(14px, 3.8vw, 18px); }
+    body.presentation-mode .frontier-wrap { display:block; height:100dvh; padding:10px; box-sizing:border-box; }
+    body.presentation-mode .frontier-list { display:none; }
+    body.presentation-mode .frontier-plot { min-height:calc(100dvh - 20px); border-radius:24px; }
+    body.presentation-mode .frontier-dot { width:clamp(48px, 10vw, 76px); font-size:clamp(10px, 2.6vw, 15px); }
+    body.presentation-mode .market-window-mode { height:100dvh; background:#01030a; }
+    body.presentation-mode .market-window-mode .market-sun { width:min(280px, 42%); }
+    body.presentation-mode .market-planet { width:clamp(96px, 18vw, 150px); }
+    body.presentation-mode .market-planet-name { font-size:clamp(13px, 3.6vw, 20px); }
+    body.presentation-mode .coin-label,
+    body.presentation-mode .coin-return,
+    body.presentation-mode .coin-fallback,
+    body.presentation-mode text { letter-spacing:0 !important; }
+
+    .story-orbit-panel { padding:0; height:100%; min-height:0; display:block; overflow:hidden; position:relative; }
+    .story-mode-controls { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin:0; min-height:38px; max-width:100%; overflow:visible; position:relative; z-index:4; }
+    .story-mode-controls .choice-strip { flex:1; justify-content:center; }
+    .story-mode-controls .slider-strip { flex:1 1 520px; justify-content:flex-start; }
+    .story-mode-controls .zone-filter-strip { flex:0 1 auto; justify-content:flex-end; }
+    .story-svg-shell { position:absolute; inset:0; width:100%; min-height:0; height:100%; border:0; border-radius:0; overflow:hidden; background:#03050a; box-shadow:none; }
+    .story-svg { width:100%; height:100%; display:block; }
+    .story-legend { position:absolute; right:0; bottom:34px; z-index:18; width:min(220px, calc(50vw - 8px)); background:rgba(11,14,20,.9); border:1px solid var(--md-outline); border-radius:18px; padding:12px; box-shadow:var(--md-shadow); backdrop-filter:blur(10px); }
+    .story-legend[data-story-view="risk"] { width:min(260px, calc(50vw - 8px)); }
+    .story-legend .legend-item { cursor:default; --active-color:#80d8ff; }
+    .story-legend .legend-item.filterable { cursor:pointer; }
+    .story-legend .legend-item:not(.filterable):hover { background:transparent; box-shadow:none; }
+    .story-legend .legend-item.filterable:hover, .story-legend .legend-item.filterable.active { color:#fff; background:color-mix(in srgb, var(--active-color) 14%, rgba(30,41,59,.72)); box-shadow:0 0 16px color-mix(in srgb, var(--active-color) 42%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--active-color) 70%, transparent); }
+    .story-legend-controls { margin:0 0 9px 0; padding:0 0 9px 0; border-bottom:1px solid rgba(148,163,184,.16); display:flex; flex-direction:column; gap:8px; }
+    .story-legend-controls.controls-after { margin:9px 0 0 0; padding:9px 0 0 0; border-top:1px solid rgba(148,163,184,.16); border-bottom:0; }
+    .story-legend-controls .choice-strip, .story-legend-controls .zone-filter-strip, .story-legend-controls .slider-strip { justify-content:flex-start; gap:7px; }
+    .story-legend-controls .choice-btn, .story-legend-controls .zone-btn { padding:6px 8px; font-size:9.5px; border-radius:14px; --active-color:#00d4aa; }
+    .story-legend-controls .slider-strip { flex-direction:column; align-items:stretch; gap:7px; }
+    .story-legend-controls .slider-group { justify-content:space-between; padding:8px 9px; font-size:9px; border-radius:14px; min-height:32px; }
+    .story-legend-controls .slider-group input { width:112px; cursor:pointer; }
+    .story-legend[data-story-view="risk"] .slider-group input { width:128px; }
+    .profile-strip { flex-wrap:nowrap; overflow-x:auto; padding:3px; border:1px solid rgba(128,216,255,.16); border-radius:999px; background:rgba(15,23,42,.64); scrollbar-width:none; }
+    .profile-strip::-webkit-scrollbar { display:none; }
+    .profile-strip .choice-btn { flex:0 0 auto; white-space:nowrap; line-height:1.05; }
+    .story-axis { stroke:#334155; stroke-width:1.2; stroke-dasharray:7 9; opacity:.78; }
+    .story-axis-label { fill:#94a3b8; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:900; }
+    .story-node { cursor:pointer; }
+    .story-node text { pointer-events:none; text-shadow:0 2px 6px rgba(0,0,0,.86); }
+    .choice-strip, .zone-filter-strip, .slider-strip { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .choice-btn, .zone-btn { background:rgba(15,23,42,.88); border:1px solid #263244; color:#94a3b8; padding:8px 11px; border-radius:999px; cursor:pointer; font-size:11px; font-weight:950; --active-color:#00d4aa; }
+    .choice-btn.active, .zone-btn.active { color:#fff; border-color:var(--active-color); background:color-mix(in srgb, var(--active-color) 16%, rgba(15,23,42,.88)); box-shadow:0 0 15px color-mix(in srgb, var(--active-color) 45%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--active-color) 62%, transparent); }
+    .slider-group { display:flex; gap:7px; align-items:center; color:#94a3b8; font-size:10px; font-weight:950; text-transform:uppercase; letter-spacing:0; background:rgba(15,23,42,.82); border:1px solid #263244; border-radius:999px; padding:7px 10px; }
+    .slider-group input { width:88px; accent-color:#00d4aa; }
+    .market-window-mode { padding:0; height:100%; overflow:hidden; background:radial-gradient(circle at 50% 50%, rgba(0,212,170,.08), rgba(7,10,19,.97) 44%, rgba(3,5,10,.99)); }
+    .market-window-mode .market-solar-system { height:100%; min-height:100%; }
+    .market-window-mode .market-sun { width:min(230px, 28%); }
+    .market-window-mode .market-window-summary { display:none; }
+    .market-table-launch { position:absolute; right:16px; bottom:14px; z-index:6; border:1px solid rgba(0,212,170,.44); background:rgba(11,14,20,.86); color:#dffcf5; border-radius:999px; padding:9px 13px; font-size:11px; font-weight:950; cursor:pointer; box-shadow:0 0 18px rgba(0,212,170,.16); }
+    .market-table-launch:hover { border-color:#00d4aa; color:#fff; box-shadow:0 0 22px rgba(0,212,170,.28); }
+    .market-modal-backdrop { position:absolute; inset:0; z-index:12; display:flex; align-items:center; justify-content:center; background:rgba(3,5,10,.72); backdrop-filter:blur(8px); }
+    .market-modal-backdrop.hidden { display:none; }
+    .market-modal { width:min(980px, calc(100% - 38px)); max-height:min(620px, calc(100% - 44px)); overflow:auto; border:1px solid rgba(128,216,255,.28); border-radius:18px; background:rgba(7,10,19,.98); box-shadow:0 24px 60px rgba(0,0,0,.55); }
+    .market-modal-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-bottom:1px solid rgba(128,216,255,.16); }
+    .market-modal-title { color:#fff; font-size:14px; font-weight:950; }
+    .market-modal-close { border:1px solid rgba(148,163,184,.32); background:rgba(15,23,42,.9); color:#e2e8f0; border-radius:999px; padding:7px 11px; font-size:11px; font-weight:950; cursor:pointer; }
+    .market-modal-body { padding:0 12px 12px; }
+    @media (max-width: 880px) {
+        .story-panel { padding:14px; }
+        .frontier-wrap { grid-template-columns:1fr; }
+        .frontier-plot { min-height:330px; }
+        .story-legend[data-story-view="frontier"], .story-legend[data-story-view="portfolio"] { display:none; }
+        .story-legend[data-story-view="performance"] .legend-grid { display:none; }
+        .story-legend[data-story-view="risk"] .story-legend-controls { display:none; }
+        .story-legend[data-story-view="risk"] .legend-title { display:none; }
+        .story-legend[data-story-view="risk"] .legend-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+        .story-legend[data-story-view="risk"] .legend-item { display:flex; grid-template-columns:none; align-items:center; margin:0; padding:7px 9px; border:1px solid rgba(255,255,255,.08); border-radius:999px; }
+        .story-legend[data-story-view="risk"] .legend-swatch, .story-legend[data-story-view="risk"] .legend-code { display:none; }
+    }
+    @keyframes market-planet-orbit {
+        from { transform:translate(-50%,-50%) rotate(0deg) translateX(var(--orbit-r, 7px)) rotate(0deg); }
+        to { transform:translate(-50%,-50%) rotate(360deg) translateX(var(--orbit-r, 7px)) rotate(-360deg); }
+    }
+    @keyframes market-planet-glow {
+        from { box-shadow:0 0 13px color-mix(in srgb, var(--planet-color) 46%, transparent), inset 0 0 16px rgba(255,255,255,.05); }
+        to { box-shadow:0 0 23px color-mix(in srgb, var(--planet-color) 70%, transparent), inset 0 0 22px rgba(255,255,255,.08); }
+    }
+
+    .pairs-table { width:100%; border-collapse:collapse; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; }
+    .pairs-table thead th { position:sticky; top:0; z-index:2; background:var(--md-surface-high); color:#fff; border-bottom:2px solid var(--md-tertiary); padding:13px 12px; text-align:center; white-space:nowrap; letter-spacing:0; cursor:pointer; user-select:none; transition:color .16s, text-shadow .16s; }
+    .pairs-table thead th:hover { color:#00d4aa; text-shadow:0 0 10px rgba(0,212,170,.45); }
+    .pairs-table tbody tr { background:#0b0e14; cursor:pointer; transition:background .16s ease; }
+    .pairs-table tbody tr:nth-child(even) { background:#0f141e; }
+    .pairs-table tbody tr:hover { background:#1f2937; }
+    .pairs-table td { border-bottom:1px solid var(--md-outline); color:#e2e8f0; padding:12px; text-align:center; white-space:nowrap; }
+    .pairs-table td:first-child { color:#fff; font-weight:900; text-align:left; }
+    .asset-cell-inner { display:flex; align-items:center; gap:10px; min-width:190px; }
+    .asset-logo { width:26px; height:26px; border-radius:999px; background:#03050a; border:1px solid rgba(128,216,255,.18); object-fit:contain; box-shadow:0 0 10px rgba(128,216,255,.14); }
+    .asset-logo.reverse-logo { filter:invert(1) brightness(1.35) drop-shadow(0 0 5px rgba(255,255,255,.28)); }
+    .asset-copy { display:grid; gap:1px; }
+    .asset-ticker { color:#fff; font-weight:950; }
+    .asset-name { color:#94a3b8; font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:10px; font-weight:800; }
+    .tier-cell { font-size:11px; font-weight:900; }
+    .section-separator { width:90%; max-width:1400px; margin:30px auto 40px; border:0; height:1px; background:linear-gradient(90deg, transparent, var(--md-outline) 15%, var(--md-tertiary) 50%, var(--md-outline) 85%, transparent); box-shadow:0 0 12px rgba(0,212,170,.28); }
+    .bottom-content-wrapper { max-width:1400px; margin:0 auto; padding:0 24px 80px; position:relative; z-index:5; }
+    .methodology-card { background:var(--md-surface); border:1px solid var(--md-outline); border-left:4px solid var(--md-tertiary); padding:30px; border-radius:24px; margin-top:35px; line-height:1.7; font-size:14px; box-shadow:var(--md-shadow); color:var(--md-on-surface); }
+    .methodology-card h2 { color:#fff; margin-top:0; font-size:1.4rem; border-bottom:1px solid var(--md-outline); padding-bottom:10px; letter-spacing:0; }
+    .methodology-card h3 { color:#fff; margin-top:35px; border-bottom:1px solid var(--md-outline); padding-bottom:8px; letter-spacing:0; }
+    .m-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-top:20px; }
+    .m-col strong { color:#00d4aa; font-size:1.1rem; display:block; margin-bottom:6px; }
+    .m-col p { margin:0; color:#cbd5e1; }
+    .methodology-hidden { display:none !important; }
+    .tier-box { background:var(--md-surface-high); border:1px solid var(--md-outline); padding:20px; border-radius:18px; margin-top:15px; }
+    .tier-box h4 { margin:0 0 8px 0; font-size:15px; display:flex; align-items:center; gap:8px; }
+
+    body.compact-page { overflow:hidden; }
+    body.compact-page #galaxy-section { min-height:100vh; }
+    body.compact-page .section-separator, body.compact-page .bottom-content-wrapper { display:none; }
+    body.compact-page #orbit-description { display:none; }
+    body.compact-page #zone-legend { right:0; bottom:34px; width:min(220px, calc(100vw - 16px)); }
+    body.compact-page #tier-panel { bottom:24px; }
+
+    @media (max-width: 880px) {
+        .top-nav { top:16px; left:16px; }
+        #chart-title { top:16px; left:16px; font-size:15px; }
+        #control-deck { top:46px; left:12px; right:12px; flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:8px; max-width:none; }
+        #control-deck .segmented-control { width:auto; max-width:calc(100vw - 24px); flex-direction:row; flex-wrap:wrap; }
+        #control-deck .focus-btn { width:auto; justify-content:center; min-height:30px; }
+        .segmented-control { border-radius:18px; }
+        #orbit-description, #zone-legend { display:none; }
+        #table-view { inset:190px 12px 86px 12px; }
+        #tier-panel { display:flex; bottom:18px; top:auto; max-height:28vh; overflow:auto; width:calc(100vw - 24px); }
+        .filter-pill, .focus-btn { font-size:11px; padding:7px 10px; }
+        .rag-core-card { padding:18px; }
+        .rag-headline { font-size:13.2px; max-width:202px; }
+        .rag-statline, .rag-gemline { font-size:8.5px; max-width:202px; }
+        .rag-universe { font-size:6.8px; }
+        .status-meter { height:7px; margin-top:7px; width:min(162px, 68%); }
+        .rag-posture, .rag-bullets { display:none; }
+        .market-sun { width:132px; padding:14px; }
+        .market-window-title { font-size:15px; }
+        .market-window-summary { font-size:9px; }
+        .market-planet { width:82px; padding:8px; }
+        .market-planet-name { font-size:9.5px; }
+        .market-planet-value { font-size:12px; }
+        .market-planet-reading { display:none; }
+    }
+    @media (orientation: portrait) {
+        #table-view.frameless-panel { inset:154px 8px 16px 8px; overflow:hidden; }
+        .story-orbit-panel { padding:0; gap:6px; height:100%; min-height:0; }
+        .story-svg-shell { min-height:0; border-radius:14px; }
+        .story-legend { left:12px; right:12px; bottom:18px; width:auto; max-height:31vh; overflow:auto; }
+        .story-legend[data-story-view="frontier"], .story-legend[data-story-view="portfolio"] { display:none; }
+        .story-legend[data-story-view="performance"] .legend-grid { display:none; }
+        .story-legend[data-story-view="risk"] .story-legend-controls { display:none; }
+        .story-legend[data-story-view="risk"] .legend-title { display:none; }
+        .story-legend[data-story-view="risk"] .legend-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+        .story-legend[data-story-view="risk"] .legend-item { display:flex; grid-template-columns:none; align-items:center; margin:0; padding:7px 9px; border:1px solid rgba(255,255,255,.08); border-radius:999px; }
+        .story-legend[data-story-view="risk"] .legend-swatch, .story-legend[data-story-view="risk"] .legend-code { display:none; }
+        .story-mode-controls { max-height:32vh; overflow:auto; justify-content:center; align-content:flex-start; padding:6px 2px 2px; }
+        .story-mode-controls .choice-strip,
+        .story-mode-controls .slider-strip,
+        .story-mode-controls .zone-filter-strip { flex:1 1 100%; justify-content:center; }
+        .choice-strip, .zone-filter-strip, .slider-strip { gap:6px; }
+        .choice-btn, .zone-btn { padding:7px 9px; font-size:10px; }
+        .slider-group { padding:6px 8px; font-size:9px; gap:6px; }
+        .slider-group input { width:68px; }
+    }
+</style>
+</head>
+<body class="compact-page">
+    <div id="galaxy-section">
+        <div class="top-nav">
+            <div id="status-line"></div>
+        </div>
+        <div id="chart-title">Lagrangian Galaxy for Bitcoin Equities</div>
+
+        <div id="control-deck" aria-label="Galaxy controls">
+            <div class="segmented-control view-mode" aria-label="Market judgment mode">
+                <button class="focus-btn active" data-view="galaxy">Galaxy</button>
+                <button class="focus-btn" data-view="performance">Performance</button>
+                <button class="focus-btn" data-view="risk">Risk</button>
+                <button class="focus-btn" data-view="frontier">Frontier</button>
+                <button class="focus-btn" data-view="portfolio">Portfolio</button>
+                <button class="focus-btn" data-view="table">Screener</button>
+                <button class="focus-btn" data-view="market">Market Window</button>
+            </div>
+            <div class="segmented-control focus-mode" aria-label="Galaxy focus">
+                <button class="focus-btn active" data-focus="PRIMARY">Primary Galaxy</button>
+                
+            </div>
+            <button id="reset-zone-btn" class="focus-btn reset-zone-btn" type="button">Reset Zone</button>
+        </div>
+
+        <div id="galaxy-canvas"><div id="tooltip"></div></div>
+        <div id="table-view" aria-label="Bitcoin Equities asset table"></div>
+
+        <div id="orbit-description"></div>
+
+        <div id="zone-legend" aria-label="Zone color legend">
+            <p class="legend-title">Galaxy Zone Color Code</p>
+            <div class="legend-grid">
+                <div class="legend-item" data-zone-filter="Golden Breakout" role="button" tabindex="0"><span class="legend-swatch" style="background:#eab308;color:#eab308;"></span><div><strong>Golden Breakout</strong><span class="legend-code">M &gt; med | R &lt; med</span></div></div>
+                <div class="legend-item" data-zone-filter="Deep Accumulation" role="button" tabindex="0"><span class="legend-swatch" style="background:#3b82f6;color:#3b82f6;"></span><div><strong>Deep Accumulation</strong><span class="legend-code">M &lt; med | R &lt; med</span></div></div>
+                <div class="legend-item" data-zone-filter="Euphoria" role="button" tabindex="0"><span class="legend-swatch" style="background:#a855f7;color:#a855f7;"></span><div><strong>Euphoria</strong><span class="legend-code">M &gt; med | R &gt; med</span></div></div>
+                <div class="legend-item" data-zone-filter="Value Trap" role="button" tabindex="0"><span class="legend-swatch" style="background:#ef4444;color:#ef4444;"></span><div><strong>Value Trap</strong><span class="legend-code">M &lt; med | R &gt; med</span></div></div>
+                <div class="legend-item legend-all active" data-zone-filter="ALL" role="button" tabindex="0"><span class="legend-swatch all-zone-swatch"></span><div><strong>All Zones</strong><span class="legend-code">Full galaxy</span></div></div>
+            </div>
+        </div>
+        <a href="Bitcoin_Gravity_Dashboard.html" target="_top" id="full-report-link" class="report-link" aria-label="Open full Bitcoin Equities report">Full Report</a>
+
+        <div id="tier-panel" aria-label="Zone filters">
+            <button class="filter-pill active" data-zone-filter="ALL">All Zones</button>
+            <button class="filter-pill" data-zone-filter="Golden Breakout">Golden Breakout</button>
+            <button class="filter-pill" data-zone-filter="Deep Accumulation">Deep Accumulation</button>
+            <button class="filter-pill" data-zone-filter="Euphoria">Euphoria</button>
+            <button class="filter-pill" data-zone-filter="Value Trap">Value Trap</button>
+        </div>
+    </div>
+
+    <hr class="section-separator">
+
+    <div class="bottom-content-wrapper" id="methodology">
+        <div class="methodology-card">
+            <h2>Core Quantitative Methodology & Terminology</h2>
+            <div class="m-grid">
+                <div class="m-col" data-methodology="gravity">
+                    <strong>1. Cycle-Adjusted Gravity Index</strong>
+                    <p>Current deviation from the cycle TWAP is ranked against each asset's own cycle extremes. This keeps the absolute gravity score asset-specific rather than peer-relative.</p>
+                </div>
+                <div class="m-col" data-methodology="composite-risk">
+                    <strong>2. Composite Risk Score</strong>
+                    <p>Raw gravity is scaled by logarithmic market dominance, with a base floor to avoid treating structurally weak assets as low risk only because their gravity is depressed.</p>
+                </div>
+                <div class="m-col" data-methodology="momentum-quality">
+                    <strong>3. Momentum Quality</strong>
+                    <p>The 90-day return is still shown as a raw percentage, but bubble sizing also uses volatility-adjusted momentum, trend quality, and directional consistency.</p>
+                </div>
+                <div class="m-col" data-methodology="galaxy-status">
+                    <strong>4. Galaxy Status Score</strong>
+                    <p>Status = 36% zone heat + 22% relative momentum + 18% relative gravity + 14% momentum quality + 10% 90-day activity. Ranges: &lt;30 Deep Accumulation, 30-45 Accumulation Bias, 45-60 Balanced Rotation, 60-75 Heated Rotation, 75+ Euphoria Risk.</p>
+                </div>
+                <div class="m-col" data-methodology="gem-score">
+                    <strong>5. Gem Candidate Score</strong>
+                    <p>Gem = 32% risk-adjusted momentum rank + 24% momentum quality + 20% relative momentum + 14% lower-risk rank + 10% impact rank. This picks one candidate inside the active galaxy.</p>
+                </div>
+                <div class="m-col" data-methodology="gravity-phase">
+                    <strong>6. Average Gravity Phase</strong>
+                    <p>Average gravity gives the phase read: &lt;20 Accumulation, 20-40 Breakout, 40-60 Euphoria, 60+ Value Trap.</p>
+                </div>
+                <div class="m-col" data-methodology="orbit-radius">
+                    <strong>7. Galaxy Orbit Radius</strong>
+                    <p>Zone assignment sets the orbit lane. Composite risk, impact, and momentum quality adjust the local position inside that lane while preserving the Gold, Blue, Purple, Red ordering.</p>
+                </div>
+                <div class="m-col" data-methodology="screener">
+                    <strong>8. Screener Logic</strong>
+                    <p>The screener keeps the original sector terminal fields: spot, 2020 TWAP, TWAP premium, gravity risk, composite risk, 90D ROI, mean-reversion probability, and zone.</p>
+                </div>
+                <div class="m-col" data-methodology="portfolio">
+                    <strong>9. Portfolio Profiles</strong>
+                    <p>Risk-averse through aggressive portfolios blend safety, momentum, market-cap, volume impact, and gravity, then apply zone guardrails plus a small minimum sleeve so deep-accumulation assets stay visible while extended value traps cannot dominate without a clear risk-on reason.</p>
+                </div>
+                <div class="m-col" data-methodology="frontier">
+                    <strong>10. Frontier Quadrants</strong>
+                    <p>Annual return and annual volatility define the original 2x2 efficient frontier: Efficient Compounders, Capital Preservation, High-Octane Growth, and Inefficient Risk.</p>
+                </div>
+                <div class="m-col" data-methodology="risk-playground">
+                    <strong>11. Risk Weight Playground</strong>
+                    <p>Regression gravity, TWAP premium, SMA state, drawdown, and vol/beta signals are blended through adjustable model weights into Accumulation, Neutral, and Distribution rings.</p>
+                </div>
+            </div>
+
+            <h3>Relative Matrix Assignment</h3>
+            <div class="m-grid">
+                <div class="tier-box" style="border-left:4px solid #eab308;">
+                    <h4 style="color:#eab308;">Golden Breakout</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum is above the peer median while composite risk is below the peer median. This is the clean rotation lane.</p>
+                </div>
+                <div class="tier-box" style="border-left:4px solid #3b82f6;">
+                    <h4 style="color:#3b82f6;">Deep Accumulation</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum and risk are both below the peer median. This is the base-building lane, not an automatic buy signal.</p>
+                </div>
+                <div class="tier-box" style="border-left:4px solid #a855f7;">
+                    <h4 style="color:#a855f7;">Euphoria</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum is above median, but risk is also above median. This is the markup lane where mean-reversion risk starts to matter.</p>
+                </div>
+                <div class="tier-box" style="border-left:4px solid #ef4444;">
+                    <h4 style="color:#ef4444;">Value Trap</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum is below median while risk is above median. This is the stagnation lane where cheapness can be misleading.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+const rawData = [{"Ticker":"HOOD","Company_Name":"Robinhood Markets","Spot_Formatted":"$119.40","TWAP_Formatted":"$47.29","Prem_Pct":152.46,"Gravity":41.2,"Comp_Risk":41.2,"Ret24":-1.2,"Ret7":14.3,"Ret30":20.2,"Ret90":54.8,"MR_Prob_Num":24.2,"MR_Prob_Str":"24.2%","Volume_Log":7.35,"MarketCap":107350425600.0,"Ann_Return":85.7,"Ann_Vol":65.4,"ATH_Drawdown":-21.7,"SMA_Risk":100.0,"Gravity_Score":41.2,"Dominance_Multiplier":1.0,"Composite_Risk":41.2,"TWAP_Price":47.295,"Current_Price":119.4,"Return_24H":-1.2,"Return_7D":14.3,"Return_30D":20.2,"Return_90D":54.8,"Volatility_90D":44.7,"Risk_Adjusted_Momentum":1.23,"Trend_Quality":47.0,"Directional_Consistency":48.9,"Momentum_Quality":47.7,"Avg_Volume":22531870,"Composite_Impact":59.06,"Market_Cap_Estimated":false,"Market_Cap_Rank":1,"Galaxy_Group":"PRIMARY","Relative_Gravity":80.0,"Relative_Momentum":100.0,"Quadrant":"Euphoria","Color":"#a855f7","Beta":0.57,"Momentum_Norm":1.0,"Safety_Raw":0.8021,"Safety_Score":80.2,"Frontier_Zone":"Efficient Compounders","Regression_Signal":41.2,"TWAP_Signal":73.0,"Drawdown_Signal":78.3,"Vol_Beta_Signal":22.9,"Spider_State":"Neutral"},{"Ticker":"MSTR","Company_Name":"Strategy Inc.","Spot_Formatted":"$158.61","TWAP_Formatted":"$157.33","Prem_Pct":0.81,"Gravity":9.1,"Comp_Risk":10.7,"Ret24":-1.9,"Ret7":25.7,"Ret30":63.3,"Ret90":-4.8,"MR_Prob_Num":59.9,"MR_Prob_Str":"59.9%","Volume_Log":7.44,"MarketCap":63012843520.0,"Ann_Return":90.4,"Ann_Vol":88.3,"ATH_Drawdown":-66.5,"SMA_Risk":100.0,"Gravity_Score":9.1,"Dominance_Multiplier":0.93,"Composite_Risk":10.7,"TWAP_Price":157.3338,"Current_Price":158.61,"Return_24H":-1.9,"Return_7D":25.7,"Return_30D":63.3,"Return_90D":-4.8,"Volatility_90D":52.5,"Risk_Adjusted_Momentum":-0.09,"Trend_Quality":0.1,"Directional_Consistency":56.7,"Momentum_Quality":22.7,"Avg_Volume":27707523,"Composite_Impact":21.84,"Market_Cap_Estimated":false,"Market_Cap_Rank":2,"Galaxy_Group":"PRIMARY","Relative_Gravity":13.3,"Relative_Momentum":40.0,"Quadrant":"Deep Accumulation","Color":"#3b82f6","Beta":0.9,"Momentum_Norm":0.3934,"Safety_Raw":0.5844,"Safety_Score":58.4,"Frontier_Zone":"Efficient Compounders","Regression_Signal":9.1,"TWAP_Signal":28.9,"Drawdown_Signal":33.5,"Vol_Beta_Signal":53.2,"Spider_State":"Neutral"},{"Ticker":"COIN","Company_Name":"Coinbase","Spot_Formatted":"$195.11","TWAP_Formatted":"$180.35","Prem_Pct":8.18,"Gravity":18.9,"Comp_Risk":20.8,"Ret24":-2.1,"Ret7":18.6,"Ret30":26.8,"Ret90":3.0,"MR_Prob_Num":44.4,"MR_Prob_Str":"44.4%","Volume_Log":7.02,"MarketCap":51477221376.0,"Ann_Return":62.5,"Ann_Vol":83.2,"ATH_Drawdown":-53.5,"SMA_Risk":100.0,"Gravity_Score":18.9,"Dominance_Multiplier":0.91,"Composite_Risk":20.8,"TWAP_Price":180.3538,"Current_Price":195.11,"Return_24H":-2.1,"Return_7D":18.6,"Return_30D":26.8,"Return_90D":3.0,"Volatility_90D":43.8,"Risk_Adjusted_Momentum":0.07,"Trend_Quality":5.0,"Directional_Consistency":46.7,"Momentum_Quality":21.7,"Avg_Volume":10590343,"Composite_Impact":15.8,"Market_Cap_Estimated":false,"Market_Cap_Rank":4,"Galaxy_Group":"PRIMARY","Relative_Gravity":26.7,"Relative_Momentum":63.3,"Quadrant":"Golden Breakout","Color":"#eab308","Beta":0.9,"Momentum_Norm":0.5162,"Safety_Raw":0.6408,"Safety_Score":64.1,"Frontier_Zone":"Capital Preservation","Regression_Signal":18.9,"TWAP_Signal":31.1,"Drawdown_Signal":46.5,"Vol_Beta_Signal":49.9,"Spider_State":"Neutral"},{"Ticker":"PYPL","Company_Name":"PayPal","Spot_Formatted":"$55.04","TWAP_Formatted":"$65.39","Prem_Pct":-15.82,"Gravity":36.5,"Comp_Risk":40.7,"Ret24":4.6,"Ret7":4.4,"Ret30":-8.9,"Ret90":24.7,"MR_Prob_Num":18.9,"MR_Prob_Str":"18.9%","Volume_Log":7.12,"MarketCap":47084568576.0,"Ann_Return":-2.6,"Ann_Vol":39.2,"ATH_Drawdown":-41.1,"SMA_Risk":100.0,"Gravity_Score":36.5,"Dominance_Multiplier":0.9,"Composite_Risk":40.7,"TWAP_Price":65.3859,"Current_Price":55.04,"Return_24H":4.6,"Return_7D":4.4,"Return_30D":-8.9,"Return_90D":24.7,"Volatility_90D":27.5,"Risk_Adjusted_Momentum":0.9,"Trend_Quality":57.7,"Directional_Consistency":52.2,"Momentum_Quality":55.5,"Avg_Volume":13232716,"Composite_Impact":42.11,"Market_Cap_Estimated":false,"Market_Cap_Rank":5,"Galaxy_Group":"PRIMARY","Relative_Gravity":66.7,"Relative_Momentum":93.3,"Quadrant":"Golden Breakout","Color":"#eab308","Beta":0.21,"Momentum_Norm":0.8578,"Safety_Raw":0.8105,"Safety_Score":81.0,"Frontier_Zone":"Capital Preservation","Regression_Signal":36.5,"TWAP_Signal":24.1,"Drawdown_Signal":58.9,"Vol_Beta_Signal":0.0,"Spider_State":"Neutral"},{"Ticker":"XYZ","Company_Name":"Block","Spot_Formatted":"$76.42","TWAP_Formatted":"$68.31","Prem_Pct":11.88,"Gravity":57.5,"Comp_Risk":64.3,"Ret24":-0.4,"Ret7":-0.3,"Ret30":-8.0,"Ret90":8.2,"MR_Prob_Num":23.1,"MR_Prob_Str":"23.1%","Volume_Log":6.6,"MarketCap":45912752128.0,"Ann_Return":22.6,"Ann_Vol":52.6,"ATH_Drawdown":-22.7,"SMA_Risk":50.0,"Gravity_Score":57.5,"Dominance_Multiplier":0.89,"Composite_Risk":64.3,"TWAP_Price":68.3065,"Current_Price":76.42,"Return_24H":-0.4,"Return_7D":-0.3,"Return_30D":-8.0,"Return_90D":8.2,"Volatility_90D":24.2,"Risk_Adjusted_Momentum":0.34,"Trend_Quality":46.7,"Directional_Consistency":47.8,"Momentum_Quality":47.1,"Avg_Volume":3966583,"Composite_Impact":21.21,"Market_Cap_Estimated":false,"Market_Cap_Rank":6,"Galaxy_Group":"PRIMARY","Relative_Gravity":93.3,"Relative_Momentum":86.7,"Quadrant":"Euphoria","Color":"#a855f7","Beta":0.36,"Momentum_Norm":0.5981,"Safety_Raw":0.7081,"Safety_Score":70.8,"Frontier_Zone":"Capital Preservation","Regression_Signal":57.5,"TWAP_Signal":32.1,"Drawdown_Signal":77.3,"Vol_Beta_Signal":4.7,"Spider_State":"Neutral"},{"Ticker":"IREN","Company_Name":"IREN","Spot_Formatted":"$44.12","TWAP_Formatted":"$17.59","Prem_Pct":150.83,"Gravity":26.7,"Comp_Risk":34.5,"Ret24":-4.4,"Ret7":3.5,"Ret30":-1.4,"Ret90":-12.6,"MR_Prob_Num":25.8,"MR_Prob_Str":"25.8%","Volume_Log":7.61,"MarketCap":17387837440.0,"Ann_Return":129.5,"Ann_Vol":117.5,"ATH_Drawdown":-42.3,"SMA_Risk":50.0,"Gravity_Score":26.7,"Dominance_Multiplier":0.77,"Composite_Risk":34.5,"TWAP_Price":17.5917,"Current_Price":44.125,"Return_24H":-4.4,"Return_7D":3.5,"Return_30D":-1.4,"Return_90D":-12.6,"Volatility_90D":66.1,"Risk_Adjusted_Momentum":-0.19,"Trend_Quality":35.4,"Directional_Consistency":58.9,"Momentum_Quality":44.8,"Avg_Volume":40630666,"Composite_Impact":33.64,"Market_Cap_Estimated":false,"Market_Cap_Rank":7,"Galaxy_Group":"PRIMARY","Relative_Gravity":46.7,"Relative_Momentum":20.0,"Quadrant":"Deep Accumulation","Color":"#3b82f6","Beta":1.27,"Momentum_Norm":0.2706,"Safety_Raw":0.4304,"Safety_Score":43.0,"Frontier_Zone":"High-Octane Growth","Regression_Signal":26.7,"TWAP_Signal":72.5,"Drawdown_Signal":57.7,"Vol_Beta_Signal":89.5,"Spider_State":"Neutral"},{"Ticker":"HUT","Company_Name":"Hut 8","Spot_Formatted":"$96.82","TWAP_Formatted":"$28.01","Prem_Pct":245.63,"Gravity":52.5,"Comp_Risk":72.2,"Ret24":-4.6,"Ret7":7.8,"Ret30":16.7,"Ret90":0.6,"MR_Prob_Num":33.4,"MR_Prob_Str":"33.4%","Volume_Log":6.68,"MarketCap":11933981696.0,"Ann_Return":115.0,"Ann_Vol":104.7,"ATH_Drawdown":-27.2,"SMA_Risk":75.0,"Gravity_Score":52.5,"Dominance_Multiplier":0.73,"Composite_Risk":72.2,"TWAP_Price":28.0126,"Current_Price":96.82,"Return_24H":-4.6,"Return_7D":7.8,"Return_30D":16.7,"Return_90D":0.6,"Volatility_90D":58.1,"Risk_Adjusted_Momentum":0.01,"Trend_Quality":45.1,"Directional_Consistency":50.0,"Momentum_Quality":47.1,"Avg_Volume":4794440,"Composite_Impact":8.65,"Market_Cap_Estimated":false,"Market_Cap_Rank":9,"Galaxy_Group":"PRIMARY","Relative_Gravity":86.7,"Relative_Momentum":53.3,"Quadrant":"Euphoria","Color":"#a855f7","Beta":1.23,"Momentum_Norm":0.4784,"Safety_Raw":0.3671,"Safety_Score":36.7,"Frontier_Zone":"High-Octane Growth","Regression_Signal":52.5,"TWAP_Signal":100.0,"Drawdown_Signal":72.8,"Vol_Beta_Signal":79.3,"Spider_State":"Distribution"},{"Ticker":"RIOT","Company_Name":"Riot Platforms","Spot_Formatted":"$23.00","TWAP_Formatted":"$12.46","Prem_Pct":84.53,"Gravity":63.3,"Comp_Risk":92.1,"Ret24":-2.0,"Ret7":13.0,"Ret30":19.7,"Ret90":-0.8,"MR_Prob_Num":63.4,"MR_Prob_Str":"63.4%","Volume_Log":7.23,"MarketCap":8630956032.0,"Ann_Return":72.8,"Ann_Vol":92.2,"ATH_Drawdown":-19.8,"SMA_Risk":100.0,"Gravity_Score":63.3,"Dominance_Multiplier":0.69,"Composite_Risk":92.1,"TWAP_Price":12.4639,"Current_Price":23.0,"Return_24H":-2.0,"Return_7D":13.0,"Return_30D":19.7,"Return_90D":-0.8,"Volatility_90D":52.2,"Risk_Adjusted_Momentum":-0.01,"Trend_Quality":36.4,"Directional_Consistency":46.7,"Momentum_Quality":40.5,"Avg_Volume":16907236,"Composite_Impact":10.4,"Market_Cap_Estimated":false,"Market_Cap_Rank":10,"Galaxy_Group":"PRIMARY","Relative_Gravity":100.0,"Relative_Momentum":46.7,"Quadrant":"Value Trap","Color":"#ef4444","Beta":1.14,"Momentum_Norm":0.4564,"Safety_Raw":0.3708,"Safety_Score":37.1,"Frontier_Zone":"Efficient Compounders","Regression_Signal":63.3,"TWAP_Signal":53.2,"Drawdown_Signal":80.2,"Vol_Beta_Signal":66.9,"Spider_State":"Distribution"},{"Ticker":"WULF","Company_Name":"TeraWulf","Spot_Formatted":"$15.74","TWAP_Formatted":"$6.64","Prem_Pct":136.91,"Gravity":40.8,"Comp_Risk":60.5,"Ret24":-3.4,"Ret7":2.3,"Ret30":-3.5,"Ret90":-25.5,"MR_Prob_Num":20.8,"MR_Prob_Str":"20.8%","Volume_Log":7.47,"MarketCap":7853766656.0,"Ann_Return":141.5,"Ann_Vol":122.7,"ATH_Drawdown":-45.7,"SMA_Risk":25.0,"Gravity_Score":40.8,"Dominance_Multiplier":0.68,"Composite_Risk":60.5,"TWAP_Price":6.6438,"Current_Price":15.74,"Return_24H":-3.4,"Return_7D":2.3,"Return_30D":-3.5,"Return_90D":-25.5,"Volatility_90D":52.7,"Risk_Adjusted_Momentum":-0.48,"Trend_Quality":74.9,"Directional_Consistency":55.6,"Momentum_Quality":67.2,"Avg_Volume":29652793,"Composite_Impact":45.63,"Market_Cap_Estimated":false,"Market_Cap_Rank":11,"Galaxy_Group":"PRIMARY","Relative_Gravity":73.3,"Relative_Momentum":13.3,"Quadrant":"Value Trap","Color":"#ef4444","Beta":1.26,"Momentum_Norm":0.0675,"Safety_Raw":0.2585,"Safety_Score":25.8,"Frontier_Zone":"High-Octane Growth","Regression_Signal":40.8,"TWAP_Signal":68.4,"Drawdown_Signal":54.3,"Vol_Beta_Signal":92.5,"Spider_State":"Neutral"},{"Ticker":"CIFR","Company_Name":"Cipher Mining","Spot_Formatted":"$17.73","TWAP_Formatted":"$7.29","Prem_Pct":143.19,"Gravity":36.2,"Comp_Risk":54.2,"Ret24":-2.0,"Ret7":6.0,"Ret30":6.7,"Ret90":-7.3,"MR_Prob_Num":7.8,"MR_Prob_Str":"7.8%","Volume_Log":7.55,"MarketCap":7358494720.0,"Ann_Return":138.2,"Ann_Vol":123.0,"ATH_Drawdown":-39.2,"SMA_Risk":50.0,"Gravity_Score":36.2,"Dominance_Multiplier":0.67,"Composite_Risk":54.2,"TWAP_Price":7.2907,"Current_Price":17.73,"Return_24H":-2.0,"Return_7D":6.0,"Return_30D":6.7,"Return_90D":-7.3,"Volatility_90D":71.2,"Risk_Adjusted_Momentum":-0.1,"Trend_Quality":55.5,"Directional_Consistency":52.2,"Momentum_Quality":54.2,"Avg_Volume":35379356,"Composite_Impact":25.23,"Market_Cap_Estimated":false,"Market_Cap_Rank":12,"Galaxy_Group":"PRIMARY","Relative_Gravity":60.0,"Relative_Momentum":33.3,"Quadrant":"Value Trap","Color":"#ef4444","Beta":1.32,"Momentum_Norm":0.3541,"Safety_Raw":0.339,"Safety_Score":33.9,"Frontier_Zone":"High-Octane Growth","Regression_Signal":36.2,"TWAP_Signal":70.3,"Drawdown_Signal":60.8,"Vol_Beta_Signal":93.8,"Spider_State":"Neutral"},{"Ticker":"MARA","Company_Name":"MARA Holdings","Spot_Formatted":"$12.55","TWAP_Formatted":"$14.10","Prem_Pct":-10.99,"Gravity":19.7,"Comp_Risk":32.0,"Ret24":-2.9,"Ret7":13.7,"Ret30":36.3,"Ret90":3.0,"MR_Prob_Num":27.6,"MR_Prob_Str":"27.6%","Volume_Log":7.7,"MarketCap":4848056320.0,"Ann_Return":57.4,"Ann_Vol":102.1,"ATH_Drawdown":-59.6,"SMA_Risk":100.0,"Gravity_Score":19.7,"Dominance_Multiplier":0.62,"Composite_Risk":32.0,"TWAP_Price":14.1002,"Current_Price":12.55,"Return_24H":-2.9,"Return_7D":13.7,"Return_30D":36.3,"Return_90D":3.0,"Volatility_90D":52.9,"Risk_Adjusted_Momentum":0.06,"Trend_Quality":34.1,"Directional_Consistency":45.6,"Momentum_Quality":38.7,"Avg_Volume":50682876,"Composite_Impact":19.03,"Market_Cap_Estimated":false,"Market_Cap_Rank":14,"Galaxy_Group":"PRIMARY","Relative_Gravity":33.3,"Relative_Momentum":63.3,"Quadrant":"Golden Breakout","Color":"#eab308","Beta":1.23,"Momentum_Norm":0.5162,"Safety_Raw":0.4665,"Safety_Score":46.7,"Frontier_Zone":"Inefficient Risk","Regression_Signal":19.7,"TWAP_Signal":25.5,"Drawdown_Signal":40.4,"Vol_Beta_Signal":77.6,"Spider_State":"Neutral"},{"Ticker":"CLSK","Company_Name":"CleanSpark","Spot_Formatted":"$13.95","TWAP_Formatted":"$9.91","Prem_Pct":40.81,"Gravity":21.1,"Comp_Risk":36.5,"Ret24":-2.2,"Ret7":9.1,"Ret30":21.1,"Ret90":3.8,"MR_Prob_Num":20.9,"MR_Prob_Str":"20.9%","Volume_Log":7.27,"MarketCap":3582598144.0,"Ann_Return":87.6,"Ann_Vol":101.5,"ATH_Drawdown":-40.4,"SMA_Risk":75.0,"Gravity_Score":21.1,"Dominance_Multiplier":0.58,"Composite_Risk":36.5,"TWAP_Price":9.9068,"Current_Price":13.95,"Return_24H":-2.2,"Return_7D":9.1,"Return_30D":21.1,"Return_90D":3.8,"Volatility_90D":53.4,"Risk_Adjusted_Momentum":0.07,"Trend_Quality":44.5,"Directional_Consistency":48.9,"Momentum_Quality":46.2,"Avg_Volume":18522850,"Composite_Impact":20.13,"Market_Cap_Estimated":false,"Market_Cap_Rank":15,"Galaxy_Group":"PRIMARY","Relative_Gravity":40.0,"Relative_Momentum":80.0,"Quadrant":"Golden Breakout","Color":"#eab308","Beta":1.22,"Momentum_Norm":0.5288,"Safety_Raw":0.511,"Safety_Score":51.1,"Frontier_Zone":"High-Octane Growth","Regression_Signal":21.1,"TWAP_Signal":40.5,"Drawdown_Signal":59.6,"Vol_Beta_Signal":76.7,"Spider_State":"Neutral"},{"Ticker":"HIVE","Company_Name":"HIVE Digital","Spot_Formatted":"$3.16","TWAP_Formatted":"$3.12","Prem_Pct":1.19,"Gravity":33.0,"Comp_Risk":82.3,"Ret24":-4.2,"Ret7":9.0,"Ret30":22.5,"Ret90":-8.7,"MR_Prob_Num":50.2,"MR_Prob_Str":"50.2%","Volume_Log":7.3,"MarketCap":866716416.0,"Ann_Return":37.7,"Ann_Vol":91.7,"ATH_Drawdown":-54.6,"SMA_Risk":75.0,"Gravity_Score":33.0,"Dominance_Multiplier":0.4,"Composite_Risk":82.3,"TWAP_Price":3.1227,"Current_Price":3.16,"Return_24H":-4.2,"Return_7D":9.0,"Return_30D":22.5,"Return_90D":-8.7,"Volatility_90D":59.4,"Risk_Adjusted_Momentum":-0.15,"Trend_Quality":49.4,"Directional_Consistency":53.3,"Momentum_Quality":50.9,"Avg_Volume":19759353,"Composite_Impact":26.66,"Market_Cap_Estimated":false,"Market_Cap_Rank":16,"Galaxy_Group":"PRIMARY","Relative_Gravity":53.3,"Relative_Momentum":26.7,"Quadrant":"Value Trap","Color":"#ef4444","Beta":1.08,"Momentum_Norm":0.332,"Safety_Raw":0.2732,"Safety_Score":27.3,"Frontier_Zone":"Capital Preservation","Regression_Signal":33.0,"TWAP_Signal":29.0,"Drawdown_Signal":45.4,"Vol_Beta_Signal":63.8,"Spider_State":"Neutral"},{"Ticker":"BTBT","Company_Name":"Bit Digital","Spot_Formatted":"$1.76","TWAP_Formatted":"$2.45","Prem_Pct":-28.07,"Gravity":9.6,"Comp_Risk":27.6,"Ret24":-1.7,"Ret7":23.1,"Ret30":18.1,"Ret90":3.5,"MR_Prob_Num":34.3,"MR_Prob_Str":"34.3%","Volume_Log":7.51,"MarketCap":634714944.0,"Ann_Return":59.6,"Ann_Vol":100.6,"ATH_Drawdown":-68.1,"SMA_Risk":100.0,"Gravity_Score":9.6,"Dominance_Multiplier":0.36,"Composite_Risk":27.6,"TWAP_Price":2.4468,"Current_Price":1.76,"Return_24H":-1.7,"Return_7D":23.1,"Return_30D":18.1,"Return_90D":3.5,"Volatility_90D":55.0,"Risk_Adjusted_Momentum":0.06,"Trend_Quality":29.6,"Directional_Consistency":47.8,"Momentum_Quality":36.9,"Avg_Volume":32045883,"Composite_Impact":20.95,"Market_Cap_Estimated":false,"Market_Cap_Rank":17,"Galaxy_Group":"PRIMARY","Relative_Gravity":20.0,"Relative_Momentum":73.3,"Quadrant":"Golden Breakout","Color":"#eab308","Beta":1.15,"Momentum_Norm":0.5241,"Safety_Raw":0.477,"Safety_Score":47.7,"Frontier_Zone":"Inefficient Risk","Regression_Signal":9.6,"TWAP_Signal":20.5,"Drawdown_Signal":31.9,"Vol_Beta_Signal":72.9,"Spider_State":"Neutral"},{"Ticker":"ARBK","Company_Name":"Argo Blockchain","Spot_Formatted":"$2.34","TWAP_Formatted":"$199.62","Prem_Pct":-98.83,"Gravity":0.0,"Comp_Risk":66.7,"Ret24":-4.6,"Ret7":-16.4,"Ret30":-19.0,"Ret90":-39.8,"MR_Prob_Num":33.0,"MR_Prob_Str":"33.0%","Volume_Log":4.22,"MarketCap":34245656.0,"Ann_Return":-26.3,"Ann_Vol":154.3,"ATH_Drawdown":-99.7,"SMA_Risk":25.0,"Gravity_Score":0.0,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":199.6211,"Current_Price":2.34,"Return_24H":-4.6,"Return_7D":-16.4,"Return_30D":-19.0,"Return_90D":-39.8,"Volatility_90D":29.4,"Risk_Adjusted_Momentum":-1.35,"Trend_Quality":83.7,"Directional_Consistency":62.2,"Momentum_Quality":75.1,"Avg_Volume":16463,"Composite_Impact":45.5,"Market_Cap_Estimated":false,"Market_Cap_Rank":18,"Galaxy_Group":"PRIMARY","Relative_Gravity":6.7,"Relative_Momentum":6.7,"Quadrant":"Value Trap","Color":"#ef4444","Beta":1.15,"Momentum_Norm":0.0,"Safety_Raw":0.1074,"Safety_Score":10.7,"Frontier_Zone":"Inefficient Risk","Regression_Signal":0.0,"TWAP_Signal":0.0,"Drawdown_Signal":0.3,"Vol_Beta_Signal":93.7,"Spider_State":"Accumulation"}];
+const assetMenuAction = "open_bitcoin_asset_menu";
+const methodologyByView = {
+  galaxy: ["gravity", "composite-risk", "momentum-quality", "galaxy-status", "gem-score", "gravity-phase", "orbit-radius"],
+  market: ["gravity", "composite-risk", "momentum-quality", "galaxy-status", "gem-score", "gravity-phase"],
+  portfolio: ["gravity", "composite-risk", "momentum-quality", "portfolio"],
+  performance: ["momentum-quality"],
+  frontier: ["momentum-quality", "frontier"],
+  risk: ["gravity", "composite-risk", "risk-playground"],
+  table: ["gravity", "composite-risk", "momentum-quality", "screener"]
+};
+
+function updateMethodology(view = state.view) {
+  const active = new Set(methodologyByView[view] || methodologyByView.galaxy);
+  document.querySelectorAll("[data-methodology]").forEach(item => {
+    item.classList.toggle("methodology-hidden", !active.has(item.dataset.methodology));
+  });
+}
+
+let activeBible = {"title": "", "headline": "Balanced Rotation", "posture": "The bitcoin equities are balanced between accumulation and breakout pressure.", "status_score": 54.3, "status_label": "Balanced Rotation", "avg_gravity": 31.1, "gravity_phase": "Breakout", "gem_ticker": "HOOD", "gem_score": 80.0, "gem_zone": "Euphoria", "gem_line": "Gem: HOOD \u00b7 80/100", "activity_window": "4Y Activity", "galaxies": {"PRIMARY": {"title": "", "headline": "Balanced Rotation", "posture": "The bitcoin equities are balanced between accumulation and breakout pressure.", "status_score": 54.3, "status_label": "Balanced Rotation", "avg_gravity": 31.1, "gravity_phase": "Breakout", "gem_ticker": "HOOD", "gem_score": 80.0, "gem_zone": "Euphoria", "gem_line": "Gem: HOOD \u00b7 80/100", "activity_window": "4Y Activity"}, "OUTER": {"title": "", "headline": "No Signal", "posture": "Not enough market activity is available for a reliable status read.", "status_score": 50, "status_label": "No Signal", "avg_gravity": 50, "gravity_phase": "No Signal", "gem_line": "Gem: No signal"}}, "market_window": {"headline": "Balanced Rotation", "summary": "The bitcoin equities are balanced between accumulation and breakout pressure.", "planets": [{"id": 1, "name": "Gravity", "value": "31.1", "reading": "Breakout", "detail": "Average gravity maps the galaxy phase to Breakout.", "color": "#80d8ff"}, {"id": 2, "name": "Galaxy Status Score", "value": "54/100", "reading": "Balanced Rotation", "detail": "Position size follows the status score before the return headline.", "color": "#00d4aa"}, {"id": 3, "name": "Gold Share", "value": "33%", "reading": "PYPL, COIN, CLSK", "detail": "Gold means momentum is above median while risk is below median.", "color": "#eab308"}, {"id": 4, "name": "Blue Share", "value": "13%", "reading": "MSTR, IREN", "detail": "Blue is base-building until momentum confirms.", "color": "#3b82f6"}, {"id": 5, "name": "Purple Share", "value": "20%", "reading": "HUT, XYZ, HOOD", "detail": "Purple is strength with extension risk.", "color": "#a855f7"}, {"id": 6, "name": "90D Quality", "value": "46/100", "reading": "Vol 53%", "detail": "Quality blends trend structure and directional consistency.", "color": "#f97316"}, {"id": 7, "name": "Positive Partition", "value": "53%", "reading": "90D > 0", "detail": "Share of assets with positive 90-day momentum.", "color": "#22c55e"}], "gold_names": "PYPL, COIN, CLSK", "blue_names": "MSTR, IREN", "purple_names": "HUT, XYZ, HOOD"}};
+const zoneOrder = ["Golden Breakout", "Deep Accumulation", "Euphoria", "Value Trap"];
+const zoneConfig = {
+  "Golden Breakout": { color: "#eab308", short: "Gold", speed: 0.00052, direction: -1 },
+  "Deep Accumulation": { color: "#3b82f6", short: "Blue", speed: 0.00064, direction: -1 },
+  "Euphoria": { color: "#a855f7", short: "Purple", speed: 0.00078, direction: -1 },
+  "Value Trap": { color: "#ef4444", short: "Red", speed: 0.00094, direction: -1 }
+};
+const ORBIT_SPEED_MULTIPLIER = 0.42;
+const primaryZoneRadiusRanges = {
+  "Golden Breakout": [32, 40],
+  "Deep Accumulation": [24, 28],
+  "Euphoria": [16, 20],
+  "Value Trap": [10, 15]
+};
+const outerZoneRadiusRanges = {
+  "Golden Breakout": [24, 30],
+  "Deep Accumulation": [18, 22],
+  "Euphoria": [13, 16],
+  "Value Trap": [9, 12]
+};
+const visibleOrbitZones = ["Golden Breakout", "Deep Accumulation", "Euphoria"];
+const zoneRevealOrder = ["Golden Breakout", "Deep Accumulation", "Euphoria", "Value Trap"];
+const zoneRevealDelayMs = 1000;
+const zoneRevealSessionKey = "8gems-zone-reveal-complete";
+let zoneRevealAlreadyPlayed = false;
+try {
+  zoneRevealAlreadyPlayed = sessionStorage.getItem(zoneRevealSessionKey) === "1";
+} catch (err) {
+  zoneRevealAlreadyPlayed = false;
+}
+const initialRouteParams = new URLSearchParams(window.location.search || "");
+let presentationMode = initialRouteParams.get("preso") === "1";
+document.body.classList.toggle("presentation-mode", presentationMode);
+document.body.dataset.cwNativePreso = "1";
+const validDashboardViews = ["galaxy", "performance", "risk", "frontier", "portfolio", "table", "market"];
+const validDashboardFocuses = ["PRIMARY", "OUTER", "MARKET"];
+const initialViewParam = initialRouteParams.get("view");
+const initialView = initialViewParam === "screener" ? "table" : initialViewParam;
+const initialFocusParam = initialRouteParams.get("focus");
+const initialZoneParam = initialRouteParams.get("zone");
+const hasOuterGalaxy = rawData.some(d => d.Galaxy_Group === "OUTER");
+const galaxyOrder = hasOuterGalaxy ? ["PRIMARY", "OUTER"] : ["PRIMARY"];
+const galaxyMeta = {
+  PRIMARY: { label: "Primary Galaxy", color: "#80d8ff", coreTitle: "Galaxy Status" },
+  OUTER: { label: "Outer Galaxy", color: "#f97316", coreTitle: "Outer Galaxy" },
+  MARKET: { label: "Market Window", color: "#00d4aa", coreTitle: "Market Window" }
+};
+
+const state = {
+  zone: presentationMode ? (zoneOrder.includes(initialZoneParam) ? initialZoneParam : "Golden Breakout") : "ALL",
+  view: validDashboardViews.includes(initialView) ? initialView : "galaxy",
+  focus: validDashboardFocuses.includes(initialFocusParam) ? initialFocusParam : "PRIMARY",
+  revealedZoneIndex: presentationMode ? zoneRevealOrder.indexOf("Golden Breakout") : 0,
+  tableSort: { key: "Gravity", direction: "asc" }
+};
+
+let performanceKey = "Ret24";
+let activePerformanceLane = "ALL";
+let portfolioProfile = "neutral";
+let activePortfolioLane = "ALL";
+let riskWeights = { regression: 1.0, twap: 1.3, sma: 1.0, drawdown: 0.9, volbeta: 1.1 };
+let activeRiskZone = "ALL";
+let activeFrontierZone = "ALL";
+let storyTimer = null;
+
+if (!hasOuterGalaxy) {
+  const outerFocusButton = document.querySelector('[data-focus="OUTER"]');
+  if (outerFocusButton) outerFocusButton.classList.add("hidden");
+  if (state.focus === "OUTER") state.focus = "PRIMARY";
+}
+if (state.view === "market") state.focus = "MARKET";
+if (state.focus === "MARKET") state.view = "market";
+
+const container = document.getElementById("galaxy-canvas");
+const tableView = document.getElementById("table-view");
+const statusLine = document.getElementById("status-line");
+const tooltip = d3.select("#tooltip");
+const svg = d3.select("#galaxy-canvas").append("svg");
+const defs = svg.append("defs");
+
+defs.append("clipPath")
+  .attr("id", "coinLogoClip")
+  .attr("clipPathUnits", "objectBoundingBox")
+  .append("circle")
+  .attr("cx", 0.5)
+  .attr("cy", 0.5)
+  .attr("r", 0.5);
+
+const backgroundLayer = svg.append("g");
+const orbitLayer = svg.append("g");
+const wellLayer = svg.append("g");
+const nodeLayer = svg.append("g");
+
+let width = 0;
+let height = 0;
+let centers = {};
+let node = nodeLayer.selectAll(".coin-node");
+let zoneRevealTimers = [];
+let reservedRects = [];
+let lastOrbitTick = Date.now() * 0.001;
+
+function numberValue(value, fallback = 0) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function clamp(v, lo, hi) {
+  return Math.max(lo, Math.min(hi, numberValue(v)));
+}
+
+function isMobileGalaxy() {
+  return window.innerWidth <= 880;
+}
+
+function layoutAspectRatio() {
+  return window.innerHeight / Math.max(1, window.innerWidth);
+}
+
+function galaxyMotionScale() {
+  return presentationMode ? 0.35 : 1;
+}
+
+function isVerticalGalaxy() {
+  return galaxyMotionScale() <= 0;
+}
+
+function defaultRevealMaxIndex() {
+  if (presentationMode) return zoneRevealOrder.indexOf("Golden Breakout");
+  return isMobileGalaxy()
+    ? zoneRevealOrder.indexOf("Euphoria")
+    : zoneRevealOrder.length - 1;
+}
+
+const maxImpact = Math.max(1, d3.max(rawData, d => Math.abs(numberValue(d.Composite_Impact))) || 1);
+const maxRisk = Math.max(1, d3.max(rawData, d => numberValue(d.Composite_Risk)) || 1);
+
+function bubbleRadius(d) {
+  const ranges = d.Galaxy_Group === "OUTER" ? outerZoneRadiusRanges : primaryZoneRadiusRanges;
+  const [minRadius, maxRadius] = ranges[d.Quadrant] || [18, 28];
+  const impactNorm = clamp(Math.abs(numberValue(d.Composite_Impact)) / maxImpact, 0, 1);
+  const qualityNorm = clamp(d.Momentum_Quality, 0, 100) / 100;
+  const returnNorm = clamp(Math.abs(numberValue(d.Return_90D)) / 100, 0, 1);
+  const blend = clamp((impactNorm * 0.58) + (qualityNorm * 0.28) + (returnNorm * 0.14), 0, 1);
+  return minRadius + (maxRadius - minRadius) * blend;
+}
+
+function displayRadius(d) {
+  const mobileScale = isMobileGalaxy() ? 0.85 : 1;
+  const goldMobileScale = presentationMode ? 1 : (isMobileGalaxy() && d.Quadrant === "Golden Breakout" ? 0.80 : 1);
+  const presentationScale = presentationMode ? 2 : 1;
+  return numberValue(d.radius) * mobileScale * goldMobileScale * presentationScale * (state.zone === "ALL" ? 1 : 1.14);
+}
+
+function microOrbitRadius(d, i) {
+  const base = d.Galaxy_Group === "OUTER" ? 4.5 : 6.5;
+  const zoneScale = {
+    "Golden Breakout": 1.00,
+    "Deep Accumulation": 0.62,
+    "Euphoria": 0.56,
+    "Value Trap": 0.28
+  }[d.Quadrant] || 0.42;
+  const variation = (i % 3) * (zoneScale >= 0.9 ? 0.90 : 0.58);
+  return base * zoneScale + variation;
+}
+
+function microOrbitSpeed(d, i) {
+  const zoneScale = {
+    "Golden Breakout": 1.00,
+    "Deep Accumulation": 0.62,
+    "Euphoria": 0.54,
+    "Value Trap": 0.28
+  }[d.Quadrant] || 0.42;
+  return (0.42 + (i % 5) * 0.026) * zoneScale;
+}
+
+const matrixData = rawData.map((d, i) => ({
+  ...d,
+  id: d.Ticker || `asset-${i}`,
+  Galaxy_Group: d.Galaxy_Group || "PRIMARY",
+  Market_Cap_Rank: numberValue(d.Market_Cap_Rank, i + 1),
+  radius: bubbleRadius(d),
+  phase: i * 1.61803398875,
+  microOrbitR: microOrbitRadius(d, i),
+  microSpeed: microOrbitSpeed(d, i),
+  localOrbitDirection: i % 2 === 0 ? 1 : -1,
+  localX: 0,
+  localY: 0,
+  x: null,
+  y: null
+}));
+
+const simulation = d3.forceSimulation()
+  .alphaTarget(0.024)
+  .velocityDecay(0.30)
+  .force("charge", d3.forceManyBody().strength(d => -d.radius * 4.9))
+  .force("collide", d3.forceCollide().radius(d => d.radius + 12).strength(0.98).iterations(8));
+
+const stockLogoDomains = {"ARBK": "argoblockchain.com", "BTBT": "bit-digital.com", "CIFR": "ciphermining.com", "CLSK": "cleanspark.com", "COIN": "coinbase.com", "CORZ": "corescientific.com", "FBTC": "fidelity.com", "GREE": "greenidge.com", "HIVE": "hivedigitaltech.com", "HOOD": "robinhood.com", "HUT": "hut8.com", "IBIT": "ishares.com", "IREN": "iren.com", "MARA": "mara.com", "MSTR": "strategy.com", "PYPL": "paypal.com", "RIOT": "riotplatforms.com", "WULF": "terawulf.com", "XYZ": "block.xyz"};
+
+function normalizedTicker(ticker) {
+  return String(ticker || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+function coinLogoSources(ticker) {
+  const symbol = normalizedTicker(ticker);
+  const domain = stockLogoDomains[symbol] || `${symbol.toLowerCase()}.com`;
+  return [
+    { url: `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`, reverse: false },
+    { url: `https://logo.clearbit.com/${domain}`, reverse: false }
+  ];
+}
+
+function applyLogoSource(imageEl, ticker, index = 0) {
+  const sources = coinLogoSources(ticker);
+  if (!sources[index]) return false;
+  imageEl.dataset.logoIndex = String(index);
+  d3.select(imageEl)
+    .classed("reverse-logo", !!sources[index].reverse)
+    .attr("href", sources[index].url);
+  return true;
+}
+
+function coinLogoUrl(ticker) {
+  const source = coinLogoSources(ticker)[0];
+  return source ? source.url : "";
+}
+
+function coinLogoNeedsReverse(ticker) {
+  const source = coinLogoSources(ticker)[0];
+  return !!(source && source.reverse);
+}
+
+function useNextLogoSource(imageEl, ticker) {
+  const nextIndex = numberValue(imageEl.dataset.logoIndex, 0) + 1;
+  return applyLogoSource(imageEl, ticker, nextIndex);
+}
+
+
+function signedPct(v, digits = 1) {
+  const n = numberValue(v);
+  return `${n >= 0 ? "+" : ""}${n.toFixed(digits)}%`;
+}
+
+function formatNumber(v, digits = 1) {
+  return numberValue(v).toLocaleString(undefined, { maximumFractionDigits: digits });
+}
+
+function formatPrice(price) {
+  const n = numberValue(price);
+  return n < 1 ? n.toFixed(4) : n.toFixed(2);
+}
+
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
+
+function visibleData() {
+  if (state.focus === "ALL") return [];
+  const revealLimit = state.zone === "ALL" ? Math.min(state.revealedZoneIndex, defaultRevealMaxIndex()) : zoneRevealOrder.length - 1;
+  return matrixData.filter(d =>
+    (state.focus === "ALL" || d.Galaxy_Group === state.focus) &&
+    (state.zone === "ALL" || d.Quadrant === state.zone) &&
+    (state.zone !== "ALL" || zoneRevealOrder.indexOf(d.Quadrant) <= revealLimit)
+  );
+}
+
+function sortArrow(key) {
+  if (state.tableSort.key !== key) return "";
+  return state.tableSort.direction === "asc" ? " ↑" : " ↓";
+}
+
+function sortValue(d, key) {
+  if (["Ticker", "Quadrant"].includes(key)) return String(d[key] || "");
+  return numberValue(d[key]);
+}
+
+function setTableSort(key) {
+  if (state.tableSort.key === key) {
+    state.tableSort.direction = state.tableSort.direction === "asc" ? "desc" : "asc";
+  } else {
+    state.tableSort.key = key;
+    state.tableSort.direction = ["Ticker", "Quadrant", "Gravity", "Comp_Risk"].includes(key) ? "asc" : "desc";
+  }
+  render();
+}
+
+function marketPlanets() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  return Array.isArray(windowData.planets) ? windowData.planets : [];
+}
+
+function renderMarketTable() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  const rows = marketPlanets().map(planet => `
+    <tr>
+      <td style="color:${planet.color || "#80d8ff"}; font-weight:950;">${String(planet.id || "").padStart(2, "0")}</td>
+      <td>${escapeHtml(planet.name)}</td>
+      <td style="color:${planet.color || "#80d8ff"}; font-weight:950;">${escapeHtml(planet.value)}</td>
+      <td>${escapeHtml(planet.reading)}</td>
+      <td style="text-align:left; white-space:normal;">${escapeHtml(planet.detail)}</td>
+    </tr>
+  `).join("");
+
+  tableView.innerHTML = `
+    <table class="pairs-table market-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Planet</th>
+          <th>Reading</th>
+          <th>Signal</th>
+          <th style="text-align:left;">Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>${rows || `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">${escapeHtml(windowData.summary || "No market window available.")}</td></tr>`}</tbody>
+    </table>
+  `;
+}
+
+
+function stopStoryTimer() {
+  if (storyTimer) {
+    storyTimer.stop();
+    storyTimer = null;
+  }
+}
+
+function sortArrow(key) {
+  if (state.tableSort.key !== key) return "";
+  return state.tableSort.direction === "asc" ? " ↑" : " ↓";
+}
+
+function sortValue(d, key) {
+  const textKeys = ["Ticker", "Quadrant", "Frontier_Zone", "Spider_State"];
+  if (textKeys.includes(key)) return String(d[key] || "");
+  return numberValue(d[key]);
+}
+
+function setTableSort(key) {
+  if (state.tableSort.key === key) {
+    state.tableSort.direction = state.tableSort.direction === "asc" ? "desc" : "asc";
+  } else {
+    state.tableSort.key = key;
+    state.tableSort.direction = ["Ticker", "Quadrant", "Frontier_Zone", "Spider_State", "Gravity", "Comp_Risk"].includes(key) ? "asc" : "desc";
+  }
+  render();
+}
+
+function marketPlanets() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  return Array.isArray(windowData.planets) ? windowData.planets : [];
+}
+
+function marketRowsHtml() {
+  return marketPlanets().map(planet => `
+    <tr>
+      <td style="color:${planet.color || "#80d8ff"}; font-weight:950;">${String(planet.id || "").padStart(2, "0")}</td>
+      <td>${escapeHtml(planet.name)}</td>
+      <td style="color:${planet.color || "#80d8ff"}; font-weight:950;">${escapeHtml(planet.value)}</td>
+      <td>${escapeHtml(planet.reading)}</td>
+      <td style="text-align:left; white-space:normal;">${escapeHtml(planet.detail)}</td>
+    </tr>
+  `).join("");
+}
+
+function marketTableMarkup() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  const rows = marketRowsHtml();
+  return `
+    <table class="pairs-table market-table">
+      <thead><tr><th>#</th><th>Planet</th><th>Reading</th><th>Signal</th><th style="text-align:left;">Interpretation</th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">${escapeHtml(windowData.summary || "No market window available.")}</td></tr>`}</tbody>
+    </table>
+  `;
+}
+
+function coreSignalPlanets() {
+  const wanted = new Set([1, 2, 7]);
+  return marketPlanets()
+    .map((planet, index) => ({ ...planet, _fallbackId: index + 1 }))
+    .filter(planet => wanted.has(Number(planet.id) || planet._fallbackId));
+}
+
+function showCoreSignalTooltip(event, galaxy) {
+  const planets = coreSignalPlanets();
+  const status = galaxyStatus(galaxy);
+  const headline = status && status.headline ? status.headline : "Galaxy Core";
+  const rows = planets.map(planet => {
+    const color = planet.color || "#80d8ff";
+    return `<div style="border-top:1px solid #334155;padding-top:8px;margin-top:8px;">
+      <div style="color:${color};font-weight:950;">${escapeHtml(planet.name || "Planet")}</div>
+      <div>Reading: <b>${escapeHtml(planet.value || "N/A")}</b></div>
+      <div>Signal: <b>${escapeHtml(planet.reading || "No Signal")}</b></div>
+    </div>`;
+  }).join("");
+  tooltip
+    .style("opacity", 1)
+    .style("border-color", "#80d8ff")
+    .html(`
+      <div style="font-weight:900;font-size:16px;color:#80d8ff;border-bottom:1px solid #334155;padding-bottom:8px;margin-bottom:10px;">${escapeHtml(headline)}</div>
+      ${rows || '<div style="color:#94a3b8;">Market-window signals are not available yet.</div>'}
+    `);
+  positionTooltip(event);
+}
+
+function openMarketTableModal() {
+  const modal = document.getElementById("market-table-modal");
+  if (modal) modal.classList.remove("hidden");
+}
+
+function closeMarketTableModal() {
+  const modal = document.getElementById("market-table-modal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function renderMarketPanel() {
+  stopStoryTimer();
+  tableView.innerHTML = `
+    <div class="story-panel market-window-mode">
+      ${marketWindowHtml()}
+      <button class="market-table-launch" onclick="openMarketTableModal()">Table</button>
+      <div id="market-table-modal" class="market-modal-backdrop hidden" onclick="if (event.target === this) closeMarketTableModal();">
+        <div class="market-modal">
+          <div class="market-modal-head">
+            <div class="market-modal-title">Market Window Table</div>
+            <button class="market-modal-close" onclick="closeMarketTableModal()">Close</button>
+          </div>
+          <div class="market-modal-body">${marketTableMarkup()}</div>
+        </div>
+      </div>
+    </div>
+  `;
+  bindMarketPlanetTooltips();
+}
+
+function renderTable(data) {
+  stopStoryTimer();
+  const sortKey = state.tableSort.key;
+  const direction = state.tableSort.direction === "asc" ? 1 : -1;
+  const rows = data
+    .slice()
+    .sort((a, b) => {
+      const av = sortValue(a, sortKey);
+      const bv = sortValue(b, sortKey);
+      if (typeof av === "string" || typeof bv === "string") return String(av).localeCompare(String(bv)) * direction;
+      return (av - bv) * direction;
+    })
+    .map(d => {
+      const prem = numberValue(d.Prem_Pct);
+      const ret90 = numberValue(d.Ret90);
+      return `
+        <tr data-id="${escapeHtml(d.id)}">
+          <td>
+            <div class="asset-cell-inner">
+              <img class="asset-logo ${coinLogoNeedsReverse(d.Ticker) ? "reverse-logo" : ""}" src="${coinLogoUrl(d.Ticker)}" alt="" onerror="this.style.display='none';">
+              <div class="asset-copy">
+                <span class="asset-ticker">${escapeHtml(d.Ticker)}</span>
+                <span class="asset-name">${escapeHtml(d.Company_Name || d.Ticker)}</span>
+              </div>
+            </div>
+          </td>
+          <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:#fff;">${escapeHtml(d.Spot_Formatted || "$" + formatPrice(d.Current_Price))}</td>
+          <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:#cbd5e1;">${escapeHtml(d.TWAP_Formatted || "$" + formatPrice(d.TWAP_Price))}</td>
+          <td style="color:${prem >= 0 ? "#00e676" : "#ef4444"}; font-weight:900;">${signedPct(prem)}</td>
+          <td>${numberValue(d.Gravity).toFixed(1)}</td>
+          <td style="font-weight:950; color:#fff;">${numberValue(d.Comp_Risk).toFixed(1)}</td>
+          <td style="color:${ret90 >= 0 ? "#00e676" : "#ef4444"}; font-weight:900;">${signedPct(ret90)}</td>
+          <td style="color:#c084fc; font-weight:950;">${escapeHtml(d.MR_Prob_Str || numberValue(d.MR_Prob_Num).toFixed(1) + "%")}</td>
+          <td class="tier-cell" style="color:${d.Color};">${escapeHtml(d.Quadrant)}</td>
+        </tr>
+      `;
+    }).join("");
+
+  tableView.innerHTML = `
+    <table class="pairs-table">
+      <thead>
+        <tr>
+          <th data-sort-key="Ticker">Asset${sortArrow("Ticker")}</th>
+          <th data-sort-key="Current_Price">Spot Price${sortArrow("Current_Price")}</th>
+          <th data-sort-key="TWAP_Price">2020 TWAP${sortArrow("TWAP_Price")}</th>
+          <th data-sort-key="Prem_Pct">TWAP Premium${sortArrow("Prem_Pct")}</th>
+          <th data-sort-key="Gravity">Gravity Risk${sortArrow("Gravity")}</th>
+          <th data-sort-key="Comp_Risk">Composite Risk${sortArrow("Comp_Risk")}</th>
+          <th data-sort-key="Ret90">90D ROI${sortArrow("Ret90")}</th>
+          <th data-sort-key="MR_Prob_Num">Mean Reversion Prob${sortArrow("MR_Prob_Num")}</th>
+          <th data-sort-key="Quadrant">Zone${sortArrow("Quadrant")}</th>
+        </tr>
+      </thead>
+      <tbody>${rows || `<tr><td colspan="9" style="text-align:center; color:#94a3b8;">No assets match this filter.</td></tr>`}</tbody>
+    </table>
+  `;
+  tableView.querySelectorAll("th[data-sort-key]").forEach(th => th.addEventListener("click", () => setTableSort(th.dataset.sortKey)));
+  tableView.querySelectorAll("tbody tr[data-id]").forEach(row => row.addEventListener("click", () => {
+    const asset = matrixData.find(item => item.id === row.dataset.id);
+    if (asset) window.parent.postMessage({ action: assetMenuAction, ticker: asset.Ticker }, "*");
+  }));
+}
+
+function activeUniverseData() {
+  let source = matrixData;
+  if (state.focus !== "ALL") source = source.filter(d => d.Galaxy_Group === state.focus);
+  if (state.zone !== "ALL") source = source.filter(d => d.Quadrant === state.zone);
+  return source.length ? source : matrixData;
+}
+
+// Sign colour for the return printed inside a bubble, graded by size. The
+// ring already says which zone the asset is in; the number is a return, and
+// a reader scanning forty bubbles needs its sign readable without decoding
+// the legend first -- a -7.3% painted "Golden Breakout" yellow read as good
+// news. Every band at or above zero is a green, every band below is a red,
+// which is the convention the Android app already follows. Weights and risk
+// scores keep the zone colour: they have no sign to show. Declared exactly
+// once -- this is a classic script, and a second declaration would win
+// silently.
+function returnColor(value) {
+  const n = numberValue(value);
+  if (n >= 30) return "#00e676";
+  if (n >= 10) return "#22c55e";
+  if (n >= 0) return "#86efac";
+  if (n >= -10) return "#fb7185";
+  if (n >= -25) return "#ef4444";
+  return "#991b1b";
+}
+
+function calcAllocationWeight(d, profile) {
+  const safety = Math.max(0.02, numberValue(d.Safety_Raw, 0.5));
+  const momentum = Math.max(0.02, numberValue(d.Momentum_Norm, 0.5));
+  const cap = Math.sqrt(Math.max(1, numberValue(d.MarketCap, 1)));
+  const impact = Math.max(0.5, numberValue(d.Volume_Log, 1));
+  const gravity = Math.max(0.02, numberValue(d.Gravity) / 100 || 0.5);
+  if (profile === "riskAverse") return Math.pow(safety, 3.0) * Math.pow(cap, 1.05);
+  if (profile === "conservative") return Math.pow(safety, 2.2) * Math.pow(cap, 0.85) * (0.75 + momentum * 0.25);
+  if (profile === "neutral") return (safety * 0.50 + momentum * 0.35 + gravity * 0.15) * Math.pow(cap, 0.55) * Math.pow(impact, 0.25);
+  if (profile === "riskOn") return Math.pow(momentum, 1.45) * Math.pow(impact, 0.85) * (0.45 + gravity * 0.55);
+  if (profile === "aggressive") return Math.pow(momentum, 2.25) * Math.pow(impact, 1.05) * (0.25 + Math.pow(gravity, 1.45));
+  return (safety * 0.55 + momentum * 0.45) * cap;
+}
+
+function portfolioZoneMultiplier(d, profile) {
+  const zone = String(d.Quadrant || "");
+  const table = {
+    riskAverse: { "Golden Breakout": 0.98, "Deep Accumulation": 1.18, "Euphoria": 0.34, "Value Trap": 0.12 },
+    conservative: { "Golden Breakout": 1.02, "Deep Accumulation": 1.16, "Euphoria": 0.44, "Value Trap": 0.18 },
+    neutral: { "Golden Breakout": 1.10, "Deep Accumulation": 1.05, "Euphoria": 0.64, "Value Trap": 0.28 },
+    riskOn: { "Golden Breakout": 1.15, "Deep Accumulation": 0.92, "Euphoria": 0.82, "Value Trap": 0.40 },
+    aggressive: { "Golden Breakout": 1.06, "Deep Accumulation": 0.98, "Euphoria": 0.86, "Value Trap": 0.52 }
+  };
+  return (table[profile] && table[profile][zone]) || 0.75;
+}
+
+function portfolioAdjustedWeight(d, profile) {
+  const base = calcAllocationWeight(d, profile);
+  const quality = Math.max(0.12, numberValue(d.Momentum_Norm, 0.5) * 0.45 + numberValue(d.Safety_Raw, 0.5) * 0.55);
+  return base * portfolioZoneMultiplier(d, profile) * quality;
+}
+
+function portfolioColor(score, maxScore) {
+  const t = clamp(score / Math.max(1e-8, maxScore), 0, 1);
+  if (t >= 0.72) return "#00d4aa";
+  if (t >= 0.42) return "#80d8ff";
+  return "#64748b";
+}
+
+function weightedRiskScore(d) {
+  const parts = [
+    ["regression", numberValue(d.Regression_Signal)],
+    ["twap", numberValue(d.TWAP_Signal)],
+    ["sma", numberValue(d.SMA_Risk)],
+    ["drawdown", numberValue(d.Drawdown_Signal)],
+    ["volbeta", numberValue(d.Vol_Beta_Signal)]
+  ];
+  const totalWeight = parts.reduce((sum, [key]) => sum + numberValue(riskWeights[key]), 0) || 1;
+  return parts.reduce((sum, [key, value]) => sum + clamp(value, 0, 100) * numberValue(riskWeights[key]), 0) / totalWeight;
+}
+
+function riskZone(score) {
+  if (score < 34) return "Accumulation";
+  if (score < 67) return "Neutral";
+  return "Distribution";
+}
+
+function frontierZoneLabel(zone) {
+  return String(zone || "") === "Efficient Compounder" ? "Efficient Compounders" : String(zone || "");
+}
+
+function frontierZoneMatches(assetZone, selectedZone) {
+  return selectedZone === "ALL" || frontierZoneLabel(assetZone) === frontierZoneLabel(selectedZone);
+}
+
+function storyHeader(kicker, title, subtitle) {
+  return `<div class="story-panel-header"><div><div class="story-kicker">${escapeHtml(kicker)}</div><div class="story-title">${escapeHtml(title)}</div></div><div class="story-subtitle">${escapeHtml(subtitle)}</div></div>`;
+}
+
+function setPerformanceKey(key) {
+  performanceKey = key;
+  renderStoryOrbit("performance");
+}
+
+function setPerformanceLaneFilter(lane) {
+  activePerformanceLane = lane;
+  renderStoryOrbit("performance");
+}
+
+function setPortfolioProfile(profile) {
+  portfolioProfile = profile;
+  renderStoryOrbit("portfolio");
+}
+
+function setPortfolioLaneFilter(lane) {
+  activePortfolioLane = lane;
+  renderStoryOrbit("portfolio");
+}
+
+function setFrontierZone(zone) {
+  activeFrontierZone = zone;
+  renderStoryOrbit("frontier");
+}
+
+function setRiskZoneFilter(zone) {
+  activeRiskZone = zone;
+  renderStoryOrbit("risk");
+}
+
+function setRiskWeight(key, value) {
+  riskWeights[key] = numberValue(value, 1);
+  renderStoryOrbit("risk");
+}
+
+function modeControls(view) {
+  if (view === "performance") {
+    const opts = [["Ret24", "24H"], ["Ret7", "7D"], ["Ret30", "30D"], ["Ret90", "90D"]];
+    const colors = { Ret24: "#22c55e", Ret7: "#16a34a", Ret30: "#00d4aa", Ret90: "#80d8ff" };
+    return `<div class="choice-strip">${opts.map(([key, label]) => `<button class="choice-btn ${performanceKey === key ? "active" : ""}" style="--active-color:${colors[key]};" onclick="setPerformanceKey('${key}')">${label}</button>`).join("")}</div>`;
+  }
+
+  if (view === "portfolio") {
+    const profiles = [["riskAverse", "Risk Averse"], ["conservative", "Conservative"], ["neutral", "Neutral"], ["riskOn", "Risk-On"], ["aggressive", "Aggressive"]];
+    const colors = { riskAverse: "#3b82f6", conservative: "#80d8ff", neutral: "#00d4aa", riskOn: "#eab308", aggressive: "#ef4444" };
+    return `<div class="choice-strip profile-strip">${profiles.map(([key, label]) => `<button class="choice-btn ${portfolioProfile === key ? "active" : ""}" style="--active-color:${colors[key]};" onclick="setPortfolioProfile('${key}')">${label}</button>`).join("")}</div>`;
+  }
+
+  if (view === "risk") {
+    const sliders = [["regression", "Regression"], ["twap", "TWAP"], ["sma", "SMA"], ["drawdown", "Drawdown"], ["volbeta", "Vol/Beta"]].map(([key, label]) => `
+      <label class="slider-group">${label}<input type="range" min="0.2" max="2.2" step="0.1" value="${riskWeights[key]}" oninput="riskWeights['${key}'] = numberValue(this.value, 1)" onchange="setRiskWeight('${key}', this.value)"></label>
+    `).join("");
+    return `<div class="slider-strip">${sliders}</div>`;
+  }
+
+  return "";
+}
+
+function storyLaneConfigs(view) {
+  if (view === "performance") {
+    return [
+      { key: "strong_gain", label: "Strong Positive", code: "Top return lane", color: "#22c55e" },
+      { key: "positive", label: "Positive", code: "Return > 0", color: "#16a34a" },
+      { key: "pullback", label: "Pullback", code: "Mild negative", color: "#ef4444" },
+      { key: "breakdown", label: "Breakdown", code: "Deep negative", color: "#991b1b" }
+    ];
+  }
+  if (view === "portfolio") {
+    return [
+      { key: "core", label: "Core Weight", code: "Highest sleeve", color: "#00d4aa" },
+      { key: "active", label: "Active Weight", code: "Mid sleeve", color: "#80d8ff" },
+      { key: "satellite", label: "Satellite", code: "Small sleeve", color: "#a855f7" },
+      { key: "trace", label: "Trace", code: "Minimum sleeve", color: "#64748b" }
+    ];
+  }
+  if (view === "risk") {
+    return [
+      { key: "accumulation", label: "Accumulation", code: "Risk < 34", color: "#3b82f6" },
+      { key: "neutral", label: "Neutral", code: "34 <= R < 67", color: "#eab308" },
+      { key: "distribution", label: "Distribution", code: "R >= 67", color: "#ef4444" }
+    ];
+  }
+  if (view === "frontier") {
+    return [
+      { key: "Efficient Compounders", label: "Efficient Compounders", code: "Return up | Vol low", color: "#eab308" },
+      { key: "Capital Preservation", label: "Capital Preservation", code: "Return low | Vol low", color: "#3b82f6" },
+      { key: "High-Octane Growth", label: "High-Octane Growth", code: "Return up | Vol high", color: "#a855f7" },
+      { key: "Inefficient Risk", label: "Inefficient Risk", code: "Return low | Vol high", color: "#ef4444" }
+    ];
+  }
+  return [];
+}
+
+function storyLaneConfig(view, key) {
+  return storyLaneConfigs(view).find(item => item.key === key) || storyLaneConfigs(view)[0] || { color: "#80d8ff", label: "Orbit", code: "" };
+}
+
+function storyLaneMotion(view, key) {
+  const configs = storyLaneConfigs(view);
+  const index = Math.max(0, configs.findIndex(item => item.key === key));
+  const base = [
+    { speed: 0.00052, direction: -1 },
+    { speed: 0.00064, direction: -1 },
+    { speed: 0.00078, direction: -1 },
+    { speed: 0.00094, direction: -1 }
+  ][index] || { speed: 0.00064, direction: -1 };
+  return base.direction * base.speed * ORBIT_SPEED_MULTIPLIER;
+}
+
+function topPerformanceAsset(data) {
+  if (!data.length) return "No asset";
+  const label = { Ret24: "24H", Ret7: "7D", Ret30: "30D", Ret90: "90D" }[performanceKey] || "90D";
+  const winner = data
+    .slice()
+    .sort((a, b) => numberValue(b[performanceKey], -9999) - numberValue(a[performanceKey], -9999))[0];
+  return `${winner.Ticker} ${signedPct(winner[performanceKey])} ${label}`;
+}
+
+function lowestRiskAsset(data) {
+  if (!data.length) return "No asset";
+  const winner = data
+    .map(d => ({ ...d, _weightedRisk: weightedRiskScore(d) }))
+    .sort((a, b) => a._weightedRisk - b._weightedRisk)[0];
+  return `${winner.Ticker} ${winner._weightedRisk.toFixed(0)}/100`;
+}
+
+function topPortfolioAsset(data) {
+  if (!data.length) return "No asset";
+  const preliminary = data.map(d => ({ ...d, _rawAllocation: portfolioAdjustedWeight(d, portfolioProfile) }));
+  const preTotal = d3.sum(preliminary, d => d._rawAllocation) || 1;
+  const trapCapPct = { riskAverse: 4, conservative: 6, neutral: 9, riskOn: 14, aggressive: 18 }[portfolioProfile] || 9;
+  const floorPct = Math.min(
+    { riskAverse: 0.35, conservative: 0.45, neutral: 0.60, riskOn: 0.75, aggressive: 0.90 }[portfolioProfile] || 0.60,
+    28 / Math.max(1, preliminary.length)
+  );
+  const weighted = preliminary.map(d => {
+    const isTrap = String(d.Quadrant || "") === "Value Trap";
+    return { ...d, _rawAllocation: isTrap ? Math.min(d._rawAllocation, preTotal * trapCapPct / 100) : d._rawAllocation };
+  });
+  const total = d3.sum(weighted, d => d._rawAllocation) || 1;
+  const residualPct = Math.max(0, 100 - floorPct * weighted.length);
+  const winner = weighted
+    .map(d => ({ ...d, _finalAllocation: floorPct + residualPct * (d._rawAllocation / total) }))
+    .sort((a, b) => b._finalAllocation - a._finalAllocation)[0];
+  return `${winner.Ticker} ${winner._finalAllocation.toFixed(1)}%`;
+}
+
+function storyCoreWinner(view, data) {
+  if (view === "performance") return topPerformanceAsset(data);
+  if (view === "risk") return lowestRiskAsset(data);
+  if (view === "portfolio") return topPortfolioAsset(data);
+  return "";
+}
+
+function storyGalaxyGeometry(width, height, view) {
+  const compact = width < 880;
+  const side = Math.min(width, height);
+  const scale = compact ? 1.02 : 1.10;
+  const coreRadius = Math.max(compact ? 56 : 82, Math.min(compact ? 101 : 128, side * (compact ? 0.132 : 0.145) * scale));
+  const zoneMaxRadius = zone => Math.max(
+    compact ? 12 : 16,
+    d3.max(matrixData.filter(d => d.Quadrant === zone), d => displayRadius(d)) || (compact ? 16 : 22)
+  );
+  const goldBubble = zoneMaxRadius("Golden Breakout");
+  const blueBubble = zoneMaxRadius("Deep Accumulation");
+  const purpleBubble = zoneMaxRadius("Euphoria");
+  const trapBubble = zoneMaxRadius("Value Trap");
+  const visualGap = Math.max(compact ? 18 : 24, side * 0.022 * scale);
+  const goldGap = Math.max(compact ? 16 : 22, side * (compact ? 0.022 : 0.026) * scale);
+  const standardLaneRadii = {
+    "Golden Breakout": coreRadius + goldBubble + goldGap,
+    "Deep Accumulation": coreRadius + goldBubble + goldGap + goldBubble + blueBubble + visualGap,
+    "Euphoria": coreRadius + goldBubble + goldGap + goldBubble + blueBubble + visualGap + blueBubble + purpleBubble + visualGap,
+    "Value Trap": coreRadius + goldBubble + goldGap + goldBubble + blueBubble + visualGap + blueBubble + purpleBubble + visualGap + purpleBubble + trapBubble + visualGap * 2.8
+  };
+  const laneKeys = storyLaneConfigs(view).map(item => item.key);
+  const standardZones = zoneOrder;
+  const laneRadii = {};
+  laneKeys.forEach((key, index) => {
+    const zone = standardZones[Math.min(index, standardZones.length - 1)];
+    laneRadii[key] = standardLaneRadii[zone];
+  });
+  return {
+    cx: width * 0.50,
+    cy: compact ? height * 0.48 : height * 0.46,
+    coreRadius,
+    laneRadii
+  };
+}
+
+function performanceLane(ret, maxAbs) {
+  if (ret >= maxAbs * 0.22) return "strong_gain";
+  if (ret >= 0) return "positive";
+  if (ret >= -maxAbs * 0.35) return "pullback";
+  return "breakdown";
+}
+
+function portfolioLane(allocation, maxScore) {
+  const pct = clamp(allocation / Math.max(1e-8, maxScore), 0, 1);
+  if (pct >= 0.72) return "core";
+  if (pct >= 0.38) return "active";
+  if (pct >= 0.14) return "satellite";
+  return "trace";
+}
+
+function weightedRiskLane(score) {
+  if (score < 34) return "accumulation";
+  if (score < 67) return "neutral";
+  return "distribution";
+}
+
+function riskFilterForLane(lane) {
+  if (lane === "accumulation") return "Accumulation";
+  if (lane === "neutral") return "Neutral";
+  return "Distribution";
+}
+
+function storyLegendAllRow(view) {
+  const config = {
+    performance: { active: activePerformanceLane === "ALL", label: "All", code: "Full performance", color: "#80d8ff", click: "setPerformanceLaneFilter('ALL')" },
+    frontier: { active: activeFrontierZone === "ALL", label: "All", code: "Full frontier", color: "#80d8ff", click: "setFrontierZone('ALL')" },
+    portfolio: { active: activePortfolioLane === "ALL", label: "All", code: "Full portfolio", color: "#80d8ff", click: "setPortfolioLaneFilter('ALL')" },
+    risk: { active: activeRiskZone === "ALL", label: "All", code: "Full model", color: "#80d8ff", click: "setRiskZoneFilter('ALL')" }
+  }[view];
+  if (!config) return "";
+  return `
+    <div class="legend-item legend-all filterable ${config.active ? "active" : ""}" style="--active-color:${config.color};" role="button" tabindex="0" onclick="${config.click}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${config.click};}">
+      <span class="legend-swatch all-zone-swatch"></span>
+      <div><strong>${escapeHtml(config.label)}</strong><span class="legend-code">${escapeHtml(config.code)}</span></div>
+    </div>
+  `;
+}
+
+function storyLegendRows(view) {
+  const filterable = ["performance", "frontier", "portfolio", "risk"].includes(view);
+  const rows = storyLaneConfigs(view).map(item => {
+    let active = false;
+    let click = "";
+    if (view === "performance") {
+      active = activePerformanceLane === item.key;
+      click = `setPerformanceLaneFilter('${item.key}')`;
+    } else if (view === "frontier") {
+      active = activeFrontierZone !== "ALL" && frontierZoneMatches(item.key, activeFrontierZone);
+      click = `setFrontierZone('${item.key}')`;
+    } else if (view === "portfolio") {
+      active = activePortfolioLane === item.key;
+      click = `setPortfolioLaneFilter('${item.key}')`;
+    } else if (view === "risk") {
+      const zone = riskFilterForLane(item.key);
+      active = activeRiskZone === zone;
+      click = `setRiskZoneFilter('${zone}')`;
+    }
+    return `
+      <div class="legend-item ${filterable ? "filterable" : ""} ${active ? "active" : ""}" style="--active-color:${item.color};" ${filterable ? `role="button" tabindex="0" onclick="${click}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${click};}"` : ""}>
+        <span class="legend-swatch" style="background:${item.color};color:${item.color};"></span>
+        <div><strong>${escapeHtml(item.label)}</strong><span class="legend-code">${escapeHtml(item.code)}</span></div>
+      </div>
+    `;
+  }).join("");
+  return rows + storyLegendAllRow(view);
+}
+
+function storyLegend(view) {
+  const title = {
+    performance: "Performance Orbits",
+    portfolio: "Portfolio Orbits",
+    frontier: "Frontier Zones",
+    risk: "Risk Orbits"
+  }[view] || "Galaxy Orbits";
+  const rows = storyLegendRows(view);
+  const controls = modeControls(view);
+  const controlsFirst = ["performance", "portfolio", "risk"].includes(view);
+  const controlMarkup = controls ? `<div class="story-legend-controls ${controlsFirst ? "" : "controls-after"}">${controls}</div>` : "";
+  return `
+    <p class="legend-title">${escapeHtml(title)}</p>
+    ${controlsFirst ? controlMarkup : ""}
+    <div class="legend-grid">${rows}</div>
+    ${controlsFirst ? "" : controlMarkup}
+  `;
+}
+
+function buildStoryItems(view, data, width, height) {
+  const geometry = storyGalaxyGeometry(width, height, view);
+
+  if (view === "performance") {
+    const label = { Ret24: "24H", Ret7: "7D", Ret30: "30D", Ret90: "90D" }[performanceKey] || "90D";
+    const maxAbs = Math.max(1, d3.max(data, d => Math.abs(numberValue(d[performanceKey]))) || 1);
+    const mapped = data.map((d, i) => {
+      const ret = numberValue(d[performanceKey]);
+      const quality = clamp((ret + maxAbs) / (maxAbs * 2), 0, 1);
+      const lane = performanceLane(ret, maxAbs);
+      const config = storyLaneConfig(view, lane);
+      return { ...d, _storyLane: lane, _label: signedPct(ret), _labelColor: returnColor(ret), _color: config.color, _metric: 7 + quality * 42, _orbitR: geometry.laneRadii[lane], _angle: -Math.PI / 2 + i * Math.PI * 2 / Math.max(1, data.length), _tooltipMetric: `${label} performance: <b>${signedPct(ret)}</b>` };
+    });
+    return activePerformanceLane === "ALL" ? mapped : mapped.filter(d => d._storyLane === activePerformanceLane);
+  }
+
+  if (view === "portfolio") {
+    const preliminary = data.map(d => ({ ...d, _rawAllocation: portfolioAdjustedWeight(d, portfolioProfile) }));
+    const preTotal = d3.sum(preliminary, d => d._rawAllocation) || 1;
+    const trapCapPct = { riskAverse: 4, conservative: 6, neutral: 9, riskOn: 14, aggressive: 18 }[portfolioProfile] || 9;
+    const floorPct = Math.min(
+      { riskAverse: 0.35, conservative: 0.45, neutral: 0.60, riskOn: 0.75, aggressive: 0.90 }[portfolioProfile] || 0.60,
+      28 / Math.max(1, preliminary.length)
+    );
+    const weighted = preliminary.map(d => {
+      const isTrap = String(d.Quadrant || "") === "Value Trap";
+      const capped = isTrap ? Math.min(d._rawAllocation, preTotal * trapCapPct / 100) : d._rawAllocation;
+      return { ...d, _rawAllocation: capped, _trapCapPct: isTrap ? trapCapPct : null };
+    });
+    const total = d3.sum(weighted, d => d._rawAllocation) || 1;
+    const totalFloor = floorPct * weighted.length;
+    const residualPct = Math.max(0, 100 - totalFloor);
+    const withFinal = weighted.map(d => ({ ...d, _finalAllocation: floorPct + residualPct * (d._rawAllocation / total) }));
+    const maxScore = Math.max(1e-8, d3.max(withFinal, d => d._finalAllocation) || 1);
+    const mapped = withFinal.map((d, i) => {
+      const allocation = d._finalAllocation;
+      const guardrail = portfolioZoneMultiplier(d, portfolioProfile);
+      const capLine = d._trapCapPct ? `<br>Value-trap cap: <b>${d._trapCapPct}% max raw sleeve</b>` : "";
+      const lane = portfolioLane(allocation, maxScore);
+      const config = storyLaneConfig(view, lane);
+      return { ...d, Allocation: allocation, _storyLane: lane, _label: allocation.toFixed(1) + "%", _color: config.color, _metric: 10 + allocation * 1.55, _orbitR: geometry.laneRadii[lane], _angle: -Math.PI / 2 + i * Math.PI * 2 / Math.max(1, withFinal.length), _tooltipMetric: `Portfolio weight: <b>${allocation.toFixed(1)}%</b><br>Minimum sleeve: <b>${floorPct.toFixed(2)}%</b><br>State guardrail: <b>${guardrail.toFixed(2)}x</b>${capLine}<br>Zone: <b>${escapeHtml(d.Quadrant)}</b>` };
+    });
+    return activePortfolioLane === "ALL" ? mapped : mapped.filter(d => d._storyLane === activePortfolioLane);
+  }
+
+  if (view === "frontier") {
+    const vols = data.map(d => numberValue(d.Ann_Vol)).filter(Number.isFinite);
+    const rets = data.map(d => numberValue(d.Ann_Return)).filter(Number.isFinite);
+    const xMin = Math.min(...vols, 0), xMax = Math.max(...vols, 1);
+    const yMin = Math.min(...rets, 0), yMax = Math.max(...rets, 1);
+    const padX = Math.max(72, width * 0.08);
+    const padTop = 74;
+    const padBottom = Math.max(72, height * 0.12);
+    const sx = v => padX + ((numberValue(v) - xMin) / (xMax - xMin + 1e-8)) * (width - padX * 2);
+    const sy = v => height - padBottom - ((numberValue(v) - yMin) / (yMax - yMin + 1e-8)) * (height - padTop - padBottom);
+    return data.filter(d => frontierZoneMatches(d.Frontier_Zone, activeFrontierZone)).map((d, i) => {
+      const lane = frontierZoneLabel(d.Frontier_Zone);
+      const config = storyLaneConfig(view, lane);
+      return {
+        ...d,
+        _storyLane: lane,
+        _label: signedPct(d.Ann_Return, 0),
+        _labelColor: returnColor(d.Ann_Return),
+        _color: config.color,
+        _metric: numberValue(d.Safety_Score) + 10,
+        _targetX: sx(d.Ann_Vol),
+        _targetY: sy(d.Ann_Return),
+        _angle: i * 1.618,
+        _tooltipMetric: `Annual return: <b>${signedPct(d.Ann_Return)}</b><br>Annual vol: <b>${numberValue(d.Ann_Vol).toFixed(1)}%</b><br>Frontier zone: <b>${escapeHtml(frontierZoneLabel(d.Frontier_Zone))}</b>`
+      };
+    });
+  }
+
+  if (view === "risk") {
+    const filtered = data.map((d, i) => ({ ...d, Weighted_Risk: weightedRiskScore(d), _rawIndex: i }))
+      .filter(d => activeRiskZone === "ALL" || riskZone(d.Weighted_Risk) === activeRiskZone);
+    return filtered.map((d, i) => {
+      const score = numberValue(d.Weighted_Risk);
+      const zone = riskZone(score);
+      const lane = weightedRiskLane(score);
+      const config = storyLaneConfig(view, lane);
+      return { ...d, _zone: zone, _storyLane: lane, _label: score.toFixed(0) + "/100", _color: config.color, _metric: Math.abs(score - 50) + 18, _orbitR: geometry.laneRadii[lane], _angle: -Math.PI / 2 + i * Math.PI * 2 / Math.max(1, filtered.length), _tooltipMetric: `Weighted risk: <b>${score.toFixed(1)}/100</b><br>Signal zone: <b>${zone}</b>` };
+    });
+  }
+
+  return [];
+}
+
+function updateStoryOrbitAnchor(d, cx, cy) {
+  d._anchorX = cx + Math.cos(d._angle) * d._orbitR;
+  d._anchorY = cy + Math.sin(d._angle) * d._orbitR;
+}
+
+function resolveStoryNodeLayout(items, view, width, height, cx, cy) {
+  if (!items.length) return;
+  const gap = view === "frontier" ? 20 : view === "risk" ? 18 : 13;
+
+  if (view === "frontier") {
+    for (let iter = 0; iter < 100; iter++) {
+      for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+          const a = items[i], b = items[j];
+          let dx = b._anchorX - a._anchorX;
+          let dy = b._anchorY - a._anchorY;
+          let dist = Math.hypot(dx, dy);
+          if (dist < 0.001) {
+            const angle = (i + j + iter + 1) * 1.618;
+            dx = Math.cos(angle);
+            dy = Math.sin(angle);
+            dist = 1;
+          }
+          const minDist = a._radius + b._radius + gap;
+          if (dist >= minDist) continue;
+          const push = (minDist - dist) * 0.52;
+          const ux = dx / dist;
+          const uy = dy / dist;
+          a._anchorX -= ux * push;
+          a._anchorY -= uy * push;
+          b._anchorX += ux * push;
+          b._anchorY += uy * push;
+        }
+      }
+      items.forEach(d => {
+        d._anchorX += (numberValue(d._targetX, d._anchorX) - d._anchorX) * 0.006;
+        d._anchorY += (numberValue(d._targetY, d._anchorY) - d._anchorY) * 0.006;
+        const edge = d._radius + 12;
+        d._anchorX = clamp(d._anchorX, edge, width - edge);
+        d._anchorY = clamp(d._anchorY, edge, height - edge);
+      });
+    }
+    return;
+  }
+
+  for (let iter = 0; iter < 78; iter++) {
+    items.forEach(d => updateStoryOrbitAnchor(d, cx, cy));
+    let moved = false;
+    for (let i = 0; i < items.length; i++) {
+      for (let j = i + 1; j < items.length; j++) {
+        const a = items[i], b = items[j];
+        const dx = b._anchorX - a._anchorX;
+        const dy = b._anchorY - a._anchorY;
+        const dist = Math.hypot(dx, dy);
+        const minDist = a._radius + b._radius + gap + Math.max(numberValue(a._microR), numberValue(b._microR));
+        if (dist >= minDist) continue;
+        const direction = Math.sign(Math.sin(numberValue(b._angle) - numberValue(a._angle))) || (i % 2 === 0 ? 1 : -1);
+        const orbitBase = Math.max(44, (numberValue(a._orbitR) + numberValue(b._orbitR)) * 0.5);
+        const shift = Math.min(0.058, ((minDist - Math.max(1, dist)) / orbitBase) * 0.55);
+        a._angle -= direction * shift;
+        b._angle += direction * shift;
+        moved = true;
+      }
+    }
+    if (!moved && iter > 10) break;
+  }
+  items.forEach(d => updateStoryOrbitAnchor(d, cx, cy));
+}
+
+function drawFrontierChip(bg, label, stageWidth, stageHeight) {
+  const widthPx = Math.max(96, Math.min(190, label.text.length * 7 + 20));
+  const heightPx = 22;
+  const x = clamp(label.x, 10, stageWidth - widthPx - 10);
+  const y = clamp(label.y, 10, stageHeight - heightPx - 10);
+  const group = bg.append("g").attr("class", "frontier-label-chip").attr("transform", `translate(${x},${y})`);
+  group.append("rect")
+    .attr("width", widthPx)
+    .attr("height", heightPx)
+    .attr("rx", 11)
+    .attr("fill", "rgba(3,5,10,.72)")
+    .attr("stroke", label.color)
+    .attr("stroke-opacity", 0.22);
+  group.append("text")
+    .attr("x", 10)
+    .attr("y", 15)
+    .attr("fill", label.color)
+    .attr("font-family", "ui-monospace,SFMono-Regular,Menlo,monospace")
+    .attr("font-size", 10)
+    .attr("font-weight", 900)
+    .text(label.text);
+}
+
+function frontierSmartLabels(data, sx, sy, medVolX, medRetY, width, height, padX, padTop, padBottom) {
+  const occupied = data.map(d => ({ x: sx(d.Ann_Vol), y: sy(d.Ann_Return), r: 54 }));
+  const used = [];
+  const defs = [
+    { text: "Efficient Compounders", color: "#eab308", candidates: [[padX + width * 0.20, padTop + 14], [padX + width * 0.20, padTop + 48], [medVolX - 188, padTop + 14], [padX + 8, medRetY - 34]] },
+    { text: "High-Octane Growth", color: "#a855f7", candidates: [[medVolX + 16, padTop + 14], [width - padX - 176, padTop + 14], [width - padX - 176, medRetY - 34], [medVolX + 16, padTop + 48]] },
+    { text: "Capital Preservation", color: "#3b82f6", candidates: [[padX + 8, medRetY + 28], [padX + 8, height - padBottom + 28], [medVolX - 188, height - padBottom + 28], [padX + 8, height - padBottom - 10]] },
+    { text: "Inefficient Risk", color: "#ef4444", candidates: [[medVolX + 16, medRetY + 28], [width - padX - 156, height - padBottom + 28], [width - padX - 156, medRetY + 28], [medVolX + 16, height - padBottom + 28]] }
+  ];
+
+  return defs.map(def => {
+    const widthPx = Math.max(96, Math.min(190, def.text.length * 7 + 20));
+    const heightPx = 22;
+    const best = def.candidates
+      .map(([rawX, rawY]) => {
+        const x = clamp(rawX, 10, width - widthPx - 10);
+        const y = clamp(rawY, 10, height - heightPx - 10);
+        const cx = x + widthPx / 2;
+        const cy = y + heightPx / 2;
+        const pointCost = occupied.reduce((sum, point) => {
+          const distance = Math.hypot(cx - point.x, cy - point.y);
+          return sum + Math.max(0, point.r + 58 - distance);
+        }, 0);
+        const usedCost = used.reduce((sum, rect) => {
+          const overlap = !(x + widthPx < rect.x || x > rect.x + rect.w || y + heightPx < rect.y || y > rect.y + rect.h);
+          return sum + (overlap ? 160 : 0);
+        }, 0);
+        return { x, y, w: widthPx, h: heightPx, cost: pointCost + usedCost };
+      })
+      .sort((a, b) => a.cost - b.cost)[0];
+    used.push(best);
+    return { ...def, x: best.x, y: best.y };
+  });
+}
+
+function drawStoryBackground(stage, view, width, height, data) {
+  const geometry = storyGalaxyGeometry(width, height, view);
+  const cx = geometry.cx;
+  const cy = geometry.cy;
+  const coreR = geometry.coreRadius;
+  const bg = stage.append("g").attr("class", "story-bg");
+
+  bg.append("rect").attr("width", width).attr("height", height).attr("fill", "#03050a");
+  d3.range(84).forEach(i => bg.append("circle")
+    .attr("cx", (Math.sin(i * 891) * 0.5 + 0.5) * width)
+    .attr("cy", (Math.cos(i * 457) * 0.5 + 0.5) * height)
+    .attr("r", 0.4 + (i % 4) * 0.16)
+    .attr("fill", "#cbd5e1")
+    .attr("opacity", 0.07 + (i % 5) * 0.03));
+
+  if (view === "frontier") {
+    const vols = data.map(d => numberValue(d.Ann_Vol)).filter(Number.isFinite);
+    const rets = data.map(d => numberValue(d.Ann_Return)).filter(Number.isFinite);
+    const medVol = d3.median(vols) || 0;
+    const medRet = d3.median(rets) || 0;
+    const xMin = Math.min(...vols, 0), xMax = Math.max(...vols, 1);
+    const yMin = Math.min(...rets, 0), yMax = Math.max(...rets, 1);
+    const padX = Math.max(72, width * 0.08);
+    const padTop = 74;
+    const padBottom = Math.max(72, height * 0.12);
+    const sx = v => padX + ((numberValue(v) - xMin) / (xMax - xMin + 1e-8)) * (width - padX * 2);
+    const sy = v => height - padBottom - ((numberValue(v) - yMin) / (yMax - yMin + 1e-8)) * (height - padTop - padBottom);
+    const medVolX = sx(medVol);
+    const medRetY = sy(medRet);
+    bg.append("line").attr("class", "story-axis").attr("x1", medVolX).attr("x2", medVolX).attr("y1", padTop).attr("y2", height - padBottom);
+    bg.append("line").attr("class", "story-axis").attr("x1", padX).attr("x2", width - padX).attr("y1", medRetY).attr("y2", medRetY);
+    frontierSmartLabels(data, sx, sy, medVolX, medRetY, width, height, padX, padTop, padBottom).forEach(label => drawFrontierChip(bg, label, width, height));
+    drawFrontierChip(bg, { text: "Annual Return Up", x: medVolX - 168, y: medRetY - 32, color: "#94a3b8" }, width, height);
+    drawFrontierChip(bg, { text: "Annual Volatility ->", x: medVolX + 18, y: medRetY - 32, color: "#94a3b8" }, width, height);
+    return;
+  }
+
+  storyLaneConfigs(view).forEach(item => {
+    bg.append("circle").attr("cx", cx).attr("cy", cy).attr("r", geometry.laneRadii[item.key]).attr("fill", "none").attr("stroke", item.color).attr("stroke-width", 1.2).attr("stroke-dasharray", "7 8").attr("opacity", 0.34).style("filter", `drop-shadow(0 0 4px ${item.color})`);
+  });
+  bg.append("circle").attr("cx", cx).attr("cy", cy).attr("r", coreR).attr("fill", "rgba(7,10,19,.92)").attr("stroke", "rgba(128,216,255,.72)").attr("stroke-width", 2.8).style("filter", "drop-shadow(0 0 28px rgba(128,216,255,.44))");
+  const title = view === "performance" ? ({ Ret24: "24H", Ret7: "7D", Ret30: "30D", Ret90: "90D" }[performanceKey]) : view === "portfolio" ? portfolioProfile.replace(/([A-Z])/g, " $1").replace(/^./, m => m.toUpperCase()) : "Risk Model";
+  const winnerLine = storyCoreWinner(view, data);
+  bg.append("text").attr("x", cx).attr("y", cy - 8).attr("text-anchor", "middle").attr("fill", "#fff").attr("font-size", 18).attr("font-weight", 950).text(title);
+  bg.append("text").attr("x", cx).attr("y", cy + 18).attr("text-anchor", "middle").attr("fill", "#00d4aa").attr("font-size", 13).attr("font-family", "ui-monospace,SFMono-Regular,Menlo,monospace").attr("font-weight", 950).text(winnerLine || "No Signal");
+}
+
+function renderStoryOrbit(view) {
+  stopStoryTimer();
+  const source = activeUniverseData();
+  tableView.innerHTML = `
+    <div class="story-panel story-orbit-panel" data-story-view="${escapeHtml(view)}">
+      <div id="story-galaxy-stage" class="story-svg-shell"></div>
+      <div class="story-legend" data-story-view="${escapeHtml(view)}">${storyLegend(view)}</div>
+    </div>
+  `;
+
+  const shell = tableView.querySelector("#story-galaxy-stage");
+  const rect = shell.getBoundingClientRect();
+  const fallbackWidth = window.innerWidth - (window.innerWidth > 880 ? 230 : 24);
+  const width = Math.max(760, rect.width || tableView.clientWidth || fallbackWidth);
+  const height = Math.max(560, rect.height || tableView.clientHeight || window.innerHeight);
+  const svgStory = d3.select(shell).append("svg").attr("class", "story-svg").attr("viewBox", `0 0 ${width} ${height}`).attr("preserveAspectRatio", "xMidYMid meet");
+  drawStoryBackground(svgStory, view, width, height, source);
+  const items = buildStoryItems(view, source, width, height);
+  const metrics = items.map(d => numberValue(d._metric)).filter(Number.isFinite);
+  const minMetric = metrics.length ? Math.min(...metrics) : 1;
+  const maxMetric = metrics.length ? Math.max(...metrics) : 1;
+  const radiusScale = d3.scaleSqrt().domain([minMetric, maxMetric]).range(view === "frontier" ? [13, 34] : view === "risk" ? [14, 36] : [14, 39]).clamp(true);
+  const geometry = storyGalaxyGeometry(width, height, view);
+  const cx = geometry.cx;
+  const cy = geometry.cy;
+  const laneCounts = {};
+  const laneSeen = {};
+  items.forEach(d => {
+    const lane = d._storyLane || "orbit";
+    laneCounts[lane] = (laneCounts[lane] || 0) + 1;
+    laneSeen[lane] = 0;
+  });
+
+  items.forEach((d, i) => {
+    const r = radiusScale(numberValue(d._metric));
+    const lane = d._storyLane || "orbit";
+    const laneIndex = Math.max(0, storyLaneConfigs(view).findIndex(item => item.key === lane));
+    const lanePosition = laneSeen[lane]++;
+    const laneCount = Math.max(1, laneCounts[lane]);
+    d._radius = r;
+    d._angle = -Math.PI / 2 + (lanePosition / laneCount) * Math.PI * 2 + laneIndex * 0.34;
+    d._orbitSpeed = storyLaneMotion(view, lane);
+    if (view === "frontier") {
+      d._anchorX = d._targetX;
+      d._anchorY = d._targetY;
+      d._microR = 1.2 + (i % 4) * 0.35;
+    } else {
+      d._anchorX = cx + Math.cos(d._angle) * d._orbitR;
+      d._anchorY = cy + Math.sin(d._angle) * d._orbitR;
+      d._microR = view === "risk" ? 3.5 + (i % 4) * 0.7 : 5 + (i % 5) * 1.2;
+    }
+    d._speed = 0.28 + (i % 7) * 0.035;
+    d._phase = i * 1.618;
+  });
+  resolveStoryNodeLayout(items, view, width, height, cx, cy);
+
+  const groups = svgStory.append("g").selectAll("g.story-node").data(items, d => d.Ticker).join("g").attr("class", "story-node");
+  groups.append("circle")
+    .attr("class", "story-node-shell")
+    .attr("r", d => d._radius)
+    .attr("fill", "rgba(7,10,19,.94)")
+    .attr("stroke", d => d._color || d.Color)
+    .attr("stroke-width", 3)
+    .style("filter", d => `drop-shadow(0 0 12px ${d._color || d.Color})`);
+  groups.append("circle").attr("r", d => d._radius * 0.68).attr("fill", "rgba(255,255,255,.03)").attr("stroke", "rgba(255,255,255,.08)");
+  groups.append("image")
+    .attr("class", d => coinLogoNeedsReverse(d.Ticker) ? "coin-logo reverse-logo" : "coin-logo")
+    .attr("href", d => coinLogoUrl(d.Ticker))
+    .attr("x", d => -d._radius * 0.38)
+    .attr("y", d => -d._radius * 0.56)
+    .attr("width", d => d._radius * 0.76)
+    .attr("height", d => d._radius * 0.76)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .on("error", function(event, d) { useNextLogoSource(this, d.Ticker); });
+  groups.append("text").attr("text-anchor", "middle").attr("y", d => d._radius + 13).attr("fill", "#e2e8f0").attr("font-size", 10).attr("font-weight", 950).text(d => d.Ticker);
+  groups.append("text").attr("text-anchor", "middle").attr("y", d => Math.max(10, d._radius * 0.54)).attr("fill", d => d._labelColor || d._color || d.Color).attr("font-size", 10).attr("font-family", "ui-monospace,SFMono-Regular,Menlo,monospace").attr("font-weight", 950).text(d => d._label);
+
+  groups.on("mouseover", function(event, d) {
+    d3.select(this).select(".story-node-shell").attr("stroke-width", 5);
+    tooltip.style("opacity", 1)
+      .style("left", `${event.offsetX + 18}px`)
+      .style("top", `${event.offsetY + 18}px`)
+      .style("border-color", d._color || d.Color)
+      .html(`<b>${escapeHtml(d.Ticker)}</b> <span style="color:${d._color || d.Color}">- ${escapeHtml(d.Quadrant)}</span><br><br>${d._tooltipMetric}<br>Gravity: <b>${numberValue(d.Gravity).toFixed(1)}</b> | Risk: <b>${numberValue(d.Comp_Risk).toFixed(1)}</b><br>Mean Reversion: <b style="color:#c084fc">${escapeHtml(d.MR_Prob_Str)}</b>`);
+  }).on("mousemove", function(event) {
+    tooltip.style("left", `${event.offsetX + 18}px`).style("top", `${event.offsetY + 18}px`);
+  }).on("mouseout", function() {
+    d3.select(this).select(".story-node-shell").attr("stroke-width", 3);
+    tooltip.style("opacity", 0);
+  }).on("click", (event, d) => {
+    event.stopPropagation();
+    window.parent.postMessage({ action: assetMenuAction, ticker: d.Ticker }, "*");
+  });
+
+  storyTimer = d3.timer(elapsed => {
+    const t = elapsed / 1000;
+    const motionScale = galaxyMotionScale();
+    groups.attr("transform", d => {
+      if (motionScale <= 0) return `translate(${d._anchorX},${d._anchorY})`;
+      const speed = d._speed * motionScale * ORBIT_SPEED_MULTIPLIER;
+      if (view !== "frontier") {
+        const orbitAngle = numberValue(d._angle) + numberValue(d._orbitSpeed) * t * 60 * motionScale;
+        const angleOffset = Math.sin(t * speed + d._phase) * Math.min(0.038, (numberValue(d._microR) * motionScale) / Math.max(1, numberValue(d._orbitR)));
+        const angle = orbitAngle + angleOffset;
+        return `translate(${cx + Math.cos(angle) * d._orbitR},${cy + Math.sin(angle) * d._orbitR})`;
+      }
+      const microR = d._microR * motionScale;
+      const localX = Math.cos(t * speed + d._phase) * microR;
+      const localY = Math.sin(t * speed + d._phase) * microR;
+      return `translate(${d._anchorX + localX},${d._anchorY + localY})`;
+    });
+  });
+}
+
+function renderStoryView(view) {
+  renderStoryOrbit(view);
+}
+
+function renderActivePanel(data) {
+  if (state.view === "market") renderMarketPanel();
+  else if (state.view === "table") renderTable(activeUniverseData());
+  else if (["performance", "portfolio", "frontier", "risk"].includes(state.view)) renderStoryView(state.view);
+  else {
+    stopStoryTimer();
+    renderTable(data);
+  }
+}
+
+function applyViewMode() {
+  const showPanel = state.view !== "galaxy";
+  const framelessPanel = showPanel && state.view !== "table";
+  tableView.classList.toggle("active", showPanel);
+  tableView.classList.toggle("frameless-panel", framelessPanel);
+  svg.classed("galaxy-hidden", showPanel);
+  document.getElementById("orbit-description").classList.toggle("galaxy-hidden", showPanel);
+  document.getElementById("zone-legend").classList.toggle("galaxy-hidden", showPanel);
+  document.getElementById("tier-panel").classList.toggle("galaxy-hidden", showPanel);
+  tooltip.style("opacity", 0);
+  updateMethodology(state.view);
+}
+
+function downstreamViewUsesZoneFilter(view) {
+  return ["performance", "portfolio", "frontier", "risk", "table"].includes(view);
+}
+
+function updateResetButton() {
+  const btn = document.getElementById("reset-zone-btn");
+  if (!btn) return;
+  const visible = downstreamViewUsesZoneFilter(state.view) && state.zone !== "ALL";
+  btn.classList.toggle("visible", visible);
+  btn.textContent = visible ? `Reset ${state.zone}` : "Reset Zone";
+}
+
+function setGlobalZoneFilter(zone) {
+  if (zone !== "ALL" && !zoneOrder.includes(zone)) return;
+  state.zone = zone;
+  syncDashboardButtons();
+  tooltip.style("opacity", 0);
+  startZoneReveal();
+  render();
+}
+
+function laneRadiiFor(scale, compact) {
+  const side = Math.min(width, height);
+  const coreRadius = presentationMode
+    ? Math.max(compact ? 42 : 58, Math.min(compact ? 74 : 92, side * (compact ? 0.090 : 0.105) * scale))
+    : Math.max(compact ? 56 : 82, Math.min(compact ? 101 : 128, side * (compact ? 0.132 : 0.145) * scale));
+  const zoneMaxRadius = zone => Math.max(
+    compact ? 12 : 16,
+    d3.max(matrixData.filter(d => d.Quadrant === zone), d => displayRadius(d)) || (compact ? 16 : 22)
+  );
+  const goldBubble = zoneMaxRadius("Golden Breakout");
+  const blueBubble = zoneMaxRadius("Deep Accumulation");
+  const purpleBubble = zoneMaxRadius("Euphoria");
+  const trapBubble = zoneMaxRadius("Value Trap");
+  const visualGap = presentationMode
+    ? Math.max(compact ? 42 : 56, side * 0.060 * scale)
+    : Math.max(compact ? 18 : 24, side * 0.022 * scale);
+  const goldGap = presentationMode
+    ? Math.max(compact ? 70 : 96, side * 0.095 * scale)
+    : Math.max(compact ? 16 : 22, side * (compact ? 0.022 : 0.026) * scale);
+  const innerOrbit = coreRadius + goldBubble + goldGap;
+  const blueOrbit = innerOrbit + goldBubble + blueBubble + visualGap;
+  const purpleOrbit = blueOrbit + blueBubble + purpleBubble + visualGap;
+  const laneRadii = {
+    "Golden Breakout": innerOrbit,
+    "Deep Accumulation": blueOrbit,
+    "Euphoria": purpleOrbit,
+    "Value Trap": purpleOrbit + purpleBubble + trapBubble + visualGap * 2.8
+  };
+  return { coreRadius, laneRadii };
+}
+
+function layoutCenters() {
+  const compact = width < 880;
+  const orbitY = compact ? height * 0.48 : height * 0.46;
+
+  if (state.focus === "PRIMARY") {
+    centers = compact
+      ? { PRIMARY: { x: width * 0.50, y: orbitY, scale: 1.02, active: true, collapsed: false, ...laneRadiiFor(1.02, compact) } }
+      : {
+          PRIMARY: { x: width * 0.50, y: orbitY, scale: 1.10, active: true, collapsed: false, ...laneRadiiFor(1.10, compact) },
+          OUTER: { x: width - 92, y: 112, scale: 0.34, active: false, collapsed: true, ...laneRadiiFor(0.34, compact) }
+        };
+  } else if (state.focus === "OUTER") {
+    centers = compact
+      ? { OUTER: { x: width * 0.50, y: orbitY, scale: 1.02, active: true, collapsed: false, ...laneRadiiFor(1.02, compact) } }
+      : {
+          PRIMARY: { x: width - 92, y: 112, scale: 0.34, active: false, collapsed: true, ...laneRadiiFor(0.34, compact) },
+          OUTER: { x: width * 0.50, y: orbitY, scale: 1.10, active: true, collapsed: false, ...laneRadiiFor(1.10, compact) }
+        };
+  } else {
+    const marketRadii = laneRadiiFor(compact ? 0.64 : 0.92, compact);
+    centers = {
+      MARKET: { x: width * 0.50, y: compact ? height * 0.52 : height * 0.50, scale: compact ? 0.86 : 1.0, active: true, collapsed: false, ...marketRadii }
+    };
+  }
+}
+
+function zoneCounts(data) {
+  return zoneOrder.reduce((acc, zone) => {
+    acc[zone] = data.filter(d => d.Quadrant === zone).length;
+    return acc;
+  }, {});
+}
+
+function filterCountData() {
+  if (state.focus === "OUTER") {
+    return matrixData.filter(d => d.Galaxy_Group === "OUTER");
+  }
+  return matrixData.filter(d => d.Galaxy_Group === "PRIMARY");
+}
+
+function updateFilterLabels() {
+  const countData = filterCountData();
+  const counts = zoneCounts(countData);
+  const labels = {
+    "ALL": `All Zones (${countData.length})`,
+    "Golden Breakout": `Golden Breakout (${counts["Golden Breakout"] || 0})`,
+    "Deep Accumulation": `Deep Accumulation (${counts["Deep Accumulation"] || 0})`,
+    "Euphoria": `Euphoria (${counts["Euphoria"] || 0})`,
+    "Value Trap": `Value Trap (${counts["Value Trap"] || 0})`
+  };
+  document.querySelectorAll("button[data-zone-filter]").forEach(btn => {
+    btn.textContent = labels[btn.dataset.zoneFilter] || btn.dataset.zoneFilter;
+  });
+}
+
+function updateReservedRects() {
+  const canvasRect = container.getBoundingClientRect();
+  reservedRects = [];
+  ["chart-title", "control-deck", "tier-panel", "zone-legend"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.classList.contains("galaxy-hidden")) return;
+    if (window.getComputedStyle(el).display === "none") return;
+    const rect = el.getBoundingClientRect();
+    const pad = id === "control-deck" ? 30 : id === "tier-panel" ? 56 : id === "zone-legend" ? 24 : 18;
+    reservedRects.push({
+      left: Math.max(0, rect.left - canvasRect.left - pad),
+      right: Math.min(width, rect.right - canvasRect.left + pad),
+      top: Math.max(0, rect.top - canvasRect.top - pad),
+      bottom: Math.min(height, rect.bottom - canvasRect.top + pad)
+    });
+  });
+}
+
+function boundaryRadius(d) {
+  return displayRadius(d) + numberValue(d.microOrbitR) + 18;
+}
+
+function coreBoundaryRadius(d, center) {
+  const shellPadding = center.collapsed ? 10 : 14;
+  return numberValue(center.coreRadius) + displayRadius(d) + shellPadding;
+}
+
+function displayLaneZone(zone) {
+  if (state.zone !== "ALL" && (zone === "Euphoria" || zone === "Value Trap")) {
+    return "Deep Accumulation";
+  }
+  return zone;
+}
+
+function zoneDisplayLaneRadius(zone, center) {
+  if (!center) return 0;
+  const laneZone = displayLaneZone(zone);
+  return numberValue(center.laneRadii && center.laneRadii[laneZone], center.coreRadius + 120);
+}
+
+function keepOutsideCore(d, center) {
+  if (!center || center.collapsed) return;
+  const minDistance = coreBoundaryRadius(d, center);
+  let dx = numberValue(d.x) - center.x;
+  let dy = numberValue(d.y) - center.y;
+  let distance = Math.hypot(dx, dy);
+
+  if (distance < 0.001) {
+    const angle = numberValue(d.anchorAngle, d.phase || 0);
+    dx = Math.cos(angle);
+    dy = Math.sin(angle);
+    distance = 1;
+  }
+
+  if (distance >= minDistance) return;
+
+  const scale = minDistance / distance;
+  d.x = center.x + dx * scale;
+  d.y = center.y + dy * scale;
+  const outwardX = dx / distance;
+  const outwardY = dy / distance;
+  d.vx = Math.max(0.08, Math.abs(numberValue(d.vx))) * outwardX;
+  d.vy = Math.max(0.08, Math.abs(numberValue(d.vy))) * outwardY;
+}
+
+function zoneLaneDistance(d, center) {
+  if (!center) return 0;
+  const zone = zoneOrder.includes(d.Quadrant) ? d.Quadrant : "Value Trap";
+  const baseRadius = zoneDisplayLaneRadius(zone, center);
+  const coreLimit = coreBoundaryRadius(d, center);
+  return Math.max(baseRadius, coreLimit);
+}
+
+function lockToOrbitLane(d, center) {
+  if (!center || center.collapsed) return;
+  const desired = zoneLaneDistance(d, center);
+  let dx = numberValue(d.x) - center.x;
+  let dy = numberValue(d.y) - center.y;
+  let distance = Math.hypot(dx, dy);
+  if (distance < 0.001) {
+    const angle = numberValue(d.anchorAngle, d.phase || 0);
+    dx = Math.cos(angle);
+    dy = Math.sin(angle);
+    distance = 1;
+  }
+  const ux = dx / distance;
+  const uy = dy / distance;
+  d.x = center.x + ux * desired;
+  d.y = center.y + uy * desired;
+  const radialVelocity = numberValue(d.vx) * ux + numberValue(d.vy) * uy;
+  d.vx = numberValue(d.vx) - radialVelocity * ux * 0.94;
+  d.vy = numberValue(d.vy) - radialVelocity * uy * 0.94;
+}
+
+function overlapsReservedPoint(x, y, radius) {
+  return reservedRects.some(rect => (
+    x + radius > rect.left &&
+    x - radius < rect.right &&
+    y + radius > rect.top &&
+    y - radius < rect.bottom
+  ));
+}
+
+function slideAroundReservedRects(d, center, radius) {
+  if (!center || center.collapsed || !overlapsReservedPoint(d.x, d.y, radius)) return;
+  const laneDistance = zoneLaneDistance(d, center);
+  const baseAngle = Math.atan2(numberValue(d.y) - center.y, numberValue(d.x) - center.x);
+  const offsets = [0.16, -0.16, 0.32, -0.32, 0.52, -0.52, 0.76, -0.76, 1.02, -1.02, 1.34, -1.34];
+  let best = null;
+  offsets.forEach(offset => {
+    const angle = baseAngle + offset;
+    const x = center.x + Math.cos(angle) * laneDistance;
+    const y = center.y + Math.sin(angle) * laneDistance;
+    const cost = (overlapsReservedPoint(x, y, radius) ? 100000 : 0) + overflowCost(x, y, radius) * 500 + Math.abs(offset);
+    if (!best || cost < best.cost) best = { x, y, angle, cost };
+  });
+  if (best) {
+    d.x = clamp(best.x, radius, width - radius);
+    d.y = clamp(best.y, radius, height - radius);
+    d.anchorAngle = best.angle;
+  }
+}
+
+function orbitPointForAngle(d, center, angle, laneDistance, radius) {
+  return {
+    x: center.x + Math.cos(angle) * laneDistance,
+    y: center.y + Math.sin(angle) * laneDistance,
+    angle
+  };
+}
+
+function relaxedOrbitPoint(d, center, radius, laneDistance) {
+  const baseAngle = numberValue(d.anchorAngle, d.phase || 0);
+  return orbitPointForAngle(d, center, baseAngle, laneDistance, radius);
+}
+
+function overflowCost(x, y, radius) {
+  return (
+    Math.max(0, radius - x) +
+    Math.max(0, x - (width - radius)) +
+    Math.max(0, radius - y) +
+    Math.max(0, y - (height - radius))
+  );
+}
+
+function pushOutsideReservedRects(d, radius) {
+  reservedRects.forEach(rect => {
+    const overlaps = (
+      d.x + radius > rect.left &&
+      d.x - radius < rect.right &&
+      d.y + radius > rect.top &&
+      d.y - radius < rect.bottom
+    );
+    if (!overlaps) return;
+
+    const candidates = [
+      { x: rect.left - radius, y: d.y, vx: -0.65, vy: d.vy || 0 },
+      { x: rect.right + radius, y: d.y, vx: 0.65, vy: d.vy || 0 },
+      { x: d.x, y: rect.top - radius, vx: d.vx || 0, vy: -0.65 },
+      { x: d.x, y: rect.bottom + radius, vx: d.vx || 0, vy: 0.65 }
+    ].map(candidate => ({
+      ...candidate,
+      cost: Math.hypot(candidate.x - d.x, candidate.y - d.y) + overflowCost(candidate.x, candidate.y, radius) * 12
+    })).sort((a, b) => a.cost - b.cost);
+
+    const best = candidates[0];
+    d.x = clamp(best.x, radius, width - radius);
+    d.y = clamp(best.y, radius, height - radius);
+    d.vx = best.vx;
+    d.vy = best.vy;
+  });
+}
+
+function clearZoneRevealTimers() {
+  zoneRevealTimers.forEach(timer => clearTimeout(timer));
+  zoneRevealTimers = [];
+}
+
+function startZoneReveal() {
+  clearZoneRevealTimers();
+  const maxIndex = defaultRevealMaxIndex();
+  if (state.zone !== "ALL") {
+    state.revealedZoneIndex = zoneRevealOrder.length - 1;
+    return;
+  }
+  if (zoneRevealAlreadyPlayed) {
+    state.revealedZoneIndex = maxIndex;
+    return;
+  }
+
+  state.revealedZoneIndex = 0;
+  if (maxIndex <= 0) {
+    zoneRevealAlreadyPlayed = true;
+    try { sessionStorage.setItem(zoneRevealSessionKey, "1"); } catch (err) {}
+    return;
+  }
+
+  zoneRevealOrder.slice(1, maxIndex + 1).forEach((zone, index) => {
+    const nextIndex = index + 1;
+    const timer = setTimeout(() => {
+      state.revealedZoneIndex = nextIndex;
+      if (nextIndex >= maxIndex) {
+        zoneRevealAlreadyPlayed = true;
+        try { sessionStorage.setItem(zoneRevealSessionKey, "1"); } catch (err) {}
+      }
+      render();
+    }, nextIndex * zoneRevealDelayMs);
+    zoneRevealTimers.push(timer);
+  });
+}
+
+function drawBackdrop() {
+  backgroundLayer.selectAll("*").remove();
+  const stars = d3.range(120).map(i => ({
+    x: (Math.sin(i * 999) * 0.5 + 0.5) * width,
+    y: (Math.cos(i * 733) * 0.5 + 0.5) * height,
+    r: 0.35 + ((i % 5) * 0.18),
+    o: 0.08 + ((i % 7) * 0.035)
+  }));
+
+  backgroundLayer.selectAll("circle.star")
+    .data(stars)
+    .join("circle")
+    .attr("class", "star")
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .attr("r", d => d.r)
+    .attr("fill", "#cbd5e1")
+    .attr("opacity", d => d.o);
+}
+
+function drawZoneOrbits() {
+  if (state.focus === "ALL") {
+    orbitLayer.selectAll(".zone-orbit").data([]).join("circle").remove();
+    orbitLayer.selectAll(".orbit-label").remove();
+    return;
+  }
+  const activeGalaxyKeys = galaxyOrder.filter(key => state.focus === "ALL" || key === state.focus);
+  const revealedOrbitZones = state.zone === "ALL"
+    ? visibleOrbitZones.filter(zone => zoneRevealOrder.indexOf(zone) <= Math.min(state.revealedZoneIndex, defaultRevealMaxIndex()))
+    : zoneOrder.filter(zone => zone === state.zone);
+  const orbitData = activeGalaxyKeys.flatMap(galaxy => revealedOrbitZones.map(zone => ({ galaxy, zone })));
+
+  orbitLayer.selectAll(".zone-orbit")
+    .data(orbitData, d => `${d.galaxy}-${d.zone}`)
+    .join("circle")
+    .attr("class", "zone-orbit")
+    .attr("cx", d => centers[d.galaxy].x)
+    .attr("cy", d => centers[d.galaxy].y)
+    .attr("r", d => zoneDisplayLaneRadius(d.zone, centers[d.galaxy]))
+    .attr("stroke", d => zoneConfig[d.zone].color)
+    .style("opacity", d => centers[d.galaxy].collapsed ? 0.12 : 0.34)
+    .style("filter", d => `drop-shadow(0 0 4px ${zoneConfig[d.zone].color})`);
+
+  orbitLayer.selectAll(".orbit-label").remove();
+}
+
+function cleanRagText(text) {
+  return String(text || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\[[^\]]+\]/g, " ")
+    .replace(/Video Title:.*?(?=Current Structure|Macro Quantitative Risk|$)/i, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function summarizeRagDoc(doc) {
+  const record = (doc.records || [])[0] || {};
+  const facts = record.facts || [];
+  const structure = facts.find(f => /ratio|Composite risk|momentum|accumulation|over/i.test(f));
+  const risk = facts.find(f => /risk|over.?extended|mean.?reversion|floor/i.test(f));
+  const action = facts.find(f => /ML forecast|forward return|support floors|moving.?average supports|Cycle bull targets/i.test(f));
+  const fallback = doc.latest_summary_text || record.summary_text || "";
+  const headline = cleanRagText(structure || fallback).slice(0, 190);
+  const posture = cleanRagText(risk || fallback).slice(0, 230);
+  const actionText = cleanRagText(action || "").slice(0, 230);
+  if (!headline) return null;
+  return {
+    title: "",
+    source: "JSON RAG",
+    headline,
+    posture,
+    action: actionText,
+    bullets: [headline, posture, actionText].filter(Boolean),
+    rag_date: doc.updated_at ? String(doc.updated_at).slice(0, 10) : ""
+  };
+}
+
+async function hydrateRagBible() {
+  try {
+    const response = await fetch("/data/assets/BITCOIN_EQUITIES_SECTOR.json", { cache: "no-store" });
+    if (!response.ok) return;
+    const doc = await response.json();
+    const ragBible = summarizeRagDoc(doc);
+    if (ragBible) {
+      activeBible = ragBible;
+      render();
+    }
+  } catch (err) {
+    return;
+  }
+}
+
+function galaxyStatus(galaxy) {
+  if (activeBible && activeBible.galaxies && activeBible.galaxies[galaxy]) {
+    return activeBible.galaxies[galaxy];
+  }
+  return activeBible || {};
+}
+
+function bibleHtml(data, galaxy) {
+  const status = galaxyStatus(galaxy);
+  const headline = status && status.headline ? status.headline : "No Signal";
+  const score = clamp(status && status.status_score, 0, 100);
+  const avgGravity = status && status.avg_gravity !== undefined ? numberValue(status.avg_gravity, 50).toFixed(1) : "50.0";
+  const phase = status && status.gravity_phase ? status.gravity_phase : "No Signal";
+  const gemLine = status && status.gem_line ? status.gem_line : "Gem: No signal";
+  const universeLabel = !hasOuterGalaxy ? "Single Galaxy" : (galaxy === "PRIMARY" ? "Top 20" : "21-40");
+  return `
+    <div class="rag-headline">${escapeHtml(headline)}</div>
+    <div class="status-meter"><div class="status-meter-fill" style="width:${score}%;"></div></div>
+    <div class="rag-statline">Avg Gravity ${avgGravity} · ${escapeHtml(phase)}</div>
+    <div class="rag-gemline">${escapeHtml(gemLine)}</div>
+    <div class="rag-universe">${escapeHtml(universeLabel)}</div>
+  `;
+}
+
+function marketWindowHtml() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  const coords = [
+    [50, 13], [78, 24], [86, 53], [68, 79], [32, 79], [14, 53], [22, 24]
+  ];
+  const planets = marketPlanets().slice(0, 7).map((planet, index) => {
+    const [x, y] = coords[index] || [50, 50];
+    const color = planet.color || "#80d8ff";
+    const orbitR = 5 + (index % 3) * 2;
+    const duration = (16 + index * 1.8) / ORBIT_SPEED_MULTIPLIER;
+    return `
+      <div class="market-planet"
+        style="--x:${x}%; --y:${y}%; --planet-color:${color}; --orbit-r:${orbitR}px; --orbit-duration:${duration}s; --orbit-delay:-${index * 0.9}s;"
+        data-name="${escapeHtml(planet.name)}"
+        data-value="${escapeHtml(planet.value)}"
+        data-signal="${escapeHtml(planet.reading)}"
+        data-detail="${escapeHtml(planet.detail)}"
+        data-color="${escapeHtml(color)}">
+        <div class="market-planet-index">${String(planet.id || index + 1).padStart(2, "0")}</div>
+        <div class="market-planet-name">${escapeHtml(planet.name)}</div>
+        <div class="market-planet-value">${escapeHtml(planet.value)}</div>
+        <div class="market-planet-reading">${escapeHtml(planet.reading)}</div>
+      </div>
+    `;
+  }).join("");
+  return `
+    <div class="market-solar-system">
+      <div class="market-orbit-ring r1"></div>
+      <div class="market-orbit-ring r2"></div>
+      <div class="market-orbit-ring r3"></div>
+      <div class="market-sun">
+        <div class="market-window-kicker">Market Window</div>
+        <div class="market-window-title">${escapeHtml(windowData.headline || "No Signal")}</div>
+        <div class="market-window-summary">${escapeHtml(windowData.summary || "Waiting for today's galaxy read.")}</div>
+      </div>
+      ${planets || ""}
+    </div>
+  `;
+}
+
+function galaxyCounts(data) {
+  return galaxyOrder.reduce((acc, galaxy) => {
+    acc[galaxy] = data.filter(d => d.Galaxy_Group === galaxy).length;
+    return acc;
+  }, {});
+}
+
+function drawWells(data) {
+  const countData = matrixData.filter(d => state.zone === "ALL" || d.Quadrant === state.zone);
+  const counts = galaxyCounts(countData);
+  const wellKeys = state.focus === "ALL" ? ["MARKET"] : galaxyOrder.filter(galaxy => centers[galaxy]);
+  const wells = wellLayer.selectAll(".gravity-well")
+    .data(wellKeys, d => d)
+    .join(
+      enter => {
+        const g = enter.append("g").attr("class", "gravity-well well-core");
+        g.append("circle").attr("class", "halo outer");
+        g.append("circle").attr("class", "halo middle");
+        g.append("circle").attr("class", "halo inner");
+        g.append("circle").attr("class", "core-shell");
+        g.append("foreignObject")
+          .attr("class", "rag-core-foreign")
+          .append("xhtml:div")
+          .attr("class", "rag-core-card");
+        g.append("text").attr("class", "well-label");
+        g.append("text").attr("class", "well-sub");
+        g.on("click", (event, galaxy) => {
+          if (galaxy === "MARKET" || state.focus === galaxy) return;
+          state.focus = galaxy;
+          document.querySelectorAll("[data-focus]").forEach(btn => btn.classList.toggle("active", btn.dataset.focus === state.focus));
+          startZoneReveal();
+          render();
+        });
+        g.on("mouseover", function(event, galaxy) {
+          if (galaxy === "MARKET" || centers[galaxy]?.collapsed) return;
+          d3.select(this).select(".core-shell").attr("stroke-width", 4);
+          showCoreSignalTooltip(event, galaxy);
+        });
+        g.on("mousemove", function(event, galaxy) {
+          if (galaxy === "MARKET" || centers[galaxy]?.collapsed) return;
+          showCoreSignalTooltip(event, galaxy);
+        });
+        g.on("mouseout", function() {
+          d3.select(this).select(".core-shell").attr("stroke-width", 2.5);
+          tooltip.style("opacity", 0);
+        });
+        return g;
+      },
+      update => update,
+      exit => exit.transition().duration(230).style("opacity", 0).remove()
+    );
+
+  wells.transition().duration(520)
+    .attr("transform", galaxy => `translate(${centers[galaxy].x},${centers[galaxy].y})`)
+    .style("opacity", galaxy => centers[galaxy].collapsed ? 0.36 : 1);
+
+  wells.classed("market-well", galaxy => galaxy === "MARKET");
+
+  wells.select(".outer")
+    .attr("r", galaxy => centers[galaxy].coreRadius + 96 * centers[galaxy].scale)
+    .attr("fill", "none")
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-opacity", galaxy => centers[galaxy].collapsed ? 0.10 : 0.18)
+    .attr("stroke-width", 1.3)
+    .attr("stroke-dasharray", "7,8");
+
+  wells.select(".middle")
+    .attr("r", galaxy => centers[galaxy].coreRadius + 46 * centers[galaxy].scale)
+    .attr("fill", galaxy => galaxyMeta[galaxy].color)
+    .attr("fill-opacity", galaxy => centers[galaxy].collapsed ? 0.012 : 0.024)
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-opacity", galaxy => centers[galaxy].collapsed ? 0.10 : 0.22)
+    .attr("stroke-width", 1);
+
+  wells.select(".inner")
+    .attr("r", galaxy => centers[galaxy].coreRadius)
+    .attr("fill", galaxy => galaxyMeta[galaxy].color)
+    .attr("fill-opacity", galaxy => centers[galaxy].collapsed ? 0.016 : 0.035)
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-opacity", galaxy => centers[galaxy].collapsed ? 0.12 : 0.30)
+    .attr("stroke-width", 1.3);
+
+  wells.select(".core-shell")
+    .style("display", galaxy => galaxy === "MARKET" ? "none" : "block")
+    .attr("r", galaxy => centers[galaxy].coreRadius * 0.92)
+    .attr("fill", "#070a13")
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-width", 2.5)
+    .style("filter", galaxy => `drop-shadow(0 0 18px ${galaxyMeta[galaxy].color})`);
+
+  wells.each(function(galaxy) {
+    const c = centers[galaxy];
+    const useRagCard = !c.collapsed;
+    const isMarket = galaxy === "MARKET";
+    const coreWidth = isMarket ? Math.min(width - 70, 860) : Math.max(126, Math.min(300, c.coreRadius * 1.78));
+    const coreHeight = isMarket ? Math.min(height - 170, 520) : coreWidth;
+    const well = d3.select(this);
+
+    well.select(".rag-core-foreign")
+      .style("display", useRagCard ? "block" : "none")
+      .attr("x", -coreWidth / 2)
+      .attr("y", -coreHeight / 2)
+      .attr("width", coreWidth)
+      .attr("height", coreHeight);
+
+    if (useRagCard) {
+      well.select(".rag-core-card")
+        .classed("market-window-card", isMarket)
+        .html(isMarket ? marketWindowHtml() : bibleHtml(data, galaxy));
+    }
+
+    well.select(".well-label")
+      .style("display", useRagCard ? "none" : "block")
+      .attr("y", 8)
+      .style("font-size", `${Math.max(11, 16 * c.scale)}px`)
+      .style("fill", galaxyMeta[galaxy].color)
+      .text(galaxyMeta[galaxy].label);
+
+	    well.select(".well-sub")
+	      .style("display", "none")
+	      .text("");
+	  });
+  bindMarketPlanetTooltips();
+}
+
+function updateTargets(data) {
+  const counts = {};
+  const seen = {};
+  galaxyOrder.forEach(galaxy => {
+    counts[galaxy] = zoneCounts(data.filter(d => d.Galaxy_Group === galaxy));
+    seen[galaxy] = zoneOrder.reduce((acc, zone) => ({ ...acc, [zone]: 0 }), {});
+  });
+
+  data.forEach(d => {
+    const galaxy = galaxyOrder.includes(d.Galaxy_Group) ? d.Galaxy_Group : "OUTER";
+    const c = centers[galaxy] || centers.PRIMARY;
+    if (!c) return;
+    const zone = zoneOrder.includes(d.Quadrant) ? d.Quadrant : "Value Trap";
+    const zoneIndex = Math.max(0, zoneOrder.indexOf(zone));
+    const count = Math.max(1, counts[galaxy][zone]);
+    const idx = seen[galaxy][zone]++;
+    const baseAngle = (idx / count) * Math.PI * 2 - Math.PI / 2 + zoneIndex * 0.34;
+    const returnSkew = clamp(d.Return_90D, -80, 80) / 80 * 0.16;
+    const impactNorm = clamp(Math.abs(numberValue(d.Composite_Impact)) / maxImpact, 0, 1);
+
+    d.orbitDistance = zoneLaneDistance(d, c);
+    d.anchorAngle = baseAngle + returnSkew + (galaxy === "OUTER" ? 0.16 : 0);
+    d.orbitSpeed = zoneConfig[zone].direction * zoneConfig[zone].speed * (0.86 + impactNorm * 0.28) * ORBIT_SPEED_MULTIPLIER;
+    d.targetX = c.x + Math.cos(d.anchorAngle) * d.orbitDistance;
+    d.targetY = c.y + Math.sin(d.anchorAngle) * d.orbitDistance;
+
+    if (d.x === null || d.y === null || Number.isNaN(d.x) || Number.isNaN(d.y)) {
+      d.x = d.targetX;
+      d.y = d.targetY;
+      d.vx = 0;
+      d.vy = 0;
+    }
+  });
+}
+
+function positionTooltip(event) {
+  const ttNode = tooltip.node();
+  const ttWidth = ttNode.offsetWidth || 300;
+  const ttHeight = ttNode.offsetHeight || 210;
+  let left = event.pageX + 16;
+  let top = event.pageY - 18;
+  if (left + ttWidth > window.innerWidth + window.scrollX) left = event.pageX - ttWidth - 16;
+  if (top + ttHeight > window.innerHeight + window.scrollY) top = event.pageY - ttHeight - 16;
+  tooltip.style("left", `${Math.max(window.scrollX + 10, left)}px`).style("top", `${Math.max(window.scrollY + 10, top)}px`);
+}
+
+function showMarketPlanetTooltip(event, planetEl) {
+  const color = planetEl.dataset.color || "#80d8ff";
+  tooltip
+    .style("opacity", 1)
+    .style("border-color", color)
+    .html(`
+      <div style="font-weight:900;font-size:16px;color:${color};border-bottom:1px solid #334155;padding-bottom:8px;margin-bottom:10px;">${escapeHtml(planetEl.dataset.name || "Market Planet")}</div>
+      <div>Reading: <b>${escapeHtml(planetEl.dataset.value || "N/A")}</b></div>
+      <div>Signal: <b>${escapeHtml(planetEl.dataset.signal || "No Signal")}</b></div>
+      <div style="margin-top:8px;color:#cbd5e1;line-height:1.35;">${escapeHtml(planetEl.dataset.detail || "No interpretation available.")}</div>
+    `);
+  positionTooltip(event);
+}
+
+function bindMarketPlanetTooltips() {
+  document.querySelectorAll(".market-planet").forEach(planetEl => {
+    planetEl.addEventListener("mouseenter", event => showMarketPlanetTooltip(event, planetEl));
+    planetEl.addEventListener("mousemove", event => showMarketPlanetTooltip(event, planetEl));
+    planetEl.addEventListener("mouseleave", () => tooltip.style("opacity", 0));
+  });
+}
+
+function showTooltip(event, d, nodeElement) {
+  d3.selectAll(".coin-node .node-shell").attr("stroke-width", 3);
+  d3.select(nodeElement).select(".node-shell").attr("stroke-width", 6);
+  tooltip
+    .style("opacity", 1)
+    .style("border-color", d.Color)
+    .html(`
+      <div style="font-weight:900;font-size:16px;color:${d.Color};border-bottom:1px solid #334155;padding-bottom:8px;margin-bottom:10px;">${escapeHtml(d.Ticker)} - ${escapeHtml(d.Quadrant)}</div>
+      <div>90D Return: <b>${signedPct(d.Return_90D)}</b></div>
+      <div>Composite Risk: <b>${formatNumber(d.Composite_Risk, 1)}</b></div>
+      <div>Raw Gravity: <b>${numberValue(d.Gravity_Score).toFixed(1)}</b></div>
+      <div>Risk-Adj Momentum: <b>${numberValue(d.Risk_Adjusted_Momentum).toFixed(2)}x</b></div>
+      <div>90D Volatility: <b>${numberValue(d.Volatility_90D).toFixed(1)}%</b></div>
+      <div>Trend Quality: <b>${numberValue(d.Trend_Quality).toFixed(1)}/100</b></div>
+      <div>Move Consistency: <b>${numberValue(d.Directional_Consistency).toFixed(1)}%</b></div>
+      <div>Relative Momentum: <b>${numberValue(d.Relative_Momentum).toFixed(1)}%</b></div>
+      <div>Impact Score: <b>${numberValue(d.Composite_Impact).toFixed(1)}</b></div>
+      ${d.Market_Cap_Estimated ? '<div>Market Cap: <b>Estimated fallback</b></div>' : ''}
+    `);
+
+  positionTooltip(event);
+}
+
+function render() {
+  width = container.clientWidth || window.innerWidth;
+  height = container.clientHeight || window.innerHeight;
+  svg.attr("width", width).attr("height", height);
+  layoutCenters();
+  drawBackdrop();
+  drawZoneOrbits();
+
+  const data = visibleData();
+  renderActivePanel(data);
+  updateTargets(data);
+  drawWells(data);
+  updateFilterLabels();
+  applyViewMode();
+  updateResetButton();
+  updateReservedRects();
+
+  statusLine.textContent = "";
+
+  node = nodeLayer.selectAll(".coin-node")
+    .data(data, d => d.id)
+    .join(
+      enter => {
+        const g = enter.append("g").attr("class", "coin-node").style("opacity", 0);
+
+	        g.append("circle")
+	          .attr("class", "node-shell")
+	          .attr("r", d => displayRadius(d))
+          .attr("fill", "#0f141e")
+          .attr("stroke", d => d.Color)
+          .attr("stroke-width", 3)
+          .style("filter", d => `drop-shadow(0 0 9px ${d.Color})`);
+
+	        g.append("circle")
+	          .attr("class", "node-inner")
+	          .attr("r", d => Math.max(11, displayRadius(d) * 0.68))
+          .attr("fill", "#03050a")
+          .attr("opacity", 0.94)
+          .attr("stroke", "rgba(255,255,255,.08)")
+          .attr("stroke-width", 1);
+
+        g.append("image")
+          .attr("class", d => `coin-logo${coinLogoNeedsReverse(d.Ticker) ? " reverse-logo" : ""}`)
+	          .attr("href", d => coinLogoUrl(d.Ticker))
+	          .attr("data-logo-index", "0")
+	          .attr("opacity", 0.82)
+	          .attr("x", d => -displayRadius(d) * 0.42)
+	          .attr("y", d => -displayRadius(d) * 0.62)
+	          .attr("width", d => displayRadius(d) * 0.84)
+	          .attr("height", d => displayRadius(d) * 0.84)
+          .attr("clip-path", "url(#coinLogoClip)")
+          .attr("preserveAspectRatio", "xMidYMid meet")
+          .on("error", function(event, d) {
+            if (useNextLogoSource(this, d.Ticker)) {
+              return;
+            }
+            d3.select(this).style("display", "none");
+            d3.select(this.parentNode).select(".coin-fallback").style("opacity", 1);
+          });
+
+        g.append("text")
+	          .attr("class", "coin-fallback")
+	          .attr("y", 1)
+	          .style("font-size", d => Math.min(14, Math.max(10, displayRadius(d) * 0.34)) + "px")
+          .text(d => d.Ticker);
+
+        g.append("text")
+	          .attr("class", "coin-label")
+	          .attr("y", d => displayRadius(d) + 12)
+	          .style("font-size", d => Math.min(11, Math.max(9, displayRadius(d) * 0.28)) + "px")
+          .text(d => d.Ticker);
+
+        g.append("text")
+	          .attr("class", "coin-return")
+	          .attr("y", d => Math.max(9, displayRadius(d) * 0.50))
+	          .style("fill", d => returnColor(d.Return_90D))
+	          .style("font-size", d => Math.min(11, Math.max(8, displayRadius(d) * 0.24)) + "px")
+          .text(d => signedPct(d.Return_90D));
+
+        g.on("mouseover", function(event, d) {
+          showTooltip(event, d, this);
+        });
+
+        g.on("mousemove", function(event, d) {
+          showTooltip(event, d, this);
+        });
+
+        g.on("mouseout", function() {
+          d3.select(this).select(".node-shell").attr("stroke-width", 3);
+          tooltip.style("opacity", 0);
+        });
+
+        g.on("click", (event, d) => {
+          event.stopPropagation();
+          window.parent.postMessage({
+            action: assetMenuAction,
+            ticker: d.Ticker,
+            stats: {
+              color: d.Color,
+              quadrant: d.Quadrant,
+              risk_score: formatNumber(d.Composite_Risk, 1),
+              gravity: numberValue(d.Gravity_Score).toFixed(1),
+              dominance: numberValue(d.Dominance_Multiplier).toFixed(2),
+              twap: formatPrice(d.TWAP_Price),
+              momentum: signedPct(d.Return_90D),
+              volatility_90d: numberValue(d.Volatility_90D).toFixed(1) + "%",
+              risk_adjusted_momentum: numberValue(d.Risk_Adjusted_Momentum).toFixed(2) + "x",
+              trend_quality: numberValue(d.Trend_Quality).toFixed(1) + "/100",
+              relative_gravity: numberValue(d.Relative_Gravity).toFixed(1) + "%",
+              relative_momentum: numberValue(d.Relative_Momentum).toFixed(1) + "%",
+              impact: numberValue(d.Composite_Impact).toFixed(1)
+            }
+          }, "*");
+        });
+
+        g.transition().duration(260).style("opacity", 1);
+        return g;
+      },
+      update => update,
+	      exit => exit.transition().duration(230).style("opacity", 0).remove()
+	    );
+
+  node.select(".node-shell")
+    .attr("r", d => displayRadius(d));
+  node.select(".node-inner")
+    .attr("r", d => Math.max(11, displayRadius(d) * 0.68));
+  node.select(".coin-logo")
+    .attr("x", d => -displayRadius(d) * 0.42)
+    .attr("y", d => -displayRadius(d) * 0.62)
+    .attr("width", d => displayRadius(d) * 0.84)
+    .attr("height", d => displayRadius(d) * 0.84);
+  node.select(".coin-fallback")
+    .style("font-size", d => Math.min(14, Math.max(10, displayRadius(d) * 0.34)) + "px");
+  node.select(".coin-label")
+    .attr("y", d => displayRadius(d) + 12)
+    .style("font-size", d => Math.min(11, Math.max(9, displayRadius(d) * 0.28)) + "px");
+  node.select(".coin-return")
+    .attr("y", d => Math.max(9, displayRadius(d) * 0.50))
+    .style("font-size", d => Math.min(11, Math.max(8, displayRadius(d) * 0.24)) + "px");
+
+  const motionScale = galaxyMotionScale();
+  if (motionScale <= 0) {
+    simulation.stop();
+    data.forEach(d => {
+      const c = centers[d.Galaxy_Group] || centers.PRIMARY;
+      const r = boundaryRadius(d);
+      const point = relaxedOrbitPoint(d, c, r, zoneLaneDistance(d, c));
+      d.x = point.x;
+      d.y = point.y;
+      d.vx = 0;
+      d.vy = 0;
+      d.localX = 0;
+      d.localY = 0;
+    });
+    node.attr("transform", d => `translate(${numberValue(d.x)},${numberValue(d.y)})`);
+    return;
+  }
+
+  simulation
+    .velocityDecay(0.82)
+    .nodes(data)
+    .force("charge", null)
+    .force("x", null)
+    .force("y", null)
+    .force("collide", null)
+    .alphaTarget(0.004 + motionScale * 0.020)
+    .alpha(0.18 + motionScale * 0.74)
+    .restart();
+}
+
+simulation.on("tick", () => {
+  const now = Date.now() * 0.001;
+  const delta = Math.min(0.05, Math.max(0.001, now - lastOrbitTick));
+  lastOrbitTick = now;
+  const data = visibleData();
+  const motionScale = galaxyMotionScale();
+  data.forEach(d => {
+    const c = centers[d.Galaxy_Group] || centers.PRIMARY;
+    d.anchorAngle = numberValue(d.anchorAngle) + numberValue(d.orbitSpeed, 0.001) * delta * 60 * motionScale;
+    const orbitDistance = zoneLaneDistance(d, c);
+    let renderAngle = numberValue(d.anchorAngle);
+    if (motionScale <= 0) {
+      d.localX = 0;
+      d.localY = 0;
+    } else {
+      const localAngle = now * numberValue(d.microSpeed, 0.62) * numberValue(d.localOrbitDirection, 1) * motionScale + d.phase;
+      const localRadius = numberValue(d.microOrbitR) * motionScale;
+      renderAngle += Math.sin(localAngle) * Math.min(0.038, localRadius / Math.max(1, orbitDistance));
+      d.localX = 0;
+      d.localY = 0;
+    }
+    d.targetX = c.x + Math.cos(renderAngle) * orbitDistance;
+    d.targetY = c.y + Math.sin(renderAngle) * orbitDistance;
+
+    const r = boundaryRadius(d);
+    const point = orbitPointForAngle(d, c, renderAngle, orbitDistance, r);
+    d.x = point.x;
+    d.y = point.y;
+    d.vx = 0;
+    d.vy = 0;
+  });
+
+  node.attr("transform", d => `translate(${numberValue(d.x) + numberValue(d.localX)},${numberValue(d.y) + numberValue(d.localY)})`);
+});
+
+svg.on("click", () => {
+  tooltip.style("opacity", 0);
+  d3.selectAll(".coin-node .node-shell").attr("stroke-width", 3);
+});
+
+function syncDashboardButtons() {
+  document.querySelectorAll("[data-view]").forEach(item => item.classList.toggle("active", item.dataset.view === state.view));
+  document.querySelectorAll("[data-focus]").forEach(item => item.classList.toggle("active", item.dataset.focus === state.focus));
+  document.querySelectorAll("[data-zone-filter]").forEach(item => item.classList.toggle("active", item.dataset.zoneFilter === state.zone));
+}
+
+function normalizeDashboardView(view) {
+  if (view === "screener") return "table";
+  return validDashboardViews.includes(view) ? view : null;
+}
+
+function setDashboardView(view) {
+  const nextView = normalizeDashboardView(view);
+  if (!nextView) return;
+  state.view = nextView;
+  if (state.view === "market") {
+    state.focus = "MARKET";
+  } else if (state.focus === "MARKET") {
+    state.focus = "PRIMARY";
+  }
+  syncDashboardButtons();
+  render();
+}
+
+function setDashboardFocus(focus) {
+  if (focus === "OUTER" && !hasOuterGalaxy) focus = "PRIMARY";
+  if (!validDashboardFocuses.includes(focus)) return;
+  state.focus = focus;
+  if (state.focus === "MARKET") {
+    state.view = "market";
+  } else if (state.view === "market") {
+    state.view = "galaxy";
+  }
+  syncDashboardButtons();
+  startZoneReveal();
+  render();
+}
+
+document.querySelectorAll("[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    setDashboardView(btn.dataset.view);
+  });
+});
+
+document.querySelectorAll("[data-focus]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    setDashboardFocus(btn.dataset.focus);
+  });
+});
+
+document.querySelectorAll("[data-zone-filter]").forEach(btn => {
+  const activateZoneFilter = () => {
+    setGlobalZoneFilter(btn.dataset.zoneFilter);
+  };
+  btn.addEventListener("click", activateZoneFilter);
+  btn.addEventListener("keydown", event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    activateZoneFilter();
+  });
+});
+
+const resetZoneButton = document.getElementById("reset-zone-btn");
+if (resetZoneButton) {
+  resetZoneButton.addEventListener("click", () => setGlobalZoneFilter("ALL"));
+}
+
+window.addEventListener("message", event => {
+  if (!event.data) return;
+  if (event.data.action === "cw_presentation_view") {
+    setDashboardView(event.data.view);
+    return;
+  }
+  if (event.data.action === "cw_presentation_focus") {
+    setDashboardFocus(event.data.focus);
+    return;
+  }
+  if (event.data.action === "cw_presentation_zone") {
+    setGlobalZoneFilter(event.data.zone);
+    return;
+  }
+  if (event.data.action !== "cw_presentation_mode") return;
+  presentationMode = !!event.data.enabled;
+  document.body.classList.toggle("presentation-mode", presentationMode);
+  document.body.dataset.cwNativePreso = "1";
+  if (presentationMode && state.zone === "ALL") state.zone = "Golden Breakout";
+  syncDashboardButtons();
+  render();
+});
+
+window.addEventListener("resize", () => {
+  if (state.zone === "ALL" && zoneRevealAlreadyPlayed) {
+    state.revealedZoneIndex = defaultRevealMaxIndex();
+  }
+  render();
+});
+
+syncDashboardButtons();
+startZoneReveal();
+render();
+setTimeout(() => simulation.alpha(0.2).restart(), 500);
+</script>
+</body>
+</html>

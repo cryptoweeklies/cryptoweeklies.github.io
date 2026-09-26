@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lagrangian Galaxy for Crypto</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+    :root {
+        --md-bg:#03050a;
+        --md-surface:#0b0e14;
+        --md-surface-high:#101620;
+        --md-outline:#263244;
+        --md-primary:#80d8ff;
+        --md-primary-container:#123545;
+        --md-secondary-container:#273141;
+        --md-tertiary:#00d4aa;
+        --md-on-surface:#e3e2e6;
+        --md-muted:#c4c7cf;
+        --md-shadow:0 8px 24px rgba(0,0,0,.34);
+    }
+    body, html { margin:0; padding:0; width:100%; min-height:100%; overflow-x:hidden; overflow-y:auto; background:var(--md-bg); color:var(--md-on-surface); font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; user-select:none; }
+    /* Sized to the frame it is embedded in. The 680px floor this used to carry
+       exceeded the embedded height on a short window, so the galaxy overflowed
+       its own frame and scrolled instead of fitting; 480px matches the floor
+       .galaxy-viewport uses on the page. Width is 100% rather than 100vw so a
+       vertical scrollbar cannot push the canvas sideways. */
+    #galaxy-section { position:relative; width:100%; height:100vh; min-height:480px; overflow:hidden; background:#03050a; }
+    #galaxy-canvas { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
+    #table-view { position:absolute; inset:112px 24px 104px 24px; z-index:16; display:none; overflow:auto; background:rgba(7,10,19,.96); border:1px solid var(--md-outline); border-radius:24px; box-shadow:var(--md-shadow); backdrop-filter:blur(10px); }
+    #table-view.active { display:block; }
+    .galaxy-hidden { opacity:0; pointer-events:none; }
+    #tooltip { position:absolute; opacity:0; background:var(--md-surface-high); border:1px solid var(--md-outline); border-radius:18px; padding:15px; color:#fff; pointer-events:none; z-index:100; box-shadow:var(--md-shadow); transition:opacity .1s ease; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; min-width:270px; }
+
+    .top-nav { display:none; }
+    #status-line { margin-top:8px; color:var(--md-muted); font-size:11px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    #chart-title { position:absolute; top:25px; left:28px; z-index:24; color:#00d4aa; font-size:18px; font-weight:950; letter-spacing:0; text-shadow:0 0 18px rgba(0,212,170,.34); }
+
+    #control-deck { position:absolute; top:24px; right:24px; z-index:25; display:flex; align-items:center; gap:12px; }
+    .segmented-control { display:flex; align-items:center; gap:4px; background:rgba(11,14,20,.9); border:1px solid var(--md-outline); border-radius:24px; padding:4px; backdrop-filter:blur(10px); box-shadow:var(--md-shadow); }
+    .view-mode { background:rgba(5,13,18,.88); border-color:rgba(128,216,255,.34); }
+    .focus-mode { padding-left:6px; }
+    .focus-btn { min-height:40px; border:0; background:transparent; color:var(--md-muted); padding:0 14px; border-radius:20px; font-size:12px; font-weight:900; cursor:pointer; transition:background .2s, color .2s, box-shadow .2s; letter-spacing:0; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; }
+    .focus-btn:hover { background:rgba(255,255,255,.07); color:#fff; }
+    .focus-btn.active { background:var(--md-secondary-container); color:#fff; box-shadow:0 0 16px currentColor, inset 0 0 0 1px rgba(255,255,255,.14); }
+    .focus-btn[data-view].active { background:var(--md-primary-container); color:#d9f5ff; box-shadow:0 0 18px rgba(128,216,255,.62), inset 0 0 0 1px rgba(128,216,255,.24); }
+    .focus-btn[data-focus="PRIMARY"] { color:#80d8ff; }
+    .focus-btn[data-focus="OUTER"] { color:#f97316; }
+    .focus-btn[data-focus="ALL"] { color:#fff; }
+    .report-link { color:#80d8ff; text-decoration:none; font-size:11px; font-weight:950; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; text-transform:uppercase; letter-spacing:0; }
+    #full-report-link { position:absolute; right:10px; bottom:54px; z-index:26; display:inline-flex; align-items:center; justify-content:center; min-height:30px; padding:0 12px; border:1px solid rgba(128,216,255,.44); border-radius:999px; background:rgba(11,14,20,.92); box-shadow:0 0 18px rgba(128,216,255,.18); backdrop-filter:blur(10px); }
+    #full-report-link:hover { color:#fff; border-color:#80d8ff; box-shadow:0 0 20px rgba(128,216,255,.36); }
+    .control-divider { width:1px; height:26px; background:var(--md-outline); opacity:.8; margin:0 2px 0 6px; }
+
+    #tier-panel { position:absolute; left:50%; bottom:22px; transform:translateX(-50%); width:min(760px, calc(100vw - 32px)); z-index:25; display:flex; flex-wrap:wrap; justify-content:center; gap:8px; background:rgba(11,14,20,.92); border:1px solid var(--md-outline); border-radius:24px; padding:10px 12px; backdrop-filter:blur(10px); box-shadow:var(--md-shadow); }
+    .filter-pill { background:transparent; border:1px solid rgba(255,255,255,.08); padding:8px 12px; border-radius:18px; font-size:12px; font-weight:900; cursor:pointer; transition:background .2s, box-shadow .2s; outline:none; letter-spacing:0; }
+    .filter-pill[data-zone-filter="ALL"] { color:#fff; border-color:#475569; }
+    .filter-pill[data-zone-filter="Golden Breakout"] { color:#eab308; border-color:rgba(234,179,8,.44); }
+    .filter-pill[data-zone-filter="Deep Accumulation"] { color:#3b82f6; border-color:rgba(59,130,246,.44); }
+    .filter-pill[data-zone-filter="Euphoria"] { color:#a855f7; border-color:rgba(168,85,247,.44); }
+    .filter-pill[data-zone-filter="Value Trap"] { color:#ef4444; border-color:rgba(239,68,68,.44); }
+    .filter-pill:hover, .filter-pill.active { background:rgba(30,41,59,.92); box-shadow:0 0 16px currentColor, inset 0 0 0 1px currentColor; }
+
+    #orbit-description { display:none; }
+    #orbit-description strong { color:#fff; }
+    #zone-legend { position:absolute; right:6px; bottom:86px; z-index:18; width:min(250px, calc(50vw - 16px)); background:rgba(11,14,20,.9); border:1px solid var(--md-outline); border-radius:18px; padding:13px; box-shadow:var(--md-shadow); backdrop-filter:blur(10px); }
+    .legend-title { color:#fff; font-size:11px; font-weight:900; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; text-transform:uppercase; letter-spacing:0; margin:0 0 9px 0; }
+    .legend-grid { display:grid; grid-template-columns:1fr; gap:9px; }
+    .legend-item { display:grid; grid-template-columns:16px 1fr; gap:9px; align-items:start; color:#cbd5e1; font-size:10px; line-height:1.18; }
+    .legend-swatch { width:13px; height:13px; border-radius:999px; margin-top:1px; box-shadow:0 0 14px currentColor; }
+    .legend-item strong { color:#fff; font-size:10.5px; display:block; margin-bottom:2px; }
+    .legend-code { color:#cbd5e1; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:800; white-space:nowrap; }
+
+    .well-core { cursor:pointer; }
+    .halo { display:none; }
+    .well-label { pointer-events:none; fill:#fff; font-weight:900; font-size:16px; text-anchor:middle; }
+    .well-sub { pointer-events:none; fill:#94a3b8; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-weight:800; font-size:11px; text-anchor:middle; }
+    .orbit-label { pointer-events:none; fill:#64748b; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:800; text-anchor:middle; letter-spacing:0; }
+    .zone-orbit { fill:none; stroke-width:1.2; stroke-dasharray:7 8; opacity:.42; pointer-events:none; }
+    .coin-node { cursor:pointer; }
+    .coin-logo { pointer-events:none; }
+    .coin-logo.reverse-logo { filter:invert(1) brightness(1.35) drop-shadow(0 0 5px rgba(255,255,255,.35)); }
+    .coin-fallback { pointer-events:none; opacity:0; fill:#fff; font-weight:900; text-anchor:middle; dominant-baseline:middle; }
+    .coin-label, .coin-return { pointer-events:none; text-anchor:middle; dominant-baseline:middle; font-weight:900; text-shadow:0 2px 6px rgba(0,0,0,.9), 0 -1px 4px rgba(0,0,0,.8); }
+    .coin-label { fill:#e2e8f0; }
+    .coin-return { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .rag-core-foreign { pointer-events:none; overflow:visible; }
+    .market-well .rag-core-foreign, .market-well .rag-core-card { pointer-events:auto; }
+    .rag-core-card { width:100%; height:100%; border-radius:999px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; box-sizing:border-box; padding:24px 26px; color:#fff; background:radial-gradient(circle at 50% 34%, rgba(16,22,32,.98), rgba(3,5,10,.74)); border:1px solid rgba(128,216,255,.20); box-shadow:inset 0 0 34px rgba(0,212,170,.08); }
+    .rag-kicker, .rag-meta { display:none; }
+    .rag-headline, .rag-posture, .rag-statline, .rag-gemline, .rag-universe { font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
+    .rag-headline { color:#fff; font-size:15.5px; font-weight:900; line-height:1.12; max-width:238px; }
+    .rag-posture { color:#cbd5e1; font-size:10.5px; line-height:1.28; margin-top:8px; max-width:250px; }
+    .rag-statline, .rag-gemline { color:#e2e8f0; font-size:10px; line-height:1.2; margin-top:6px; font-weight:900; max-width:238px; }
+    .rag-gemline { color:#00d4aa; }
+    .rag-universe { color:#94a3b8; font-size:8px; line-height:1.05; margin-top:6px; font-weight:900; text-transform:uppercase; }
+    .rag-bullets { display:none; }
+    .rag-bullet { border-top:1px solid rgba(148,163,184,.16); padding-top:5px; }
+    .status-meter { width:min(190px, 72%); height:8px; border-radius:999px; overflow:hidden; background:rgba(148,163,184,.20); margin-top:9px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+    .status-meter-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#3b82f6,#eab308,#a855f7,#ef4444); }
+    .market-window-card { width:100%; height:100%; border-radius:999px; align-items:stretch; justify-content:center; text-align:center; padding:0; background:radial-gradient(circle at 50% 50%, rgba(0,212,170,.08), rgba(5,8,14,.76) 42%, rgba(3,5,10,.08) 72%); border:0; box-shadow:none; overflow:visible; }
+    .market-solar-system { position:relative; width:100%; height:100%; min-height:420px; }
+    .market-orbit-ring { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border:1px dashed rgba(128,216,255,.20); border-radius:999px; pointer-events:none; }
+    .market-orbit-ring.r1 { width:42%; height:42%; }
+    .market-orbit-ring.r2 { width:68%; height:68%; }
+    .market-orbit-ring.r3 { width:91%; height:91%; border-color:rgba(0,212,170,.18); }
+    .market-sun { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(240px, 30%); aspect-ratio:1; border-radius:999px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:22px; box-sizing:border-box; background:radial-gradient(circle at 50% 34%, rgba(0,212,170,.26), rgba(7,10,19,.98) 62%); border:2px solid rgba(0,212,170,.42); box-shadow:0 0 38px rgba(0,212,170,.23), inset 0 0 28px rgba(128,216,255,.08); }
+    .market-window-kicker { color:#00d4aa; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0; margin-bottom:6px; }
+    .market-window-title { color:#fff; font-size:20px; line-height:1.05; font-weight:950; margin-bottom:8px; }
+    .market-window-summary { color:#cbd5e1; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1.28; font-weight:900; }
+    .market-planet { position:absolute; left:var(--x); top:var(--y); transform:translate(-50%,-50%); width:112px; aspect-ratio:1; border-radius:999px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:12px; box-sizing:border-box; color:#fff; background:radial-gradient(circle at 35% 28%, rgba(255,255,255,.18), rgba(15,20,30,.96) 54%); border:2px solid var(--planet-color); box-shadow:0 0 18px color-mix(in srgb, var(--planet-color) 62%, transparent), inset 0 0 18px rgba(255,255,255,.06); cursor:help; animation:market-planet-orbit var(--orbit-duration, 18s) linear infinite, market-planet-glow 3.8s ease-in-out infinite alternate; animation-delay:var(--orbit-delay, 0s), var(--orbit-delay, 0s); }
+    .market-planet:hover { animation-play-state:paused; z-index:7; }
+    .market-planet-index { color:var(--planet-color); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:10px; font-weight:950; }
+    .market-planet-name { font-size:12px; line-height:1.02; font-weight:950; }
+    .market-planet-value { color:var(--planet-color); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:15px; line-height:1.05; font-weight:950; }
+    .market-planet-reading { color:#cbd5e1; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:8.5px; font-weight:800; }
+    .market-table td:nth-child(2) { color:#fff; font-weight:950; }
+    @keyframes market-planet-orbit {
+        from { transform:translate(-50%,-50%) rotate(0deg) translateX(var(--orbit-r, 7px)) rotate(0deg); }
+        to { transform:translate(-50%,-50%) rotate(360deg) translateX(var(--orbit-r, 7px)) rotate(-360deg); }
+    }
+    @keyframes market-planet-glow {
+        from { box-shadow:0 0 13px color-mix(in srgb, var(--planet-color) 46%, transparent), inset 0 0 16px rgba(255,255,255,.05); }
+        to { box-shadow:0 0 23px color-mix(in srgb, var(--planet-color) 70%, transparent), inset 0 0 22px rgba(255,255,255,.08); }
+    }
+
+    .pairs-table { width:100%; border-collapse:collapse; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; }
+    .pairs-table thead th { position:sticky; top:0; z-index:2; background:var(--md-surface-high); color:#fff; border-bottom:2px solid var(--md-tertiary); padding:13px 12px; text-align:center; white-space:nowrap; letter-spacing:0; cursor:pointer; user-select:none; transition:color .16s, text-shadow .16s; }
+    .pairs-table thead th:hover { color:#00d4aa; text-shadow:0 0 10px rgba(0,212,170,.45); }
+    .pairs-table tbody tr { background:#0b0e14; cursor:pointer; transition:background .16s ease; }
+    .pairs-table tbody tr:nth-child(even) { background:#0f141e; }
+    .pairs-table tbody tr:hover { background:#1f2937; }
+    .pairs-table td { border-bottom:1px solid var(--md-outline); color:#e2e8f0; padding:12px; text-align:center; white-space:nowrap; }
+    .pairs-table td:first-child { color:#fff; font-weight:900; text-align:left; }
+    .tier-cell { font-size:11px; font-weight:900; }
+    .section-separator { width:90%; max-width:1400px; margin:30px auto 40px; border:0; height:1px; background:linear-gradient(90deg, transparent, var(--md-outline) 15%, var(--md-tertiary) 50%, var(--md-outline) 85%, transparent); box-shadow:0 0 12px rgba(0,212,170,.28); }
+    .bottom-content-wrapper { max-width:1400px; margin:0 auto; padding:0 24px 80px; position:relative; z-index:5; }
+    .methodology-card { background:var(--md-surface); border:1px solid var(--md-outline); border-left:4px solid var(--md-tertiary); padding:30px; border-radius:24px; margin-top:35px; line-height:1.7; font-size:14px; box-shadow:var(--md-shadow); color:var(--md-on-surface); }
+    .methodology-card h2 { color:#fff; margin-top:0; font-size:1.4rem; border-bottom:1px solid var(--md-outline); padding-bottom:10px; letter-spacing:0; }
+    .methodology-card h3 { color:#fff; margin-top:35px; border-bottom:1px solid var(--md-outline); padding-bottom:8px; letter-spacing:0; }
+    .m-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-top:20px; }
+    .m-col strong { color:#00d4aa; font-size:1.1rem; display:block; margin-bottom:6px; }
+    .m-col p { margin:0; color:#cbd5e1; }
+    .tier-box { background:var(--md-surface-high); border:1px solid var(--md-outline); padding:20px; border-radius:18px; margin-top:15px; }
+    .tier-box h4 { margin:0 0 8px 0; font-size:15px; display:flex; align-items:center; gap:8px; }
+
+    body.compact-page { overflow:hidden; }
+    body.compact-page #galaxy-section { min-height:100vh; }
+    body.compact-page .section-separator, body.compact-page .bottom-content-wrapper { display:none; }
+    body.compact-page #orbit-description { display:none; }
+    body.compact-page #zone-legend { right:8px; bottom:86px; width:min(250px, calc(100vw - 16px)); }
+    body.compact-page #tier-panel { bottom:12px; }
+
+    @media (max-width: 880px) {
+        .top-nav { top:16px; left:16px; }
+        #chart-title { top:16px; left:16px; font-size:15px; }
+        #control-deck { top:14px; right:12px; left:12px; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+        .segmented-control { border-radius:18px; }
+        #orbit-description, #zone-legend { display:none; }
+        #table-view { inset:132px 12px 96px 12px; }
+        #tier-panel { bottom:12px; top:auto; max-height:28vh; overflow:auto; width:calc(100vw - 24px); }
+        .filter-pill, .focus-btn { font-size:11px; padding:7px 10px; }
+        .rag-core-card { padding:18px; }
+        .rag-headline { font-size:13.2px; max-width:202px; }
+        .rag-statline, .rag-gemline { font-size:8.5px; max-width:202px; }
+        .rag-universe { font-size:6.8px; }
+        .status-meter { height:7px; margin-top:7px; width:min(162px, 68%); }
+        .rag-posture, .rag-bullets { display:none; }
+        .market-sun { width:132px; padding:14px; }
+        .market-window-title { font-size:15px; }
+        .market-window-summary { font-size:9px; }
+        .market-planet { width:82px; padding:8px; }
+        .market-planet-name { font-size:9.5px; }
+        .market-planet-value { font-size:12px; }
+        .market-planet-reading { display:none; }
+    }
+</style>
+</head>
+<body class="full-page">
+    <div id="galaxy-section">
+        <div class="top-nav">
+            <div id="status-line"></div>
+        </div>
+        <div id="chart-title">Lagrangian Galaxy for Crypto</div>
+
+        <div id="control-deck" aria-label="Galaxy controls">
+            <div class="segmented-control view-mode" aria-label="View mode">
+                <button class="focus-btn active" data-view="galaxy">Galaxy</button>
+                <button class="focus-btn" data-view="table">Table</button>
+            </div>
+            <div class="segmented-control focus-mode" aria-label="Galaxy focus">
+                <button class="focus-btn active" data-focus="PRIMARY">Primary Galaxy</button>
+                <button class="focus-btn" data-focus="OUTER">Outer Galaxy</button>
+                <span class="control-divider" aria-hidden="true"></span>
+                <button class="focus-btn" data-focus="ALL">Market Window</button>
+            </div>
+        </div>
+
+        <div id="galaxy-canvas"><div id="tooltip"></div></div>
+        <div id="table-view" aria-label="8Gems asset table"></div>
+
+        <div id="orbit-description"></div>
+
+        <div id="zone-legend" aria-label="Zone color legend">
+            <p class="legend-title">Galaxy Zone Color Code</p>
+            <div class="legend-grid">
+                <div class="legend-item"><span class="legend-swatch" style="background:#eab308;color:#eab308;"></span><div><strong>Golden Breakout</strong><span class="legend-code">M &gt; med | R &lt; med</span></div></div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#3b82f6;color:#3b82f6;"></span><div><strong>Deep Accumulation</strong><span class="legend-code">M &lt; med | R &lt; med</span></div></div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#a855f7;color:#a855f7;"></span><div><strong>Euphoria</strong><span class="legend-code">M &gt; med | R &gt; med</span></div></div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#ef4444;color:#ef4444;"></span><div><strong>Value Trap</strong><span class="legend-code">M &lt; med | R &gt; med</span></div></div>
+            </div>
+        </div>
+        
+
+        <div id="tier-panel" aria-label="Zone filters">
+            <button class="filter-pill active" data-zone-filter="ALL">All Zones</button>
+            <button class="filter-pill" data-zone-filter="Golden Breakout">Golden Breakout</button>
+            <button class="filter-pill" data-zone-filter="Deep Accumulation">Deep Accumulation</button>
+            <button class="filter-pill" data-zone-filter="Euphoria">Euphoria</button>
+            <button class="filter-pill" data-zone-filter="Value Trap">Value Trap</button>
+        </div>
+    </div>
+
+    <hr class="section-separator">
+
+    <div class="bottom-content-wrapper" id="methodology">
+        <div class="methodology-card">
+            <h2>Core Quantitative Methodology & Terminology</h2>
+            <div class="m-grid">
+                <div class="m-col">
+                    <strong>1. Cycle-Adjusted Gravity Index</strong>
+                    <p>Current deviation from the cycle TWAP is ranked against each asset's own cycle extremes. This keeps the absolute gravity score asset-specific rather than peer-relative.</p>
+                </div>
+                <div class="m-col">
+                    <strong>2. Composite Risk Score</strong>
+                    <p>Raw gravity is scaled by logarithmic market dominance, with a base floor to avoid treating structurally weak assets as low risk only because their gravity is depressed.</p>
+                </div>
+                <div class="m-col">
+                    <strong>3. Momentum Quality</strong>
+                    <p>The 90-day return is still shown as a raw percentage, but bubble sizing also uses volatility-adjusted momentum, trend quality, and directional consistency.</p>
+                </div>
+                <div class="m-col">
+                    <strong>4. Galaxy Status Score</strong>
+                    <p>Status = 36% zone heat + 22% relative momentum + 18% relative gravity + 14% momentum quality + 10% 90-day activity. Ranges: &lt;30 Deep Accumulation, 30-45 Accumulation Bias, 45-60 Balanced Rotation, 60-75 Heated Rotation, 75+ Euphoria Risk.</p>
+                </div>
+                <div class="m-col">
+                    <strong>5. Gem Candidate Score</strong>
+                    <p>Gem = 32% risk-adjusted momentum rank + 24% momentum quality + 20% relative momentum + 14% lower-risk rank + 10% impact rank. This picks one candidate inside the active galaxy.</p>
+                </div>
+                <div class="m-col">
+                    <strong>6. Average Gravity Phase</strong>
+                    <p>Average gravity gives the phase read: &lt;20 Accumulation, 20-40 Breakout, 40-60 Euphoria, 60+ Value Trap.</p>
+                </div>
+                <div class="m-col">
+                    <strong>7. Galaxy Orbit Radius</strong>
+                    <p>Zone assignment sets the orbit lane. Composite risk, impact, and momentum quality adjust the local position inside that lane while preserving the Gold, Blue, Purple, Red ordering.</p>
+                </div>
+            </div>
+
+            <h3>Relative Matrix Assignment</h3>
+            <div class="m-grid">
+                <div class="tier-box" style="border-left:4px solid #eab308;">
+                    <h4 style="color:#eab308;">Golden Breakout</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum is above the peer median while composite risk is below the peer median. This is the clean rotation lane.</p>
+                </div>
+                <div class="tier-box" style="border-left:4px solid #3b82f6;">
+                    <h4 style="color:#3b82f6;">Deep Accumulation</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum and risk are both below the peer median. This is the base-building lane, not an automatic buy signal.</p>
+                </div>
+                <div class="tier-box" style="border-left:4px solid #a855f7;">
+                    <h4 style="color:#a855f7;">Euphoria</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum is above median, but risk is also above median. This is the markup lane where mean-reversion risk starts to matter.</p>
+                </div>
+                <div class="tier-box" style="border-left:4px solid #ef4444;">
+                    <h4 style="color:#ef4444;">Value Trap</h4>
+                    <p style="margin:0; color:#94a3b8; font-size:13px;">Momentum is below median while risk is above median. This is the stagnation lane where cheapness can be misleading.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+const rawData = [{"Ticker":"BTC","Gravity_Score":31.0,"Dominance_Multiplier":1.0,"Composite_Risk":31.0,"TWAP_Price":63715.9861250641,"Return_90D":41.3,"Volatility_90D":19.6,"Risk_Adjusted_Momentum":2.11,"Trend_Quality":79.8,"Directional_Consistency":53.3,"Momentum_Quality":69.2,"Avg_Volume":29782991308,"Composite_Impact":88.92,"Market_Cap_Estimated":false,"Market_Cap_Rank":1,"Galaxy_Group":"PRIMARY","Relative_Gravity":87.2,"Relative_Momentum":28.2,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"ETH","Gravity_Score":29.1,"Dominance_Multiplier":0.82,"Composite_Risk":35.7,"TWAP_Price":2466.9890894857,"Return_90D":71.4,"Volatility_90D":27.5,"Risk_Adjusted_Momentum":2.6,"Trend_Quality":86.8,"Directional_Consistency":61.1,"Momentum_Quality":76.5,"Avg_Volume":14563237106,"Composite_Impact":118.44,"Market_Cap_Estimated":false,"Market_Cap_Rank":2,"Galaxy_Group":"PRIMARY","Relative_Gravity":84.6,"Relative_Momentum":61.5,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"BNB","Gravity_Score":34.8,"Dominance_Multiplier":0.68,"Composite_Risk":50.8,"TWAP_Price":536.1844247591,"Return_90D":40.6,"Volatility_90D":17.3,"Risk_Adjusted_Momentum":2.35,"Trend_Quality":88.2,"Directional_Consistency":58.9,"Momentum_Quality":76.5,"Avg_Volume":1622336381,"Composite_Impact":77.5,"Market_Cap_Estimated":false,"Market_Cap_Rank":3,"Galaxy_Group":"PRIMARY","Relative_Gravity":92.3,"Relative_Momentum":25.6,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"XRP","Gravity_Score":12.8,"Dominance_Multiplier":0.68,"Composite_Risk":18.8,"TWAP_Price":1.2169869705,"Return_90D":48.2,"Volatility_90D":34.1,"Risk_Adjusted_Momentum":1.42,"Trend_Quality":58.1,"Directional_Consistency":52.2,"Momentum_Quality":55.7,"Avg_Volume":3595056501,"Composite_Impact":94.62,"Market_Cap_Estimated":false,"Market_Cap_Rank":4,"Galaxy_Group":"PRIMARY","Relative_Gravity":69.2,"Relative_Momentum":33.3,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"SOL","Gravity_Score":15.3,"Dominance_Multiplier":0.64,"Composite_Risk":23.7,"TWAP_Price":106.696694168,"Return_90D":71.0,"Volatility_90D":28.3,"Risk_Adjusted_Momentum":2.51,"Trend_Quality":70.8,"Directional_Consistency":55.6,"Momentum_Quality":64.7,"Avg_Volume":3612948098,"Composite_Impact":117.25,"Market_Cap_Estimated":false,"Market_Cap_Rank":5,"Galaxy_Group":"PRIMARY","Relative_Gravity":74.4,"Relative_Momentum":59.0,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"TRX","Gravity_Score":28.0,"Dominance_Multiplier":0.55,"Composite_Risk":50.6,"TWAP_Price":0.1893848359,"Return_90D":4.6,"Volatility_90D":8.3,"Risk_Adjusted_Momentum":0.56,"Trend_Quality":58.9,"Directional_Consistency":55.6,"Momentum_Quality":57.6,"Avg_Volume":457406278,"Composite_Impact":26.04,"Market_Cap_Estimated":false,"Market_Cap_Rank":6,"Galaxy_Group":"PRIMARY","Relative_Gravity":82.1,"Relative_Momentum":2.6,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"DOGE","Gravity_Score":6.0,"Dominance_Multiplier":0.48,"Composite_Risk":20.8,"TWAP_Price":0.1347087764,"Return_90D":34.9,"Volatility_90D":32.2,"Risk_Adjusted_Momentum":1.08,"Trend_Quality":54.2,"Directional_Consistency":51.1,"Momentum_Quality":52.9,"Avg_Volume":1094268445,"Composite_Impact":79.16,"Market_Cap_Estimated":false,"Market_Cap_Rank":7,"Galaxy_Group":"PRIMARY","Relative_Gravity":25.6,"Relative_Momentum":17.9,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"LINK","Gravity_Score":27.3,"Dominance_Multiplier":0.43,"Composite_Risk":63.7,"TWAP_Price":12.4398887565,"Return_90D":96.3,"Volatility_90D":32.3,"Risk_Adjusted_Momentum":2.99,"Trend_Quality":86.4,"Directional_Consistency":57.8,"Momentum_Quality":75.0,"Avg_Volume":423776533,"Composite_Impact":117.41,"Market_Cap_Estimated":false,"Market_Cap_Rank":8,"Galaxy_Group":"PRIMARY","Relative_Gravity":79.5,"Relative_Momentum":84.6,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"ADA","Gravity_Score":9.7,"Dominance_Multiplier":0.42,"Composite_Risk":24.0,"TWAP_Price":0.464014796,"Return_90D":81.1,"Volatility_90D":38.5,"Risk_Adjusted_Momentum":2.11,"Trend_Quality":73.3,"Directional_Consistency":51.1,"Momentum_Quality":64.4,"Avg_Volume":526151326,"Composite_Impact":118.8,"Market_Cap_Estimated":false,"Market_Cap_Rank":9,"Galaxy_Group":"PRIMARY","Relative_Gravity":53.8,"Relative_Momentum":76.9,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"XLM","Gravity_Score":10.9,"Dominance_Multiplier":0.39,"Composite_Risk":27.9,"TWAP_Price":0.1825596868,"Return_90D":27.4,"Volatility_90D":33.0,"Risk_Adjusted_Momentum":0.83,"Trend_Quality":1.9,"Directional_Consistency":54.4,"Momentum_Quality":22.9,"Avg_Volume":216462113,"Composite_Impact":53.44,"Market_Cap_Estimated":false,"Market_Cap_Rank":10,"Galaxy_Group":"PRIMARY","Relative_Gravity":61.5,"Relative_Momentum":10.3,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"BCH","Gravity_Score":14.8,"Dominance_Multiplier":0.38,"Composite_Risk":39.2,"TWAP_Price":336.4905798634,"Return_90D":76.2,"Volatility_90D":49.0,"Risk_Adjusted_Momentum":1.55,"Trend_Quality":30.7,"Directional_Consistency":47.8,"Momentum_Quality":37.6,"Avg_Volume":274949900,"Composite_Impact":94.02,"Market_Cap_Estimated":false,"Market_Cap_Rank":11,"Galaxy_Group":"PRIMARY","Relative_Gravity":71.8,"Relative_Momentum":71.8,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"NEAR","Gravity_Score":35.0,"Dominance_Multiplier":0.37,"Composite_Risk":94.6,"TWAP_Price":2.9144854933,"Return_90D":164.5,"Volatility_90D":49.5,"Risk_Adjusted_Momentum":3.33,"Trend_Quality":38.6,"Directional_Consistency":53.3,"Momentum_Quality":44.5,"Avg_Volume":881853730,"Composite_Impact":128.69,"Market_Cap_Estimated":false,"Market_Cap_Rank":12,"Galaxy_Group":"PRIMARY","Relative_Gravity":94.9,"Relative_Momentum":96.2,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"UNI","Gravity_Score":46.6,"Dominance_Multiplier":0.36,"Composite_Risk":127.9,"TWAP_Price":6.7538173101,"Return_90D":232.5,"Volatility_90D":50.2,"Risk_Adjusted_Momentum":4.63,"Trend_Quality":78.5,"Directional_Consistency":58.9,"Momentum_Quality":70.6,"Avg_Volume":824227324,"Composite_Impact":155.39,"Market_Cap_Estimated":false,"Market_Cap_Rank":13,"Galaxy_Group":"PRIMARY","Relative_Gravity":97.4,"Relative_Momentum":100.0,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"LTC","Gravity_Score":33.2,"Dominance_Multiplier":0.36,"Composite_Risk":92.6,"TWAP_Price":78.9172654967,"Return_90D":71.8,"Volatility_90D":27.8,"Risk_Adjusted_Momentum":2.58,"Trend_Quality":67.4,"Directional_Consistency":57.8,"Momentum_Quality":63.6,"Avg_Volume":370655988,"Composite_Impact":91.23,"Market_Cap_Estimated":false,"Market_Cap_Rank":14,"Galaxy_Group":"PRIMARY","Relative_Gravity":89.7,"Relative_Momentum":66.7,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"AVAX","Gravity_Score":9.0,"Dominance_Multiplier":0.34,"Composite_Risk":29.4,"TWAP_Price":20.8836315141,"Return_90D":70.5,"Volatility_90D":38.3,"Risk_Adjusted_Momentum":1.84,"Trend_Quality":51.2,"Directional_Consistency":52.2,"Momentum_Quality":51.6,"Avg_Volume":448716900,"Composite_Impact":104.01,"Market_Cap_Estimated":false,"Market_Cap_Rank":15,"Galaxy_Group":"PRIMARY","Relative_Gravity":51.3,"Relative_Momentum":56.4,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"HBAR","Gravity_Score":6.1,"Dominance_Multiplier":0.32,"Composite_Risk":30.9,"TWAP_Price":0.1097860075,"Return_90D":34.2,"Volatility_90D":27.0,"Risk_Adjusted_Momentum":1.27,"Trend_Quality":45.1,"Directional_Consistency":52.2,"Momentum_Quality":48.0,"Avg_Volume":80383310,"Composite_Impact":66.85,"Market_Cap_Estimated":false,"Market_Cap_Rank":17,"Galaxy_Group":"PRIMARY","Relative_Gravity":28.2,"Relative_Momentum":15.4,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"SHIB","Gravity_Score":5.2,"Dominance_Multiplier":0.31,"Composite_Risk":32.8,"TWAP_Price":0.0000120794,"Return_90D":50.7,"Volatility_90D":75.7,"Risk_Adjusted_Momentum":0.67,"Trend_Quality":60.2,"Directional_Consistency":10.0,"Momentum_Quality":40.1,"Avg_Volume":82433747,"Composite_Impact":78.36,"Market_Cap_Estimated":false,"Market_Cap_Rank":18,"Galaxy_Group":"PRIMARY","Relative_Gravity":15.4,"Relative_Momentum":38.5,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"CRO","Gravity_Score":7.0,"Dominance_Multiplier":0.3,"Composite_Risk":33.7,"TWAP_Price":0.0945081443,"Return_90D":21.5,"Volatility_90D":32.3,"Risk_Adjusted_Momentum":0.67,"Trend_Quality":5.0,"Directional_Consistency":43.3,"Momentum_Quality":20.4,"Avg_Volume":9764678,"Composite_Impact":40.36,"Market_Cap_Estimated":false,"Market_Cap_Rank":19,"Galaxy_Group":"PRIMARY","Relative_Gravity":38.5,"Relative_Momentum":7.7,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"AAVE","Gravity_Score":19.5,"Dominance_Multiplier":0.26,"Composite_Risk":74.9,"TWAP_Price":136.6123319514,"Return_90D":70.4,"Volatility_90D":42.4,"Risk_Adjusted_Momentum":1.66,"Trend_Quality":71.4,"Directional_Consistency":50.0,"Momentum_Quality":62.9,"Avg_Volume":273577140,"Composite_Impact":99.0,"Market_Cap_Estimated":false,"Market_Cap_Rank":20,"Galaxy_Group":"PRIMARY","Relative_Gravity":76.9,"Relative_Momentum":53.8,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"DOT","Gravity_Score":6.5,"Dominance_Multiplier":0.25,"Composite_Risk":40.0,"TWAP_Price":4.6124516551,"Return_90D":58.2,"Volatility_90D":38.5,"Risk_Adjusted_Momentum":1.51,"Trend_Quality":46.9,"Directional_Consistency":51.1,"Momentum_Quality":48.6,"Avg_Volume":172853442,"Composite_Impact":90.27,"Market_Cap_Estimated":false,"Market_Cap_Rank":21,"Galaxy_Group":"OUTER","Relative_Gravity":32.1,"Relative_Momentum":43.6,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"ICP","Gravity_Score":8.2,"Dominance_Multiplier":0.23,"Composite_Risk":43.0,"TWAP_Price":6.0738127687,"Return_90D":54.7,"Volatility_90D":30.9,"Risk_Adjusted_Momentum":1.77,"Trend_Quality":67.6,"Directional_Consistency":57.8,"Momentum_Quality":63.7,"Avg_Volume":67967215,"Composite_Impact":88.5,"Market_Cap_Estimated":false,"Market_Cap_Rank":22,"Galaxy_Group":"OUTER","Relative_Gravity":43.6,"Relative_Momentum":41.0,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"ETC","Gravity_Score":12.5,"Dominance_Multiplier":0.21,"Composite_Risk":59.5,"TWAP_Price":18.5830299502,"Return_90D":36.2,"Volatility_90D":34.9,"Risk_Adjusted_Momentum":1.04,"Trend_Quality":36.2,"Directional_Consistency":47.8,"Momentum_Quality":40.9,"Avg_Volume":55683164,"Composite_Impact":62.0,"Market_Cap_Estimated":false,"Market_Cap_Rank":23,"Galaxy_Group":"OUTER","Relative_Gravity":66.7,"Relative_Momentum":20.5,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"QNT","Gravity_Score":64.2,"Dominance_Multiplier":0.2,"Composite_Risk":318.7,"TWAP_Price":96.2838548668,"Return_90D":78.9,"Volatility_90D":40.8,"Risk_Adjusted_Momentum":1.93,"Trend_Quality":4.4,"Directional_Consistency":46.7,"Momentum_Quality":21.3,"Avg_Volume":12618756,"Composite_Impact":62.07,"Market_Cap_Estimated":false,"Market_Cap_Rank":24,"Galaxy_Group":"OUTER","Relative_Gravity":100.0,"Relative_Momentum":74.4,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"KAS","Gravity_Score":5.6,"Dominance_Multiplier":0.19,"Composite_Risk":51.3,"TWAP_Price":0.0731302097,"Return_90D":71.7,"Volatility_90D":36.7,"Risk_Adjusted_Momentum":1.95,"Trend_Quality":31.4,"Directional_Consistency":51.1,"Momentum_Quality":39.3,"Avg_Volume":16312875,"Composite_Impact":84.04,"Market_Cap_Estimated":false,"Market_Cap_Rank":25,"Galaxy_Group":"OUTER","Relative_Gravity":17.9,"Relative_Momentum":64.1,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"ALGO","Gravity_Score":10.8,"Dominance_Multiplier":0.17,"Composite_Risk":62.0,"TWAP_Price":0.1811232564,"Return_90D":39.2,"Volatility_90D":32.9,"Risk_Adjusted_Momentum":1.19,"Trend_Quality":42.0,"Directional_Consistency":55.6,"Momentum_Quality":47.4,"Avg_Volume":51805698,"Composite_Impact":67.25,"Market_Cap_Estimated":false,"Market_Cap_Rank":26,"Galaxy_Group":"OUTER","Relative_Gravity":59.0,"Relative_Momentum":23.1,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"RENDER","Gravity_Score":5.0,"Dominance_Multiplier":0.17,"Composite_Risk":59.4,"TWAP_Price":3.5291037081,"Return_90D":31.3,"Volatility_90D":31.1,"Risk_Adjusted_Momentum":1.01,"Trend_Quality":1.1,"Directional_Consistency":50.0,"Momentum_Quality":20.7,"Avg_Volume":36419637,"Composite_Impact":53.21,"Market_Cap_Estimated":false,"Market_Cap_Rank":27,"Galaxy_Group":"OUTER","Relative_Gravity":12.8,"Relative_Momentum":12.8,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"ATOM","Gravity_Score":8.8,"Dominance_Multiplier":0.16,"Composite_Risk":61.6,"TWAP_Price":6.5370781418,"Return_90D":19.6,"Volatility_90D":31.9,"Risk_Adjusted_Momentum":0.62,"Trend_Quality":18.1,"Directional_Consistency":45.6,"Momentum_Quality":29.1,"Avg_Volume":37180789,"Composite_Impact":43.49,"Market_Cap_Estimated":false,"Market_Cap_Rank":28,"Galaxy_Group":"OUTER","Relative_Gravity":48.7,"Relative_Momentum":5.1,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"FIL","Gravity_Score":7.2,"Dominance_Multiplier":0.16,"Composite_Risk":61.8,"TWAP_Price":3.6601602488,"Return_90D":67.3,"Volatility_90D":46.1,"Risk_Adjusted_Momentum":1.46,"Trend_Quality":24.3,"Directional_Consistency":53.3,"Momentum_Quality":35.9,"Avg_Volume":155387536,"Composite_Impact":89.85,"Market_Cap_Estimated":false,"Market_Cap_Rank":29,"Galaxy_Group":"OUTER","Relative_Gravity":41.0,"Relative_Momentum":51.3,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"VET","Gravity_Score":8.5,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.0224579507,"Return_90D":113.0,"Volatility_90D":38.9,"Risk_Adjusted_Momentum":2.91,"Trend_Quality":74.2,"Directional_Consistency":55.6,"Momentum_Quality":66.8,"Avg_Volume":23902741,"Composite_Impact":120.82,"Market_Cap_Estimated":false,"Market_Cap_Rank":30,"Galaxy_Group":"OUTER","Relative_Gravity":46.2,"Relative_Momentum":92.3,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"INJ","Gravity_Score":6.9,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":12.8757223029,"Return_90D":73.2,"Volatility_90D":47.4,"Risk_Adjusted_Momentum":1.54,"Trend_Quality":41.9,"Directional_Consistency":43.3,"Momentum_Quality":42.5,"Avg_Volume":113191288,"Composite_Impact":95.59,"Market_Cap_Estimated":false,"Market_Cap_Rank":31,"Galaxy_Group":"OUTER","Relative_Gravity":35.9,"Relative_Momentum":69.2,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"STX","Gravity_Score":5.8,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.9096561463,"Return_90D":108.3,"Volatility_90D":53.2,"Risk_Adjusted_Momentum":2.04,"Trend_Quality":49.7,"Directional_Consistency":52.2,"Momentum_Quality":50.7,"Avg_Volume":24034465,"Composite_Impact":111.68,"Market_Cap_Estimated":false,"Market_Cap_Rank":32,"Galaxy_Group":"OUTER","Relative_Gravity":23.1,"Relative_Momentum":89.7,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"LDO","Gravity_Score":9.8,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":1.4328201985,"Return_90D":102.9,"Volatility_90D":44.5,"Risk_Adjusted_Momentum":2.31,"Trend_Quality":44.2,"Directional_Consistency":61.1,"Momentum_Quality":51.0,"Avg_Volume":49744614,"Composite_Impact":110.52,"Market_Cap_Estimated":false,"Market_Cap_Rank":33,"Galaxy_Group":"OUTER","Relative_Gravity":56.4,"Relative_Momentum":87.2,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"XTZ","Gravity_Score":11.1,"Dominance_Multiplier":0.15,"Composite_Risk":73.7,"TWAP_Price":0.7772558816,"Return_90D":58.3,"Volatility_90D":44.5,"Risk_Adjusted_Momentum":1.31,"Trend_Quality":29.4,"Directional_Consistency":51.1,"Momentum_Quality":38.1,"Avg_Volume":17908211,"Composite_Impact":73.0,"Market_Cap_Estimated":false,"Market_Cap_Rank":34,"Galaxy_Group":"OUTER","Relative_Gravity":64.1,"Relative_Momentum":46.2,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"OP","Gravity_Score":0.5,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":1.3222207034,"Return_90D":49.7,"Volatility_90D":44.4,"Risk_Adjusted_Momentum":1.12,"Trend_Quality":14.1,"Directional_Consistency":51.1,"Momentum_Quality":28.9,"Avg_Volume":87429378,"Composite_Impact":75.61,"Market_Cap_Estimated":false,"Market_Cap_Rank":35,"Galaxy_Group":"OUTER","Relative_Gravity":2.6,"Relative_Momentum":35.9,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"AR","Gravity_Score":6.5,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":10.6645398712,"Return_90D":164.5,"Volatility_90D":57.3,"Risk_Adjusted_Momentum":2.87,"Trend_Quality":53.3,"Directional_Consistency":53.3,"Momentum_Quality":53.3,"Avg_Volume":28695352,"Composite_Impact":139.99,"Market_Cap_Estimated":false,"Market_Cap_Rank":36,"Galaxy_Group":"OUTER","Relative_Gravity":32.1,"Relative_Momentum":96.2,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"GRT","Gravity_Score":3.6,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.1203040671,"Return_90D":59.9,"Volatility_90D":36.0,"Risk_Adjusted_Momentum":1.66,"Trend_Quality":14.9,"Directional_Consistency":44.4,"Momentum_Quality":26.7,"Avg_Volume":18004485,"Composite_Impact":73.26,"Market_Cap_Estimated":false,"Market_Cap_Rank":37,"Galaxy_Group":"OUTER","Relative_Gravity":7.7,"Relative_Momentum":48.7,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"RUNE","Gravity_Score":4.5,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":2.379048481,"Return_90D":96.1,"Volatility_90D":32.5,"Risk_Adjusted_Momentum":2.96,"Trend_Quality":71.7,"Directional_Consistency":61.1,"Momentum_Quality":67.5,"Avg_Volume":8826738,"Composite_Impact":108.26,"Market_Cap_Estimated":false,"Market_Cap_Rank":38,"Galaxy_Group":"OUTER","Relative_Gravity":10.3,"Relative_Momentum":82.1,"Quadrant":"Euphoria","Color":"#a855f7"},{"Ticker":"IOTA","Gravity_Score":5.7,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.1673664146,"Return_90D":46.2,"Volatility_90D":36.7,"Risk_Adjusted_Momentum":1.26,"Trend_Quality":38.2,"Directional_Consistency":56.7,"Momentum_Quality":45.6,"Avg_Volume":8070508,"Composite_Impact":66.93,"Market_Cap_Estimated":false,"Market_Cap_Rank":39,"Galaxy_Group":"OUTER","Relative_Gravity":20.5,"Relative_Momentum":30.8,"Quadrant":"Value Trap","Color":"#ef4444"},{"Ticker":"THETA","Gravity_Score":3.5,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.9714238158,"Return_90D":82.2,"Volatility_90D":37.9,"Risk_Adjusted_Momentum":2.17,"Trend_Quality":69.0,"Directional_Consistency":55.6,"Momentum_Quality":63.6,"Avg_Volume":7532058,"Composite_Impact":98.18,"Market_Cap_Estimated":false,"Market_Cap_Rank":40,"Galaxy_Group":"OUTER","Relative_Gravity":5.1,"Relative_Momentum":79.5,"Quadrant":"Euphoria","Color":"#a855f7"}];
+let activeBible = {"title": "", "headline": "Balanced Rotation", "posture": "The crypto market is balanced between accumulation and breakout pressure.", "status_score": 54.2, "status_label": "Balanced Rotation", "avg_gravity": 20.1, "gravity_phase": "Breakout", "gem_ticker": "UNI", "gem_score": 78.9, "gem_zone": "Euphoria", "gem_line": "Gem: UNI \u00b7 79/100", "activity_window": "4Y Activity", "galaxies": {"PRIMARY": {"title": "", "headline": "Balanced Rotation", "posture": "The crypto market is balanced between accumulation and breakout pressure.", "status_score": 54.2, "status_label": "Balanced Rotation", "avg_gravity": 20.1, "gravity_phase": "Breakout", "gem_ticker": "UNI", "gem_score": 78.9, "gem_zone": "Euphoria", "gem_line": "Gem: UNI \u00b7 79/100", "activity_window": "4Y Activity"}, "OUTER": {"title": "", "headline": "Balanced Rotation", "posture": "The crypto market is balanced between accumulation and breakout pressure.", "status_score": 50.0, "status_label": "Balanced Rotation", "avg_gravity": 9.8, "gravity_phase": "Accumulation", "gem_ticker": "VET", "gem_score": 78.9, "gem_zone": "Euphoria", "gem_line": "Gem: VET \u00b7 79/100", "activity_window": "4Y Activity"}}, "market_window": {"headline": "Balanced Rotation", "summary": "The crypto market is balanced between accumulation and breakout pressure.", "planets": [{"id": 1, "name": "Gravity", "value": "14.8", "reading": "Accumulation", "detail": "Average gravity maps the galaxy phase to Accumulation.", "color": "#80d8ff"}, {"id": 2, "name": "Throttle Risk", "value": "52/100", "reading": "Balanced Rotation", "detail": "Position size follows the status score before the return headline.", "color": "#00d4aa"}, {"id": 3, "name": "Gold Share", "value": "13%", "reading": "SOL, ADA, KAS", "detail": "Gold means momentum is above median while risk is below median.", "color": "#eab308"}, {"id": 4, "name": "Blue Share", "value": "31%", "reading": "XRP, DOGE, XLM", "detail": "Blue is base-building until momentum confirms.", "color": "#3b82f6"}, {"id": 5, "name": "Purple Share", "value": "38%", "reading": "QNT, UNI, NEAR", "detail": "Purple is strength with extension risk.", "color": "#a855f7"}, {"id": 6, "name": "90D Quality", "value": "50/100", "reading": "Vol 37%", "detail": "Quality blends trend structure and directional consistency.", "color": "#f97316"}, {"id": 7, "name": "Positive Partition", "value": "100%", "reading": "90D > 0", "detail": "Share of assets with positive 90-day momentum.", "color": "#22c55e"}], "gold_names": "SOL, ADA, KAS", "blue_names": "XRP, DOGE, XLM", "purple_names": "QNT, UNI, NEAR"}};
+const zoneOrder = ["Golden Breakout", "Deep Accumulation", "Euphoria", "Value Trap"];
+const zoneConfig = {
+  "Golden Breakout": { color: "#eab308", short: "Gold", speed: 0.00162, direction: 1 },
+  "Deep Accumulation": { color: "#3b82f6", short: "Blue", speed: 0.00136, direction: -1 },
+  "Euphoria": { color: "#a855f7", short: "Purple", speed: 0.00118, direction: -1 },
+  "Value Trap": { color: "#ef4444", short: "Red", speed: 0.00102, direction: 1 }
+};
+const primaryZoneRadiusRanges = {
+  "Golden Breakout": [32, 40],
+  "Deep Accumulation": [24, 28],
+  "Euphoria": [16, 20],
+  "Value Trap": [10, 15]
+};
+const outerZoneRadiusRanges = {
+  "Golden Breakout": [24, 30],
+  "Deep Accumulation": [18, 22],
+  "Euphoria": [13, 16],
+  "Value Trap": [9, 12]
+};
+const visibleOrbitZones = ["Golden Breakout", "Deep Accumulation", "Euphoria"];
+const zoneRevealOrder = ["Golden Breakout", "Deep Accumulation", "Euphoria", "Value Trap"];
+const zoneRevealDelayMs = 1000;
+const zoneRevealSessionKey = "8gems-zone-reveal-complete";
+let zoneRevealAlreadyPlayed = false;
+try {
+  zoneRevealAlreadyPlayed = sessionStorage.getItem(zoneRevealSessionKey) === "1";
+} catch (err) {
+  zoneRevealAlreadyPlayed = false;
+}
+const galaxyOrder = ["PRIMARY", "OUTER"];
+const galaxyMeta = {
+  PRIMARY: { label: "Primary Galaxy", color: "#80d8ff", coreTitle: "Galaxy Status" },
+  OUTER: { label: "Outer Galaxy", color: "#f97316", coreTitle: "Outer Galaxy" },
+  MARKET: { label: "Market Window", color: "#00d4aa", coreTitle: "Market Window" }
+};
+
+const state = {
+  zone: "ALL",
+  view: "galaxy",
+  focus: "PRIMARY",
+  revealedZoneIndex: 0,
+  tableSort: { key: "Composite_Impact", direction: "desc" }
+};
+
+const container = document.getElementById("galaxy-canvas");
+const tableView = document.getElementById("table-view");
+const statusLine = document.getElementById("status-line");
+const tooltip = d3.select("#tooltip");
+const svg = d3.select("#galaxy-canvas").append("svg");
+const defs = svg.append("defs");
+
+defs.append("clipPath")
+  .attr("id", "coinLogoClip")
+  .attr("clipPathUnits", "objectBoundingBox")
+  .append("circle")
+  .attr("cx", 0.5)
+  .attr("cy", 0.5)
+  .attr("r", 0.5);
+
+const backgroundLayer = svg.append("g");
+const orbitLayer = svg.append("g");
+const wellLayer = svg.append("g");
+const nodeLayer = svg.append("g");
+
+let width = 0;
+let height = 0;
+let centers = {};
+let node = nodeLayer.selectAll(".coin-node");
+let zoneRevealTimers = [];
+let reservedRects = [];
+let lastOrbitTick = Date.now() * 0.001;
+
+function numberValue(value, fallback = 0) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function clamp(v, lo, hi) {
+  return Math.max(lo, Math.min(hi, numberValue(v)));
+}
+
+function isMobileGalaxy() {
+  return window.innerWidth <= 880;
+}
+
+function defaultRevealMaxIndex() {
+  return isMobileGalaxy()
+    ? zoneRevealOrder.indexOf("Euphoria")
+    : zoneRevealOrder.length - 1;
+}
+
+const maxImpact = Math.max(1, d3.max(rawData, d => Math.abs(numberValue(d.Composite_Impact))) || 1);
+const maxRisk = Math.max(1, d3.max(rawData, d => numberValue(d.Composite_Risk)) || 1);
+
+function bubbleRadius(d) {
+  const ranges = d.Galaxy_Group === "OUTER" ? outerZoneRadiusRanges : primaryZoneRadiusRanges;
+  const [minRadius, maxRadius] = ranges[d.Quadrant] || [18, 28];
+  const impactNorm = clamp(Math.abs(numberValue(d.Composite_Impact)) / maxImpact, 0, 1);
+  const qualityNorm = clamp(d.Momentum_Quality, 0, 100) / 100;
+  const returnNorm = clamp(Math.abs(numberValue(d.Return_90D)) / 100, 0, 1);
+  const blend = clamp((impactNorm * 0.58) + (qualityNorm * 0.28) + (returnNorm * 0.14), 0, 1);
+  return minRadius + (maxRadius - minRadius) * blend;
+}
+
+function displayRadius(d) {
+  const mobileScale = isMobileGalaxy() ? 0.85 : 1;
+  return numberValue(d.radius) * mobileScale * (state.zone === "ALL" ? 1 : 1.14);
+}
+
+const matrixData = rawData.map((d, i) => ({
+  ...d,
+  id: d.Ticker || `asset-${i}`,
+  Galaxy_Group: d.Galaxy_Group || "PRIMARY",
+  Market_Cap_Rank: numberValue(d.Market_Cap_Rank, i + 1),
+  radius: bubbleRadius(d),
+  phase: i * 1.61803398875,
+  microOrbitR: (d.Galaxy_Group === "OUTER" ? 4.5 : 6.5) + (i % 5) * 1.35,
+  microSpeed: 0.62 + ((i % 7) * 0.075),
+  localOrbitDirection: i % 2 === 0 ? 1 : -1,
+  localX: 0,
+  localY: 0,
+  x: null,
+  y: null
+}));
+
+const simulation = d3.forceSimulation()
+  .alphaTarget(0.024)
+  .velocityDecay(0.30)
+  .force("charge", d3.forceManyBody().strength(d => -d.radius * 4.9))
+  .force("collide", d3.forceCollide().radius(d => d.radius + 12).strength(0.98).iterations(8));
+
+const coinGeckoLogoMap = {
+  BTC: [1, "bitcoin"], ETH: [279, "ethereum"], BNB: [825, "bnb"], XRP: [44, "xrp-symbol-white-128"],
+  SOL: [4128, "solana"], DOGE: [5, "dogecoin"], ADA: [975, "cardano"], TRX: [1094, "tron-logo"],
+  LINK: [1975, "chainlink-new-logo"], AVAX: [12559, "avalanche-avax-logo"], SUI: [26375, "sui-ocean-square"],
+  BCH: [780, "bitcoin-cash-circle"], HBAR: [3688, "hbar"], TON: [17980, "ton_symbol"], DOT: [12171, "polkadot"],
+  LTC: [2, "litecoin"], UNI: [12504, "uniswap-logo"], NEAR: [10365, "near"], XLM: [100, "Stellar_symbol_black_RGB"],
+  ALGO: [4380, "algorand-algo-logo"], AR: [4343, "oRt6SiEN_400x400"], GALA: [12493, "GALA-COINGECKO"],
+  APT: [26455, "aptos_round"],
+  ICP: [14495, "internet-computer-icp-logo"], ETC: [453, "ethereum-classic-logo"], KAS: [25751, "kaspa-icon-exchanges"],
+  QNT: [3370, "qnt"], RENDER: [11636, "render-token"], RNDR: [11636, "render-token"], ARB: [16547, "arbitrum"],
+  OP: [25244, "optimism"], AAVE: [12645, "aave-token-round"], MKR: [1364, "maker"], INJ: [12882, "injective"],
+  SEI: [28205, "sei-network"], FET: [5681, "fetch-ai"], RUNE: [6595, "thorchain"]
+};
+
+const simpleIconSlugMap = {
+  BTC: "bitcoin", ETH: "ethereum", SOL: "solana", BNB: "binance", XRP: "xrp", ADA: "cardano",
+  DOGE: "dogecoin", DOT: "polkadot", LTC: "litecoin", LINK: "chainlink", UNI: "uniswap",
+  NEAR: "near", ICP: "internetcomputer", OP: "optimism", ARB: "arbitrum", AAVE: "aave",
+  MKR: "maker", RENDER: "render", RNDR: "render", XLM: "stellar", AR: "arweave", GALA: "gala",
+  ALGO: "algorand"
+};
+const darkLogoTickers = new Set(["NEAR", "ICP", "QNT", "KAS", "APT", "FET", "XLM", "AR", "GALA", "ALGO"]);
+
+function normalizedTicker(ticker) {
+  return String(ticker || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+function coinLogoSources(ticker) {
+  const symbol = normalizedTicker(ticker);
+  const lower = symbol.toLowerCase();
+  const sources = [];
+  const simpleSlug = simpleIconSlugMap[symbol];
+  if (darkLogoTickers.has(symbol) && simpleSlug) {
+    sources.push({ url: `https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/${simpleSlug}.svg`, reverse: true });
+  }
+  const coinGecko = coinGeckoLogoMap[symbol];
+  if (coinGecko) {
+    sources.push({ url: `https://assets.coingecko.com/coins/images/${coinGecko[0]}/large/${coinGecko[1]}.png`, reverse: darkLogoTickers.has(symbol) });
+  }
+  sources.push({ url: `https://assets.coincap.io/assets/icons/${lower}@2x.png`, reverse: false });
+  sources.push({ url: `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/color/${lower}.svg`, reverse: false });
+  if (simpleSlug) {
+    sources.push({ url: `https://cdn.jsdelivr.net/npm/simple-icons@v16/icons/${simpleSlug}.svg`, reverse: darkLogoTickers.has(symbol) });
+  }
+  return sources;
+}
+
+function applyLogoSource(imageEl, ticker, index = 0) {
+  const sources = coinLogoSources(ticker);
+  if (!sources[index]) return false;
+  imageEl.dataset.logoIndex = String(index);
+  d3.select(imageEl)
+    .classed("reverse-logo", !!sources[index].reverse)
+    .attr("href", sources[index].url);
+  return true;
+}
+
+function coinLogoUrl(ticker) {
+  const source = coinLogoSources(ticker)[0];
+  return source ? source.url : "";
+}
+
+function coinLogoNeedsReverse(ticker) {
+  const source = coinLogoSources(ticker)[0];
+  return !!(source && source.reverse);
+}
+
+function useNextLogoSource(imageEl, ticker) {
+  const nextIndex = numberValue(imageEl.dataset.logoIndex, 0) + 1;
+  return applyLogoSource(imageEl, ticker, nextIndex);
+}
+
+function signedPct(v, digits = 1) {
+  const n = numberValue(v);
+  return `${n >= 0 ? "+" : ""}${n.toFixed(digits)}%`;
+}
+
+// Sign colour for the return printed inside a bubble, graded by size. The
+// ring already says which zone the asset is in; the number is a return, and
+// a reader scanning forty bubbles needs its sign readable without decoding
+// the legend first -- a -7.3% painted "Golden Breakout" yellow read as good
+// news. Every band at or above zero is a green, every band below is a red,
+// which is the convention the Android app already follows. Weights and risk
+// scores keep the zone colour: they have no sign to show. Declared exactly
+// once -- this is a classic script, and a second declaration would win
+// silently.
+function returnColor(value) {
+  const n = numberValue(value);
+  if (n >= 30) return "#00e676";
+  if (n >= 10) return "#22c55e";
+  if (n >= 0) return "#86efac";
+  if (n >= -10) return "#fb7185";
+  if (n >= -25) return "#ef4444";
+  return "#991b1b";
+}
+
+function formatNumber(v, digits = 1) {
+  return numberValue(v).toLocaleString(undefined, { maximumFractionDigits: digits });
+}
+
+function formatPrice(price) {
+  const n = numberValue(price);
+  return n < 1 ? n.toFixed(4) : n.toFixed(2);
+}
+
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
+
+function visibleData() {
+  if (state.focus === "ALL") return [];
+  const revealLimit = state.zone === "ALL" ? Math.min(state.revealedZoneIndex, defaultRevealMaxIndex()) : zoneRevealOrder.length - 1;
+  return matrixData.filter(d =>
+    (state.focus === "ALL" || d.Galaxy_Group === state.focus) &&
+    (state.zone === "ALL" || d.Quadrant === state.zone) &&
+    (state.zone !== "ALL" || zoneRevealOrder.indexOf(d.Quadrant) <= revealLimit)
+  );
+}
+
+function sortArrow(key) {
+  if (state.tableSort.key !== key) return "";
+  return state.tableSort.direction === "asc" ? " ↑" : " ↓";
+}
+
+function sortValue(d, key) {
+  if (["Ticker", "Quadrant"].includes(key)) return String(d[key] || "");
+  return numberValue(d[key]);
+}
+
+function setTableSort(key) {
+  if (state.tableSort.key === key) {
+    state.tableSort.direction = state.tableSort.direction === "asc" ? "desc" : "asc";
+  } else {
+    state.tableSort.key = key;
+    state.tableSort.direction = ["Ticker", "Quadrant"].includes(key) ? "asc" : "desc";
+  }
+  render();
+}
+
+function marketPlanets() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  return Array.isArray(windowData.planets) ? windowData.planets : [];
+}
+
+function renderMarketTable() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  const rows = marketPlanets().map(planet => `
+    <tr>
+      <td style="color:${planet.color || "#80d8ff"}; font-weight:950;">${String(planet.id || "").padStart(2, "0")}</td>
+      <td>${escapeHtml(planet.name)}</td>
+      <td style="color:${planet.color || "#80d8ff"}; font-weight:950;">${escapeHtml(planet.value)}</td>
+      <td>${escapeHtml(planet.reading)}</td>
+      <td style="text-align:left; white-space:normal;">${escapeHtml(planet.detail)}</td>
+    </tr>
+  `).join("");
+
+  tableView.innerHTML = `
+    <table class="pairs-table market-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Planet</th>
+          <th>Reading</th>
+          <th>Signal</th>
+          <th style="text-align:left;">Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>${rows || `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">${escapeHtml(windowData.summary || "No market window available.")}</td></tr>`}</tbody>
+    </table>
+  `;
+}
+
+function renderTable(data) {
+  if (state.focus === "ALL") {
+    renderMarketTable();
+    return;
+  }
+
+  const sortKey = state.tableSort.key;
+  const direction = state.tableSort.direction === "asc" ? 1 : -1;
+  const rows = data
+    .slice()
+    .sort((a, b) => {
+      const av = sortValue(a, sortKey);
+      const bv = sortValue(b, sortKey);
+      if (typeof av === "string" || typeof bv === "string") {
+        return String(av).localeCompare(String(bv)) * direction;
+      }
+      return (av - bv) * direction;
+    })
+    .map(d => `
+      <tr data-id="${escapeHtml(d.id)}">
+        <td>${escapeHtml(d.Ticker)}</td>
+        <td class="tier-cell" style="color:${d.Color};">${escapeHtml(d.Quadrant)}</td>
+        <td style="color:${numberValue(d.Return_90D) >= 0 ? "#00e676" : "#ef4444"}; font-weight:900;">${signedPct(d.Return_90D)}</td>
+        <td>${formatNumber(d.Composite_Risk, 1)}</td>
+        <td style="color:#80d8ff; font-weight:900;">${numberValue(d.Risk_Adjusted_Momentum).toFixed(2)}x</td>
+        <td>${numberValue(d.Gravity_Score).toFixed(1)}</td>
+        <td>${numberValue(d.Composite_Impact).toFixed(1)}</td>
+      </tr>
+    `).join("");
+
+  tableView.innerHTML = `
+    <table class="pairs-table">
+      <thead>
+        <tr>
+          <th data-sort-key="Ticker">Asset${sortArrow("Ticker")}</th>
+          <th data-sort-key="Quadrant">Zone${sortArrow("Quadrant")}</th>
+          <th data-sort-key="Return_90D">90D Return${sortArrow("Return_90D")}</th>
+          <th data-sort-key="Composite_Risk">Composite Risk${sortArrow("Composite_Risk")}</th>
+          <th data-sort-key="Risk_Adjusted_Momentum">Risk-Adj${sortArrow("Risk_Adjusted_Momentum")}</th>
+          <th data-sort-key="Gravity_Score">Gravity${sortArrow("Gravity_Score")}</th>
+          <th data-sort-key="Composite_Impact">Impact${sortArrow("Composite_Impact")}</th>
+        </tr>
+      </thead>
+      <tbody>${rows || `<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No assets match this filter.</td></tr>`}</tbody>
+    </table>
+  `;
+
+  tableView.querySelectorAll("th[data-sort-key]").forEach(th => {
+    th.addEventListener("click", () => setTableSort(th.dataset.sortKey));
+  });
+}
+
+function applyViewMode() {
+  const showTable = state.view === "table";
+  const showMarketWindow = state.focus === "ALL" && !showTable;
+  tableView.classList.toggle("active", showTable);
+  svg.classed("galaxy-hidden", showTable);
+  document.getElementById("orbit-description").classList.toggle("galaxy-hidden", showTable);
+  document.getElementById("zone-legend").classList.toggle("galaxy-hidden", showTable || showMarketWindow);
+  document.getElementById("tier-panel").classList.toggle("galaxy-hidden", showTable || showMarketWindow);
+  tooltip.style("opacity", 0);
+}
+
+function laneRadiiFor(scale, compact) {
+  const side = Math.min(width, height);
+  const coreRadius = Math.max(compact ? 62 : 92, Math.min(compact ? 112 : 142, side * (compact ? 0.145 : 0.16) * scale));
+  const innerOrbit = coreRadius + Math.max(compact ? 82 : 88, side * 0.095 * scale);
+  const orbitStep = Math.max(compact ? 50 : 64, Math.min(compact ? 68 : 82, side * 0.074 * scale));
+  const laneRadii = {};
+  zoneOrder.forEach((zone, i) => {
+    laneRadii[zone] = innerOrbit + orbitStep * i;
+  });
+  return { coreRadius, laneRadii };
+}
+
+function layoutCenters() {
+  const compact = width < 880;
+  const orbitY = compact ? height * 0.48 : height * 0.46;
+
+  if (state.focus === "PRIMARY") {
+    centers = compact
+      ? { PRIMARY: { x: width * 0.50, y: orbitY, scale: 1.02, active: true, collapsed: false, ...laneRadiiFor(1.02, compact) } }
+      : {
+          PRIMARY: { x: width * 0.50, y: orbitY, scale: 1.10, active: true, collapsed: false, ...laneRadiiFor(1.10, compact) },
+          OUTER: { x: width - 92, y: 112, scale: 0.34, active: false, collapsed: true, ...laneRadiiFor(0.34, compact) }
+        };
+  } else if (state.focus === "OUTER") {
+    centers = compact
+      ? { OUTER: { x: width * 0.50, y: orbitY, scale: 1.02, active: true, collapsed: false, ...laneRadiiFor(1.02, compact) } }
+      : {
+          PRIMARY: { x: 92, y: 112, scale: 0.34, active: false, collapsed: true, ...laneRadiiFor(0.34, compact) },
+          OUTER: { x: width * 0.50, y: orbitY, scale: 1.10, active: true, collapsed: false, ...laneRadiiFor(1.10, compact) }
+        };
+  } else {
+    const marketRadii = laneRadiiFor(compact ? 0.64 : 0.92, compact);
+    centers = {
+      MARKET: { x: width * 0.50, y: compact ? height * 0.52 : height * 0.50, scale: compact ? 0.86 : 1.0, active: true, collapsed: false, ...marketRadii }
+    };
+  }
+}
+
+function zoneCounts(data) {
+  return zoneOrder.reduce((acc, zone) => {
+    acc[zone] = data.filter(d => d.Quadrant === zone).length;
+    return acc;
+  }, {});
+}
+
+function filterCountData() {
+  if (state.focus === "OUTER") {
+    return matrixData.filter(d => d.Galaxy_Group === "OUTER");
+  }
+  return matrixData.filter(d => d.Galaxy_Group === "PRIMARY");
+}
+
+function updateFilterLabels() {
+  const countData = filterCountData();
+  const counts = zoneCounts(countData);
+  const labels = {
+    "ALL": `All Zones (${countData.length})`,
+    "Golden Breakout": `Golden Breakout (${counts["Golden Breakout"] || 0})`,
+    "Deep Accumulation": `Deep Accumulation (${counts["Deep Accumulation"] || 0})`,
+    "Euphoria": `Euphoria (${counts["Euphoria"] || 0})`,
+    "Value Trap": `Value Trap (${counts["Value Trap"] || 0})`
+  };
+  document.querySelectorAll("[data-zone-filter]").forEach(btn => {
+    btn.textContent = labels[btn.dataset.zoneFilter] || btn.dataset.zoneFilter;
+  });
+}
+
+function updateReservedRects() {
+  const canvasRect = container.getBoundingClientRect();
+  reservedRects = [];
+  ["chart-title", "control-deck", "tier-panel", "zone-legend"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.classList.contains("galaxy-hidden")) return;
+    if (window.getComputedStyle(el).display === "none") return;
+    const rect = el.getBoundingClientRect();
+    const pad = id === "control-deck" ? 30 : 18;
+    reservedRects.push({
+      left: Math.max(0, rect.left - canvasRect.left - pad),
+      right: Math.min(width, rect.right - canvasRect.left + pad),
+      top: Math.max(0, rect.top - canvasRect.top - pad),
+      bottom: Math.min(height, rect.bottom - canvasRect.top + pad)
+    });
+  });
+}
+
+function boundaryRadius(d) {
+  return displayRadius(d) + numberValue(d.microOrbitR) + 18;
+}
+
+function coreBoundaryRadius(d, center) {
+  const shellPadding = center.collapsed ? 20 : 26;
+  return numberValue(center.coreRadius) + boundaryRadius(d) + shellPadding;
+}
+
+function keepOutsideCore(d, center) {
+  if (!center || center.collapsed) return;
+  const minDistance = coreBoundaryRadius(d, center);
+  let dx = numberValue(d.x) - center.x;
+  let dy = numberValue(d.y) - center.y;
+  let distance = Math.hypot(dx, dy);
+
+  if (distance < 0.001) {
+    const angle = numberValue(d.anchorAngle, d.phase || 0);
+    dx = Math.cos(angle);
+    dy = Math.sin(angle);
+    distance = 1;
+  }
+
+  if (distance >= minDistance) return;
+
+  const scale = minDistance / distance;
+  d.x = center.x + dx * scale;
+  d.y = center.y + dy * scale;
+  const outwardX = dx / distance;
+  const outwardY = dy / distance;
+  d.vx = Math.max(0.08, Math.abs(numberValue(d.vx))) * outwardX;
+  d.vy = Math.max(0.08, Math.abs(numberValue(d.vy))) * outwardY;
+}
+
+function overflowCost(x, y, radius) {
+  return (
+    Math.max(0, radius - x) +
+    Math.max(0, x - (width - radius)) +
+    Math.max(0, radius - y) +
+    Math.max(0, y - (height - radius))
+  );
+}
+
+function pushOutsideReservedRects(d, radius) {
+  reservedRects.forEach(rect => {
+    const overlaps = (
+      d.x + radius > rect.left &&
+      d.x - radius < rect.right &&
+      d.y + radius > rect.top &&
+      d.y - radius < rect.bottom
+    );
+    if (!overlaps) return;
+
+    const candidates = [
+      { x: rect.left - radius, y: d.y, vx: -0.65, vy: d.vy || 0 },
+      { x: rect.right + radius, y: d.y, vx: 0.65, vy: d.vy || 0 },
+      { x: d.x, y: rect.top - radius, vx: d.vx || 0, vy: -0.65 },
+      { x: d.x, y: rect.bottom + radius, vx: d.vx || 0, vy: 0.65 }
+    ].map(candidate => ({
+      ...candidate,
+      cost: Math.hypot(candidate.x - d.x, candidate.y - d.y) + overflowCost(candidate.x, candidate.y, radius) * 12
+    })).sort((a, b) => a.cost - b.cost);
+
+    const best = candidates[0];
+    d.x = clamp(best.x, radius, width - radius);
+    d.y = clamp(best.y, radius, height - radius);
+    d.vx = best.vx;
+    d.vy = best.vy;
+  });
+}
+
+function clearZoneRevealTimers() {
+  zoneRevealTimers.forEach(timer => clearTimeout(timer));
+  zoneRevealTimers = [];
+}
+
+function startZoneReveal() {
+  clearZoneRevealTimers();
+  const maxIndex = defaultRevealMaxIndex();
+  if (state.zone !== "ALL") {
+    state.revealedZoneIndex = zoneRevealOrder.length - 1;
+    return;
+  }
+  if (zoneRevealAlreadyPlayed) {
+    state.revealedZoneIndex = maxIndex;
+    return;
+  }
+
+  state.revealedZoneIndex = 0;
+  if (maxIndex <= 0) {
+    zoneRevealAlreadyPlayed = true;
+    try { sessionStorage.setItem(zoneRevealSessionKey, "1"); } catch (err) {}
+    return;
+  }
+
+  zoneRevealOrder.slice(1, maxIndex + 1).forEach((zone, index) => {
+    const nextIndex = index + 1;
+    const timer = setTimeout(() => {
+      state.revealedZoneIndex = nextIndex;
+      if (nextIndex >= maxIndex) {
+        zoneRevealAlreadyPlayed = true;
+        try { sessionStorage.setItem(zoneRevealSessionKey, "1"); } catch (err) {}
+      }
+      render();
+    }, nextIndex * zoneRevealDelayMs);
+    zoneRevealTimers.push(timer);
+  });
+}
+
+function drawBackdrop() {
+  backgroundLayer.selectAll("*").remove();
+  const stars = d3.range(120).map(i => ({
+    x: (Math.sin(i * 999) * 0.5 + 0.5) * width,
+    y: (Math.cos(i * 733) * 0.5 + 0.5) * height,
+    r: 0.35 + ((i % 5) * 0.18),
+    o: 0.08 + ((i % 7) * 0.035)
+  }));
+
+  backgroundLayer.selectAll("circle.star")
+    .data(stars)
+    .join("circle")
+    .attr("class", "star")
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .attr("r", d => d.r)
+    .attr("fill", "#cbd5e1")
+    .attr("opacity", d => d.o);
+}
+
+function drawZoneOrbits() {
+  if (state.focus === "ALL") {
+    orbitLayer.selectAll(".zone-orbit").data([]).join("circle").remove();
+    orbitLayer.selectAll(".orbit-label").remove();
+    return;
+  }
+  const activeGalaxyKeys = galaxyOrder.filter(key => state.focus === "ALL" || key === state.focus);
+  const revealedOrbitZones = state.zone === "ALL"
+    ? visibleOrbitZones.filter(zone => zoneRevealOrder.indexOf(zone) <= Math.min(state.revealedZoneIndex, defaultRevealMaxIndex()))
+    : zoneOrder.filter(zone => zone === state.zone);
+  const orbitData = activeGalaxyKeys.flatMap(galaxy => revealedOrbitZones.map(zone => ({ galaxy, zone })));
+
+  orbitLayer.selectAll(".zone-orbit")
+    .data(orbitData, d => `${d.galaxy}-${d.zone}`)
+    .join("circle")
+    .attr("class", "zone-orbit")
+    .attr("cx", d => centers[d.galaxy].x)
+    .attr("cy", d => centers[d.galaxy].y)
+    .attr("r", d => centers[d.galaxy].laneRadii[d.zone])
+    .attr("stroke", d => zoneConfig[d.zone].color)
+    .style("opacity", d => centers[d.galaxy].collapsed ? 0.12 : 0.34)
+    .style("filter", d => `drop-shadow(0 0 4px ${zoneConfig[d.zone].color})`);
+
+  orbitLayer.selectAll(".orbit-label").remove();
+}
+
+function cleanRagText(text) {
+  return String(text || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\[[^\]]+\]/g, " ")
+    .replace(/Video Title:.*?(?=Current Structure|Macro Quantitative Risk|$)/i, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function summarizeRagDoc(doc) {
+  const record = (doc.records || [])[0] || {};
+  const facts = record.facts || [];
+  const structure = facts.find(f => /ratio|Composite risk|momentum|accumulation|over/i.test(f));
+  const risk = facts.find(f => /risk|over.?extended|mean.?reversion|floor/i.test(f));
+  const action = facts.find(f => /ML forecast|forward return|support floors|moving.?average supports|Cycle bull targets/i.test(f));
+  const fallback = doc.latest_summary_text || record.summary_text || "";
+  const headline = cleanRagText(structure || fallback).slice(0, 190);
+  const posture = cleanRagText(risk || fallback).slice(0, 230);
+  const actionText = cleanRagText(action || "").slice(0, 230);
+  if (!headline) return null;
+  return {
+    title: "",
+    source: "JSON RAG",
+    headline,
+    posture,
+    action: actionText,
+    bullets: [headline, posture, actionText].filter(Boolean),
+    rag_date: doc.updated_at ? String(doc.updated_at).slice(0, 10) : ""
+  };
+}
+
+async function hydrateRagBible() {
+  try {
+    const response = await fetch("/data/assets/CRYPTO_SECTOR.json", { cache: "no-store" });
+    if (!response.ok) return;
+    const doc = await response.json();
+    const ragBible = summarizeRagDoc(doc);
+    if (ragBible) {
+      activeBible = ragBible;
+      render();
+    }
+  } catch (err) {
+    return;
+  }
+}
+
+function galaxyStatus(galaxy) {
+  if (activeBible && activeBible.galaxies && activeBible.galaxies[galaxy]) {
+    return activeBible.galaxies[galaxy];
+  }
+  return activeBible || {};
+}
+
+function bibleHtml(data, galaxy) {
+  const status = galaxyStatus(galaxy);
+  const headline = status && status.headline ? status.headline : "No Signal";
+  const score = clamp(status && status.status_score, 0, 100);
+  const avgGravity = status && status.avg_gravity !== undefined ? numberValue(status.avg_gravity, 50).toFixed(1) : "50.0";
+  const phase = status && status.gravity_phase ? status.gravity_phase : "No Signal";
+  const gemLine = status && status.gem_line ? status.gem_line : "Gem: No signal";
+  const universeLabel = galaxy === "PRIMARY" ? "Top 20" : "21-40";
+  return `
+    <div class="rag-headline">${escapeHtml(headline)}</div>
+    <div class="status-meter"><div class="status-meter-fill" style="width:${score}%;"></div></div>
+    <div class="rag-statline">Avg Gravity ${avgGravity} · ${escapeHtml(phase)}</div>
+    <div class="rag-gemline">${escapeHtml(gemLine)}</div>
+    <div class="rag-universe">${escapeHtml(universeLabel)}</div>
+  `;
+}
+
+function marketWindowHtml() {
+  const windowData = (activeBible && activeBible.market_window) || {};
+  const coords = [
+    [50, 13], [78, 24], [86, 53], [68, 79], [32, 79], [14, 53], [22, 24]
+  ];
+  const planets = marketPlanets().slice(0, 7).map((planet, index) => {
+    const [x, y] = coords[index] || [50, 50];
+    const color = planet.color || "#80d8ff";
+    const orbitR = 5 + (index % 3) * 2;
+    const duration = 16 + index * 1.8;
+    return `
+      <div class="market-planet"
+        style="--x:${x}%; --y:${y}%; --planet-color:${color}; --orbit-r:${orbitR}px; --orbit-duration:${duration}s; --orbit-delay:-${index * 0.9}s;"
+        data-name="${escapeHtml(planet.name)}"
+        data-value="${escapeHtml(planet.value)}"
+        data-signal="${escapeHtml(planet.reading)}"
+        data-detail="${escapeHtml(planet.detail)}"
+        data-color="${escapeHtml(color)}">
+        <div class="market-planet-index">${String(planet.id || index + 1).padStart(2, "0")}</div>
+        <div class="market-planet-name">${escapeHtml(planet.name)}</div>
+        <div class="market-planet-value">${escapeHtml(planet.value)}</div>
+        <div class="market-planet-reading">${escapeHtml(planet.reading)}</div>
+      </div>
+    `;
+  }).join("");
+  return `
+    <div class="market-solar-system">
+      <div class="market-orbit-ring r1"></div>
+      <div class="market-orbit-ring r2"></div>
+      <div class="market-orbit-ring r3"></div>
+      <div class="market-sun">
+        <div class="market-window-kicker">Market Window</div>
+        <div class="market-window-title">${escapeHtml(windowData.headline || "No Signal")}</div>
+        <div class="market-window-summary">${escapeHtml(windowData.summary || "Waiting for today's galaxy read.")}</div>
+      </div>
+      ${planets || ""}
+    </div>
+  `;
+}
+
+function galaxyCounts(data) {
+  return galaxyOrder.reduce((acc, galaxy) => {
+    acc[galaxy] = data.filter(d => d.Galaxy_Group === galaxy).length;
+    return acc;
+  }, {});
+}
+
+function drawWells(data) {
+  const countData = matrixData.filter(d => state.zone === "ALL" || d.Quadrant === state.zone);
+  const counts = galaxyCounts(countData);
+  const wellKeys = state.focus === "ALL" ? ["MARKET"] : galaxyOrder.filter(galaxy => centers[galaxy]);
+  const wells = wellLayer.selectAll(".gravity-well")
+    .data(wellKeys, d => d)
+    .join(
+      enter => {
+        const g = enter.append("g").attr("class", "gravity-well well-core");
+        g.append("circle").attr("class", "halo outer");
+        g.append("circle").attr("class", "halo middle");
+        g.append("circle").attr("class", "halo inner");
+        g.append("circle").attr("class", "core-shell");
+        g.append("foreignObject")
+          .attr("class", "rag-core-foreign")
+          .append("xhtml:div")
+          .attr("class", "rag-core-card");
+        g.append("text").attr("class", "well-label");
+        g.append("text").attr("class", "well-sub");
+        g.on("click", (event, galaxy) => {
+          if (galaxy === "MARKET") return;
+          state.focus = state.focus === galaxy ? "ALL" : galaxy;
+          document.querySelectorAll("[data-focus]").forEach(btn => btn.classList.toggle("active", btn.dataset.focus === state.focus));
+          startZoneReveal();
+          render();
+        });
+        return g;
+      },
+      update => update,
+      exit => exit.transition().duration(230).style("opacity", 0).remove()
+    );
+
+  wells.transition().duration(520)
+    .attr("transform", galaxy => `translate(${centers[galaxy].x},${centers[galaxy].y})`)
+    .style("opacity", galaxy => centers[galaxy].collapsed ? 0.36 : 1);
+
+  wells.classed("market-well", galaxy => galaxy === "MARKET");
+
+  wells.select(".outer")
+    .attr("r", galaxy => centers[galaxy].coreRadius + 96 * centers[galaxy].scale)
+    .attr("fill", "none")
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-opacity", galaxy => centers[galaxy].collapsed ? 0.10 : 0.18)
+    .attr("stroke-width", 1.3)
+    .attr("stroke-dasharray", "7,8");
+
+  wells.select(".middle")
+    .attr("r", galaxy => centers[galaxy].coreRadius + 46 * centers[galaxy].scale)
+    .attr("fill", galaxy => galaxyMeta[galaxy].color)
+    .attr("fill-opacity", galaxy => centers[galaxy].collapsed ? 0.012 : 0.024)
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-opacity", galaxy => centers[galaxy].collapsed ? 0.10 : 0.22)
+    .attr("stroke-width", 1);
+
+  wells.select(".inner")
+    .attr("r", galaxy => centers[galaxy].coreRadius)
+    .attr("fill", galaxy => galaxyMeta[galaxy].color)
+    .attr("fill-opacity", galaxy => centers[galaxy].collapsed ? 0.016 : 0.035)
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-opacity", galaxy => centers[galaxy].collapsed ? 0.12 : 0.30)
+    .attr("stroke-width", 1.3);
+
+  wells.select(".core-shell")
+    .style("display", galaxy => galaxy === "MARKET" ? "none" : "block")
+    .attr("r", galaxy => centers[galaxy].coreRadius * 0.92)
+    .attr("fill", "#070a13")
+    .attr("stroke", galaxy => galaxyMeta[galaxy].color)
+    .attr("stroke-width", 2.5)
+    .style("filter", galaxy => `drop-shadow(0 0 18px ${galaxyMeta[galaxy].color})`);
+
+  wells.each(function(galaxy) {
+    const c = centers[galaxy];
+    const useRagCard = !c.collapsed;
+    const isMarket = galaxy === "MARKET";
+    const coreWidth = isMarket ? Math.min(width - 70, 860) : Math.max(126, Math.min(300, c.coreRadius * 1.78));
+    const coreHeight = isMarket ? Math.min(height - 170, 520) : coreWidth;
+    const well = d3.select(this);
+
+    well.select(".rag-core-foreign")
+      .style("display", useRagCard ? "block" : "none")
+      .attr("x", -coreWidth / 2)
+      .attr("y", -coreHeight / 2)
+      .attr("width", coreWidth)
+      .attr("height", coreHeight);
+
+    if (useRagCard) {
+      well.select(".rag-core-card")
+        .classed("market-window-card", isMarket)
+        .html(isMarket ? marketWindowHtml() : bibleHtml(data, galaxy));
+    }
+
+    well.select(".well-label")
+      .style("display", useRagCard ? "none" : "block")
+      .attr("y", 8)
+      .style("font-size", `${Math.max(11, 16 * c.scale)}px`)
+      .style("fill", galaxyMeta[galaxy].color)
+      .text(galaxyMeta[galaxy].label);
+
+	    well.select(".well-sub")
+	      .style("display", "none")
+	      .text("");
+	  });
+  bindMarketPlanetTooltips();
+}
+
+function updateTargets(data) {
+  const counts = {};
+  const seen = {};
+  galaxyOrder.forEach(galaxy => {
+    counts[galaxy] = zoneCounts(data.filter(d => d.Galaxy_Group === galaxy));
+    seen[galaxy] = zoneOrder.reduce((acc, zone) => ({ ...acc, [zone]: 0 }), {});
+  });
+
+  data.forEach(d => {
+    const galaxy = galaxyOrder.includes(d.Galaxy_Group) ? d.Galaxy_Group : "OUTER";
+    const c = centers[galaxy] || centers.PRIMARY;
+    const zone = zoneOrder.includes(d.Quadrant) ? d.Quadrant : "Value Trap";
+    const zoneIndex = Math.max(0, zoneOrder.indexOf(zone));
+    const count = Math.max(1, counts[galaxy][zone]);
+    const idx = seen[galaxy][zone]++;
+    const baseAngle = (idx / count) * Math.PI * 2 - Math.PI / 2 + zoneIndex * 0.34;
+    const returnSkew = clamp(d.Return_90D, -80, 80) / 80 * 0.42;
+    const riskNorm = clamp(numberValue(d.Composite_Risk) / maxRisk, 0, 1);
+    const quality = clamp(d.Momentum_Quality, 0, 100) / 100;
+    const impactNorm = clamp(Math.abs(numberValue(d.Composite_Impact)) / maxImpact, 0, 1);
+    const laneSpread = ((idx % 3) - 1) * Math.max(12, d.radius * 0.52);
+    const baseRadius = c.laneRadii[zone] || c.laneRadii["Value Trap"];
+    const coreClearance = coreBoundaryRadius(d, c);
+    const nextZone = zoneOrder[zoneIndex + 1];
+    const previousZone = zoneOrder[zoneIndex - 1];
+    const laneInner = previousZone
+      ? Math.max(coreClearance, c.laneRadii[previousZone] + boundaryRadius(d) * 0.40)
+      : coreClearance;
+    const laneOuter = nextZone
+      ? Math.max(laneInner, c.laneRadii[nextZone] - boundaryRadius(d) * 0.42)
+      : baseRadius + Math.max(42, boundaryRadius(d) * 1.45);
+    const zonePull = zone === "Golden Breakout" ? -Math.max(10, boundaryRadius(d) * 0.35) : 0;
+    const candidateDistance = baseRadius + laneSpread + riskNorm * 16 + impactNorm * 11 - quality * 8 + zonePull;
+
+    d.orbitDistance = clamp(candidateDistance, laneInner, laneOuter);
+    d.anchorAngle = baseAngle + returnSkew + (galaxy === "OUTER" ? 0.22 : 0);
+    d.orbitSpeed = zoneConfig[zone].direction * zoneConfig[zone].speed * (0.82 + impactNorm * 0.36);
+    d.targetX = c.x + Math.cos(d.anchorAngle) * d.orbitDistance;
+    d.targetY = c.y + Math.sin(d.anchorAngle) * d.orbitDistance;
+
+    if (d.x === null || d.y === null || Number.isNaN(d.x) || Number.isNaN(d.y)) {
+      d.x = c.x;
+      d.y = c.y;
+    }
+  });
+}
+
+function positionTooltip(event) {
+  const ttNode = tooltip.node();
+  const ttWidth = ttNode.offsetWidth || 300;
+  const ttHeight = ttNode.offsetHeight || 210;
+  let left = event.pageX + 16;
+  let top = event.pageY - 18;
+  if (left + ttWidth > window.innerWidth + window.scrollX) left = event.pageX - ttWidth - 16;
+  if (top + ttHeight > window.innerHeight + window.scrollY) top = event.pageY - ttHeight - 16;
+  tooltip.style("left", `${Math.max(window.scrollX + 10, left)}px`).style("top", `${Math.max(window.scrollY + 10, top)}px`);
+}
+
+function showMarketPlanetTooltip(event, planetEl) {
+  const color = planetEl.dataset.color || "#80d8ff";
+  tooltip
+    .style("opacity", 1)
+    .style("border-color", color)
+    .html(`
+      <div style="font-weight:900;font-size:16px;color:${color};border-bottom:1px solid #334155;padding-bottom:8px;margin-bottom:10px;">${escapeHtml(planetEl.dataset.name || "Market Planet")}</div>
+      <div>Reading: <b>${escapeHtml(planetEl.dataset.value || "N/A")}</b></div>
+      <div>Signal: <b>${escapeHtml(planetEl.dataset.signal || "No Signal")}</b></div>
+      <div style="margin-top:8px;color:#cbd5e1;line-height:1.35;">${escapeHtml(planetEl.dataset.detail || "No interpretation available.")}</div>
+    `);
+  positionTooltip(event);
+}
+
+function bindMarketPlanetTooltips() {
+  document.querySelectorAll(".market-planet").forEach(planetEl => {
+    planetEl.addEventListener("mouseenter", event => showMarketPlanetTooltip(event, planetEl));
+    planetEl.addEventListener("mousemove", event => showMarketPlanetTooltip(event, planetEl));
+    planetEl.addEventListener("mouseleave", () => tooltip.style("opacity", 0));
+  });
+}
+
+function showTooltip(event, d, nodeElement) {
+  d3.selectAll(".coin-node .node-shell").attr("stroke-width", 3);
+  d3.select(nodeElement).select(".node-shell").attr("stroke-width", 6);
+  tooltip
+    .style("opacity", 1)
+    .style("border-color", d.Color)
+    .html(`
+      <div style="font-weight:900;font-size:16px;color:${d.Color};border-bottom:1px solid #334155;padding-bottom:8px;margin-bottom:10px;">${escapeHtml(d.Ticker)} - ${escapeHtml(d.Quadrant)}</div>
+      <div>90D Return: <b>${signedPct(d.Return_90D)}</b></div>
+      <div>Composite Risk: <b>${formatNumber(d.Composite_Risk, 1)}</b></div>
+      <div>Raw Gravity: <b>${numberValue(d.Gravity_Score).toFixed(1)}</b></div>
+      <div>Risk-Adj Momentum: <b>${numberValue(d.Risk_Adjusted_Momentum).toFixed(2)}x</b></div>
+      <div>90D Volatility: <b>${numberValue(d.Volatility_90D).toFixed(1)}%</b></div>
+      <div>Trend Quality: <b>${numberValue(d.Trend_Quality).toFixed(1)}/100</b></div>
+      <div>Move Consistency: <b>${numberValue(d.Directional_Consistency).toFixed(1)}%</b></div>
+      <div>Relative Momentum: <b>${numberValue(d.Relative_Momentum).toFixed(1)}%</b></div>
+      <div>Impact Score: <b>${numberValue(d.Composite_Impact).toFixed(1)}</b></div>
+      ${d.Market_Cap_Estimated ? '<div>Market Cap: <b>Estimated fallback</b></div>' : ''}
+    `);
+
+  positionTooltip(event);
+}
+
+function render() {
+  width = container.clientWidth || window.innerWidth;
+  height = container.clientHeight || window.innerHeight;
+  svg.attr("width", width).attr("height", height);
+  layoutCenters();
+  drawBackdrop();
+  drawZoneOrbits();
+
+  const data = visibleData();
+  renderTable(data);
+  updateTargets(data);
+  drawWells(data);
+  updateFilterLabels();
+  applyViewMode();
+  updateReservedRects();
+
+  statusLine.textContent = "";
+
+  node = nodeLayer.selectAll(".coin-node")
+    .data(data, d => d.id)
+    .join(
+      enter => {
+        const g = enter.append("g").attr("class", "coin-node").style("opacity", 0);
+
+	        g.append("circle")
+	          .attr("class", "node-shell")
+	          .attr("r", d => displayRadius(d))
+          .attr("fill", "#0f141e")
+          .attr("stroke", d => d.Color)
+          .attr("stroke-width", 3)
+          .style("filter", d => `drop-shadow(0 0 9px ${d.Color})`);
+
+	        g.append("circle")
+	          .attr("class", "node-inner")
+	          .attr("r", d => Math.max(11, displayRadius(d) * 0.68))
+          .attr("fill", "#03050a")
+          .attr("opacity", 0.94)
+          .attr("stroke", "rgba(255,255,255,.08)")
+          .attr("stroke-width", 1);
+
+        g.append("image")
+          .attr("class", d => `coin-logo${coinLogoNeedsReverse(d.Ticker) ? " reverse-logo" : ""}`)
+	          .attr("href", d => coinLogoUrl(d.Ticker))
+	          .attr("data-logo-index", "0")
+	          .attr("opacity", 0.82)
+	          .attr("x", d => -displayRadius(d) * 0.42)
+	          .attr("y", d => -displayRadius(d) * 0.62)
+	          .attr("width", d => displayRadius(d) * 0.84)
+	          .attr("height", d => displayRadius(d) * 0.84)
+          .attr("clip-path", "url(#coinLogoClip)")
+          .attr("preserveAspectRatio", "xMidYMid meet")
+          .on("error", function(event, d) {
+            if (useNextLogoSource(this, d.Ticker)) {
+              return;
+            }
+            d3.select(this).style("display", "none");
+            d3.select(this.parentNode).select(".coin-fallback").style("opacity", 1);
+          });
+
+        g.append("text")
+	          .attr("class", "coin-fallback")
+	          .attr("y", 1)
+	          .style("font-size", d => Math.min(14, Math.max(10, displayRadius(d) * 0.34)) + "px")
+          .text(d => d.Ticker);
+
+        g.append("text")
+	          .attr("class", "coin-label")
+	          .attr("y", d => displayRadius(d) + 12)
+	          .style("font-size", d => Math.min(11, Math.max(9, displayRadius(d) * 0.28)) + "px")
+          .text(d => d.Ticker);
+
+        g.append("text")
+	          .attr("class", "coin-return")
+	          .attr("y", d => Math.max(9, displayRadius(d) * 0.50))
+	          .style("fill", d => returnColor(d.Return_90D))
+	          .style("font-size", d => Math.min(11, Math.max(8, displayRadius(d) * 0.24)) + "px")
+          .text(d => signedPct(d.Return_90D));
+
+        g.on("mouseover", function(event, d) {
+          showTooltip(event, d, this);
+        });
+
+        g.on("mousemove", function(event, d) {
+          showTooltip(event, d, this);
+        });
+
+        g.on("mouseout", function() {
+          d3.select(this).select(".node-shell").attr("stroke-width", 3);
+          tooltip.style("opacity", 0);
+        });
+
+        g.on("click", (event, d) => {
+          event.stopPropagation();
+          window.parent.postMessage({
+            action: "open_asset_menu",
+            ticker: d.Ticker,
+            stats: {
+              color: d.Color,
+              quadrant: d.Quadrant,
+              risk_score: formatNumber(d.Composite_Risk, 1),
+              gravity: numberValue(d.Gravity_Score).toFixed(1),
+              dominance: numberValue(d.Dominance_Multiplier).toFixed(2),
+              twap: formatPrice(d.TWAP_Price),
+              momentum: signedPct(d.Return_90D),
+              volatility_90d: numberValue(d.Volatility_90D).toFixed(1) + "%",
+              risk_adjusted_momentum: numberValue(d.Risk_Adjusted_Momentum).toFixed(2) + "x",
+              trend_quality: numberValue(d.Trend_Quality).toFixed(1) + "/100",
+              relative_gravity: numberValue(d.Relative_Gravity).toFixed(1) + "%",
+              relative_momentum: numberValue(d.Relative_Momentum).toFixed(1) + "%",
+              impact: numberValue(d.Composite_Impact).toFixed(1)
+            }
+          }, "*");
+        });
+
+        g.transition().duration(260).style("opacity", 1);
+        return g;
+      },
+      update => update,
+	      exit => exit.transition().duration(230).style("opacity", 0).remove()
+	    );
+
+  node.select(".node-shell")
+    .attr("r", d => displayRadius(d));
+  node.select(".node-inner")
+    .attr("r", d => Math.max(11, displayRadius(d) * 0.68));
+  node.select(".coin-logo")
+    .attr("x", d => -displayRadius(d) * 0.42)
+    .attr("y", d => -displayRadius(d) * 0.62)
+    .attr("width", d => displayRadius(d) * 0.84)
+    .attr("height", d => displayRadius(d) * 0.84);
+  node.select(".coin-fallback")
+    .style("font-size", d => Math.min(14, Math.max(10, displayRadius(d) * 0.34)) + "px");
+  node.select(".coin-label")
+    .attr("y", d => displayRadius(d) + 12)
+    .style("font-size", d => Math.min(11, Math.max(9, displayRadius(d) * 0.28)) + "px");
+  node.select(".coin-return")
+    .attr("y", d => Math.max(9, displayRadius(d) * 0.50))
+    .style("font-size", d => Math.min(11, Math.max(8, displayRadius(d) * 0.24)) + "px");
+
+  simulation
+    .nodes(data)
+    .force("x", d3.forceX(d => d.targetX).strength(0.12))
+    .force("y", d3.forceY(d => d.targetY).strength(0.12))
+    .force("collide", d3.forceCollide().radius(d => boundaryRadius(d)).strength(0.98).iterations(8))
+    .alphaTarget(0.024)
+    .alpha(0.92)
+    .restart();
+}
+
+simulation.on("tick", () => {
+  const now = Date.now() * 0.001;
+  const delta = Math.min(0.05, Math.max(0.001, now - lastOrbitTick));
+  lastOrbitTick = now;
+  const data = visibleData();
+  data.forEach(d => {
+    const c = centers[d.Galaxy_Group] || centers.PRIMARY;
+    d.anchorAngle = numberValue(d.anchorAngle) + numberValue(d.orbitSpeed, 0.001) * delta * 60;
+    const precession = Math.sin(now * numberValue(d.orbitSpeed, 0.001) * 60 + d.phase) * Math.min(9, numberValue(d.orbitDistance) * 0.03);
+    const orbitDistance = Math.max(coreBoundaryRadius(d, c), numberValue(d.orbitDistance) + precession);
+    const localAngle = now * numberValue(d.microSpeed, 0.62) * numberValue(d.localOrbitDirection, 1) + d.phase;
+    d.localX = Math.cos(localAngle) * numberValue(d.microOrbitR);
+    d.localY = Math.sin(localAngle) * numberValue(d.microOrbitR);
+    d.targetX = c.x + Math.cos(d.anchorAngle) * orbitDistance;
+    d.targetY = c.y + Math.sin(d.anchorAngle) * orbitDistance;
+
+    const r = boundaryRadius(d);
+    keepOutsideCore(d, c);
+    pushOutsideReservedRects(d, r);
+    keepOutsideCore(d, c);
+    if (d.x < r) { d.x = r; d.vx *= -0.8; }
+    else if (d.x > width - r) { d.x = width - r; d.vx *= -0.8; }
+    if (d.y < r) { d.y = r; d.vy *= -0.8; }
+    else if (d.y > height - r) { d.y = height - r; d.vy *= -0.8; }
+    keepOutsideCore(d, c);
+  });
+
+  node.attr("transform", d => `translate(${numberValue(d.x) + numberValue(d.localX)},${numberValue(d.y) + numberValue(d.localY)})`);
+});
+
+svg.on("click", () => {
+  tooltip.style("opacity", 0);
+  d3.selectAll(".coin-node .node-shell").attr("stroke-width", 3);
+});
+
+document.querySelectorAll("[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.view = btn.dataset.view;
+    document.querySelectorAll("[data-view]").forEach(item => item.classList.toggle("active", item.dataset.view === state.view));
+    render();
+  });
+});
+
+document.querySelectorAll("[data-focus]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.focus = btn.dataset.focus;
+    document.querySelectorAll("[data-focus]").forEach(item => item.classList.toggle("active", item.dataset.focus === state.focus));
+    startZoneReveal();
+    render();
+  });
+});
+
+document.querySelectorAll("[data-zone-filter]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.zone = btn.dataset.zoneFilter;
+    document.querySelectorAll("[data-zone-filter]").forEach(item => item.classList.toggle("active", item.dataset.zoneFilter === state.zone));
+    tooltip.style("opacity", 0);
+    startZoneReveal();
+    render();
+  });
+});
+
+window.addEventListener("resize", () => {
+  if (state.zone === "ALL" && zoneRevealAlreadyPlayed) {
+    state.revealedZoneIndex = defaultRevealMaxIndex();
+  }
+  render();
+});
+
+startZoneReveal();
+render();
+setTimeout(() => simulation.alpha(0.2).restart(), 500);
+</script>
+</body>
+</html>

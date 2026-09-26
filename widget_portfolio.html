@@ -1,0 +1,142 @@
+
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+    body, html { margin: 0; padding: 0; overflow: hidden; width: 100vw; height: 100vh; background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    #portfolio-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; cursor: grab; } #portfolio-container:active { cursor: grabbing; }
+    #tooltip { position: absolute; opacity: 0; background-color: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 12px; color: #fff; pointer-events: none; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.8); transition: opacity 0.1s ease; min-width: 240px; }
+    .tt-header { font-size: 1.1rem; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 6px; margin-bottom: 8px; } .tt-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; } .tt-lbl { color: #94a3b8; } .tt-val { font-weight: bold; font-family: monospace; font-size: 0.9rem; }
+
+    .slider-wrapper { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px; background: rgba(7, 10, 19, 0.85); padding: 15px 25px; border-radius: 12px; border: 1px solid #334155; backdrop-filter: blur(4px); z-index: 10; }
+    .slider-labels { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8rem; color: #94a3b8; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .slider-labels span { cursor: pointer; padding: 5px; margin: -5px; transition: color 0.3s ease; }
+    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; } input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #3b82f6; cursor: pointer; margin-top: -8px; box-shadow: 0 0 10px rgba(59, 130, 246, 0.8); } input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #1e293b; border-radius: 2px; }
+
+    #widget-legend { position: absolute; top: 15px; right: 15px; background: rgba(15, 23, 42, 0.85); padding: 12px; border-radius: 8px; font-size: 12px; color: #cbd5e1; border: 1px solid #334155; z-index: 10; pointer-events: auto; backdrop-filter: blur(4px); }
+    .leg-item { margin-bottom: 5px; display: flex; align-items: center; gap: 6px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 10px; cursor: pointer; transition: 0.3s; user-select: none; } .leg-item:hover { transform: translateX(-2px); } .leg-item.dimmed { opacity: 0.3; filter: grayscale(50%); }
+    .report-link { display: inline-block; margin-top: 8px; color: #60a5fa; text-decoration: none; font-weight: bold; font-size: 12px; transition: color 0.2s; } .report-link:hover { color: #93c5fd; text-decoration: underline; }
+
+    @media (max-width: 600px) { .slider-labels { font-size: 0.6rem; } #widget-legend { top: 10px; right: 10px; padding: 8px; font-size: 10px; } }
+</style></head><body>
+    <div id="portfolio-container"><div id="tooltip"></div>
+        <div id="widget-legend">
+            <div class="leg-item" data-zone="Gem Zone" onclick="togglePortfolioFilter('Gem Zone')"><span style="color:#22c55e; font-size:16px;">●</span> Gem Zone</div>
+            <div class="leg-item" data-zone="High Yield / High Risk" onclick="togglePortfolioFilter('High Yield / High Risk')"><span style="color:#facc15; font-size:16px;">●</span> High Yield</div>
+            <div class="leg-item" data-zone="Safe Haven / Bleeding" onclick="togglePortfolioFilter('Safe Haven / Bleeding')"><span style="color:#3b82f6; font-size:16px;">●</span> Safe Haven</div>
+            <div class="leg-item" data-zone="Danger Zone" onclick="togglePortfolioFilter('Danger Zone')"><span style="color:#ef4444; font-size:16px;">●</span> Danger Zone</div>
+            <a href="https://cryptoweeklies.com/combined_portfolio_allocation.html" target="_top" class="report-link">View Full Report ↗</a>
+        </div>
+        <div class="slider-wrapper">
+            <div class="slider-labels" id="slider-labels">
+                <span onclick="setRisk(-1)">Risk-Averse</span>
+                <span onclick="setRisk(-0.5)">Conservative</span>
+                <span onclick="setRisk(0)" style="color:#fff;">Neutral</span>
+                <span onclick="setRisk(0.5)">Aggressive</span>
+                <span onclick="setRisk(1)">Degen</span>
+            </div>
+            <input type="range" id="risk-slider" min="-1" max="1" step="0.5" value="0">
+        </div>
+    </div>
+    <script>
+        let data = [{"Ticker": "TRX", "Allocation": 10.56, "MarketCap": 1000000000.0, "Safety_Raw": 0.9085494258004461, "Safety_Score": 90.9, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 48.7, "Vol_Ann": 64.2, "Sortino": 1.37}, {"Ticker": "XRP", "Allocation": 8.21, "MarketCap": 1000000000.0, "Safety_Raw": 0.7066000417250418, "Safety_Score": 70.7, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 45.8, "Vol_Ann": 84.0, "Sortino": 0.89}, {"Ticker": "BTC", "Allocation": 8.77, "MarketCap": 1000000000.0, "Safety_Raw": 0.75425700085594, "Safety_Score": 75.4, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 24.9, "Vol_Ann": 50.8, "Sortino": 0.66}, {"Ticker": "BNB", "Allocation": 9.23, "MarketCap": 1000000000.0, "Safety_Raw": 0.7938590541177781, "Safety_Score": 79.4, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 23.9, "Vol_Ann": 56.1, "Sortino": 0.56}, {"Ticker": "MKR", "Allocation": 7.34, "MarketCap": 1000000000.0, "Safety_Raw": 0.6318108340345236, "Safety_Score": 63.2, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 35.1, "Vol_Ann": 92.5, "Sortino": 0.55}, {"Ticker": "BCH", "Allocation": 7.01, "MarketCap": 1000000000.0, "Safety_Raw": 0.6026750897330491, "Safety_Score": 60.3, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 28.7, "Vol_Ann": 84.7, "Sortino": 0.52}, {"Ticker": "AAVE", "Allocation": 5.75, "MarketCap": 1000000000.0, "Safety_Raw": 0.49494113416062524, "Safety_Score": 49.5, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 35.2, "Vol_Ann": 97.2, "Sortino": 0.51}, {"Ticker": "LINK", "Allocation": 6.46, "MarketCap": 1000000000.0, "Safety_Raw": 0.5559871160146576, "Safety_Score": 55.6, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 28.2, "Vol_Ann": 85.7, "Sortino": 0.45}, {"Ticker": "DOGE", "Allocation": 5.86, "MarketCap": 1000000000.0, "Safety_Raw": 0.5039025692270266, "Safety_Score": 50.4, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 27.7, "Vol_Ann": 89.7, "Sortino": 0.44}, {"Ticker": "HBAR", "Allocation": 5.58, "MarketCap": 1000000000.0, "Safety_Raw": 0.4803086565939079, "Safety_Score": 48.0, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 20.7, "Vol_Ann": 98.9, "Sortino": 0.33}, {"Ticker": "ETH", "Allocation": 7.11, "MarketCap": 1000000000.0, "Safety_Raw": 0.6117544982449626, "Safety_Score": 61.2, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": 16.5, "Vol_Ann": 68.9, "Sortino": 0.31}, {"Ticker": "SHIB", "Allocation": 5.31, "MarketCap": 1000000000.0, "Safety_Raw": 0.4566329750032814, "Safety_Score": 45.7, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 23.7, "Vol_Ann": 111.7, "Sortino": 0.31}, {"Ticker": "LTC", "Allocation": 7.34, "MarketCap": 1000000000.0, "Safety_Raw": 0.6315877701754434, "Safety_Score": 63.2, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": 11.5, "Vol_Ann": 73.5, "Sortino": 0.19}, {"Ticker": "ETC", "Allocation": 5.45, "MarketCap": 1000000000.0, "Safety_Raw": 0.4690815472612234, "Safety_Score": 46.9, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": 7.4, "Vol_Ann": 84.3, "Sortino": 0.1}, {"Ticker": "TON", "Allocation": NaN, "MarketCap": 1000000000.0, "Safety_Raw": NaN, "Safety_Score": NaN, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": NaN, "Vol_Ann": NaN, "Sortino": NaN}]; const width = window.innerWidth; let height = window.innerHeight;
+        const svg = d3.select("#portfolio-container").append("svg").attr("width", "100%").attr("height", "100%");
+        const defs = svg.append("defs"); defs.append("clipPath").attr("id", "cClip").attr("clipPathUnits", "objectBoundingBox").append("circle").attr("cx", 0.5).attr("cy", 0.5).attr("r", 0.5);
+        let radScale = d3.scaleSqrt().domain([0, d3.max(data, d=>d.Allocation)]).range(width<600?[15,60]:[25,100]);
+        data.forEach(d=> { d.radius = radScale(d.Allocation); d.x=width/2+(Math.random()-0.5)*100; d.y=height/2+(Math.random()-0.5)*100; });
+
+        const sim = d3.forceSimulation(data).velocityDecay(0.18).alphaTarget(0.025)
+            .force("charge", d3.forceManyBody().strength(d=>-3.0*d.radius)).force("collision", d3.forceCollide().radius(d=>d.radius+3).strength(0.8).iterations(4))
+            .force("x", d3.forceX(width/2).strength(0.003)).force("y", d3.forceY(height/2).strength(0.003));
+
+        const node = svg.append("g").selectAll("g").data(data).join("g").attr("class", "bubble-node").call(d3.drag().on("start", (e,d)=>{if(!e.active)sim.alphaTarget(0.05).restart(); d.fx=d.x; d.fy=d.y;}).on("drag",(e,d)=>{d.fx=e.x; d.fy=e.y;}).on("end",(e,d)=>{if(!e.active)sim.alphaTarget(0.025); d.fx=null; d.fy=null;}));
+        node.append("circle").attr("fill", "rgba(15,23,42,0.15)").attr("stroke", d=>d.Color).attr("stroke-width",3).attr("r", d=>d.radius).style("filter", d=>`drop-shadow(0px 0px 8px ${d.Color})`);
+        node.append("image").attr("href", d=>`https://assets.coincap.io/assets/icons/${d.Ticker.toLowerCase()}@2x.png`).attr("x", d=>-(d.radius*0.8)/2).attr("y", d=>-d.radius*0.75).attr("width", d=>d.radius*0.8).attr("height", d=>d.radius*0.8).attr("clip-path","url(#cClip)");
+        node.append("text").attr("class","t1").text(d=>d.Ticker).attr("y", d=>d.radius*0.25).style("font-size", d=>Math.min(20,d.radius/2.0)+"px").attr("text-anchor","middle").style("fill","white").style("font-weight","900").style("font-family","sans-serif");
+        node.append("text").attr("class","t2").text(d=>d.Allocation.toFixed(1)+"%").attr("y", d=>d.radius*0.65).style("font-size", d=>Math.min(14,d.radius/2.5)+"px").attr("text-anchor","middle").style("fill",d=>d.Color).style("font-weight","bold").style("font-family","monospace");
+
+        const tt = d3.select("#tooltip");
+        node.on("mouseover", function(e, d) {
+            if(d3.select(this).style("opacity")<1) return;
+            d3.selectAll(".bubble-node circle").attr("stroke-width",2); d3.select(this).select("circle").attr("stroke-width",6);
+            tt.html(`<div class="tt-header" style="color:${d.Color}">${d.Ticker}</div><div class="tt-row"><span class="tt-lbl">Weight:</span><span class="tt-val" style="color:${d.Color}; font-size:1.1rem;">${d.Allocation.toFixed(2)}%</span></div><div class="tt-row"><span class="tt-lbl">Safety:</span><span class="tt-val">${d.Safety_Score.toFixed(1)}/100</span></div>`);
+            tt.style("opacity",1).style("border-color",d.Color);
+            let x=e.pageX+15; let y=e.pageY-15; if(x+250>width) x=e.pageX-265; if(y+150>height) y=e.pageY-165;
+            tt.style("left",x+"px").style("top",y+"px");
+        }).on("mouseout", function() { d3.selectAll(".bubble-node circle").attr("stroke-width",3); tt.style("opacity",0); });
+
+        let bounds = { legend: null, slider: null };
+        function updateBounds() {
+            let legEl = document.getElementById("widget-legend");
+            if(legEl) { let rect = legEl.getBoundingClientRect(); bounds.legend = { left: rect.left - 15, right: rect.right + 15, top: rect.top - 15, bottom: rect.bottom + 15 }; }
+            let slEl = document.querySelector('.slider-wrapper');
+            if(slEl) { let rect = slEl.getBoundingClientRect(); bounds.slider = { left: rect.left - 15, right: rect.right + 15, top: rect.top - 15, bottom: rect.bottom + 15 }; }
+        }
+        setTimeout(updateBounds, 100);
+
+        function resolveRectCollision(d, rect) {
+            if (!rect) return;
+            let r = d.radius + 3;
+            // If bounding box overlaps
+            if (d.x > rect.left - r && d.x < rect.right + r && d.y > rect.top - r && d.y < rect.bottom + r) {
+                let overlapLeft = (d.x + r) - rect.left;
+                let overlapRight = rect.right - (d.x - r);
+                let overlapTop = (d.y + r) - rect.top;
+                let overlapBottom = rect.bottom - (d.y - r);
+
+                let minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+                if (minOverlap === overlapLeft) { d.x = rect.left - r; d.vx *= -0.8; }
+                else if (minOverlap === overlapRight) { d.x = rect.right + r; d.vx *= -0.8; }
+                else if (minOverlap === overlapTop) { d.y = rect.top - r; d.vy *= -0.8; }
+                else if (minOverlap === overlapBottom) { d.y = rect.bottom + r; d.vy *= -0.8; }
+            }
+        }
+
+        sim.on("tick", () => {
+            let t=Date.now()/1000;
+            data.forEach((d,i)=>{
+                d.vx+=Math.sin(t+i)*0.05; d.vy+=Math.cos(t+i)*0.05;
+
+                let r=d.radius+3;
+                if(d.x<r){d.x=r;d.vx*=-0.8;}else if(d.x>width-r){d.x=width-r;d.vx*=-0.8;}
+                if(d.y<r){d.y=r;d.vy*=-0.8;}else if(d.y>height-r){d.y=height-r;d.vy*=-0.8;}
+
+                resolveRectCollision(d, bounds.legend);
+                resolveRectCollision(d, bounds.slider);
+            });
+            node.attr("transform", d=>`translate(${d.x},${d.y})`);
+        });
+
+        setTimeout(() => { sim.force("x", d3.forceX(width/2).strength(0.015)).force("y", d3.forceY(height/2).strength(0.015)).alpha(0.2).restart(); }, 500);
+
+        let actP = null;
+        window.togglePortfolioFilter = function(z) {
+            if(actP===z) { actP=null; d3.selectAll('.leg-item').classed('dimmed',false); d3.selectAll('.bubble-node').transition().style('opacity',1); }
+            else { actP=z; d3.selectAll('.leg-item').classed('dimmed', function(){return this.getAttribute('data-zone')!==z;}); d3.selectAll('.bubble-node').transition().style('opacity', d=>d.Quadrant===z?1:0.05); }
+        }
+
+        window.setRisk = function(val) {
+            const slider = document.getElementById('risk-slider');
+            slider.value = val;
+            slider.dispatchEvent(new Event('input'));
+        };
+
+        const slider = document.getElementById('risk-slider');
+        const labels = document.querySelectorAll('#slider-labels span');
+        slider.addEventListener('input', function() {
+            const R = parseFloat(this.value); let actIdx = (R+1)*2;
+            labels.forEach((l,i) => l.style.color = (i===actIdx) ? (i===4?'#ef4444':'#fff') : '#94a3b8');
+            const capE = 0.5 - (R*0.4); const safeE = 1.0 - (R*2.0);
+            let tot = 0; data.forEach(d => { d.RawWeight = Math.pow(d.MarketCap, capE) * Math.pow(Math.max(0.01, d.Safety_Raw), safeE); tot += d.RawWeight; });
+            let maxA = 0; data.forEach(d => { d.Allocation = (d.RawWeight/tot)*100; if(d.Allocation>maxA) maxA=d.Allocation; });
+            radScale.domain([0, maxA]); data.forEach(d => d.radius = radScale(d.Allocation));
+
+            node.select("circle").transition().duration(500).attr("r", d=>d.radius);
+            node.select("image").transition().duration(500).attr("x", d=>-(d.radius*0.8)/2).attr("y", d=>-d.radius*0.75).attr("width", d=>d.radius*0.8).attr("height", d=>d.radius*0.8);
+            node.select(".t1").transition().duration(500).style("font-size", d=>Math.min(20,d.radius/2.0)+"px").attr("y", d=>d.radius*0.25);
+            node.select(".t2").transition().duration(500).text(d=>d.Allocation.toFixed(1)+"%").style("font-size", d=>Math.min(14,d.radius/2.5)+"px").attr("y", d=>d.radius*0.65);
+            sim.force("collision", d3.forceCollide().radius(d=>d.radius+3).strength(0.8).iterations(4)).alpha(0.3).restart();
+        });
+
+        window.addEventListener('resize', () => { height = window.innerHeight; updateBounds(); });
+    </script>
+</body></html>

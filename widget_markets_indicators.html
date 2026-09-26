@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U.S. Stock Market Indicators</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; padding: 0; background: transparent; color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.strip {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.tile {
+    background: #0f141e; border: 1px solid #1e293b; border-radius: 10px;
+    padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 6px;
+    border-top: 2px solid var(--tile-accent); min-width: 0;
+    cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover, .tile:focus-visible {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+    outline: none;
+}
+/* No published page behind it: do not offer a click that goes nowhere. */
+.tile-inert { cursor: default; }
+.tile-inert:hover { transform: none; border-color: #1e293b; box-shadow: none; }
+.tile-head { display: flex; align-items: center; gap: 6px; }
+.tile-icon { font-size: 12px; line-height: 1; }
+.tile-title {
+    font-size: 11px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.tile-body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.value-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.score { font-size: 26px; font-weight: 900; font-family: monospace; line-height: 1; color: #fff; }
+/* Phase and status names run to "Bear Market / Accumulation" and "Guarded
+   Accumulation", which no ellipsis can shorten usefully. Wrap instead of
+   truncating: the label is the reader's only classification, and short ones
+   such as "Fear" still sit on one line. */
+.pill {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor;
+    font-family: monospace; text-align: right; line-height: 1.3; max-width: 60%;
+}
+.meter { width: 100%; height: 7px; background: #1e293b; border-radius: 4px; position: relative; overflow: hidden; }
+.meter-fill { position: absolute; inset: 0; }
+.meter-marker { position: absolute; top: 0; width: 3px; height: 100%; background: #fff; box-shadow: 0 0 6px #fff; }
+.scale { display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-family: monospace; }
+.dual { display: flex; align-items: center; gap: 8px; }
+.dual-cell { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.dual-value { font-size: 15px; font-weight: 800; font-family: monospace; color: #cbd5e1; }
+.dual-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.dual-divider { width: 1px; align-self: stretch; background: #1e293b; }
+.spark { width: 100%; height: 40px; }
+.spark-empty { font-size: 10px; color: #64748b; font-family: monospace; }
+.targets { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.target { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+.target-icon { font-size: 11px; line-height: 1; }
+.target-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.target-value { font-size: 12px; font-weight: 700; font-family: monospace; color: #cbd5e1; }
+.target-bear .target-value { color: #f87171; }
+.target-bull .target-value { color: #4ade80; }
+.target-spot .target-value { color: #fff; }
+.tile-foot { font-size: 9px; color: #64748b; font-family: monospace; border-top: 1px solid #1e293b; padding-top: 5px; }
+.strip-foot {
+    margin-top: 8px; font-size: 10px; color: #475569; font-family: monospace;
+    display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+@media (max-width: 520px) { .score { font-size: 22px; } }
+</style>
+<!-- cw:seo-noindex --><meta name="robots" content="noindex,follow" /><!-- /cw:seo-noindex -->
+</head>
+<body>
+<div class="strip"><article class="tile tile-fear_greed" style="--tile-accent:#ffb648;" data-url="https://cryptoweeklies.com/SPY_Price_Forecast_And_Analysis.html" data-title="SPY Price Forecast &amp; Analysis" data-sub="Fear &amp; Greed" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#129517;</span><span class="tile-title">Fear &amp; Greed</span></header><div class="tile-body"><div class="value-row"><span class="score">63</span><span class="pill" style="color:#ffb648;">Greed</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #ef4444, #f97316, #eab308, #4ade80, #22c55e);"></div><div class="meter-marker" style="left:62.80%;"></div></div><div class="scale"><span>0 Extreme Fear</span><span>Extreme Greed 100</span></div></div><footer class="tile-foot">30-day average 72</footer></article><article class="tile tile-peak_valley" style="--tile-accent:#00d4aa;" data-url="https://cryptoweeklies.com/SPY_Price_Forecast_And_Analysis.html" data-title="SPY Price Forecast &amp; Analysis" data-sub="Peak / Valley Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#9889;</span><span class="tile-title">Peak / Valley Risk</span></header><div class="tile-body"><div class="value-row"><span class="score">85.3%</span><span class="pill" style="color:#00d4aa;">Euphoria Risk</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #3b82f6, #22c55e, #eab308, #f59e0b, #f97316, #ef4444);"></div><div class="meter-marker" style="left:85.30%;"></div></div><div class="scale"><span>0 Safe Trough</span><span>Danger Peak 100</span></div></div><footer class="tile-foot">Lagging confirmation 85.3</footer></article><article class="tile tile-macro_risk" style="--tile-accent:#10b981;" data-url="https://cryptoweeklies.com/SPY_Composite_SMA_Risk.html" data-title="SPY Composite SMA Risk" data-sub="Macro Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128208;</span><span class="tile-title">Macro Risk</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#ef4444;">84</span><span class="pill" style="color:#ef4444;">Overextended</span></div><div class="dual"><div class="dual-cell"><span class="dual-value">81</span><span class="dual-label">20W</span></div><div class="dual-divider"></div><div class="dual-cell"><span class="dual-value">86</span><span class="dual-label">100W / 200W</span></div></div></div><footer class="tile-foot">Weekly SMA z-score sigmoid composite</footer></article><article class="tile tile-roi" style="--tile-accent:#eab308;" data-url="https://cryptoweeklies.com/SPY_Price_Forecast_And_Analysis.html" data-title="SPY Price Forecast &amp; Analysis" data-sub="Year-to-Date ROI" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128200;</span><span class="tile-title">Year-to-Date ROI</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#22c55e;">+13.79%</span><span class="pill" style="color:#eab308;">SPY YTD</span></div><div class="spark"><svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:100%;overflow:visible;" aria-hidden="true"><path d="M 0.0,24.9 0.6,24.0 1.3,23.1 1.9,23.6 2.5,23.6 3.1,22.7 3.8,22.4 4.4,23.4 5.0,23.0 5.7,23.2 6.3,26.0 6.9,24.4 7.5,23.7 8.2,23.6 8.8,22.4 9.4,22.4 10.1,22.7 10.7,23.1 11.3,22.4 11.9,23.6 12.6,26.0 13.2,23.4 13.8,22.7 14.5,23.1 15.1,23.1 15.7,25.3 16.4,25.2 17.0,24.2 17.6,24.6 18.2,23.6 18.9,25.0 19.5,24.0 20.1,22.8 20.8,23.6 21.4,24.2 22.0,25.5 22.6,24.5 23.3,25.3 23.9,27.1 24.5,25.9 25.2,26.3 25.8,28.4 26.4,29.2 27.0,27.8 27.7,27.4 28.3,29.3 28.9,29.7 29.6,30.2 30.2,30.7 30.8,29.9 31.4,32.3 32.1,34.6 32.7,35.0 33.3,31.2 34.0,30.1 34.6,29.5 35.2,29.4 35.8,26.0 36.5,25.2 37.1,25.3 37.7,22.2 38.4,21.1 39.0,20.7 39.6,19.0 40.3,19.3 40.9,20.2 41.5,18.8 42.1,18.2 42.8,17.9 43.4,18.7 44.0,18.7 44.7,17.2 45.3,16.8 45.9,17.4 46.5,14.1 47.2,14.6 47.8,13.3 48.4,13.0 49.1,13.2 49.7,12.4 50.3,13.0 50.9,13.1 51.6,14.1 52.2,12.6 52.8,12.3 53.5,11.7 54.1,10.7 54.7,9.9 55.3,9.5 56.0,9.1 56.6,8.8 57.2,9.9 57.9,9.4 58.5,13.4 59.1,13.5 59.7,15.8 60.4,13.3 61.0,12.5 61.6,9.8 62.3,10.7 62.9,12.7 63.5,11.6 64.2,13.8 64.8,13.9 65.4,13.6 66.0,14.7 66.7,12.3 67.3,11.3 67.9,11.5 68.6,10.1 69.2,10.9 69.8,11.4 70.4,10.1 71.1,9.4 71.7,10.0 72.3,9.4 73.0,10.3 73.6,11.8 74.2,12.0 74.8,10.8 75.5,12.8 76.1,12.7 76.7,12.7 77.4,12.3 78.0,14.6 78.6,12.1 79.2,11.0 79.9,6.0 80.5,6.3 81.1,6.6 81.8,5.6 82.4,5.7 83.0,6.2 83.6,5.8 84.3,5.0 84.9,5.8 85.5,6.8 86.2,6.5 86.8,7.8 87.4,7.2 88.1,7.1 88.7,7.1 89.3,6.1 89.9,6.4 90.6,6.9 91.2,8.0 91.8,7.3 92.5,6.3 93.1,7.1 93.7,7.9 94.3,8.8 95.0,7.5 95.6,8.2 96.2,8.9 96.9,7.8 97.5,7.6 98.1,5.2 98.7,5.2 99.4,6.4 100.0,5.6 L 100,40 L 0,40 Z" fill="#22c55e26" stroke="none"></path><path d="M 0.0,24.9 0.6,24.0 1.3,23.1 1.9,23.6 2.5,23.6 3.1,22.7 3.8,22.4 4.4,23.4 5.0,23.0 5.7,23.2 6.3,26.0 6.9,24.4 7.5,23.7 8.2,23.6 8.8,22.4 9.4,22.4 10.1,22.7 10.7,23.1 11.3,22.4 11.9,23.6 12.6,26.0 13.2,23.4 13.8,22.7 14.5,23.1 15.1,23.1 15.7,25.3 16.4,25.2 17.0,24.2 17.6,24.6 18.2,23.6 18.9,25.0 19.5,24.0 20.1,22.8 20.8,23.6 21.4,24.2 22.0,25.5 22.6,24.5 23.3,25.3 23.9,27.1 24.5,25.9 25.2,26.3 25.8,28.4 26.4,29.2 27.0,27.8 27.7,27.4 28.3,29.3 28.9,29.7 29.6,30.2 30.2,30.7 30.8,29.9 31.4,32.3 32.1,34.6 32.7,35.0 33.3,31.2 34.0,30.1 34.6,29.5 35.2,29.4 35.8,26.0 36.5,25.2 37.1,25.3 37.7,22.2 38.4,21.1 39.0,20.7 39.6,19.0 40.3,19.3 40.9,20.2 41.5,18.8 42.1,18.2 42.8,17.9 43.4,18.7 44.0,18.7 44.7,17.2 45.3,16.8 45.9,17.4 46.5,14.1 47.2,14.6 47.8,13.3 48.4,13.0 49.1,13.2 49.7,12.4 50.3,13.0 50.9,13.1 51.6,14.1 52.2,12.6 52.8,12.3 53.5,11.7 54.1,10.7 54.7,9.9 55.3,9.5 56.0,9.1 56.6,8.8 57.2,9.9 57.9,9.4 58.5,13.4 59.1,13.5 59.7,15.8 60.4,13.3 61.0,12.5 61.6,9.8 62.3,10.7 62.9,12.7 63.5,11.6 64.2,13.8 64.8,13.9 65.4,13.6 66.0,14.7 66.7,12.3 67.3,11.3 67.9,11.5 68.6,10.1 69.2,10.9 69.8,11.4 70.4,10.1 71.1,9.4 71.7,10.0 72.3,9.4 73.0,10.3 73.6,11.8 74.2,12.0 74.8,10.8 75.5,12.8 76.1,12.7 76.7,12.7 77.4,12.3 78.0,14.6 78.6,12.1 79.2,11.0 79.9,6.0 80.5,6.3 81.1,6.6 81.8,5.6 82.4,5.7 83.0,6.2 83.6,5.8 84.3,5.0 84.9,5.8 85.5,6.8 86.2,6.5 86.8,7.8 87.4,7.2 88.1,7.1 88.7,7.1 89.3,6.1 89.9,6.4 90.6,6.9 91.2,8.0 91.8,7.3 92.5,6.3 93.1,7.1 93.7,7.9 94.3,8.8 95.0,7.5 95.6,8.2 96.2,8.9 96.9,7.8 97.5,7.6 98.1,5.2 98.7,5.2 99.4,6.4 100.0,5.6" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path><circle cx="100.0" cy="5.6" r="2.5" fill="#fff" stroke="#22c55e" stroke-width="1.5"></circle></svg></div></div><footer class="tile-foot">Through 2026-09-25</footer></article><article class="tile tile-bull_bear" style="--tile-accent:#4ade80;" data-url="https://cryptoweeklies.com/SPY_Price_Forecast_And_Analysis.html" data-title="SPY Price Forecast &amp; Analysis" data-sub="Bull / Bear Targets" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128002;</span><span class="tile-title">Bull / Bear Targets</span></header><div class="tile-body"><div class="value-row"><span class="score" style="font-size:20px;">$846.66</span><span class="pill" style="color:#FACC15;">Bull Phase Expansion</span></div><div class="targets"><div class="target target-bear"><span class="target-icon">&#128060;</span><span class="target-value">$749.83</span></div><div class="target target-spot"><span class="target-label">Spot</span><span class="target-value">$770.64</span></div><div class="target target-bull"><span class="target-icon">&#128002;</span><span class="target-value">$957.81</span></div></div></div><footer class="tile-foot">26-week base: 15/16 assets positive</footer></article></div>
+<div class="strip-foot"><span>Reference: S&amp;P 500 SPDR ETF</span><span>16 assets &middot; market close 2026-09-25</span></div>
+<script>
+(function () {
+    var last = 0;
+    function report() {
+        var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
+        if (!height || Math.abs(height - last) < 2) return;
+        last = height;
+        try {
+            parent.postMessage({ action: 'cw_widget_height', height: height }, '*');
+        } catch (error) {
+            return;
+        }
+    }
+    window.addEventListener('load', report);
+    window.addEventListener('resize', report);
+    window.addEventListener('message', function (event) {
+        if (!event.data || event.data.action !== 'cw_widget_measure') return;
+        last = 0;
+        report();
+        // The host asks the moment it reveals the view, which can precede the
+        // relayout. Measure again once the frame has been painted at its real
+        // width; this is a no-op when the first answer was already right.
+        if (window.requestAnimationFrame) window.requestAnimationFrame(report);
+    });
+    function openTile(tile) {
+        // The destination is resolved and existence-checked at build time; a
+        // tile with no data-url has no published page behind it and stays inert.
+        var url = tile && tile.getAttribute('data-url');
+        if (!url) return;
+        try {
+            parent.postMessage({
+                action: 'open-chart',
+                url: url,
+                title: tile.getAttribute('data-title') || '',
+                sub: tile.getAttribute('data-sub') || ''
+            }, '*');
+        } catch (err) {}
+    }
+    document.addEventListener('click', function (e) {
+        openTile(e.target.closest('.tile[data-url]'));
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var tile = e.target.closest && e.target.closest('.tile[data-url]');
+        if (!tile) return;
+        e.preventDefault();
+        openTile(tile);
+    });
+    if (window.ResizeObserver) {
+        new ResizeObserver(report).observe(document.body);
+    }
+    report();
+})();
+</script>
+</body>
+</html>

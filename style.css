@@ -1,0 +1,1941 @@
+html {
+    overflow-y: scroll !important;
+}
+/* Material Symbols - Outlined (M3 Icons) */
+
+/* ============================================
+   FinTech-Dark M3 Theme - Terminal Edition
+   ============================================ */
+
+:root {
+  /* M3 Color System */
+  --md-sys-color-primary: #00d4aa;
+  --md-sys-color-primary-container: #003d32;
+  --md-sys-color-on-primary: #003d32;
+  --md-sys-color-on-primary-container: #6effd8;
+  --md-sys-color-secondary: #8ac1b8;
+  --md-sys-color-secondary-container: #1e3a35;
+  --md-sys-color-on-secondary: #1e3a35;
+  --md-sys-color-on-secondary-container: #a6ddd3;
+  --md-sys-color-tertiary: #e6c48c;
+  --md-sys-color-tertiary-container: #4a3c1e;
+  --md-sys-color-on-tertiary: #4a3c1e;
+  --md-sys-color-on-tertiary-container: #ffdfa6;
+  --md-sys-color-error: #ff5a5a;
+  --md-sys-color-error-container: #3d1414;
+  --md-sys-color-on-error: #3d1414;
+  --md-sys-color-on-error-container: #ffb4ab;
+  
+  /* M3 Dark Theme Surface System */
+  --md-sys-color-background: #0a0e14;
+  --md-sys-color-surface: #111820;
+  --md-sys-color-surface-dim: #0d1117;
+  --md-sys-color-surface-bright: #1a2332;
+  --md-sys-color-surface-container-lowest: #080b10;
+  --md-sys-color-surface-container-low: #0f151c;
+  --md-sys-color-surface-container: #1a2332;
+  --md-sys-color-surface-container-high: #242f3f;
+  --md-sys-color-surface-container-highest: #2f3b4d;
+  
+  /* On-surface colors */
+  --md-sys-color-on-background: #e6edf5;
+  --md-sys-color-on-surface: #e6edf5;
+  --md-sys-color-on-surface-variant: #9ba8b8;
+  --md-sys-color-outline: #2d3a4d;
+  --md-sys-color-outline-variant: #3d4d63;
+  
+  /* FinTech Semantic Colors */
+  --fintech-positive: #00d4aa;
+  --fintech-positive-muted: rgba(0, 212, 170, 0.15);
+  --fintech-negative: #ff5a5a;
+  --fintech-negative-muted: rgba(255, 90, 90, 0.15);
+  --fintech-warning: #ffb648;
+  --fintech-warning-muted: rgba(255, 182, 72, 0.15);
+  --fintech-info: #4da6ff;
+  --fintech-info-muted: rgba(77, 166, 255, 0.15);
+  --fintech-neutral: #7a8a9d;
+  
+  /* Legacy Variables */
+  --ticker-bg: var(--md-sys-color-surface-container-lowest);
+  --bg: var(--md-sys-color-background);
+  --panel: var(--md-sys-color-surface);
+  --ink: var(--md-sys-color-on-surface);
+  --muted: var(--md-sys-color-on-surface-variant);
+  --accent: var(--md-sys-color-primary);
+  --border: var(--md-sys-color-outline);
+  
+  /* M3 Elevations */
+  --md-sys-elevation-level1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+  --md-sys-elevation-level2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+  --md-sys-elevation-level3: 0 1px 3px rgba(0,0,0,0.3), 0 4px 8px 3px rgba(0,0,0,0.15);
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-full: 9999px;
+}
+
+/* === ABSOLUTE EDGE-TO-EDGE RESET === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === Accessibility helpers === */
+
+/* Available to screen readers and to search engines, never painted. Not
+   `display: none`, which would remove it from the accessibility tree too. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard users land on this first and can jump past the ticker, the brand
+   bar and the whole sidebar. It stays off-screen until it takes focus. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 8px;
+  z-index: 10002;
+  padding: 10px 16px;
+  border-radius: 0 0 8px 8px;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  /* Offset by the element's own height rather than a percentage of the
+     containing block, which resolves to zero here and left it on screen. */
+  transform: translateY(-200%);
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* === Header (Flush to Edges) === */
+
+
+/* === 100% MAXIMUM VIEWPORT LAYOUT === */
+
+
+
+/* === The Strictly Locked Desktop Sidebar === */
+.sidebar {
+  width: 250px; min-width: 250px; flex-shrink: 0; 
+  position: -webkit-sticky; position: sticky; top: 15px; 
+  height: calc(100vh - 30px); align-self: flex-start; 
+  overflow-y: auto; overflow-x: hidden; 
+  background: var(--md-sys-color-surface); 
+  border: 1px solid var(--md-sys-color-outline); border-radius: 12px; 
+  padding: 20px 14px; display: flex; flex-direction: column; gap: 8px;
+  box-shadow: var(--md-sys-elevation-level2); z-index: 100;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--md-sys-color-outline); border-radius: 4px; }
+
+.sidebar-section-title {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--md-sys-color-primary);
+  margin-top: 14px; margin-bottom: 2px; padding-left: 8px; font-weight: 700;
+}
+.sidebar-section-title:first-child { margin-top: 0; }
+
+.sidebar-link {
+  display: block; color: var(--md-sys-color-on-surface-variant); text-decoration: none;
+  font-size: 14px; font-weight: 500; padding: 10px 12px; border-radius: 8px;
+  transition: all 0.2s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  background: rgba(88, 166, 255, 0.1); color: var(--accent); transform: translateX(5px);
+}
+
+/* === Mobile Hamburger Menu & Overlay === */
+
+/* === Single Page Application (SPA) Views === */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === Dynamic Chart Viewer === */
+
+/* === Professional Data Tables (Markdown Injected) === */
+.data-table-view table th:first-child,
+.data-table-view table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: var(--md-sys-color-surface);
+    z-index: 2;
+    border-right: 1px solid var(--md-sys-color-outline);
+}
+
+/* The absolute top-left corner cell must sit above both the scrollable rows AND the scrollable header */
+.data-table-view thead th:first-child {
+    z-index: 12; 
+    background-color: #1a1d24;
+}
+
+/* === Tickers === */
+.ticker-bull { background-color: rgba(22, 163, 74, 0.15) !important; border-bottom: 1px solid rgba(22, 163, 74, 0.4) !important; width: 100%; top: 0; }
+.ticker-bear { background-color: rgba(220, 38, 38, 0.15) !important; border-bottom: 1px solid rgba(220, 38, 38, 0.4) !important; width: 100%; top: 40px; }
+.ticker-bear .ticker__track { animation-duration: 30s; }
+.ticker__item { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 9999px; border: 1px solid var(--md-sys-color-outline); background: var(--md-sys-color-surface); font-weight: 600; font-size: 14px; }
+.ticker-bear .ticker__item { border-color: var(--fintech-negative-muted); background: rgba(30, 10, 10, 0.8); }
+@keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* === Inputs & Buttons === */
+input[type="text"] {
+  background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); border: none; border-bottom: 2px solid var(--md-sys-color-outline); padding: 16px; border-radius: 4px 4px 0 0; font-size: 16px; width: 100%;
+}
+input[type="text"]:focus { outline: none; border-bottom-color: var(--md-sys-color-primary); }
+.btn-sliced {
+  position: relative; background: transparent; color: var(--md-sys-color-primary); font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 12px 28px; border: 2px solid var(--md-sys-color-primary); cursor: pointer; outline: none; transition: color 0.3s;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+.btn-sliced::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--md-sys-color-primary); z-index: -1; transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.3s;
+}
+.btn-sliced:hover { color: var(--md-sys-color-on-primary); }
+.btn-sliced:hover::before { transform: scaleX(1); }
+
+/* === Widget Dashboard Grid === */
+.widget-dashboard {
+    max-width: 100%; /* Changed from 1200px to expand edge-to-edge */
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+}
+.widget-container { display: flex; flex-direction: column; gap: 8px; }
+.cloud-widget { grid-column: 1 / -1; }
+.widget-window {
+    position: relative;
+    width: 100%;
+    /* Change fixed height to fluid aspect ratio */
+    aspect-ratio: 16 / 9; 
+    max-height: 80vh;
+    background: #000;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.cloud-widget .widget-window { height: 420px; }
+.perfect-iframe { width: 100%; height: 100%; border: none; overflow: hidden; }
+.perfect-image { width: 100%; height: 100%; object-fit: contain !important; display: block; }
+.widget-title { font-size: 14px; font-weight: 600; color: var(--md-sys-color-primary); text-transform: uppercase; padding-left: 4px; }
+
+/* === Cards === */
+.card {
+  background: var(--md-sys-color-surface);
+  border: 1px solid var(--md-sys-color-outline);
+  padding: clamp(16px, 2%, 24px);
+  border-radius: var(--md-sys-shape-corner-large);
+  margin-bottom: 24px;
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.mono-text { font-family: 'Roboto Mono', monospace; }
+.muted { color: var(--md-sys-color-on-surface-variant); }
+
+/* === Footer === */
+footer {
+  border-top: 1px solid var(--md-sys-color-outline);
+  text-align: center;
+  padding: 32px 24px;
+  color: var(--md-sys-color-on-surface-variant);
+  background: var(--md-sys-color-surface);
+  margin-top: 48px;
+}
+
+/* === Responsive Rules === */
+@media (max-width: 950px) {
+  .mobile-menu-btn { display: flex; }
+  .page-layout { display: block; padding: 10px; }
+  .sidebar {
+      position: fixed; top: 0; left: -320px; width: 280px; height: 100vh;
+      border-radius: 0; border: none; border-right: 1px solid var(--md-sys-color-outline);
+      z-index: 10000; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); margin: 0;
+      background-color: #0d1117 !important; 
+      box-shadow: 5px 0 25px rgba(0,0,0,0.8);
+      padding-top: 60px; gap: 14px;
+  }
+  .sidebar.open { left: 0; }
+  .sidebar-overlay.open { display: block; }
+  .nav-text::before {
+    content: '';
+    position: absolute;
+    left: -15px; /* Spans backward across the empty gap */
+    top: 0;
+    width: 15px;
+    height: 100%;
+}
+
+}
+
+@media (max-width: 480px) { 
+  header h1 { display: none; } 
+  .ticker__item { padding-right: 20px; }
+}
+/* ===========================================
+   Matrix View Selector (Story Mode Toggles)
+   =========================================== */
+/* --- Matrix View Selector (Story Mode Toggles) --- */
+.view-selector-container {
+    display: flex;
+    justify-content: center; /* Centered on Desktop */
+    gap: 12px;
+    margin-bottom: 20px;
+    
+    /* NEW: Force single line and allow horizontal scrolling */
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+/* Hide scrollbar Chrome/Safari */
+.view-selector-container::-webkit-scrollbar { 
+    display: none; 
+}
+
+.view-btn {
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface-variant);
+    border: 1px solid var(--md-sys-color-outline);
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    flex: 0 0 auto; /* Prevent buttons from shrinking on mobile */
+    white-space: nowrap; /* Prevent text wrapping inside buttons */
+}
+
+.view-btn:hover {
+    background: var(--md-sys-color-surface-container-high);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.view-btn.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border-color: #3b82f6;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+    .view-selector-container {
+        justify-content: flex-start;
+        padding-bottom: 5px;
+    }
+    .view-btn { 
+        padding: 10px 18px; 
+        font-size: 0.85rem; 
+    }
+}
+
+/* Institutional Tabular Nums & Sticky Anchors */
+table td, .ticker__value, .mono-text {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ========================================================
+   AREA 4: RESPONSIVE SCAFFOLDING & SCREENER SCROLL MASKS
+   ======================================================== */
+
+/* 1. Frozen Top Header Row (Vertical Scanning Lock) */
+.data-table-view thead th {
+    position: sticky;
+    top: 0;
+    background-color: #1a1d24;
+    color: var(--md-sys-color-primary);
+    z-index: 10;
+    border-bottom: 2px solid var(--md-sys-color-outline);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+}
+
+/* 2. Dedicated Horizontally Scrolling Track */
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+    border-radius: 8px;
+}
+
+/* 3. Right-Side GPU Gradient Mask (Signals Off-Screen Columns on Mobile/Tablet) */
+@media (max-width: 1024px) {
+    .table-scroll {
+        mask-image: linear-gradient(to right, black calc(100% - 35px), transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, black calc(100% - 35px), transparent 100%);
+    }
+}
+
+/* --- Restored Physics-Safe Widget Containment --- */
+.fluid-widget-container {
+    position: relative;
+    width: 100%;
+    /* Reverted from aspect-ratio to guarantee massive vertical space */
+    height: 75vh; 
+    min-height: 680px; /* Absolute mathematical floor so 50+ D3 bubbles never crush */
+    background: #000;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Mobile: Keep it tall so bubbles stack vertically instead of squashing */
+@media (max-width: 768px) {
+    .fluid-widget-container {
+        height: 85vh; 
+        min-height: 600px;
+    }
+}
+
+/* === Standalone galaxy dashboard views ===
+   The Quantum, AI, Bitcoin-equities and Crypto-pairs views contain nothing but
+   their dashboard, so any height short of the viewport reads as dead black
+   space underneath it. Each previously carried its own inline height (85vh or
+   80vh) with a min-height of 700-800px, which on a 720px-tall window both
+   overflowed the fold and still left a gap on taller ones.
+
+   The Crypto galaxy avoids this because resizeMatrixShell() measures its top
+   edge and sizes it at runtime; this fills the same space declaratively. The
+   offset covers the 40px sticky ticker plus the page-layout padding, and the
+   floor is low enough that a short window shrinks rather than overflows. */
+.galaxy-viewport {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 65px);
+    min-height: 480px;
+    background: #03050a;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.galaxy-viewport > iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+@media (max-width: 950px) {
+    .galaxy-viewport { height: calc(100dvh - 56px); }
+}
+
+/* === Flagship synthesis bar + galaxy, as one column ===
+   .galaxy-viewport's height is a flat calc against the viewport, not a
+   measurement, so a sibling placed above it does not come out of the galaxy --
+   it pushes the galaxy down and the page scrolls by exactly the bar's height.
+   The stack takes over that calc and the viewport flexes into whatever is
+   left, which holds the pair at the footprint the galaxy had on its own at
+   every width, with no resize handler to keep in step.
+
+   The view itself cannot be the flex column: switchView reveals it with an
+   inline display:block, and an inline declaration beats any display:flex the
+   stylesheet asks for, at any specificity. */
+.galaxy-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: calc(100dvh - 65px);
+    min-height: 480px;
+}
+/* min-height:0 because a flex item defaults to min-height:auto, which refuses
+   to shrink below the iframe's intrinsic height and puts the overflow back. */
+.galaxy-stack > .galaxy-viewport {
+    height: auto;
+    min-height: 0;
+    flex: 1 1 auto;
+}
+@media (max-width: 950px) {
+    .galaxy-stack { height: calc(100dvh - 56px); }
+}
+/* Presentation mode sets the viewport height with !important, which would
+   otherwise beat the flex sizing above and reintroduce the overflow in the one
+   mode that has the least room to spare. */
+body.presentation-mode .galaxy-stack {
+    height: calc(100dvh - 56px);
+    min-height: 0;
+}
+body.presentation-mode .galaxy-stack > .galaxy-viewport {
+    height: auto !important;
+    min-height: 0 !important;
+}
+@media (max-width: 950px) {
+    body.presentation-mode .galaxy-stack { height: calc(100dvh - 34px); }
+}
+
+/* Per-sector indicator strip (Fear & Greed, Peak/Valley, Macro Risk, ROI,
+   Bull/Bear) shown above each stock galaxy.
+
+   The strip is an iframe, so it cannot size itself to its content the way a
+   block element would, and its tile grid reflows from five columns to one. The
+   document reports its own height on load and resize and the host applies it;
+   these heights are the pre-message fallback, chosen to match the row count at
+   each breakpoint so the correction is not visible as a jump. */
+.indicator-strip {
+    width: 100%;
+    height: 160px;
+    margin-bottom: 12px;
+}
+.indicator-strip > iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+@media (max-width: 1080px) {
+    .indicator-strip { height: 300px; }
+}
+@media (max-width: 660px) {
+    .indicator-strip { height: 430px; }
+}
+@media (max-width: 440px) {
+    .indicator-strip { height: 700px; }
+}
+body.presentation-mode .indicator-strip { display: none; }
+
+/* Cross-fade iframe layers (Leave these untouched) */
+.matrix-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+    transition: opacity 0.4s ease-in-out;
+}
+.matrix-layer.hidden {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+.matrix-layer.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+/* === YouTube / Presentation Mode === */
+.presentation-toggle {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid var(--md-sys-color-outline);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--md-sys-color-on-surface-variant);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+.presentation-toggle:hover,
+body.presentation-mode .presentation-toggle {
+    color: #ffffff;
+    border-color: rgba(0, 212, 170, 0.7);
+    background: rgba(0, 212, 170, 0.16);
+    box-shadow: 0 0 18px rgba(0, 212, 170, 0.22);
+}
+.presentation-toggle .nav-icon {
+    font-size: 18px !important;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+}
+body.presentation-mode .ticker-track-window,
+body.presentation-mode .floating-ai-shell,
+body.presentation-mode footer,
+body.presentation-mode .app-smart-banner,
+body.presentation-mode .header-app-cta,
+body.presentation-mode #topBtn {
+    display: none !important;
+}
+body.presentation-mode .ticker { height: 38px; }
+body.presentation-mode .page-layout {
+    padding: 6px;
+    gap: 6px;
+}
+body.presentation-mode .sidebar {
+    top: 6px;
+    height: calc(100dvh - 12px);
+}
+body.presentation-mode .fluid-widget-container {
+    height: calc(100dvh - 50px) !important;
+    min-height: 0 !important;
+    border-radius: 10px;
+}
+body.presentation-mode .galaxy-viewport {
+    height: calc(100dvh - 56px) !important;
+    min-height: 0 !important;
+}
+@media (max-width: 950px) {
+    .presentation-toggle-label { display: none; }
+    body.presentation-mode .ticker {
+        height: 34px;
+        padding: 0 8px;
+    }
+    body.presentation-mode .ticker-brand {
+        border-right: 0;
+        padding-right: 0;
+    }
+    body.presentation-mode .page-layout { padding: 0; }
+    body.presentation-mode .sidebar:not(.open) { left: -320px; }
+    body.presentation-mode .fluid-widget-container,
+    body.presentation-mode .galaxy-viewport {
+        height: calc(100dvh - 34px) !important;
+        border-radius: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
+}
+
+/* === Classic Report Library === */
+.classic-view-subtitle {
+    margin: -4px 0 16px;
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 13px;
+    line-height: 1.5;
+}
+.classic-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.classic-search-box {
+    flex: 1 1 360px;
+    min-width: min(100%, 260px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid var(--md-sys-color-outline);
+    background: var(--md-sys-color-surface-container-low, #070a13);
+}
+.classic-search-box .nav-icon {
+    font-size: 20px !important;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+}
+#classic-search {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--md-sys-color-on-surface);
+    font: inherit;
+    font-size: 14px;
+}
+.classic-search-count {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.classic-report-title {
+    margin: 0 0 10px;
+    color: var(--md-sys-color-secondary);
+    font-size: 15px;
+    letter-spacing: 0;
+}
+.classic-extra-tables {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 18px;
+}
+.classic-report-section { scroll-margin-top: 56px; }
+.classic-report-section[hidden] { display: none !important; }
+.classic-empty-state {
+    display: none;
+    margin-top: 14px;
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 13px;
+    border: 1px dashed var(--md-sys-color-outline);
+    border-radius: 12px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+}
+.classic-empty-state.visible { display: block; }
+.about-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+.about-action-link.youtube {
+    background: rgba(255, 85, 85, 0.1);
+    color: #ff5555;
+    border: 1px solid rgba(255, 85, 85, 0.3);
+}
+.about-action-link.youtube:hover { background: rgba(255, 85, 85, 0.2); }
+.about-action-link.email {
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+}
+.about-action-link.email:hover { opacity: 0.82; }
+.modal-analysis-btn {
+    background: rgba(255,255,255,0.05);
+    color: var(--analysis-color);
+    border: 1px solid var(--analysis-color);
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+.modal-analysis-btn:hover { background: rgba(255,255,255,0.1); }
+
+
+/* ==========================================================================
+   Merged from the inline <style> block that used to live in index.html.
+
+   That block was loaded after this file, so its rules won the cascade at equal
+   specificity - which meant edits to the selectors below silently did nothing.
+   The content is appended here verbatim, preserving the original order, so the
+   rendered result is unchanged and this file is now the single source of truth.
+
+   Some selectors are intentionally declared twice: the earlier declaration
+   supplies properties the later one does not override. Those are marked with
+   "kept: overridden below" where they appear.
+   ========================================================================== */
+  /* --- ABSOLUTE EDGE-TO-EDGE RESET & M3 GLOBAL TYPE --- */
+  body, html {
+      margin: 0; padding: 0;
+      width: 100%; max-width: 100%;
+      overflow-x: hidden;
+      background-color: var(--md-sys-color-background);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+  main {
+      width: 100%; max-width: 100%;
+      margin: 0; padding: 0; display: block;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--md-sys-color-surface-container-lowest); }
+  ::-webkit-scrollbar-thumb { background: var(--md-sys-color-outline-variant, #1e293b); border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--md-sys-color-outline, #475569); }
+
+ /* --- Unified Ticker Styles --- */
+  .ticker { position: sticky; z-index: 1100; background: var(--md-sys-color-surface-container-lowest); border-bottom: 1px solid var(--md-sys-color-outline); overflow: hidden; white-space: nowrap; height: 40px; display: flex; align-items: center; gap: 14px; width: 100%; top: 0; box-sizing: border-box; padding: 0 14px; }
+  .ticker-brand { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; height: 100%; border-right: 1px solid var(--md-sys-color-outline); padding-right: 14px; background: var(--md-sys-color-surface-container-lowest); z-index: 2; }
+  .ticker-brand-home { display: inline-flex; align-items: center; gap: 8px; color: #fff; background: transparent; border: 0; padding: 0; cursor: pointer; font-weight: 900; font-size: 15px; font-family: inherit; }
+  .ticker-brand-home img { width: 24px; height: 24px; border-radius: 5px; }
+  .ticker-track-window { flex: 1 1 auto; overflow: hidden; height: 100%; display: flex; align-items: center; min-width: 0; }
+  .ticker__track { display: inline-flex; gap: 16px; align-items: center; animation: ticker-scroll 45s linear infinite; padding-left: max(24px, 10vw); }
+  .ticker:hover .ticker__track { animation-play-state: paused; }
+  .ticker__item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--md-sys-color-outline); font-weight: 600; font-size: 13px; }
+  .ticker__item img { width: 16px; height: 16px; border-radius: 9999px; }
+  .ticker__label { color: var(--md-sys-color-on-surface-variant); font-weight: 500; margin-left: 2px; }
+  
+  /* Pill Variants to Distinguish Bull vs Bear */
+  .item-bull { background: rgba(22, 163, 74, 0.08); border-color: rgba(22, 163, 74, 0.3); }
+  .item-bear { background: rgba(220, 38, 38, 0.08); border-color: rgba(220, 38, 38, 0.3); }
+  @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* --- Ultra-Slim Header --- */
+  header { 
+      padding: 2px 15px; /* Razor thin padding */
+      width: 100%; 
+      box-sizing: border-box; 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--md-sys-color-surface-container);
+      border-bottom: 1px solid var(--md-sys-color-outline);
+      position: relative;
+      min-height: 36px; /* Forces minimum vertical thickness */
+  }
+  .header-controls { display: flex; align-items: center; gap: 16px; }
+  .header-quick-links { display: flex; gap: 12px; align-items: center; font-size: 12px; }
+  .header-quick-links a { text-decoration: none; font-weight: 600; transition: opacity 0.2s; }
+  .header-quick-links a:hover { opacity: 0.8; }
+
+/* --- Floating AI Box (Fortified against style.css) --- */
+  .floating-ai-shell {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 12000;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+      pointer-events: none;
+  }
+  .header-ai-box {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(7, 10, 19, 0.94); /* Premium translucent background */
+      padding: 0 12px; border-radius: 20px;
+      border: 1px solid var(--md-sys-color-outline);
+      height: 36px; /* Strict outer height limit */
+      box-sizing: border-box;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      pointer-events: auto;
+  }
+  .header-ai-input {
+      background: transparent !important; 
+      border: none !important; 
+      color: white !important;
+      font-size: 13px !important; 
+      width: 86px !important; 
+      outline: none !important; 
+      padding: 0 !important; /* Strips the 16px padding from style.css */
+      margin: 0 !important;
+      height: 100% !important;
+      line-height: 34px !important; /* Perfectly vertical text alignment */
+      font-family: 'Inter', sans-serif !important;
+      box-shadow: none !important;
+      transition: width 0.24s ease !important;
+  }
+	  .header-ai-box:focus-within .header-ai-input,
+	  .header-ai-input:not(:placeholder-shown) {
+	      width: min(340px, calc(100vw - 154px)) !important;
+	  }
+  .header-ai-input::placeholder { color: var(--md-sys-color-on-surface-variant) !important; }
+  
+	  .header-ai-btn {
+	      background: rgba(0, 212, 170, 0.22) !important; 
+	      color: #ffffff !important;
+	      border: 1px solid rgba(0, 212, 170, 0.62) !important; 
+	      padding: 0 18px !important;
+	      height: 30px !important; /* Strict button height so it doesn't stretch */
+	      border-radius: 16px !important; 
+	      cursor: pointer !important; 
+	      font-size: 15px !important; 
+	      font-weight: 900 !important;
+	      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important; 
+	      display: flex !important; 
+	      align-items: center !important; 
+	      justify-content: center !important;
+	      margin: 0 !important;
+	      box-shadow: 0 0 18px rgba(0, 212, 170, 0.42), inset 0 0 12px rgba(0, 212, 170, 0.10) !important;
+	  }
+	  .header-ai-btn:hover { background: rgba(0, 212, 170, 0.34) !important; box-shadow: 0 0 26px rgba(0, 212, 170, 0.68), inset 0 0 12px rgba(255,255,255,0.08) !important; transform: translateY(-1px); }
+
+  /* --- AI Floating Modal --- */
+  #chat-popup {
+      display: none; position: fixed; 
+      right: 18px;
+      bottom: 70px;
+      left: auto;
+      top: auto;
+      width: min(540px, calc(100vw - 32px));
+      max-height: calc(100dvh - 92px);
+      overflow: hidden;
+      background: var(--md-sys-color-surface-container-highest); 
+      border: 1px solid var(--md-sys-color-primary); border-radius: 12px; 
+      padding: 14px; font-size: 14px; z-index: 10000; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      pointer-events: auto;
+      box-sizing: border-box;
+  }
+
+  #chat-response-output {
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+  }
+
+  /* --- Structured deterministic AI responses --- */
+  .cw-answer { color: var(--md-sys-color-on-surface); }
+  .cw-answer-header {
+      display: flex; justify-content: space-between; gap: 12px; align-items: center;
+      padding-bottom: 9px; border-bottom: 1px solid var(--md-sys-color-outline);
+  }
+  .cw-answer-header > div { min-width: 0; }
+  .cw-answer-header strong { display: block; font-size: 17px; line-height: 1.25; }
+  .cw-answer-asset-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .cw-answer-spot {
+      display: inline-flex; align-items: baseline; gap: 5px; padding: 4px 7px;
+      border: 1px solid rgba(53, 215, 166, 0.28); border-radius: 6px;
+      background: rgba(53, 215, 166, 0.08); color: #35d7a6;
+      font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .cw-answer-spot span { color: var(--md-sys-color-on-surface-variant); font-size: 9px; font-weight: 750; text-transform: uppercase; }
+  .cw-answer-spot b { font-size: 12px; line-height: 1; }
+  .cw-answer-spot--compact { padding: 3px 5px; text-transform: none; }
+  .cw-answer-spot--compact span { font-size: 8px; }
+  .cw-answer-spot--compact b { font-size: 10px; }
+  .cw-answer-header time, .cw-answer-note {
+      color: var(--md-sys-color-on-surface-variant); font-size: 11px; white-space: nowrap;
+  }
+  .cw-answer-kicker {
+      display: block; margin-bottom: 3px; color: var(--md-sys-color-primary);
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0;
+  }
+  .cw-answer-header-meta {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0;
+  }
+  .cw-answer-deep-dive {
+      display: inline-flex; align-items: center; min-height: 28px; padding: 5px 9px;
+      border: 1px solid rgba(0,229,255,0.45); border-radius: 6px;
+      background: rgba(0,229,255,0.10); color: #00e5ff;
+      cursor: pointer; font: inherit; font-size: 10px; font-weight: 800; white-space: nowrap;
+  }
+  /* --- Model agreement: why two numbers on this card disagree ---
+     Measured over all 165 assets: 82 produce a reconciliation and only 3 --
+     BNB, BTC, ETH -- actually disagree. So agreement is the common case and
+     gets one quiet line, while disagreement gets a collapsed disclosure whose
+     summary states the resolution. Collapsed it is ~30px against the 190px the
+     expanded block used to cost, which is what gives the 10-week range the top
+     of the card back. */
+  .cw-answer-reconcile.is-agreement {
+      margin: 8px 0 2px; font-size: 12px; line-height: 1.4;
+      color: var(--md-sys-color-on-surface-variant, #94a3b8);
+  }
+  .cw-answer-reconcile.is-disagreement {
+      margin: 8px 0 2px;
+      border: 1px solid rgba(245, 177, 52, 0.28);
+      border-left: 3px solid #f5b134;
+      border-radius: 0 8px 8px 0;
+      background: rgba(245, 177, 52, 0.06);
+  }
+  .cw-reconcile-summary {
+      cursor: pointer; list-style: none;
+      padding: 8px 12px; font-size: 12px; line-height: 1.4; font-weight: 600;
+      color: var(--md-sys-color-on-surface, #e2e8f0);
+      display: flex; align-items: baseline; gap: 8px;
+  }
+  /* Safari draws its own triangle through ::-webkit-details-marker, which the
+     bare list-style rule does not remove. */
+  .cw-reconcile-summary::-webkit-details-marker { display: none; }
+  .cw-reconcile-summary::after {
+      content: "Why"; margin-left: auto; flex: 0 0 auto;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: #f5b134;
+      border: 1px solid rgba(245, 177, 52, 0.42);
+      border-radius: 999px; padding: 1px 7px;
+  }
+  .cw-answer-reconcile[open] .cw-reconcile-summary::after { content: "Hide"; }
+  .cw-reconcile-summary:focus-visible { outline: 2px solid #38bdf8; outline-offset: -2px; }
+  .cw-reconcile-detail {
+      padding: 0 12px 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+      margin-top: 2px; padding-top: 8px;
+  }
+  .cw-reconcile-row + .cw-reconcile-row {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+  }
+  .cw-reconcile-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .cw-reconcile-family {
+      font-size: 12px; font-weight: 800; color: var(--md-sys-color-on-surface, #e2e8f0);
+  }
+  .cw-reconcile-verdict {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+      color: #f5b134; border: 1px solid rgba(245, 177, 52, 0.42);
+      border-radius: 999px; padding: 1px 7px;
+  }
+  .cw-reconcile-readings { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 4px; }
+  .cw-reconcile-reading {
+      display: inline-flex; align-items: baseline; gap: 5px;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(148, 163, 184, 0.12);
+      font-size: 11px; color: var(--md-sys-color-on-surface-variant, #94a3b8);
+  }
+  .cw-reconcile-reading b {
+      font-size: 12px; color: var(--md-sys-color-on-surface, #e2e8f0);
+      font-variant-numeric: tabular-nums;
+  }
+  .cw-reconcile-detail p {
+      margin: 0; font-size: 12px; line-height: 1.45;
+      color: var(--md-sys-color-on-surface-variant, #94a3b8);
+  }
+
+  /* --- Answer tabs: snapshot first, perspective one press away ---
+     The video perspective used to sit under the entire snapshot, which on a
+     phone put it three or four screens down and made it read as an appendix.
+     Tabbing it costs the snapshot no height and keeps the default view the
+     numbers. The worker only emits these when the second tab has content. */
+  .cw-answer-tabs {
+      display: flex; gap: 6px; margin: 10px 0 4px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.20);
+  }
+  .cw-answer-tab {
+      appearance: none; background: none; border: 0; cursor: pointer;
+      padding: 7px 12px; border-radius: 8px 8px 0 0;
+      font: inherit; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--md-sys-color-on-surface-variant, #94a3b8);
+      border-bottom: 2px solid transparent;
+      display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cw-answer-tab:hover { color: var(--md-sys-color-on-surface, #e2e8f0); }
+  .cw-answer-tab:focus-visible { outline: 2px solid #38bdf8; outline-offset: -2px; }
+  .cw-answer-tab.is-active {
+      color: #38bdf8; border-bottom-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+  }
+  .cw-answer-tab-count {
+      font-size: 10px; font-weight: 800; line-height: 1;
+      padding: 2px 5px; border-radius: 999px;
+      background: rgba(148, 163, 184, 0.22); color: inherit;
+  }
+  /* `hidden` alone loses to any class that sets display, and the panel below
+     is a block. Without this rule both panels render at once and the tabs do
+     nothing -- the same trap the indicator synthesis panels hit. */
+  .cw-answer-panel[hidden] { display: none; }
+  /* The perspective panel carries no top border of its own: the tab bar above
+     it already draws the separating line. */
+  .cw-answer-panel > .cw-answer-perspective { border-top: 0; padding-top: 4px; }
+
+  .cw-answer-body {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px;
+  }
+  .cw-answer-body > .cw-answer-section--forecast { grid-column: 1 / -1; }
+  .cw-answer-body > .cw-answer-section:only-child { grid-column: 1 / -1; }
+  .cw-answer-section, .cw-answer-perspective {
+      min-width: 0; padding: 9px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.20);
+  }
+  /* The computed Perspective block and its ranking table. Both sit inside the
+     Perspective panel and share the section rhythm above, so they only need
+     what is specific to them. */
+  /* The three Perspective blocks share one treatment: the cross-sectional peer
+     rank, its table, and the longitudinal "over time" row. They are one
+     argument read top to bottom, so a different border or rhythm on any of
+     them would read as three unrelated widgets. */
+  .cw-answer-peer-rank, .cw-answer-rank-table, .cw-answer-history {
+      min-width: 0; padding: 9px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.20);
+  }
+  .cw-answer-peer-rank p, .cw-answer-rank-table p, .cw-answer-history p {
+      margin: 6px 0 0; color: var(--md-sys-color-on-surface-variant);
+      font-size: 12px; line-height: 1.45;
+  }
+  /* Provenance is a footnote, not a finding: the galaxy's own window, and the
+     warning that the asset's report page computes its Gravity card separately
+     and may differ. IONQ reads 37.0 there and 24.8 on the galaxy. */
+  .cw-answer-provenance {
+      font-size: 11px; opacity: 0.72; font-style: italic;
+  }
+  .cw-answer-rank-table table {
+      width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 12px;
+  }
+  .cw-answer-rank-table th {
+      text-align: left; padding: 3px 6px; font-size: 10px; font-weight: 800;
+      text-transform: uppercase; color: var(--md-sys-color-on-surface-variant);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+  }
+  .cw-answer-rank-table td { padding: 3px 6px; color: var(--md-sys-color-on-surface-variant); }
+  .cw-answer-rank-table .cw-rank-position { width: 2.5em; opacity: 0.7; font-variant-numeric: tabular-nums; }
+  .cw-answer-rank-table .cw-rank-value { text-align: right; font-variant-numeric: tabular-nums; }
+  /* The row the card is about. Without this the reader has to hunt for it. */
+  .cw-answer-rank-table tr.is-self td {
+      color: var(--md-sys-color-on-surface); font-weight: 700;
+      background: rgba(148, 163, 184, 0.12);
+  }
+  /* A jump in the ranks is drawn, never closed up: rows 1,2,3 then 24 must not
+     read as though they were adjacent. */
+  .cw-answer-rank-table .cw-rank-gap td {
+      text-align: center; opacity: 0.45; padding: 1px 6px;
+  }
+  .cw-answer-section-head {
+      display: flex; justify-content: space-between; gap: 10px; align-items: baseline;
+      margin-bottom: 8px; color: var(--md-sys-color-on-surface-variant);
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0;
+  }
+  .cw-answer-section p, .cw-answer-video p {
+      margin: 6px 0 0; color: var(--md-sys-color-on-surface-variant);
+      font-size: 12px; line-height: 1.45;
+  }
+  .cw-answer-range, .cw-answer-metric-pair, .cw-answer-scenarios {
+      display: grid; gap: 7px;
+  }
+  .cw-answer-range { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cw-answer-metric-pair { grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); }
+  .cw-answer-primary + .cw-answer-metric-pair { margin-top: 9px; }
+  .cw-answer-scenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cw-answer-scenarios > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .cw-answer-range-value, .cw-answer-metric-pair > div, .cw-answer-scenarios > div {
+      min-width: 0; padding: 8px; background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 6px;
+  }
+  .cw-answer-range-value span, .cw-answer-metric-pair span, .cw-answer-scenarios span {
+      display: block; overflow-wrap: anywhere; color: var(--md-sys-color-on-surface-variant);
+      font-size: 10px; line-height: 1.2;
+  }
+  .cw-answer-range-value strong, .cw-answer-metric-pair strong, .cw-answer-scenarios strong {
+      display: block; margin-top: 3px; overflow-wrap: anywhere; font-size: 15px; line-height: 1.2;
+  }
+  .cw-answer-scenarios strong { white-space: nowrap; overflow-wrap: normal; font-variant-numeric: tabular-nums; }
+  .cw-answer-range-value.is-bear strong, .cw-answer-primary.is-caution, .cw-answer .is-caution { color: #ff8a80; }
+  .cw-answer-range-value.is-bull strong, .cw-answer-primary.is-positive, .cw-answer .is-positive { color: #35d7a6; }
+  .cw-answer-primary { font-size: 16px; font-weight: 800; line-height: 1.3; }
+  .cw-answer-primary.is-neutral { color: #dbe7f3; }
+  .cw-answer-video {
+      padding: 8px; border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 7px;
+      background: rgba(255,255,255,0.025);
+  }
+  .cw-answer-video + .cw-answer-video { margin-top: 7px; }
+  .cw-answer-video-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .cw-answer-video a, .cw-answer-video strong { color: #b8f7ff; font-size: 12px; font-weight: 750; text-decoration: none; }
+  .cw-answer-video time { flex-shrink: 0; color: var(--md-sys-color-on-surface-variant); font-size: 10px; }
+  .cw-answer-video .cw-answer-evidence { display: grid; gap: 5px; margin-top: 7px; }
+  .cw-answer-video .cw-answer-evidence p {
+      position: relative; margin: 0; padding: 7px 8px 7px 18px;
+      border-left: 2px solid rgba(0,229,255,0.32); border-radius: 0 5px 5px 0;
+      background: rgba(0,229,255,0.035);
+  }
+  .cw-answer-video .cw-answer-evidence p::before {
+      content: ""; position: absolute; left: 8px; top: 12px; width: 4px; height: 4px;
+      border-radius: 50%; background: var(--md-sys-color-primary);
+  }
+  .cw-answer-links {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px;
+  }
+
+  @media (max-width: 520px) {
+      #chat-popup { right: 8px; bottom: 62px; width: calc(100vw - 16px); padding: 10px; }
+      .cw-answer-header { align-items: flex-start; gap: 8px; }
+      .cw-answer-header-meta { gap: 4px; }
+      .cw-answer-deep-dive { white-space: normal; text-align: center; }
+      .cw-answer-video-head { align-items: flex-start; flex-direction: column; gap: 2px; }
+  }
+
+  @media (max-height: 760px) {
+      #chat-popup { bottom: 58px; padding: 10px; }
+      .cw-answer-section, .cw-answer-perspective { padding: 6px 0; }
+      .cw-answer-section-head { margin-bottom: 5px; }
+      .cw-answer-range-value, .cw-answer-metric-pair > div, .cw-answer-scenarios > div { padding: 6px; }
+      .cw-answer-primary { font-size: 14px; }
+  }
+
+  @media (max-height: 580px) {
+      .cw-answer-header { padding-bottom: 6px; }
+  }
+
+  /* --- 100% MAXIMUM VIEWPORT LAYOUT --- */
+  .page-layout { 
+      display: flex; 
+      gap: 10px; 
+      width: 100vw; 
+      max-width: 100%; 
+      margin: 0; 
+      padding: 10px 15px; 
+      align-items: flex-start; 
+      position: relative; 
+      box-sizing: border-box;
+  }
+  .main-content { 
+      flex-grow: 1; 
+      min-width: 0; 
+      width: 100%;
+  }
+
+  /* --- Material 3 Adaptive Navigation Rail / Drawer --- */
+  .sidebar {
+      flex-shrink: 0; 
+      position: -webkit-sticky; position: sticky; top: 10px; 
+      height: calc(100vh - 20px); align-self: flex-start; 
+      overflow-y: auto; overflow-x: hidden; 
+      background: var(--md-sys-color-surface-container); 
+      border: 1px solid var(--md-sys-color-outline); border-radius: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25); z-index: 100;
+  }
+  
+  @media (min-width: 951px) {
+      .sidebar {
+          width: 64px; 
+          min-width: 64px;
+          padding: 16px 4px;
+          overflow: visible !important;
+      }
+      .sidebar-section-title {
+          display: none;
+      }
+      .sidebar-link {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 56px;
+          margin: 4px 0;
+          cursor: pointer;
+          text-decoration: none;
+          color: var(--md-sys-color-on-surface-variant);
+          overflow: visible !important;
+      }
+
+      .sidebar-link::before {
+          content: '';
+          position: absolute;
+          width: 44px;
+          height: 28px;
+          border-radius: 14px;
+          background-color: transparent;
+          z-index: 0;
+          transition: background-color 0.15s cubic-bezier(0.2, 0, 0, 1), transform 0.15s ease;
+      }
+      .sidebar-link.active::before {
+          background-color: rgba(0, 212, 170, 0.16);
+          box-shadow: inset 0 0 0 1px rgba(0, 212, 170, 0.3);
+      }
+      .sidebar-link:hover::before { background-color: rgba(255, 255, 255, 0.08); }
+      .sidebar-link.active:hover::before { background-color: rgba(0, 212, 170, 0.22); }
+
+      .nav-icon {
+          font-size: 20px !important;
+          z-index: 1;
+      }
+      .material-symbols-outlined.nav-icon {
+          width: 24px;
+          height: 24px;
+          line-height: 24px;
+      }
+      .nav-text {
+          position: absolute;
+          left: 100%;
+          top: 50%;
+          transform: translateY(-50%) translateX(12px);
+          background: var(--md-sys-color-surface-container-highest);
+          color: white;
+          padding: 6px 12px;
+          border-radius: 8px;
+          border: 1px solid var(--md-sys-color-outline);
+          white-space: nowrap;
+          font-size: 12px;
+          font-weight: 600;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.15s ease, transform 0.15s ease;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+          z-index: 1000;
+      }
+      .sidebar-link:hover .nav-text {
+          opacity: 1;
+          transform: translateY(-50%) translateX(6px);
+      }
+  }
+
+  .sidebar-link {
+      display: flex;
+      align-items: center;
+      color: var(--md-sys-color-on-surface-variant);
+      text-decoration: none;
+      border-radius: 12px;
+      transition: color 0.15s ease;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: visible !important;
+  }
+  .sidebar-link * { pointer-events: none; }
+  .sidebar-link:hover, .sidebar-link.active {
+      color: #00d4aa;
+  }
+  .material-symbols-outlined.nav-icon {
+      direction: ltr;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      letter-spacing: normal;
+      text-transform: none;
+      white-space: nowrap;
+      word-wrap: normal;
+      font-feature-settings: 'liga';
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+  }
+  html.symbols-ready .material-symbols-outlined.nav-icon {
+      opacity: 1;
+  }
+  .sidebar-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--md-sys-color-on-surface-variant); margin: 16px 16px 8px 16px; opacity: 0.7; }
+
+  /* --- Mobile Hamburger Menu & Overlay --- */
+  .mobile-menu-btn { 
+      display: none; background: none; border: none; color: white; 
+      cursor: pointer; padding: 0; margin-right: 15px; align-items: center; justify-content: center;
+  }
+  .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(2px); }
+  
+  /* --- The hero bento bar: today's answer + the app offer, one row ---
+     Two cells rather than two stacked cards. The Galaxy shell underneath
+     measures the space left below it (resizeMatrixShell reads its own
+     getBoundingClientRect().top), so anything this bar does not spend on
+     vertical padding the chart gets for free. The cells keep their own tints
+     -- cyan for the reading, Play green for the offer -- because they are two
+     unrelated asks and a single flat card would blur them into one. */
+  .hero-bento {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 0 0 12px 0;
+  }
+  /* min-width:0 because a flex item's default min-width is auto, which lets
+     the answer's long first line refuse to shrink and push the CTA off the row.
+     The basis and the cap are a measured pair, not taste: the CTA's natural
+     width is its longest line ("Free, no ads, live alerts on 170+ assets"),
+     and with the answer asking for only 380px the CTA kept all 456px of that
+     at every width -- which squeezed the sentence into four lines and left the
+     bar 169px tall at a 1000px viewport, most of the saving gone. Making the
+     answer ask for 520px and capping the CTA at 40% brings that to 144px and
+     costs nothing at 1440px, where 40% is wider than the CTA wants anyway.
+     Raising the basis further is worse, not better: past ~560px the two
+     minimums stop fitting, the row wraps, and the bar jumps to 241px. */
+  .hero-bento > .hero-answer { flex: 1 1 520px; min-width: 0; }
+  .hero-bento > .app-cta-banner { flex: 0 1 auto; max-width: 40%; }
+
+  /* The plain-English answer above the dashboards. A newcomer needs one
+     sentence with today's number in it before any instrument makes sense;
+     scripts/build_seo_assets.py refreshes the values inside it. */
+  .hero-answer {
+      background: linear-gradient(180deg, rgba(56,189,248,0.07), rgba(56,189,248,0.02));
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 12px;
+      padding: 14px 18px;
+      /* Margin belongs to .hero-bento now -- a bottom margin here would show
+         up as dead space inside the row. */
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+  .hero-answer-line {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: var(--md-sys-color-on-surface, #e2e8f0);
+  }
+  .hero-answer-line strong { color: #38bdf8; font-weight: 700; }
+  .hero-answer-sub {
+      margin: 6px 0 0 0;
+      font-size: 0.85rem;
+      color: var(--muted, #94a3b8);
+  }
+  .hero-answer-sub strong { color: #e2e8f0; }
+  .hero-answer-sub a { color: #38bdf8; text-decoration: none; }
+  .hero-answer-sub a:hover { text-decoration: underline; }
+
+  /* The live BTC reading app.js appends to the sub-line. It shares that line
+     with the build date on purpose: "updated 29 August" beside "3 min ago" is
+     the contrast that tells a reader which numbers are today's model and which
+     is this minute's price. Joining an existing line also costs the bar no
+     height, and .hero-bento's height is what the Galaxy shell sizes itself
+     against. */
+  .hero-live { white-space: nowrap; }
+  .hero-live strong { color: #e2e8f0; font-variant-numeric: tabular-nums; }
+  .hero-live a { color: #38bdf8; text-decoration: none; }
+  .hero-live a:hover { text-decoration: underline; }
+  /* Past the feed's own 45-minute contract (three missed runs) the number is
+     still shown, but it stops looking like a current one. */
+  .hero-live.is-stale strong { color: #f5b134; }
+
+  /* --- Indicators header: title, live synthesis and tab bar in one band ---
+     The synthesis shipped as a full-width card under this header and cost
+     ~103px, which is 103px between the reader and the six instruments they
+     opened the view for. Folded into the gap the header already had, the
+     whole band is ~96px against ~195px before.
+
+     Wrapping is the adaptive part, not a fallback: all three share the row
+     where they fit, and where they do not the tab bar drops to its own line
+     while the synthesis stays beside the title -- which is the pairing that
+     matters, since the sentence is what explains the tabs. */
+  .indicator-header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      border-bottom: 1px solid var(--md-sys-color-outline);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+  }
+  .indicator-header-title {
+      flex: 0 0 auto;
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--md-sys-color-primary);
+  }
+  /* min-width:0 for the usual reason: a flex item defaults to min-width:auto,
+     so the sentence refuses to shrink and shoves the tab bar off the row
+     instead of wrapping inside its own cell. */
+  .indicator-synthesis {
+      flex: 1 1 340px;
+      min-width: 0;
+  }
+  .indicator-synthesis-panel {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+  }
+  /* The UA rule behind the `hidden` attribute is a bare element selector, so
+     the class rule above beats it and every panel stays visible -- all six
+     readings stacked on top of each other. This is what makes hidden work. */
+  .indicator-synthesis-panel[hidden] { display: none; }
+
+  .indicator-synthesis-line {
+      margin: 0;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--muted, #94a3b8);
+      min-width: 0;
+  }
+  .indicator-synthesis-line strong { color: #e2e8f0; font-weight: 700; }
+  .synthesis-tag {
+      display: inline-block;
+      margin-right: 6px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      color: #38bdf8;
+      font-size: 10.5px;
+      font-weight: 800;
+      white-space: nowrap;
+      vertical-align: 1px;
+  }
+  .synthesis-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 0;
+  }
+  .synthesis-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--md-sys-color-outline);
+      white-space: nowrap;
+  }
+  .synthesis-chip-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted, #94a3b8);
+  }
+  .synthesis-chip-value {
+      font-size: 12px;
+      font-weight: 800;
+      color: #38bdf8;
+      font-variant-numeric: tabular-nums;
+  }
+  .indicator-synthesis-meta {
+      margin: 3px 0 0 0;
+      font-size: 11px;
+      color: var(--muted, #94a3b8);
+  }
+
+  /* The tab bar carried its whole appearance as inline styles, which meant the
+     buttons also inherited .view-btn's 12px/24px pill padding -- 52px of header
+     for six labels. These are tabs inside a header band, not primary controls. */
+  .indicator-universe-group {
+      flex: 0 0 auto;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--md-sys-color-outline);
+      padding: 4px;
+      border-radius: 8px;
+  }
+  .indicator-universe-group .view-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+  }
+  /* The lift and drop-shadow read as a page-level control; at this size they
+     just make the band jitter as the pointer crosses it. */
+  .indicator-universe-group .view-btn:hover {
+      transform: none;
+      box-shadow: none;
+  }
+
+  /* --- Flagship synthesis bars, one per universe view ---
+     The same job .hero-bento does on the Crypto Galaxy, for the other six
+     universes: the one reading that view is actually about, stated in words,
+     above the instruments that produce it. The numbers are machine-managed by
+     build_seo_assets.update_view_flagships, so this is a live line and not a
+     caption -- which is why every figure sits in its own data-cw-flag hook.
+
+     Two cells rather than a paragraph followed by a table: the sentence
+     carries the answer for someone arriving cold and the chips carry the
+     figures a returning reader scans for, and side by side that is one row
+     instead of two. Inside a .galaxy-stack the row's height comes straight out
+     of the galaxy below it, so every pixel spent here is a pixel the chart
+     loses. Two lines of lead copy is the budget.
+
+     Accent per universe, matched to that view's sidebar icon, because six
+     identically tinted bars across six views read as one repeated banner the
+     eye then stops seeing. Declared as a pair of literal values rather than
+     mixed from one: a color-mix() a browser does not understand collapses to
+     an invalid declaration and the bar loses its border entirely. */
+  .flagship-bento {
+      --flag-accent: #38bdf8;
+      --flag-tint: rgba(56, 189, 248, 0.07);
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+      gap: 10px;
+      /* Bare views space the bar off what follows; inside a .galaxy-stack the
+         stack's own gap does that and a margin here would double it. */
+      margin: 0 0 16px 0;
+      /* Never absorb the stack's free space, and never be the thing that
+         shrinks when the viewport is short -- that is the galaxy's job. */
+      flex: 0 0 auto;
+  }
+  .galaxy-stack > .flagship-bento { margin: 0; }
+
+  .flagship-bento[data-flagship="indicators"] { --flag-accent: #22d3ee; --flag-tint: rgba(34, 211, 238, 0.07); }
+  .flagship-bento[data-flagship="pairs"]      { --flag-accent: #c084fc; --flag-tint: rgba(192, 132, 252, 0.07); }
+  .flagship-bento[data-flagship="bitcoin"]    { --flag-accent: #f59e0b; --flag-tint: rgba(245, 158, 11, 0.07); }
+  .flagship-bento[data-flagship="ai"]         { --flag-accent: #00d4aa; --flag-tint: rgba(0, 212, 170, 0.07); }
+  .flagship-bento[data-flagship="quantum"]    { --flag-accent: #818cf8; --flag-tint: rgba(129, 140, 248, 0.07); }
+  .flagship-bento[data-flagship="markets"]    { --flag-accent: #4ade80; --flag-tint: rgba(74, 222, 128, 0.07); }
+
+  /* min-width:0 for the same reason .hero-answer needs it: a flex item's
+     default min-width is auto, so the long first line refuses to shrink and
+     pushes the chips off the row instead of wrapping. */
+  .flagship-bento > .flagship-lead {
+      flex: 1 1 460px;
+      min-width: 0;
+      background: linear-gradient(180deg, var(--flag-tint), rgba(255, 255, 255, 0.01));
+      border: 1px solid var(--flag-accent);
+      border-radius: 12px;
+      padding: 11px 15px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+  }
+  .flagship-line {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: var(--md-sys-color-on-surface, #e2e8f0);
+  }
+  .flagship-line strong { color: var(--flag-accent); font-weight: 700; }
+  /* The tag is inline, not a block above the sentence: as its own line it cost
+     a third row on every one of these bars for one word. */
+  .flagship-tag {
+      display: inline-block;
+      margin-right: 7px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: var(--flag-tint);
+      border: 1px solid var(--flag-accent);
+      color: var(--flag-accent);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      vertical-align: 1px;
+  }
+  .flagship-sub {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--muted, #94a3b8);
+  }
+  .flagship-sub strong { color: #e2e8f0; font-weight: 700; }
+  .flagship-explain { color: var(--flag-accent); text-decoration: none; }
+  .flagship-explain:hover { text-decoration: underline; }
+
+  /* The chips. auto-fit rather than a fixed column count so a bar with three
+     stats and one with four both fill their cell instead of leaving a hole. */
+  .flagship-bento > .flagship-stats {
+      flex: 1 1 260px;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+      gap: 8px;
+      margin: 0;
+  }
+  .flagship-stat {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      padding: 8px 11px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--md-sys-color-outline);
+  }
+  .flagship-stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted, #94a3b8);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+  .flagship-stat-value {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--flag-accent);
+      font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Android app CTAs (header pill, hero banner, mobile install bar) ---
+     Play green rather than the site's cyan, so the three read as one offer
+     and not as three more instruments. */
+  .app-cta-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(61,220,132,0.09), rgba(61,220,132,0.02));
+      border: 1px solid rgba(61, 220, 132, 0.28);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 0;
+  }
+  .app-cta-copy { min-width: 0; }
+  .app-cta-line {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface, #e2e8f0);
+  }
+  .app-cta-sub {
+      margin: 3px 0 0 0;
+      font-size: 0.85rem;
+      color: var(--muted, #94a3b8);
+  }
+  .app-cta-btn {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #3DDC84;
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: #03050a;
+      text-decoration: none;
+      transition: filter 0.2s ease, transform 0.2s ease;
+  }
+  .app-cta-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .app-cta-glyph { width: 22px; height: 22px; flex: 0 0 auto; }
+  .app-cta-btn-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .app-cta-btn-kicker { font-size: 9px; font-weight: 700; letter-spacing: 0.7px; opacity: 0.75; }
+  .app-cta-btn-store { font-size: 15px; font-weight: 800; }
+
+  /* Header pill. Sits between the scrolling track and the Preso toggle, so it
+     must never grow: the track is the only flex-1 child in that row. */
+  .header-app-cta {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(61, 220, 132, 0.45);
+      background: rgba(61, 220, 132, 0.14);
+      color: #3DDC84;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  }
+  .header-app-cta:hover {
+      color: #ffffff;
+      background: rgba(61, 220, 132, 0.26);
+      box-shadow: 0 0 18px rgba(61, 220, 132, 0.28);
+  }
+  .header-app-cta-glyph { width: 16px; height: 16px; flex: 0 0 auto; }
+
+  /* The sidebar link is an <a> with an inline SVG where its siblings use an
+     icon font, so it needs the sizing .nav-icon gets from the font rule. */
+  .app-store-glyph { width: 22px; height: 22px; flex: 0 0 auto; }
+
+  /* Mobile install bar. Hidden here and revealed only under 950px -- the
+     desktop reader has the header pill and the hero banner already. */
+  .app-smart-banner { display: none; }
+  .app-smart-banner-close {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1;
+      padding: 8px;
+      cursor: pointer;
+      flex: 0 0 auto;
+  }
+  .app-smart-banner-close:hover { color: #e2e8f0; }
+
+  @media (max-width: 950px) {
+      .hero-answer { padding: 12px 14px; }
+      .hero-answer-line { font-size: 0.97rem; }
+
+      /* The pill keeps its glyph but drops the words: the ticker row is
+         already tight here and the label is the first thing that can go. */
+      .header-app-cta { padding: 0 9px; }
+      .header-app-cta-label { display: none; }
+      .app-cta-banner { padding: 13px 15px; }
+
+      /* The bar wraps to two rows here (460px + 260px will not share a phone),
+         which is the one place it is allowed to: inside a .galaxy-stack the
+         galaxy still keeps whatever is left, so this costs the chart height
+         rather than overflowing the page. Trimming the type and the padding is
+         what keeps that cost near one extra row instead of three. */
+      /* Everything stacks here, so the band is paying for three rows plus the
+         tab bar's own wrap. Trimming the type is what keeps that under the
+         height the single full-width synthesis card used to cost on its own. */
+      .indicator-header { gap: 7px 10px; padding-bottom: 8px; margin-bottom: 12px; }
+      .indicator-header-title { font-size: 1.05rem; }
+      .indicator-synthesis { flex: 1 1 100%; }
+      .indicator-synthesis-line { font-size: 0.8rem; }
+      /* One scrolling row rather than three wrapped ones. Six labels wrap to
+         three rows at 375px and cost ~100px of a band whose whole point is
+         being short; scrolling costs one row and the tab clipped at the right
+         edge is the affordance that says there are more. Same trade the
+         flagship chips make just below. */
+      .indicator-universe-group {
+          flex: 1 1 100%;
+          gap: 4px;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          scrollbar-width: none;
+      }
+      .indicator-universe-group::-webkit-scrollbar { display: none; }
+      .indicator-universe-group .view-btn {
+          flex: 0 0 auto;
+          padding: 5px 8px;
+          font-size: 11.5px;
+          white-space: nowrap;
+      }
+      .synthesis-chip { padding: 2px 7px; }
+      .synthesis-chip-value { font-size: 11.5px; }
+
+      .flagship-bento { gap: 8px; margin-bottom: 12px; }
+      .flagship-bento > .flagship-lead { padding: 10px 12px; }
+      .flagship-line { font-size: 0.88rem; line-height: 1.38; }
+      .flagship-sub { font-size: 0.75rem; }
+
+      /* One scrolling row, not a wrapping grid. The bar wraps to two cells
+         here -- 460px and 260px will not share a phone -- and inside a
+         .galaxy-stack that height comes straight out of the galaxy, so a
+         four-chip bar spending ~50px on a half-empty second row is 50px the
+         bubble chart does not get. Scrolling costs one row whatever the chip
+         count, and the chip clipped at the right edge is the affordance that
+         says so, which is why the scrollbar itself can go. */
+      .flagship-bento > .flagship-stats {
+          display: flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          scrollbar-width: none;
+          gap: 6px;
+      }
+      .flagship-bento > .flagship-stats::-webkit-scrollbar { display: none; }
+      /* Wide enough that a 375px viewport clips the fourth chip rather than
+         fitting it exactly, and narrow enough that three still fit at 320px. */
+      .flagship-stat { flex: 0 0 auto; min-width: 100px; padding: 6px 9px; }
+      .flagship-stat-value { font-size: 0.9rem; }
+
+      /* One row will not hold both cells at this width, and stacking them puts
+         the two-card tower back -- which is the height this bar exists to give
+         the Galaxy. The mobile reader is not losing the offer: .app-smart-banner
+         is fixed to the bottom of this exact viewport and the header pill is
+         above. Once that banner is dismissed the cell comes back, so dismissing
+         it cannot leave the page with no visible install route. */
+      .hero-bento { margin-bottom: 10px; }
+      .hero-bento > .app-cta-banner { display: none; }
+      body.app-banner-dismissed .hero-bento > .app-cta-banner {
+          display: flex;
+          flex: 1 1 100%;
+          /* The desktop cap would leave it at 40% of a phone. */
+          max-width: none;
+      }
+
+      /* Reveal the install bar, and clear a lane for it: the floating AI box
+         is fixed at bottom 18px and would otherwise sit on top of it, and the
+         footer's last line would scroll under it and never be readable. */
+      .app-smart-banner {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          z-index: 12500;
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          padding: 9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
+          background: rgba(7, 10, 19, 0.97);
+          border-top: 1px solid rgba(61, 220, 132, 0.32);
+          box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+          box-sizing: border-box;
+      }
+      body:not(.app-banner-dismissed) .floating-ai-shell { bottom: 78px; }
+      /* !important because index.html's footer carries an inline `padding`
+         shorthand, and an inline declaration beats an external rule at any
+         specificity. Without it the last footer line -- the privacy and terms
+         links -- sits under the banner at full scroll and cannot be read. */
+      body:not(.app-banner-dismissed) footer { padding-bottom: 84px !important; }
+      body.app-banner-dismissed .app-smart-banner { display: none; }
+
+      .app-smart-banner-glyph { width: 30px; height: 30px; flex: 0 0 auto; }
+      .app-smart-banner-copy { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+      .app-smart-banner-title {
+          font-size: 13px; font-weight: 700; color: #e2e8f0;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .app-smart-banner-sub {
+          font-size: 11px; color: #94a3b8;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .app-smart-banner-cta {
+          flex: 0 0 auto;
+          background: #3DDC84;
+          border-radius: 999px;
+          padding: 7px 18px;
+          color: #03050a;
+          font-size: 13px;
+          font-weight: 800;
+          text-decoration: none;
+      }
+
+      .mobile-menu-btn { display: flex; }
+      .page-layout { display: block; padding: 10px; }
+      .header-controls { flex-direction: column; align-items: flex-end; gap: 10px; }
+      .ticker { padding: 0 10px; gap: 10px; }
+      .ticker-brand { padding-right: 10px; }
+      .ticker-brand-home span { display: none; }
+      #chat-popup { left: auto; top: auto; }
+      
+      .sidebar {
+          position: fixed; top: 0; left: -320px; width: 280px; height: 100vh;
+          border-radius: 0; border: none; border-right: 1px solid var(--md-sys-color-outline);
+          z-index: 10000; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); margin: 0;
+          background-color: #0d1117 !important; 
+          box-shadow: 5px 0 25px rgba(0,0,0,0.8);
+          padding: 60px 14px 20px 14px; gap: 14px;
+      }
+      .sidebar.open { left: 0; }
+      .sidebar-overlay.open { display: block; }
+      .sidebar-link { display: flex; align-items: center; padding: 12px 16px; border-radius: 28px; margin-bottom: 4px; }
+      .sidebar-link.active { background-color: rgba(0, 212, 170, 0.16); color: #00d4aa; }
+      .nav-icon { font-size: 24px !important; margin-right: 16px; }
+      .nav-text { display: block !important; opacity: 1 !important; position: static !important; transform: none !important; background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; color: inherit !important; font-size: 14px !important; font-weight: 600 !important; }
+  }
+  @media (max-width: 480px) { header h1 { display: none; } }
+
+  /* --- Dynamic Chart Viewer Styles --- */
+  .chart-viewer-btn { background: rgba(255, 85, 85, 0.1); color: #ff5555; border: 1px solid rgba(255, 85, 85, 0.3); padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .chart-viewer-btn:hover { background: rgba(255, 85, 85, 0.2); }
+  .app-view { display: none; animation: fadeIn 0.3s ease; }
+  .card { background-color: var(--md-sys-color-surface-container-low, #070a13); border: 1px solid var(--md-sys-color-outline); border-radius: 16px; padding: clamp(16px, 3%, 24px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: border-color 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.22s cubic-bezier(0.2, 0, 0, 1), transform 0.22s cubic-bezier(0.2, 0, 0, 1); }
+  .indicator-preview-grid .card { padding: 0; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; background: #070a13; border-radius: 12px; }
+  .indicator-preview-grid .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
+  .indicator-preview-grid .card.card-peakvalley:hover { border-color: #00d4aa; box-shadow: 0 0 16px rgba(0, 212, 170, 0.3); }
+  .indicator-preview-grid .card.card-fng:hover { border-color: #ffb648; box-shadow: 0 0 16px rgba(255, 182, 72, 0.3); }
+  .indicator-preview-grid .card.card-heatmap:hover { border-color: #ff5a5a; box-shadow: 0 0 16px rgba(255, 90, 90, 0.3); }
+  .indicator-preview-grid .card.card-8gems:hover { border-color: #4da6ff; box-shadow: 0 0 16px rgba(77, 166, 255, 0.3); }
+  .indicator-preview-grid .card.card-frontier:hover { border-color: #a855f7; box-shadow: 0 0 16px rgba(168, 85, 247, 0.3); }
+  .indicator-preview-grid .card.card-narrative:hover { border-color: #e6c48c; box-shadow: 0 0 16px rgba(230, 196, 140, 0.3); }
+  .indicator-preview-grid .card.card-tldr:hover { border-color: #3b82f6; box-shadow: 0 0 16px rgba(59, 130, 246, 0.3); }
+  .indicator-preview-grid .card.card-riskmeter:hover { border-color: #ec4899; box-shadow: 0 0 16px rgba(236, 72, 153, 0.3); }
+  .indicator-preview-grid .card.card-smarisk:hover { border-color: #10b981; box-shadow: 0 0 16px rgba(16, 185, 129, 0.3); }
+  .indicator-preview-grid .card.card-roi:hover { border-color: #eab308; box-shadow: 0 0 16px rgba(234, 179, 8, 0.3); }
+  .indicator-preview-grid .card.card-bull:hover { border-color: #4ade80; box-shadow: 0 0 16px rgba(74, 222, 128, 0.3); }
+  .indicator-preview-grid .card.card-bear:hover { border-color: #f87171; box-shadow: 0 0 16px rgba(248, 113, 113, 0.3); }
+  .widget-dashboard { width: 100%; margin: 0; }
+  .widget-container { width: 100%; min-width: 0; }
+  .fluid-widget-container {
+      position: relative;
+      width: 100%;
+      height: calc(100dvh - 96px);
+      min-height: 560px;
+      overflow: hidden;
+      background: #03050a;
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 12px;
+  }
+  .matrix-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #03050a;
+      transition: opacity 0.22s ease;
+  }
+  .matrix-layer.hidden { opacity: 0; pointer-events: none; }
+  .matrix-layer.active { opacity: 1; pointer-events: auto; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* --- Professional Table Styles --- */
+  .data-table-view table { width: 100%; border-collapse: collapse; background-color: var(--md-sys-color-surface); font-size: 14px; text-align: left; border-radius: 8px; overflow: hidden; margin-top: 12px; border: 1px solid var(--md-sys-color-outline); }
+  .data-table-view th { background-color: #1a1d24; color: var(--md-sys-color-primary); padding: 14px; font-weight: 600; border-bottom: 2px solid var(--md-sys-color-outline); white-space: nowrap; }
+  .data-table-view td { padding: 12px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #e0e0e0; white-space: nowrap; }
+  .data-table-view tr:hover { background-color: rgba(88, 166, 255, 0.08); }
+  .data-table-view td a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .data-table-view td a:hover { text-decoration: underline; }
+  
+  /* Widget Report Links */
+  .widget-full-report {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.2s;
+  }
+  .widget-full-report:hover { opacity: 0.8; text-decoration: underline; }
+
+/* Clickable indicator cards */
+.card[data-action] { cursor: pointer !important; }
+.card[data-action]:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }

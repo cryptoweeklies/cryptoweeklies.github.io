@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>CryptoWeeklies Preso Mode</title>
+<meta name="description" content="Mobile-first CryptoWeeklies presentation shell for the same dashboard logic used on the main site." />
+<link rel="icon" type="image/png" sizes="192x192" href="https://cryptoweeklies.com/cryptoweeklies_logo_v8.png" />
+<link rel="stylesheet" href="preso_style.css?v=4" />
+</head>
+<body>
+<main class="preso-shell controls-collapsed" id="preso-shell">
+  <div class="preso-frame-wrap">
+    <iframe id="market-frame" class="preso-frame" src="Crypto_Story_Galaxy.html?preso=1" scrolling="auto" title="CryptoWeeklies dashboard"></iframe>
+  </div>
+
+  <div class="restore-actions" id="restore-actions">
+    <a class="mini-pill" href="index.html">Classic</a>
+    <button class="restore-pill" id="restore-btn" type="button">Controls</button>
+  </div>
+
+  <div class="search-results" id="search-results" aria-live="polite"></div>
+
+  <aside class="deep-dive-sheet" id="deep-dive-sheet" aria-live="polite">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-title" id="deep-title">Deep Dive</div>
+        <div class="sheet-subtitle" id="deep-subtitle"></div>
+      </div>
+      <button class="sheet-close" id="deep-close" type="button" aria-label="Close deep dive">x</button>
+    </div>
+    <div class="link-grid" id="deep-links"></div>
+  </aside>
+
+  <section class="viewer-sheet" id="viewer-sheet" aria-label="Report viewer">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-title" id="viewer-title">Report</div>
+        <div class="sheet-subtitle" id="viewer-subtitle"></div>
+      </div>
+      <button class="sheet-close" id="viewer-close" type="button" aria-label="Close report">x</button>
+    </div>
+    <iframe id="viewer-frame" class="viewer-frame" src="" title="Deep dive report"></iframe>
+  </section>
+
+  <nav class="preso-dock" id="preso-dock" aria-label="Presentation controls">
+    <div class="control-row" id="market-tabs"></div>
+    <div class="control-row" id="view-tabs"></div>
+    <div class="control-row orbit-row" id="zone-tabs"></div>
+    <div class="search-row">
+      <input class="preso-search" id="preso-search" type="search" placeholder="Search all tickers" autocomplete="off" />
+      <div class="control-row" id="focus-tabs"></div>
+    </div>
+  </nav>
+</main>
+
+<script src="preso_catalog.js?v=1"></script>
+<script>
+const MARKETS = {
+  crypto: {
+    label: "Crypto",
+    src: "Crypto_Story_Galaxy.html",
+    action: "open_asset_menu",
+    focuses: [["PRIMARY", "Primary"], ["OUTER", "Outer"], ["ALL", "All"]],
+    views: [
+      ["galaxy", "Galaxy"],
+      ["dca", "DCA"],
+      ["performance", "Perf"],
+      ["narrative", "Narrative"],
+      ["risk", "Risk"],
+      ["portfolio", "Portfolio"],
+      ["frontier", "Frontier"],
+      ["table", "Screener"],
+      ["gravity", "Gravity"]
+    ]
+  },
+  ai: {
+    label: "AI",
+    src: "AI_Gravity_Dashboard.html",
+    action: "open_ai_asset_menu",
+    focuses: [["PRIMARY", "Primary"], ["OUTER", "Outer"], ["MARKET", "Market"]],
+    views: [
+      ["galaxy", "Galaxy"],
+      ["performance", "Perf"],
+      ["risk", "Risk"],
+      ["portfolio", "Portfolio"],
+      ["frontier", "Frontier"],
+      ["table", "Screener"],
+      ["market", "Market"]
+    ]
+  },
+  quantum: {
+    label: "Quantum",
+    src: "Quantum_Gravity_Dashboard.html",
+    action: "open_quantum_asset_menu",
+    focuses: [["PRIMARY", "Primary"], ["OUTER", "Outer"], ["MARKET", "Market"]],
+    views: [
+      ["galaxy", "Galaxy"],
+      ["performance", "Perf"],
+      ["risk", "Risk"],
+      ["portfolio", "Portfolio"],
+      ["frontier", "Frontier"],
+      ["table", "Screener"],
+      ["market", "Market"]
+    ]
+  },
+  bitcoin: {
+    label: "Bitcoin Eq",
+    src: "Bitcoin_Gravity_Dashboard.html",
+    action: "open_bitcoin_asset_menu",
+    focuses: [["PRIMARY", "Primary"], ["OUTER", "Outer"], ["MARKET", "Market"]],
+    views: [
+      ["galaxy", "Galaxy"],
+      ["performance", "Perf"],
+      ["risk", "Risk"],
+      ["portfolio", "Portfolio"],
+      ["frontier", "Frontier"],
+      ["table", "Screener"],
+      ["market", "Market"]
+    ]
+  }
+};
+
+const ORBIT_ZONES = [
+  ["Golden Breakout", "Golden"],
+  ["Deep Accumulation", "Deep"],
+  ["Euphoria", "Euphoria"],
+  ["Value Trap", "Trap"]
+];
+const ORBIT_ZONE_KEYS = ORBIT_ZONES.map(([key]) => key);
+
+const state = {
+  market: new URLSearchParams(window.location.search).get("market") || "crypto",
+  view: new URLSearchParams(window.location.search).get("view") || "galaxy",
+  focus: "PRIMARY",
+  zone: new URLSearchParams(window.location.search).get("zone") || "Golden Breakout",
+  catalog: []
+};
+if (!MARKETS[state.market]) state.market = "crypto";
+if (!ORBIT_ZONE_KEYS.includes(state.zone)) state.zone = "Golden Breakout";
+
+const shell = document.getElementById("preso-shell");
+const frame = document.getElementById("market-frame");
+const searchInput = document.getElementById("preso-search");
+const searchResults = document.getElementById("search-results");
+const deepSheet = document.getElementById("deep-dive-sheet");
+const viewerSheet = document.getElementById("viewer-sheet");
+const viewerFrame = document.getElementById("viewer-frame");
+
+function relativeOrAbsolute(src) {
+  if (!src) return "";
+  if (/^https?:\/\//i.test(src)) return src;
+  if (window.location.protocol === "file:" && !hasLocalDashboardFile(src)) return hostedUrl(src);
+  return src.replace(/^\/+/, "");
+}
+
+function hostedUrl(src) {
+  if (!src || /^https?:\/\//i.test(src)) return src || "";
+  return `https://cryptoweeklies.com/${src.replace(/^\/+/, "")}`;
+}
+
+function hasLocalDashboardFile(src) {
+  const path = String(src || "").split("?")[0].split("#")[0].split("/").pop();
+  return path === "Crypto_Story_Galaxy.html";
+}
+
+function dashboardUrl(src, view) {
+  const base = window.location.protocol === "file:" && !hasLocalDashboardFile(src) ? hostedUrl(src) : relativeOrAbsolute(src);
+  let url;
+  try {
+    url = new URL(base, window.location.href);
+  } catch (e) {
+    return base;
+  }
+  url.searchParams.set("preso", "1");
+  if (view) url.searchParams.set("view", view);
+  if (state.focus && state.focus !== "PRIMARY") url.searchParams.set("focus", state.focus);
+  if (state.zone) url.searchParams.set("zone", state.zone);
+  if (window.location.protocol === "file:" && !/^https?:\/\//i.test(base)) {
+    return `${url.pathname.split("/").pop()}${url.search}${url.hash}`;
+  }
+  const sameOrigin = url.origin === window.location.origin;
+  return sameOrigin ? `${url.pathname.replace(/^\//, "")}${url.search}${url.hash}` : url.toString();
+}
+
+function activeMarket() {
+  return MARKETS[state.market] || MARKETS.crypto;
+}
+
+function allowedViews(market = activeMarket()) {
+  return market.views || MARKETS.crypto.views;
+}
+
+function allowedFocuses(market = activeMarket()) {
+  return market.focuses || MARKETS.crypto.focuses;
+}
+
+function validViewForMarket(view, market = activeMarket()) {
+  return allowedViews(market).some(([key]) => key === view) ? view : allowedViews(market)[0][0];
+}
+
+function validFocusForMarket(focus, market = activeMarket()) {
+  return allowedFocuses(market).some(([key]) => key === focus) ? focus : allowedFocuses(market)[0][0];
+}
+
+function setFrameSource(force = false) {
+  const market = activeMarket();
+  state.view = validViewForMarket(state.view, market);
+  state.focus = validFocusForMarket(state.focus, market);
+  const nextSrc = dashboardUrl(market.src, state.view);
+  frame.dataset.baseSrc = market.src;
+  frame.dataset.remoteFallbackTried = "0";
+  if (force || frame.getAttribute("src") !== nextSrc) {
+    frame.setAttribute("src", nextSrc);
+  } else {
+    applyIframeView();
+  }
+}
+
+function applyIframeView() {
+  try {
+    frame.contentWindow?.postMessage?.({ action: "cw_presentation_mode", enabled: true }, "*");
+    frame.contentWindow?.postMessage?.({ action: "cw_presentation_view", view: state.view }, "*");
+    frame.contentWindow?.postMessage?.({ action: "cw_presentation_focus", focus: state.focus }, "*");
+    frame.contentWindow?.postMessage?.({ action: "cw_presentation_zone", zone: state.zone }, "*");
+    const doc = frame.contentDocument || frame.contentWindow?.document;
+    if (!doc) return;
+    installPresentationAdapter(doc);
+    const selectors = [`[data-view="${state.view}"]`, `[data-mode="${state.view}"]`];
+    const button = selectors.map(selector => doc.querySelector(selector)).find(Boolean);
+    if (button && !button.classList.contains("active")) button.click();
+    if (state.focus) {
+      const focusSelector = `[data-focus="${state.focus}"]`;
+      const focusButton = doc.querySelector(focusSelector);
+      if (focusButton && !focusButton.classList.contains("active")) focusButton.click();
+    }
+    attachDashboardCloseHandler(doc);
+    applyOrbitFilter(doc);
+    amplifyPresentationBubbles(doc);
+  } catch (e) {}
+}
+
+function installPresentationAdapter(doc) {
+  if (!doc.head || doc.getElementById("cw-preso-adapter-style")) return;
+  if (doc.body) doc.body.classList.add("presentation-mode");
+  const style = doc.createElement("style");
+  style.id = "cw-preso-adapter-style";
+  style.textContent = `
+    html,
+    body {
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+      background: #01030a !important;
+    }
+    #galaxy-section,
+    #story-root,
+    #story-app,
+    .galaxy-stage,
+    .dashboard-stage,
+    .dashboard-shell {
+      width: 100vw !important;
+      height: 100dvh !important;
+      min-height: 0 !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
+    }
+    #control-deck,
+    #tier-panel,
+    #zone-legend,
+    #orbit-description,
+    .top-controls,
+    .mode-tabs,
+    .view-tabs,
+    .filter-dock,
+    .story-nav,
+    .terminal-nav {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    #chart-title {
+      top: 10px !important;
+      left: 12px !important;
+      right: 12px !important;
+      max-width: calc(100vw - 24px) !important;
+      font-size: clamp(18px, 5.8vw, 34px) !important;
+      line-height: 1 !important;
+      pointer-events: none !important;
+    }
+    #table-view.active,
+    #table-view.story-view,
+    .story-panel,
+    .story-svg-shell {
+      inset: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: #01030a !important;
+      box-shadow: none !important;
+    }
+    .coin-label,
+    .coin-return,
+    .coin-fallback,
+    .ticker-text,
+    .metric-text,
+    text {
+      letter-spacing: 0 !important;
+    }
+    @media (max-width: 760px), (orientation: portrait) {
+      #chart-title {
+        font-size: clamp(20px, 8vw, 42px) !important;
+      }
+    }
+  `;
+  doc.head.appendChild(style);
+}
+
+function attachDashboardCloseHandler(doc) {
+  if (!doc.body || doc.body.dataset.presoCloseHandler === "1") return;
+  doc.body.dataset.presoCloseHandler = "1";
+  doc.addEventListener("click", () => {
+    if (shell.dataset.syncingDashboard === "1") return;
+    shell.classList.add("controls-collapsed");
+  }, { passive: true });
+}
+
+function selectorValue(value) {
+  return String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function applyOrbitFilter(doc) {
+  if (!state.zone) return;
+  const zoneButton = doc.querySelector(`[data-zone-filter="${selectorValue(state.zone)}"]`);
+  if (zoneButton && !zoneButton.classList.contains("active")) {
+    shell.dataset.syncingDashboard = "1";
+    zoneButton.click();
+    window.setTimeout(() => { delete shell.dataset.syncingDashboard; }, 0);
+  }
+}
+
+function amplifyPresentationBubbles(doc) {
+  if (state.view !== "galaxy") return;
+  if (doc.body?.dataset?.cwNativePreso === "1") return;
+  doc.querySelectorAll(".node circle, .coin-node circle").forEach(circle => {
+    if (circle.dataset.presoAmplified === "1") return;
+    const r = Number(circle.getAttribute("r"));
+    if (!Number.isFinite(r) || r <= 0) return;
+    circle.setAttribute("r", Math.min(160, r * 2).toFixed(1));
+    circle.dataset.presoAmplified = "1";
+  });
+  doc.querySelectorAll(".node text, .coin-label, .coin-return, .coin-fallback, .ticker-text, .metric-text").forEach(text => {
+    if (text.dataset.presoAmplified === "1") return;
+    const size = Number.parseFloat(text.style.fontSize || text.getAttribute("font-size"));
+    if (!Number.isFinite(size) || size <= 0) return;
+    const nextSize = Math.min(54, size * 1.65);
+    text.style.fontSize = `${nextSize.toFixed(1)}px`;
+    text.dataset.presoAmplified = "1";
+  });
+}
+
+function checkFrameFallback() {
+  if (frame.dataset.remoteFallbackTried === "1") return;
+  try {
+    const doc = frame.contentDocument || frame.contentWindow?.document;
+    const text = (doc?.body?.innerText || "").trim();
+    const missing = /404|not found|cannot get|file not found/i.test(text) && text.length < 1200;
+    if (!missing) return;
+  } catch (e) {
+    return;
+  }
+  frame.dataset.remoteFallbackTried = "1";
+  const market = activeMarket();
+  frame.setAttribute("src", dashboardUrl(hostedUrl(market.src), state.view));
+}
+
+function button(label, active, onClick) {
+  const el = document.createElement("button");
+  el.type = "button";
+  el.className = `control-btn${active ? " active" : ""}`;
+  el.textContent = label;
+  el.addEventListener("click", onClick);
+  return el;
+}
+
+function renderControls() {
+  document.getElementById("market-tabs").replaceChildren(...Object.entries(MARKETS).map(([key, market]) =>
+    button(market.label, state.market === key, () => {
+      state.market = key;
+      state.view = validViewForMarket(state.view, market);
+      state.focus = validFocusForMarket(state.focus, market);
+      closeSheets();
+      renderControls();
+      setFrameSource(true);
+    })
+  ));
+
+  document.getElementById("view-tabs").replaceChildren(...allowedViews().map(([key, label]) =>
+    button(label, state.view === key, () => {
+      state.view = key;
+      if (key === "market" && allowedFocuses().some(([focus]) => focus === "MARKET")) {
+        state.focus = "MARKET";
+      } else if (state.focus === "MARKET") {
+        state.focus = validFocusForMarket("PRIMARY");
+      }
+      closeSheets();
+      renderControls();
+      setFrameSource(false);
+      applyIframeView();
+    })
+  ));
+
+  document.getElementById("focus-tabs").replaceChildren(...allowedFocuses().map(([key, label]) =>
+    button(label, state.focus === key, () => setFocus(key))
+  ));
+
+  document.getElementById("zone-tabs").replaceChildren(...ORBIT_ZONES.map(([key, label]) =>
+    button(label, state.zone === key, () => setZone(key))
+  ));
+}
+
+function setFocus(focus) {
+  state.focus = validFocusForMarket(focus);
+  if (state.focus === "MARKET") {
+    state.view = validViewForMarket("market");
+  } else if (state.view === "market") {
+    state.view = validViewForMarket("galaxy");
+  }
+  renderControls();
+  applyIframeView();
+}
+
+function setZone(zone) {
+  state.zone = zone;
+  renderControls();
+  applyIframeView();
+}
+
+function closeSheets() {
+  deepSheet.classList.remove("open");
+  viewerSheet.classList.remove("open");
+  searchResults.classList.remove("open");
+}
+
+function normalizeTicker(text) {
+  return String(text || "").trim().toUpperCase().replace("-USD", "");
+}
+
+function loadCatalog() {
+  try {
+    const fromSession = JSON.parse(sessionStorage.getItem("cwPresoAssetCatalog") || "[]");
+    if (Array.isArray(fromSession) && fromSession.length) {
+      state.catalog = fromSession;
+      return;
+    }
+  } catch (e) {}
+  state.catalog = Array.isArray(window.CW_PRESO_FALLBACK_CATALOG) ? window.CW_PRESO_FALLBACK_CATALOG.slice() : [];
+  addQuantumFallbackCatalog();
+}
+
+function addQuantumFallbackCatalog() {
+  const quantumRows = [
+    ["IonQ", "IONQ"],
+    ["Rigetti Computing", "RGTI"],
+    ["D-Wave Quantum", "QBTS"],
+    ["Quantum Computing Inc.", "QUBT"],
+    ["Arqit Quantum", "ARQQ"],
+    ["GlobalFoundries", "GFS"],
+    ["Linde", "LIN"],
+    ["FormFactor", "FORM"],
+    ["Keysight Technologies", "KEYS"],
+    ["Defiance Quantum ETF", "QTUM"]
+  ];
+  quantumRows.forEach(([name, ticker]) => {
+    if (findAsset(ticker)) return;
+    state.catalog.push({
+      ticker,
+      name,
+      category: "Quantum Stocks",
+      links: [
+        { label: "Forecast Graph", href: `${ticker}_Price_Forecast_And_Analysis.html` },
+        { label: "TWAP Model", href: `${ticker}_Equities_TWAP.html` },
+        { label: "Valuation Bands", href: `${ticker}_Equities_Valuation.html` },
+        { label: "SMA Risk", href: `${ticker}_Composite_SMA_Risk.html` },
+        { label: "Gravity Profile", href: `${ticker}_Gravity_Analysis.html` }
+      ]
+    });
+  });
+}
+
+function findAsset(ticker) {
+  const needle = normalizeTicker(ticker);
+  return state.catalog.find(item => normalizeTicker(item.ticker) === needle)
+    || state.catalog.find(item => normalizeTicker(item.ticker).replace(/[^A-Z0-9]/g, "") === needle.replace(/[^A-Z0-9]/g, ""));
+}
+
+function searchCatalog(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  return state.catalog.filter(item => {
+    const haystack = `${item.ticker} ${item.name} ${item.category} ${(item.links || []).map(link => link.label).join(" ")}`.toLowerCase();
+    return haystack.includes(q);
+  }).slice(0, 24);
+}
+
+function renderSearch() {
+  const rows = searchCatalog(searchInput.value);
+  if (!rows.length) {
+    searchResults.classList.remove("open");
+    searchResults.replaceChildren();
+    return;
+  }
+  searchResults.replaceChildren(...rows.map(item => {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "result-row";
+    row.innerHTML = `
+      <div class="result-ticker">${escapeHtml(item.ticker)}</div>
+      <div>
+        <div class="result-name">${escapeHtml(item.name || item.ticker)}</div>
+        <div class="result-category">${escapeHtml(item.category || "All Markets")}</div>
+      </div>
+      <div class="result-action">Open</div>
+    `;
+    row.addEventListener("click", () => {
+      searchInput.value = "";
+      searchResults.classList.remove("open");
+      openAssetDeepDive(item.ticker);
+    });
+    return row;
+  }));
+  searchResults.classList.add("open");
+}
+
+function reportKind(label) {
+  const text = String(label || "");
+  if (/graph|forecast/i.test(text)) return "Forecast";
+  if (/twap|gravity/i.test(text)) return "Gravity";
+  if (/valuation|bands/i.test(text)) return "Valuation";
+  if (/sma|summary|risk/i.test(text)) return "Risk";
+  if (/dca/i.test(text)) return "DCA";
+  if (/rainbow|phase|regression/i.test(text)) return "Cycle";
+  return "Report";
+}
+
+function openAssetDeepDive(ticker) {
+  const asset = findAsset(ticker);
+  const title = document.getElementById("deep-title");
+  const subtitle = document.getElementById("deep-subtitle");
+  const links = document.getElementById("deep-links");
+  title.textContent = normalizeTicker(ticker) || "Asset";
+  subtitle.textContent = asset ? `${asset.name || asset.ticker} / ${asset.category || "All Markets"}` : "No report catalog entry found";
+  links.replaceChildren();
+
+  if (!asset || !Array.isArray(asset.links) || !asset.links.length) {
+    const empty = document.createElement("div");
+    empty.className = "link-btn";
+    empty.textContent = "No detailed reports found in the current catalog.";
+    links.appendChild(empty);
+  } else {
+    asset.links.forEach(link => {
+      const linkButton = document.createElement("button");
+      linkButton.type = "button";
+      linkButton.className = "link-btn";
+      linkButton.innerHTML = `
+        <div class="link-kicker">${escapeHtml(reportKind(link.label))}</div>
+        <div class="link-label">${escapeHtml(link.label)}</div>
+      `;
+      linkButton.addEventListener("click", () => {
+        deepSheet.classList.remove("open");
+        openChartViewer(link.href, asset.ticker, link.label);
+      });
+      links.appendChild(linkButton);
+    });
+  }
+  viewerSheet.classList.remove("open");
+  deepSheet.classList.add("open");
+}
+
+function openChartViewer(url, title, subtitle = "") {
+  const href = relativeOrAbsolute(url);
+  document.getElementById("viewer-title").textContent = title || "Report";
+  document.getElementById("viewer-subtitle").textContent = subtitle || "";
+  viewerFrame.setAttribute("src", href);
+  viewerSheet.classList.add("open");
+}
+
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
+
+window.openAssetDeepDive = openAssetDeepDive;
+window.openChartViewer = openChartViewer;
+window.openDcaPlannerFromSummary = function(asset) {
+  state.market = "crypto";
+  state.view = "dca";
+  renderControls();
+  const src = dashboardUrl(`Crypto_Story_Galaxy.html?asset=${encodeURIComponent(asset || "")}`, "dca");
+  frame.setAttribute("src", src);
+};
+
+window.addEventListener("message", event => {
+  if (!event.data) return;
+  const actions = new Set([
+    "open_asset_menu",
+    "open_ai_asset_menu",
+    "open_quantum_asset_menu",
+    "open_bitcoin_asset_menu"
+  ]);
+  if (actions.has(event.data.action)) openAssetDeepDive(event.data.ticker);
+});
+
+frame.addEventListener("load", () => {
+  applyIframeView();
+  window.setTimeout(applyIframeView, 180);
+  window.setTimeout(checkFrameFallback, 450);
+});
+
+searchInput.addEventListener("input", renderSearch);
+document.getElementById("deep-close").addEventListener("click", () => deepSheet.classList.remove("open"));
+document.getElementById("viewer-close").addEventListener("click", () => {
+  viewerSheet.classList.remove("open");
+  viewerFrame.setAttribute("src", "");
+});
+document.getElementById("preso-dock").addEventListener("click", event => event.stopPropagation());
+document.getElementById("restore-btn").addEventListener("click", event => {
+  event.stopPropagation();
+  shell.classList.remove("controls-collapsed");
+  applyIframeView();
+});
+document.addEventListener("click", event => {
+  if (event.target.closest("#preso-dock, #restore-actions, .deep-dive-sheet, .viewer-sheet, .search-results")) return;
+  shell.classList.add("controls-collapsed");
+});
+window.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeSheets();
+});
+window.addEventListener("resize", () => window.setTimeout(applyIframeView, 80), { passive: true });
+
+loadCatalog();
+renderControls();
+setFrameSource(false);
+applyIframeView();
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitcoin Equities Indicators</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; padding: 0; background: transparent; color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.strip {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.tile {
+    background: #0f141e; border: 1px solid #1e293b; border-radius: 10px;
+    padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 6px;
+    border-top: 2px solid var(--tile-accent); min-width: 0;
+    cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover, .tile:focus-visible {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+    outline: none;
+}
+/* No published page behind it: do not offer a click that goes nowhere. */
+.tile-inert { cursor: default; }
+.tile-inert:hover { transform: none; border-color: #1e293b; box-shadow: none; }
+.tile-head { display: flex; align-items: center; gap: 6px; }
+.tile-icon { font-size: 12px; line-height: 1; }
+.tile-title {
+    font-size: 11px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.tile-body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.value-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.score { font-size: 26px; font-weight: 900; font-family: monospace; line-height: 1; color: #fff; }
+/* Phase and status names run to "Bear Market / Accumulation" and "Guarded
+   Accumulation", which no ellipsis can shorten usefully. Wrap instead of
+   truncating: the label is the reader's only classification, and short ones
+   such as "Fear" still sit on one line. */
+.pill {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor;
+    font-family: monospace; text-align: right; line-height: 1.3; max-width: 60%;
+}
+.meter { width: 100%; height: 7px; background: #1e293b; border-radius: 4px; position: relative; overflow: hidden; }
+.meter-fill { position: absolute; inset: 0; }
+.meter-marker { position: absolute; top: 0; width: 3px; height: 100%; background: #fff; box-shadow: 0 0 6px #fff; }
+.scale { display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-family: monospace; }
+.dual { display: flex; align-items: center; gap: 8px; }
+.dual-cell { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.dual-value { font-size: 15px; font-weight: 800; font-family: monospace; color: #cbd5e1; }
+.dual-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.dual-divider { width: 1px; align-self: stretch; background: #1e293b; }
+.spark { width: 100%; height: 40px; }
+.spark-empty { font-size: 10px; color: #64748b; font-family: monospace; }
+.targets { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.target { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+.target-icon { font-size: 11px; line-height: 1; }
+.target-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.target-value { font-size: 12px; font-weight: 700; font-family: monospace; color: #cbd5e1; }
+.target-bear .target-value { color: #f87171; }
+.target-bull .target-value { color: #4ade80; }
+.target-spot .target-value { color: #fff; }
+.tile-foot { font-size: 9px; color: #64748b; font-family: monospace; border-top: 1px solid #1e293b; padding-top: 5px; }
+.strip-foot {
+    margin-top: 8px; font-size: 10px; color: #475569; font-family: monospace;
+    display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+@media (max-width: 520px) { .score { font-size: 22px; } }
+</style>
+<!-- cw:seo-noindex --><meta name="robots" content="noindex,follow" /><!-- /cw:seo-noindex -->
+</head>
+<body>
+<div class="strip"><article class="tile tile-fear_greed" style="--tile-accent:#ffb648;" data-url="https://cryptoweeklies.com/IBIT_Price_Forecast_And_Analysis.html" data-title="IBIT Price Forecast &amp; Analysis" data-sub="Fear &amp; Greed" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#129517;</span><span class="tile-title">Fear &amp; Greed</span></header><div class="tile-body"><div class="value-row"><span class="score">59</span><span class="pill" style="color:#ffb648;">Neutral</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #ef4444, #f97316, #eab308, #4ade80, #22c55e);"></div><div class="meter-marker" style="left:58.90%;"></div></div><div class="scale"><span>0 Extreme Fear</span><span>Extreme Greed 100</span></div></div><footer class="tile-foot">30-day average 47</footer></article><article class="tile tile-peak_valley" style="--tile-accent:#00d4aa;" data-url="https://cryptoweeklies.com/IBIT_Price_Forecast_And_Analysis.html" data-title="IBIT Price Forecast &amp; Analysis" data-sub="Peak / Valley Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#9889;</span><span class="tile-title">Peak / Valley Risk</span></header><div class="tile-body"><div class="value-row"><span class="score">42.1%</span><span class="pill" style="color:#00d4aa;">Balanced</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #3b82f6, #22c55e, #eab308, #f59e0b, #f97316, #ef4444);"></div><div class="meter-marker" style="left:42.10%;"></div></div><div class="scale"><span>0 Safe Trough</span><span>Danger Peak 100</span></div></div><footer class="tile-foot">Lagging confirmation 57.1</footer></article><article class="tile tile-macro_risk" style="--tile-accent:#10b981;" data-url="https://cryptoweeklies.com/IBIT_Composite_SMA_Risk.html" data-title="IBIT Composite SMA Risk" data-sub="Macro Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128208;</span><span class="tile-title">Macro Risk</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#f97316;">62</span><span class="pill" style="color:#f97316;">Heated Expansion</span></div><div class="dual"><div class="dual-cell"><span class="dual-value">87</span><span class="dual-label">20W</span></div><div class="dual-divider"></div><div class="dual-cell"><span class="dual-value">49</span><span class="dual-label">100W / 200W</span></div></div></div><footer class="tile-foot">Weekly SMA z-score sigmoid composite</footer></article><article class="tile tile-roi" style="--tile-accent:#eab308;" data-url="https://cryptoweeklies.com/IBIT_Price_Forecast_And_Analysis.html" data-title="IBIT Price Forecast &amp; Analysis" data-sub="Year-to-Date ROI" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128200;</span><span class="tile-title">Year-to-Date ROI</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#ef4444;">-6.62%</span><span class="pill" style="color:#eab308;">IBIT YTD</span></div><div class="spark"><svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:100%;overflow:visible;" aria-hidden="true"><path d="M 0.0,11.2 0.6,7.7 1.3,9.1 1.9,10.3 2.5,10.4 3.1,10.9 3.8,9.9 4.4,5.0 5.0,7.0 5.7,6.6 6.3,11.4 6.9,10.9 7.5,11.5 8.2,11.5 8.8,11.6 9.4,11.7 10.1,15.7 10.7,15.9 11.3,20.4 11.9,21.6 12.6,31.5 13.2,26.6 13.8,26.0 14.5,27.5 15.1,28.5 15.7,30.2 16.4,27.5 17.0,29.5 17.6,28.8 18.2,28.3 18.9,30.9 19.5,30.9 20.1,27.2 20.8,28.5 21.4,27.2 22.0,27.9 22.6,24.2 23.3,25.6 23.9,28.0 24.5,27.3 25.2,26.0 25.8,26.2 26.4,25.6 27.0,23.5 27.7,23.0 28.3,25.8 28.9,26.4 29.6,26.1 30.2,27.1 30.8,25.9 31.4,27.7 32.1,29.7 32.7,29.3 33.3,28.3 34.0,28.9 34.6,26.8 35.2,27.4 35.8,25.6 36.5,24.9 37.1,24.0 37.7,23.2 38.4,22.6 39.0,22.4 39.6,20.7 40.3,21.7 40.9,22.7 41.5,19.6 42.1,20.6 42.8,21.3 43.4,21.7 44.0,22.4 44.7,21.6 45.3,20.0 45.9,18.7 46.5,17.7 47.2,18.7 47.8,18.7 48.4,17.3 49.1,18.2 49.7,19.1 50.3,19.5 50.9,21.3 51.6,21.3 52.2,20.7 52.8,20.7 53.5,22.1 54.1,22.0 54.7,24.0 55.3,23.9 56.0,25.5 56.6,28.8 57.2,30.2 57.9,31.6 58.5,34.2 59.1,32.8 59.7,32.9 60.4,31.5 61.0,31.6 61.6,29.2 62.3,30.0 62.9,31.1 63.5,30.9 64.2,32.6 64.8,34.5 65.4,35.0 66.0,34.5 66.7,34.1 67.3,34.3 67.9,33.2 68.6,31.4 69.2,31.4 69.8,32.7 70.4,31.9 71.1,31.3 71.7,30.8 72.3,30.5 73.0,31.1 73.6,31.1 74.2,30.4 74.8,29.3 75.5,30.7 76.1,31.1 76.7,30.6 77.4,31.4 78.0,31.6 78.6,30.6 79.2,32.1 79.9,31.1 80.5,30.6 81.1,30.9 81.8,30.5 82.4,31.3 83.0,31.7 83.6,31.8 84.3,32.1 84.9,31.0 85.5,30.8 86.2,27.8 86.8,24.5 87.4,21.1 88.1,19.7 88.7,20.0 89.3,18.9 89.9,20.8 90.6,19.7 91.2,21.0 91.8,20.9 92.5,19.0 93.1,20.1 93.7,20.3 94.3,21.1 95.0,21.0 95.6,19.6 96.2,21.9 96.9,21.6 97.5,17.9 98.1,13.8 98.7,14.0 99.4,15.3 100.0,15.8 L 100,40 L 0,40 Z" fill="#ef444426" stroke="none"></path><path d="M 0.0,11.2 0.6,7.7 1.3,9.1 1.9,10.3 2.5,10.4 3.1,10.9 3.8,9.9 4.4,5.0 5.0,7.0 5.7,6.6 6.3,11.4 6.9,10.9 7.5,11.5 8.2,11.5 8.8,11.6 9.4,11.7 10.1,15.7 10.7,15.9 11.3,20.4 11.9,21.6 12.6,31.5 13.2,26.6 13.8,26.0 14.5,27.5 15.1,28.5 15.7,30.2 16.4,27.5 17.0,29.5 17.6,28.8 18.2,28.3 18.9,30.9 19.5,30.9 20.1,27.2 20.8,28.5 21.4,27.2 22.0,27.9 22.6,24.2 23.3,25.6 23.9,28.0 24.5,27.3 25.2,26.0 25.8,26.2 26.4,25.6 27.0,23.5 27.7,23.0 28.3,25.8 28.9,26.4 29.6,26.1 30.2,27.1 30.8,25.9 31.4,27.7 32.1,29.7 32.7,29.3 33.3,28.3 34.0,28.9 34.6,26.8 35.2,27.4 35.8,25.6 36.5,24.9 37.1,24.0 37.7,23.2 38.4,22.6 39.0,22.4 39.6,20.7 40.3,21.7 40.9,22.7 41.5,19.6 42.1,20.6 42.8,21.3 43.4,21.7 44.0,22.4 44.7,21.6 45.3,20.0 45.9,18.7 46.5,17.7 47.2,18.7 47.8,18.7 48.4,17.3 49.1,18.2 49.7,19.1 50.3,19.5 50.9,21.3 51.6,21.3 52.2,20.7 52.8,20.7 53.5,22.1 54.1,22.0 54.7,24.0 55.3,23.9 56.0,25.5 56.6,28.8 57.2,30.2 57.9,31.6 58.5,34.2 59.1,32.8 59.7,32.9 60.4,31.5 61.0,31.6 61.6,29.2 62.3,30.0 62.9,31.1 63.5,30.9 64.2,32.6 64.8,34.5 65.4,35.0 66.0,34.5 66.7,34.1 67.3,34.3 67.9,33.2 68.6,31.4 69.2,31.4 69.8,32.7 70.4,31.9 71.1,31.3 71.7,30.8 72.3,30.5 73.0,31.1 73.6,31.1 74.2,30.4 74.8,29.3 75.5,30.7 76.1,31.1 76.7,30.6 77.4,31.4 78.0,31.6 78.6,30.6 79.2,32.1 79.9,31.1 80.5,30.6 81.1,30.9 81.8,30.5 82.4,31.3 83.0,31.7 83.6,31.8 84.3,32.1 84.9,31.0 85.5,30.8 86.2,27.8 86.8,24.5 87.4,21.1 88.1,19.7 88.7,20.0 89.3,18.9 89.9,20.8 90.6,19.7 91.2,21.0 91.8,20.9 92.5,19.0 93.1,20.1 93.7,20.3 94.3,21.1 95.0,21.0 95.6,19.6 96.2,21.9 96.9,21.6 97.5,17.9 98.1,13.8 98.7,14.0 99.4,15.3 100.0,15.8" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path><circle cx="100.0" cy="15.8" r="2.5" fill="#fff" stroke="#ef4444" stroke-width="1.5"></circle></svg></div></div><footer class="tile-foot">Through 2026-09-25</footer></article><article class="tile tile-bull_bear" style="--tile-accent:#4ade80;" data-url="https://cryptoweeklies.com/IBIT_Price_Forecast_And_Analysis.html" data-title="IBIT Price Forecast &amp; Analysis" data-sub="Bull / Bear Targets" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128002;</span><span class="tile-title">Bull / Bear Targets</span></header><div class="tile-body"><div class="value-row"><span class="score" style="font-size:20px;">$52.18</span><span class="pill" style="color:#EF4444;">Max Euphoria</span></div><div class="targets"><div class="target target-bear"><span class="target-icon">&#128060;</span><span class="target-value">$33.99</span></div><div class="target target-spot"><span class="target-label">Spot</span><span class="target-value">$48.22</span></div><div class="target target-bull"><span class="target-icon">&#128002;</span><span class="target-value">$76.09</span></div></div></div><footer class="tile-foot">26-week base: 18/18 assets positive</footer></article></div>
+<div class="strip-foot"><span>Reference: iShares Bitcoin Trust ETF</span><span>18 assets &middot; market close 2026-09-25</span></div>
+<script>
+(function () {
+    var last = 0;
+    function report() {
+        var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
+        if (!height || Math.abs(height - last) < 2) return;
+        last = height;
+        try {
+            parent.postMessage({ action: 'cw_widget_height', height: height }, '*');
+        } catch (error) {
+            return;
+        }
+    }
+    window.addEventListener('load', report);
+    window.addEventListener('resize', report);
+    window.addEventListener('message', function (event) {
+        if (!event.data || event.data.action !== 'cw_widget_measure') return;
+        last = 0;
+        report();
+        // The host asks the moment it reveals the view, which can precede the
+        // relayout. Measure again once the frame has been painted at its real
+        // width; this is a no-op when the first answer was already right.
+        if (window.requestAnimationFrame) window.requestAnimationFrame(report);
+    });
+    function openTile(tile) {
+        // The destination is resolved and existence-checked at build time; a
+        // tile with no data-url has no published page behind it and stays inert.
+        var url = tile && tile.getAttribute('data-url');
+        if (!url) return;
+        try {
+            parent.postMessage({
+                action: 'open-chart',
+                url: url,
+                title: tile.getAttribute('data-title') || '',
+                sub: tile.getAttribute('data-sub') || ''
+            }, '*');
+        } catch (err) {}
+    }
+    document.addEventListener('click', function (e) {
+        openTile(e.target.closest('.tile[data-url]'));
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var tile = e.target.closest && e.target.closest('.tile[data-url]');
+        if (!tile) return;
+        e.preventDefault();
+        openTile(tile);
+    });
+    if (window.ResizeObserver) {
+        new ResizeObserver(report).observe(document.body);
+    }
+    report();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institutional Crypto Pairs Terminal</title>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+<style>
+    :root {
+        --md-bg:#03050a;
+        --md-surface:#0b0e14;
+        --md-surface-high:#101620;
+        --md-outline:#263244;
+        --md-primary:#80d8ff;
+        --md-tertiary:#00d4aa;
+        --md-on-surface:#e3e2e6;
+        --md-muted:#c4c7cf;
+        --md-shadow:0 8px 24px rgba(0,0,0,.34);
+    }
+    body { background:var(--md-bg); color:var(--md-on-surface); font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; margin:0; padding:28px 20px; }
+    .container { max-width:1500px; margin:0 auto; }
+    .header-box { background:var(--md-surface); border:1px solid var(--md-outline); padding:22px; border-radius:24px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; border-left:5px solid var(--md-tertiary); box-shadow:var(--md-shadow); gap:20px; }
+    .title { font-size:1.6rem; font-weight:800; color:#fff; margin:0 0 5px 0; letter-spacing:0; }
+    .sub { font-size:.85rem; color:var(--md-muted); margin:0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:0; }
+    .back { display:inline-flex; align-items:center; min-height:36px; padding:0 14px; color:var(--md-primary); background:#123545; border:1px solid rgba(128,216,255,.26); border-radius:18px; text-decoration:none; font-size:13px; font-weight:800; margin-bottom:12px; }
+    .dataTables_wrapper { color:var(--md-muted) !important; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px; background:var(--md-surface); border:1px solid var(--md-outline); border-radius:24px; padding:18px; box-shadow:var(--md-shadow); }
+    .dataTables_wrapper select, .dataTables_wrapper input { background:var(--md-surface-high) !important; color:#fff !important; border:1px solid var(--md-outline); border-radius:18px; padding:8px 12px; outline:none; }
+    .dataTables_wrapper select:focus, .dataTables_wrapper input:focus { border-color:var(--md-primary); box-shadow:0 0 0 3px rgba(128,216,255,.16); }
+    table.dataTable { border-collapse:separate; border-spacing:0; width:100% !important; margin-top:15px !important; border-radius:18px; overflow:hidden; }
+    table.dataTable thead th { background:#20242a; color:#fff; border-bottom:2px solid var(--md-tertiary); padding:14px 10px; font-size:12px; text-align:center; letter-spacing:0; }
+    table.dataTable tbody tr { background-color:#0b0e14 !important; transition:background .2s, transform .2s; }
+    table.dataTable tbody tr:nth-child(even) { background-color:#0f141e !important; }
+    table.dataTable.display tbody tr.odd > .sorting_1,
+    table.dataTable.order-column.stripe tbody tr.odd > .sorting_1,
+    table.dataTable.display tbody tr.even > .sorting_1,
+    table.dataTable.order-column.stripe tbody tr.even > .sorting_1 { background-color:inherit !important; }
+    table.dataTable tbody tr.selected,
+    table.dataTable tbody tr:hover { background-color:#1f2937 !important; color:#ffffff !important; }
+    table.dataTable tbody tr.selected td,
+    table.dataTable tbody tr:hover td { color:#ffffff !important; }
+    table.dataTable tbody td { padding:12px 10px; border-bottom:1px solid var(--md-outline); text-align:center; color:#e2e8f0; }
+</style>
+<script>
+$(document).ready(function() {
+    $('#pairsTable').DataTable({ "pageLength": 30, "order": [[8, "desc"]] });
+});
+</script>
+</head>
+<body>
+<div class="container">
+    <div class="header-box">
+        <div>
+            <a class="back" href="https://cryptoweeklies.com/">← Back to Quant Terminal</a>
+            <h1 class="title">Relative Pairs & Opportunity Cost Terminal</h1>
+            <p class="sub">SORTED STRICTLY BY MEAN REVERSION PROBABILITY (DESCENDING)</p>
+        </div>
+        <div style="text-align:right;">
+            <p class="title" style="color:#00d4aa;">SARIMAX M3 Engine</p>
+            <p class="sub">UPDATED: September 26, 2026 - 16:22 UTC</p>
+        </div>
+    </div>
+    <table id="pairsTable" class="display">
+        <thead>
+            <tr>
+                <th>Pair Anchor</th>
+                <th>Current Spot</th>
+                <th>Projected 23W Mean</th>
+                <th>Opp Return (%)</th>
+                <th>Composite Risk</th>
+                <th>20W Risk</th>
+                <th>100W Risk</th>
+                <th>200W Risk</th>
+                <th>Mean Reversion Prob</th>
+                <th>Capital Assessment Tier</th>
+            </tr>
+        </thead>
+        <tbody><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">LTC/BTC</td>
+        <td style="font-family:monospace;">₿ 0.00087</td>
+        <td style="font-family:monospace;">₿ 0.00073</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-15.66%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.93</td>
+        <td style="font-family:monospace;">0.93</td>
+        <td style="font-family:monospace;">0.91</td>
+        <td style="font-family:monospace;">0.95</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">60.7%</td>
+        <td style="color:#ff1744; font-weight:bold; font-size:11px;">Structural Capital Sink (Bleed)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">ICP/BTC</td>
+        <td style="font-family:monospace;">₿ 0.000039</td>
+        <td style="font-family:monospace;">₿ 0.000030</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-24.96%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.88</td>
+        <td style="font-family:monospace;">0.82</td>
+        <td style="font-family:monospace;">0.89</td>
+        <td style="font-family:monospace;">0.92</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">55.5%</td>
+        <td style="color:#ff1744; font-weight:bold; font-size:11px;">Structural Capital Sink (Bleed)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">LINK/BTC</td>
+        <td style="font-family:monospace;">₿ 0.00017</td>
+        <td style="font-family:monospace;">₿ 0.00018</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+4.13%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.90</td>
+        <td style="font-family:monospace;">0.84</td>
+        <td style="font-family:monospace;">0.94</td>
+        <td style="font-family:monospace;">0.93</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">54.7%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">TRX/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.00013</td>
+        <td style="font-family:monospace;">Ξ 0.00013</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+3.09%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.21</td>
+        <td style="font-family:monospace;">0.17</td>
+        <td style="font-family:monospace;">0.20</td>
+        <td style="font-family:monospace;">0.27</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">39.7%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">ETH/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0320</td>
+        <td style="font-family:monospace;">₿ 0.0307</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-4.16%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.77</td>
+        <td style="font-family:monospace;">0.67</td>
+        <td style="font-family:monospace;">0.84</td>
+        <td style="font-family:monospace;">0.80</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">37.1%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">AVAX/BTC</td>
+        <td style="font-family:monospace;">₿ 0.00013</td>
+        <td style="font-family:monospace;">₿ 0.00012</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-9.82%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.74</td>
+        <td style="font-family:monospace;">0.90</td>
+        <td style="font-family:monospace;">0.76</td>
+        <td style="font-family:monospace;">0.57</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">34.0%</td>
+        <td style="color:#ff1744; font-weight:bold; font-size:11px;">Structural Capital Sink (Bleed)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">DOT/BTC</td>
+        <td style="font-family:monospace;">₿ 0.000015</td>
+        <td style="font-family:monospace;">₿ 0.0000089</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-41.49%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.70</td>
+        <td style="font-family:monospace;">0.90</td>
+        <td style="font-family:monospace;">0.73</td>
+        <td style="font-family:monospace;">0.48</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">33.9%</td>
+        <td style="color:#ff1744; font-weight:bold; font-size:11px;">Structural Capital Sink (Bleed)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">DOGE/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.000037</td>
+        <td style="font-family:monospace;">Ξ 0.000040</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+8.41%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.31</td>
+        <td style="font-family:monospace;">0.40</td>
+        <td style="font-family:monospace;">0.28</td>
+        <td style="font-family:monospace;">0.26</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">27.1%</td>
+        <td style="color:#00e676; font-weight:bold; font-size:11px;">Strategic Accumulation (Accretive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">BNB/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.2876</td>
+        <td style="font-family:monospace;">Ξ 0.3037</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+5.6%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.31</td>
+        <td style="font-family:monospace;">0.32</td>
+        <td style="font-family:monospace;">0.25</td>
+        <td style="font-family:monospace;">0.35</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">26.6%</td>
+        <td style="color:#00e676; font-weight:bold; font-size:11px;">Strategic Accumulation (Accretive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">XRP/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.00058</td>
+        <td style="font-family:monospace;">Ξ 0.00060</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+3.86%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.32</td>
+        <td style="font-family:monospace;">0.39</td>
+        <td style="font-family:monospace;">0.27</td>
+        <td style="font-family:monospace;">0.29</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">24.9%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">BCH/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.1249</td>
+        <td style="font-family:monospace;">Ξ 0.1216</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-2.67%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.32</td>
+        <td style="font-family:monospace;">0.50</td>
+        <td style="font-family:monospace;">0.20</td>
+        <td style="font-family:monospace;">0.27</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">24.7%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">TRX/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0000040</td>
+        <td style="font-family:monospace;">₿ 0.0000033</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-18.32%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.36</td>
+        <td style="font-family:monospace;">0.10</td>
+        <td style="font-family:monospace;">0.43</td>
+        <td style="font-family:monospace;">0.56</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">22.0%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">ADA/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.000097</td>
+        <td style="font-family:monospace;">Ξ 0.000081</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-15.65%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.36</td>
+        <td style="font-family:monospace;">0.51</td>
+        <td style="font-family:monospace;">0.28</td>
+        <td style="font-family:monospace;">0.30</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">21.5%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">BNB/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0092</td>
+        <td style="font-family:monospace;">₿ 0.0096</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+4.27%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.65</td>
+        <td style="font-family:monospace;">0.51</td>
+        <td style="font-family:monospace;">0.67</td>
+        <td style="font-family:monospace;">0.76</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">21.0%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">ICP/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.0012</td>
+        <td style="font-family:monospace;">Ξ 0.00098</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-20.7%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.63</td>
+        <td style="font-family:monospace;">0.63</td>
+        <td style="font-family:monospace;">0.54</td>
+        <td style="font-family:monospace;">0.72</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">21.0%</td>
+        <td style="color:#ff1744; font-weight:bold; font-size:11px;">Structural Capital Sink (Bleed)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">SOL/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0014</td>
+        <td style="font-family:monospace;">₿ 0.0014</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-5.99%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.64</td>
+        <td style="font-family:monospace;">0.89</td>
+        <td style="font-family:monospace;">0.54</td>
+        <td style="font-family:monospace;">0.50</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">19.9%</td>
+        <td style="color:#ff1744; font-weight:bold; font-size:11px;">Structural Capital Sink (Bleed)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">XRP/BTC</td>
+        <td style="font-family:monospace;">₿ 0.000018</td>
+        <td style="font-family:monospace;">₿ 0.000019</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+0.9%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.37</td>
+        <td style="font-family:monospace;">0.48</td>
+        <td style="font-family:monospace;">0.26</td>
+        <td style="font-family:monospace;">0.36</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">17.7%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">DOGE/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0000012</td>
+        <td style="font-family:monospace;">₿ 0.0000013</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+9.2%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.39</td>
+        <td style="font-family:monospace;">0.51</td>
+        <td style="font-family:monospace;">0.32</td>
+        <td style="font-family:monospace;">0.34</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">16.4%</td>
+        <td style="color:#00e676; font-weight:bold; font-size:11px;">Strategic Accumulation (Accretive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">LINK/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.0053</td>
+        <td style="font-family:monospace;">Ξ 0.0053</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+0.75%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.61</td>
+        <td style="font-family:monospace;">0.70</td>
+        <td style="font-family:monospace;">0.51</td>
+        <td style="font-family:monospace;">0.61</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">15.0%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">DOT/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.00048</td>
+        <td style="font-family:monospace;">Ξ 0.00032</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-32.2%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.44</td>
+        <td style="font-family:monospace;">0.66</td>
+        <td style="font-family:monospace;">0.33</td>
+        <td style="font-family:monospace;">0.34</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">13.5%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">LTC/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.0271</td>
+        <td style="font-family:monospace;">Ξ 0.0240</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-11.45%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.55</td>
+        <td style="font-family:monospace;">0.66</td>
+        <td style="font-family:monospace;">0.46</td>
+        <td style="font-family:monospace;">0.54</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">8.7%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">SOL/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.0453</td>
+        <td style="font-family:monospace;">Ξ 0.0482</td>
+        <td style="color:#00e676; font-weight:bold; font-family:monospace;">+6.5%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.46</td>
+        <td style="font-family:monospace;">0.71</td>
+        <td style="font-family:monospace;">0.35</td>
+        <td style="font-family:monospace;">0.32</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">6.5%</td>
+        <td style="color:#3b82f6; font-weight:bold; font-size:11px;">Stable Equilibrium</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">ADA/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0000031</td>
+        <td style="font-family:monospace;">₿ 0.0000025</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-17.62%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.48</td>
+        <td style="font-family:monospace;">0.68</td>
+        <td style="font-family:monospace;">0.32</td>
+        <td style="font-family:monospace;">0.43</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">5.6%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">BCH/BTC</td>
+        <td style="font-family:monospace;">₿ 0.0040</td>
+        <td style="font-family:monospace;">₿ 0.0039</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-3.1%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.53</td>
+        <td style="font-family:monospace;">0.68</td>
+        <td style="font-family:monospace;">0.45</td>
+        <td style="font-family:monospace;">0.45</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">4.6%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr><tr>
+        <td style="font-weight:bold; color:#fff; text-align:left;">AVAX/ETH</td>
+        <td style="font-family:monospace;">Ξ 0.0041</td>
+        <td style="font-family:monospace;">Ξ 0.0037</td>
+        <td style="color:#ff1744; font-weight:bold; font-family:monospace;">-10.45%</td>
+        <td style="font-weight:bold; font-family:monospace;">0.52</td>
+        <td style="font-family:monospace;">0.78</td>
+        <td style="font-family:monospace;">0.40</td>
+        <td style="font-family:monospace;">0.39</td>
+        <td style="color:#c084fc; font-weight:bold; font-family:monospace;">4.4%</td>
+        <td style="color:#facc15; font-weight:bold; font-size:11px;">Lagging Parity (Dilutive)</td>
+    </tr></tbody>
+    </table>
+</div>
+</body>
+</html>

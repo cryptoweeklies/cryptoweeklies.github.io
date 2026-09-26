@@ -1,0 +1,389 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+
+
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body { background-color: #050811; color: #d1d5db; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 30px 15px; }
+            .container { max-width: 1400px; margin: 0 auto; }
+
+            .forecast-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+            .metric-card { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+            .metric-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin: 0; }
+            .metric-value { font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 5px 0 0 0; font-family: monospace; }
+
+            .chart-card { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin-bottom: 30px; width: 100%; }
+
+            .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .text-card { background-color: #0f141e; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 25px; line-height: 1.7; height: fit-content; }
+            h2 { color: #ffffff; margin-top: 0; border-bottom: 1px solid #1e293b; padding-bottom: 10px; font-size: 1.2rem; }
+
+            .table-container { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; overflow-x: auto; }
+            .data-table { width: 100%; border-collapse: collapse; text-align: right; font-family: monospace; font-size: 0.85rem; }
+            .data-table th { background-color: #0f141e; color: #64748b; padding: 10px; border-bottom: 1px solid #1e293b; text-align: right; }
+            .data-table td { padding: 10px; border-bottom: 1px solid #1e293b; color: #d1d5db; }
+            .data-table tr:hover { background-color: #1e293b; }
+
+            @media (max-width: 768px) {
+                .forecast-grid { grid-template-columns: 1fr; }
+                .metric-value { font-size: 2rem; }
+                .content-grid { grid-template-columns: 1fr; }
+            }
+        </style>
+    <!-- cw:seo-head -->
+<title>Fetch.ai Price Forecast — What the Model Says (Updated Daily) — CryptoWeeklies</title>
+<meta name="description" content="Fetch.ai model base target is $0.21. Free, updated daily. No opinions, no hopium." />
+<link rel="canonical" href="https://cryptoweeklies.com/FET_Forecast.html" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Fetch.ai Price Forecast — What the Model Says (Updated Daily) — CryptoWeeklies" />
+<meta property="og:description" content="Fetch.ai model base target is $0.21. Free, updated daily. No opinions, no hopium." />
+<meta property="og:url" content="https://cryptoweeklies.com/FET_Forecast.html" />
+<meta property="og:image" content="https://cryptoweeklies.com/cw_logo_192_192.png" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Fetch.ai Price Forecast — What the Model Says (Updated Daily) — CryptoWeeklies" />
+<meta name="twitter:description" content="Fetch.ai model base target is $0.21. Free, updated daily. No opinions, no hopium." />
+<!-- /cw:seo-head -->
+</head>
+    <body>
+        <div class="container">
+
+            <div class="forecast-grid">
+                <div class="metric-card" style="border-left: 5px solid lime;">
+                    <p class="metric-title">68% Bear Case</p>
+                    <p class="metric-value">$0.07</p>
+                </div>
+                <div class="metric-card" style="border-left: 5px solid pink;">
+                    <p class="metric-title">23-Week Base Target</p>
+                    <p class="metric-value">$0.21</p>
+                </div>
+                <div class="metric-card" style="border-left: 5px solid yellow;">
+                    <p class="metric-title">68% Bull Case</p>
+                    <p class="metric-value">$0.55</p>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div style="height:650px; width:100%;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.6.0.min.js" integrity="sha256-QaOVwtVY0T02VaHrr6pnoHLCwayMJp4O5n4YyaE3rJk=" crossorigin="anonymous"></script>                <div id="forecast-chart" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("forecast-chart")) {                    Plotly.newPlot(                        "forecast-chart",                        [{"marker":{"color":"white"},"mode":"lines","name":"Actual","x":["2019-03-03T00:00:00","2019-03-10T00:00:00","2019-03-17T00:00:00","2019-03-24T00:00:00","2019-03-31T00:00:00","2019-04-07T00:00:00","2019-04-14T00:00:00","2019-04-21T00:00:00","2019-04-28T00:00:00","2019-05-05T00:00:00","2019-05-12T00:00:00","2019-05-19T00:00:00","2019-05-26T00:00:00","2019-06-02T00:00:00","2019-06-09T00:00:00","2019-06-16T00:00:00","2019-06-23T00:00:00","2019-06-30T00:00:00","2019-07-07T00:00:00","2019-07-14T00:00:00","2019-07-21T00:00:00","2019-07-28T00:00:00","2019-08-04T00:00:00","2019-08-11T00:00:00","2019-08-18T00:00:00","2019-08-25T00:00:00","2019-09-01T00:00:00","2019-09-08T00:00:00","2019-09-15T00:00:00","2019-09-22T00:00:00","2019-09-29T00:00:00","2019-10-06T00:00:00","2019-10-13T00:00:00","2019-10-20T00:00:00","2019-10-27T00:00:00","2019-11-03T00:00:00","2019-11-10T00:00:00","2019-11-17T00:00:00","2019-11-24T00:00:00","2019-12-01T00:00:00","2019-12-08T00:00:00","2019-12-15T00:00:00","2019-12-22T00:00:00","2019-12-29T00:00:00","2020-01-05T00:00:00","2020-01-12T00:00:00","2020-01-19T00:00:00","2020-01-26T00:00:00","2020-02-02T00:00:00","2020-02-09T00:00:00","2020-02-16T00:00:00","2020-02-23T00:00:00","2020-03-01T00:00:00","2020-03-08T00:00:00","2020-03-15T00:00:00","2020-03-22T00:00:00","2020-03-29T00:00:00","2020-04-05T00:00:00","2020-04-12T00:00:00","2020-04-19T00:00:00","2020-04-26T00:00:00","2020-05-03T00:00:00","2020-05-10T00:00:00","2020-05-17T00:00:00","2020-05-24T00:00:00","2020-05-31T00:00:00","2020-06-07T00:00:00","2020-06-14T00:00:00","2020-06-21T00:00:00","2020-06-28T00:00:00","2020-07-05T00:00:00","2020-07-12T00:00:00","2020-07-19T00:00:00","2020-07-26T00:00:00","2020-08-02T00:00:00","2020-08-09T00:00:00","2020-08-16T00:00:00","2020-08-23T00:00:00","2020-08-30T00:00:00","2020-09-06T00:00:00","2020-09-13T00:00:00","2020-09-20T00:00:00","2020-09-27T00:00:00","2020-10-04T00:00:00","2020-10-11T00:00:00","2020-10-18T00:00:00","2020-10-25T00:00:00","2020-11-01T00:00:00","2020-11-08T00:00:00","2020-11-15T00:00:00","2020-11-22T00:00:00","2020-11-29T00:00:00","2020-12-06T00:00:00","2020-12-13T00:00:00","2020-12-20T00:00:00","2020-12-27T00:00:00","2021-01-03T00:00:00","2021-01-10T00:00:00","2021-01-17T00:00:00","2021-01-24T00:00:00","2021-01-31T00:00:00","2021-02-07T00:00:00","2021-02-14T00:00:00","2021-02-21T00:00:00","2021-02-28T00:00:00","2021-03-07T00:00:00","2021-03-14T00:00:00","2021-03-21T00:00:00","2021-03-28T00:00:00","2021-04-04T00:00:00","2021-04-11T00:00:00","2021-04-18T00:00:00","2021-04-25T00:00:00","2021-05-02T00:00:00","2021-05-09T00:00:00","2021-05-16T00:00:00","2021-05-23T00:00:00","2021-05-30T00:00:00","2021-06-06T00:00:00","2021-06-13T00:00:00","2021-06-20T00:00:00","2021-06-27T00:00:00","2021-07-04T00:00:00","2021-07-11T00:00:00","2021-07-18T00:00:00","2021-07-25T00:00:00","2021-08-01T00:00:00","2021-08-08T00:00:00","2021-08-15T00:00:00","2021-08-22T00:00:00","2021-08-29T00:00:00","2021-09-05T00:00:00","2021-09-12T00:00:00","2021-09-19T00:00:00","2021-09-26T00:00:00","2021-10-03T00:00:00","2021-10-10T00:00:00","2021-10-17T00:00:00","2021-10-24T00:00:00","2021-10-31T00:00:00","2021-11-07T00:00:00","2021-11-14T00:00:00","2021-11-21T00:00:00","2021-11-28T00:00:00","2021-12-05T00:00:00","2021-12-12T00:00:00","2021-12-19T00:00:00","2021-12-26T00:00:00","2022-01-02T00:00:00","2022-01-09T00:00:00","2022-01-16T00:00:00","2022-01-23T00:00:00","2022-01-30T00:00:00","2022-02-06T00:00:00","2022-02-13T00:00:00","2022-02-20T00:00:00","2022-02-27T00:00:00","2022-03-06T00:00:00","2022-03-13T00:00:00","2022-03-20T00:00:00","2022-03-27T00:00:00","2022-04-03T00:00:00","2022-04-10T00:00:00","2022-04-17T00:00:00","2022-04-24T00:00:00","2022-05-01T00:00:00","2022-05-08T00:00:00","2022-05-15T00:00:00","2022-05-22T00:00:00","2022-05-29T00:00:00","2022-06-05T00:00:00","2022-06-12T00:00:00","2022-06-19T00:00:00","2022-06-26T00:00:00","2022-07-03T00:00:00","2022-07-10T00:00:00","2022-07-17T00:00:00","2022-07-24T00:00:00","2022-07-31T00:00:00","2022-08-07T00:00:00","2022-08-14T00:00:00","2022-08-21T00:00:00","2022-08-28T00:00:00","2022-09-04T00:00:00","2022-09-11T00:00:00","2022-09-18T00:00:00","2022-09-25T00:00:00","2022-10-02T00:00:00","2022-10-09T00:00:00","2022-10-16T00:00:00","2022-10-23T00:00:00","2022-10-30T00:00:00","2022-11-06T00:00:00","2022-11-13T00:00:00","2022-11-20T00:00:00","2022-11-27T00:00:00","2022-12-04T00:00:00","2022-12-11T00:00:00","2022-12-18T00:00:00","2022-12-25T00:00:00","2023-01-01T00:00:00","2023-01-08T00:00:00","2023-01-15T00:00:00","2023-01-22T00:00:00","2023-01-29T00:00:00","2023-02-05T00:00:00","2023-02-12T00:00:00","2023-02-19T00:00:00","2023-02-26T00:00:00","2023-03-05T00:00:00","2023-03-12T00:00:00","2023-03-19T00:00:00","2023-03-26T00:00:00","2023-04-02T00:00:00","2023-04-09T00:00:00","2023-04-16T00:00:00","2023-04-23T00:00:00","2023-04-30T00:00:00","2023-05-07T00:00:00","2023-05-14T00:00:00","2023-05-21T00:00:00","2023-05-28T00:00:00","2023-06-04T00:00:00","2023-06-11T00:00:00","2023-06-18T00:00:00","2023-06-25T00:00:00","2023-07-02T00:00:00","2023-07-09T00:00:00","2023-07-16T00:00:00","2023-07-23T00:00:00","2023-07-30T00:00:00","2023-08-06T00:00:00","2023-08-13T00:00:00","2023-08-20T00:00:00","2023-08-27T00:00:00","2023-09-03T00:00:00","2023-09-10T00:00:00","2023-09-17T00:00:00","2023-09-24T00:00:00","2023-10-01T00:00:00","2023-10-08T00:00:00","2023-10-15T00:00:00","2023-10-22T00:00:00","2023-10-29T00:00:00","2023-11-05T00:00:00","2023-11-12T00:00:00","2023-11-19T00:00:00","2023-11-26T00:00:00","2023-12-03T00:00:00","2023-12-10T00:00:00","2023-12-17T00:00:00","2023-12-24T00:00:00","2023-12-31T00:00:00","2024-01-07T00:00:00","2024-01-14T00:00:00","2024-01-21T00:00:00","2024-01-28T00:00:00","2024-02-04T00:00:00","2024-02-11T00:00:00","2024-02-18T00:00:00","2024-02-25T00:00:00","2024-03-03T00:00:00","2024-03-10T00:00:00","2024-03-17T00:00:00","2024-03-24T00:00:00","2024-03-31T00:00:00","2024-04-07T00:00:00","2024-04-14T00:00:00","2024-04-21T00:00:00","2024-04-28T00:00:00","2024-05-05T00:00:00","2024-05-12T00:00:00","2024-05-19T00:00:00","2024-05-26T00:00:00","2024-06-02T00:00:00","2024-06-09T00:00:00","2024-06-16T00:00:00","2024-06-23T00:00:00","2024-06-30T00:00:00","2024-07-07T00:00:00","2024-07-14T00:00:00","2024-07-21T00:00:00","2024-07-28T00:00:00","2024-08-04T00:00:00","2024-08-11T00:00:00","2024-08-18T00:00:00","2024-08-25T00:00:00","2024-09-01T00:00:00","2024-09-08T00:00:00","2024-09-15T00:00:00","2024-09-22T00:00:00","2024-09-29T00:00:00","2024-10-06T00:00:00","2024-10-13T00:00:00","2024-10-20T00:00:00","2024-10-27T00:00:00","2024-11-03T00:00:00","2024-11-10T00:00:00","2024-11-17T00:00:00","2024-11-24T00:00:00","2024-12-01T00:00:00","2024-12-08T00:00:00","2024-12-15T00:00:00","2024-12-22T00:00:00","2024-12-29T00:00:00","2025-01-05T00:00:00","2025-01-12T00:00:00","2025-01-19T00:00:00","2025-01-26T00:00:00","2025-02-02T00:00:00","2025-02-09T00:00:00","2025-02-16T00:00:00","2025-02-23T00:00:00","2025-03-02T00:00:00","2025-03-09T00:00:00","2025-03-16T00:00:00","2025-03-23T00:00:00","2025-03-30T00:00:00","2025-04-06T00:00:00","2025-04-13T00:00:00","2025-04-20T00:00:00","2025-04-27T00:00:00","2025-05-04T00:00:00","2025-05-11T00:00:00","2025-05-18T00:00:00","2025-05-25T00:00:00","2025-06-01T00:00:00","2025-06-08T00:00:00","2025-06-15T00:00:00","2025-06-22T00:00:00","2025-06-29T00:00:00","2025-07-06T00:00:00","2025-07-13T00:00:00","2025-07-20T00:00:00","2025-07-27T00:00:00","2025-08-03T00:00:00","2025-08-10T00:00:00","2025-08-17T00:00:00","2025-08-24T00:00:00","2025-08-31T00:00:00","2025-09-07T00:00:00","2025-09-14T00:00:00","2025-09-21T00:00:00","2025-09-28T00:00:00","2025-10-05T00:00:00","2025-10-12T00:00:00","2025-10-19T00:00:00","2025-10-26T00:00:00","2025-11-02T00:00:00","2025-11-09T00:00:00","2025-11-16T00:00:00","2025-11-23T00:00:00","2025-11-30T00:00:00","2025-12-07T00:00:00","2025-12-14T00:00:00","2025-12-21T00:00:00","2025-12-28T00:00:00","2026-01-04T00:00:00","2026-01-11T00:00:00","2026-01-18T00:00:00","2026-01-25T00:00:00","2026-02-01T00:00:00","2026-02-08T00:00:00","2026-02-15T00:00:00","2026-02-22T00:00:00","2026-03-01T00:00:00","2026-03-08T00:00:00","2026-03-15T00:00:00","2026-03-22T00:00:00","2026-03-29T00:00:00","2026-04-05T00:00:00","2026-04-12T00:00:00","2026-04-19T00:00:00","2026-04-26T00:00:00","2026-05-03T00:00:00","2026-05-10T00:00:00","2026-05-17T00:00:00","2026-05-24T00:00:00","2026-05-31T00:00:00","2026-06-07T00:00:00","2026-06-14T00:00:00"],"y":{"dtype":"f8","bdata":"AAAA8J+n2D9JkiSp9InTP9u2bduvvc0\u002fbtu2bT2Eyz+SJEkSMeDJP0mSJCkXnMk\u002fJUmSZNNCyT8lSZIkTI7KPwAAAAAce8Y\u002fJUmStPbEwD9u27YNsbW7P0mSJKl8y8M\u002fbtu2TVbHyD+SJEkSwTTHP0mSJOkJT8k\u002fkiRJElBXzD\u002fbtm3bXpXIP5IkSRIS48M\u002fAAAAgEvHwj8AAAAgzy6\u002fPwAAAICf67k\u002fbtu2jQ1juD9u27Yt+DC2P5IkSXJA1bM\u002fbtu2rUoesj9JkiRJ+c+wP7dt23aFf6s\u002fbtu2bToKqj+SJEmSnEysP0mSJGntvq0\u002fJUmSZBZYoz9u27YNEw2iP27btk1uGKY\u002fkiRJMoVMpT+3bdt28NKjPwAAAECdM6Q\u002fSZIkqakopT9JkiSJV5qmPyVJkmRqV6Q\u002fSZIkKbmCqz+SJElymC+vP5IkSfL0yKo\u002f27ZtO6oYqj8AAABAnpanP9u2bftN46M\u002ft23b1p1woz9u27bN94ykP9u2bRvpx6M\u002ft23bVu+1oz9JkiRJdbymP9u2bXuZKKo\u002fbtu2rUhEpj\u002fbtm2blaChP5IkSUKF5qE\u002fSZIkGX4vkz8lSZKkXQuIP5IkSZJSDYw\u002f27Ztu+ZVjT9JkiTJadGPPwAAAGBRzI4\u002fbtu2jXbckD8lSZKkavyUPyVJkiTAMpM\u002f27Zt+wagkz8AAAAA\u002fX2UP7dt25Z1PJc\u002fJUmS5L++mT9u27btc8GcPyVJkuTpmZ8\u002ft23bFksbnT\u002fbtm07fFidP27bto3lYaI\u002ft23btlvPqT8lSZJkJEKrP9u2bVvfTrI\u002fAAAAQPWJtj+3bds2UrK7PwAAAICnlMA\u002ft23bdpBVvT8lSZIkSsS4P7dt2zaL2rQ\u002fAAAA4POCsT9u27Zt\u002fhqtP27bts2a2q4\u002f27Zte1zWqT+SJEmS45OpPwAAACChn6k\u002f27Zt+zRspz+SJEkyF7ikP9u2bVu0fqY\u002fJUmS5CJAqj8AAAAgZUasP27bti1Wl6o\u002fAAAAwMTeqT8AAAAA\u002fcKsP5IkSXLvnKo\u002ft23bdvo5qz9JkiTJcHmxPyVJkvRyZrM\u002fkiRJEl4Itz+SJEkSDoS4P7dt2ybwUsM\u002f27Zte\u002fUuzz+SJEkCvD7RP27btg3bFs8\u002fSZIkqfQL1j9JkiSponrgPyVJkoSs7uM\u002fSZIk6ZcA5j8AAACglXPnP9u2bbt4t+Q\u002fbtu2jf+A4z+SJEmS1anbP9u2bdvn9OI\u002ft23bthU+4j8AAABgoo7ePyVJktRestU\u002ft23btnsv0z8AAACgDbjWP5IkSTIfktI\u002fJUmSxF7n0T9u27ZNcRDJP5IkSfKkOM8\u002fSZIk6WTy0T9JkiRJRLPNPwAAAJA4pdE\u002fSZIk6eah1z+SJEkS70HZP27btg0gxd4\u002fJUmS9FDd4D9JkiTJvcLhPyVJksQKQ+Y\u002fbtu2bTEC7D\u002fbtm0bW9frPyVJkuROZ+g\u002fbtu2bU7o5z+3bduW59HnP7dt29Zuwec\u002fkiRJst+T5z\u002fbtm2bdjnoPwAAAMBGGOs\u002fAAAAYFkm7D9u27YNPWrpP0mSJMnWM+k\u002ft23btuHr5j8AAADgzvPhPyVJkgQdwd4\u002fSZIkie6o4T9u27ad3dLgPwAAAGByn+A\u002fAAAAgEMm3z8lSZJkNsTaP5IkSfK5WNQ\u002ft23b9hH41D+SJEmScCHYP9u2bZt4xtU\u002fJUmSRGqR0T\u002fbtm07tMTUP7dt2xZ3f9U\u002fSZIkiXUk1T9JkiSJCeTZP7dt29byjd0\u002fAAAAIK8H3D+3bdu2xqTVPwAAACDBWNU\u002f27Ztuwn\u002f0j\u002fbtm3LnO3QP9u2bZvVwcU\u002fJUmSRBOixj8lSZKkJO\u002fDP0mSJKlFQMQ\u002fSZIkSeJnwj+SJEkSfIq3P0mSJIk8irU\u002fJUmSJB+Gsz9JkiSpagi0P0mSJElPXLM\u002ft23b1iiutT+SJEnSZpi1PyVJkkTcHrk\u002f27Zte9KNuT9u27btCUu4PyVJkkR2ZLY\u002fSZIkyWMCtT9u27bN7WK3PwAAAKBimLY\u002ft23bVqAOtT9u27YNlfW0PyVJksSpzrQ\u002fkiRJUtHWtD8lSZKEAyG1P9u2bRsODrU\u002ft23bdqANtj+SJEniM5yxPyVJkuS\u002fB68\u002fJUmSRF8Arz+3bduGyQuwP27btu2N6LY\u002fAAAAANX6tz9u27ZtcUi3PyVJkmTzOLg\u002fAAAAoO66vj+SJEmy1zXKP0mSJJlV5NA\u002f27ZtW\u002fTM0T8AAADgxEfUP0mSJAkkMNw\u002fkiRJ0j6X2z+3bdu2HQ7cPyVJkkRhmdw\u002fJUmShAcS1z8lSZJkSw3bP0mSJGlUWtg\u002fAAAAgPYf1z8AAACAT3vWPyVJkuQeDtg\u002fkiRJcvLV1z8lSZLE5JPVP5IkSdINx9M\u002fbtu2rbQK0D9u27YdlR3QP5IkSVL6g88\u002fAAAAoKgr0T9u27ZNmRXMP0mSJEl\u002f7sc\u002fkiRJMlYdzD9JkiRJ6gDNPyVJkqQX9sw\u002ft23bNpwyzT\u002fbtm0bt9nMP7dt2\u002faPPMs\u002fJUmSBJDWyT+3bdv2y+bJPwAAACAoBMo\u002f27ZtmzeDyj9u27YtnsPNPyVJkqRZmM8\u002f27ZtOwFJzT9u27YN98LMP27btg2LGMw\u002fAAAAoAsvzD8lSZLEipTKP0mSJImqjMs\u002ft23bdtW+0z9JkiQpYDfXP5IkSdJYvtk\u002fkiRJMjjU2z\u002fbtm0LPHXgP5IkSXJQRuE\u002fkiRJUlbX4D8lSZKESAbkPyVJkoQQP+c\u002fJUmSBFPN5j+SJEky\u002fvflP0mSJGm87OU\u002fbtu2jUyF5D8AAADg8fPiPyVJkoRbPuI\u002fkiRJ8tB34j8AAABAldHmP0mSJCniMvE\u002fSZIkKVmU9z8AAABAgIcDQEmSJKm\u002ffAVA27Ztu7oQBEC3bdvWM0QIQJIkSVLMegVA27ZtC1taA0AAAAAgoWEBQEmSJKmERQJAkiRJ8lIHAUDbtm2bh\u002fEBQNu2bTt1sgFA27Zt+wcUA0AlSZKE+WwBQNu2bfuGhv8\u002fSZIkKUvw+D\u002fbtm27mQv3P27bts15f\u002fg\u002fSZIkqXul8z9u27ZtZf7yP5IkSfL2KPc\u002fSZIkaWhJ9D9u27ZdYJLxPwAAAKAg8Oo\u002fbtu2raEb6z9u27YtPV7xP27btk36NvM\u002fkiRJcknX8T8lSZLECn\u002f1P27btk2D1vc\u002fkiRJkk9Y+j9u27aNKzH3P7dt2xbZi\u002fY\u002fJUmSBI4B9z9JkiTpr9L0PyVJkuRrC\u002fQ\u002fJUmSBErD9T8AAAAgMFX1PyVJksQsfPU\u002ft23btg86+j8lSZJE79T\u002fPyVJkoSfOfw\u002ft23btoTF9j8AAAAg71z1P5IkSXI3hfY\u002fSZIkaUjc9T\u002fbtm3bfOH0P0mSJCmSt\u002fM\u002fSZIkqWCh7z8lSZLk5IToP9u2bTtUEuk\u002f27Ztm7Ep6D9u27atAmrlP27bto0nDOM\u002fJUmS5L303z\u002fbtm07cqbgP7dt2zb+wuA\u002fAAAAYB\u002fi2z+SJEnyYAHcP5IkSbL4S+A\u002fAAAAgJ4U5j8AAADgrpnmP5IkSXILmOg\u002fkiRJUr236T8lSZKEpi3qP0mSJAkadOo\u002fAAAAYAt+6D8AAACAOI3nP5IkSRIXv+Q\u002fJUmSJJ2+5T9u27Zt6+zlP7dt2xZekOY\u002ft23blo506D8lSZJkg4foP27btg0PW+U\u002fkiRJcrTl5T\u002fbtm3bIcHmP9u2bbvwvuU\u002fJUmSpCos5D8lSZKEpXfjPyVJkiS\u002fPeU\u002fAAAAIBLI5D+3bduW\u002fJziP27bti15ruI\u002fkiRJkm\u002f\u002f3T8AAADgcObSPyVJkjTlhNA\u002fJUmSVKUl0D8lSZI0wa3RP5IkSRJzVdM\u002ft23blpDS0j8lSZJE+BfRP9u2bfvXL88\u002fkiRJknZmzz8lSZJkkeXKP27btu0q8co\u002fbtu2zeuUzD+SJEkyb0\u002fSP5IkSRKR29E\u002ft23bluzkzT9JkiTJeNnKPwAAAECmtcU\u002fbtu2jZMHxT\u002fbtm27T0XFP7dt2zaaF8Q\u002fJUmSBJj5wj8lSZKk+L\u002fFPwAAACBwpsw\u002fbtu2TRZ5zj9JkiQJt\u002fLNP9u2bRvxpc4\u002fSZIkqR8VzT9u27YNCdPKPyVJkkTnu8k\u002fkiRJkp27zD+3bdvW7\u002f\u002fKPwAAAKCwQsk\u002fAAAAAMPyzz9JkiTJBDnNPwAAAACxUMs\u002f"},"type":"scatter"},{"marker":{"color":"pink"},"mode":"lines","name":"Forecast","x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"HMyJcgLVyz9Z+B+Mz\u002fTMP7+AeW5mhc0\u002fJgoGD9GOzT+N35dPAmXNPy7oSZgY1cw\u002fDF1X6R16zD97lH6YKWrLPxtP8x4Rs8w\u002fAbPwLLIdzD8MwdS44y7LP2MKOhV7x8o\u002f\u002fUqSbXJRyz8x5LY05WzMP5txtgQX+8w\u002fTiySulkEzT+eZP1uPtvMP1ebOvy+Tcw\u002fb8Jqrkv0yz\u002fwF3a\u002f6+jKP\u002f9OK9pJLMw\u002figSM8m2Zyz92il7mpa7KPw=="},"type":"scatter"},{"line":{"color":"lime"},"mode":"lines","name":"Bear 68%","visible":true,"x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"S0WPZJj4xz8UxLdkrmnGP6FCjHJJKsU\u002f+myDbI3mwz9pquoIjLzCPxsuY+VwfME\u002fWDffy8mAwD\u002fSh75x42q+P5vQvZyQsb4\u002f9v\u002fntJDxvD9\u002fpJITZ\u002fW6P4HlmQqXprk\u002f5l6h9RZUuT8TvlYBeJG5P9et48VsSbk\u002f0m0UXhqOuD8N51kzybG3P89ONMpSi7Y\u002fkEKN6zqgtT+VcXblETC0P14wZZW7qLQ\u002fi1wAh9Otsz9+ZP+yGnyyPw=="},"type":"scatter"},{"line":{"color":"yellow"},"mode":"lines","name":"Bull 68%","visible":true,"x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"u+FjN5gg0D+\u002fydAvfZrSP0FO2a+YZtQ\u002faNo5zLKr1T8rzcvjxK3WPz9QwGOsStc\u002fg9hkr8\u002f71z8IJKH9YgbYP04U+TVLANo\u002fwW2dxo9c2j\u002fjlEkQzVnaPw+38xT0xdo\u002f3rFudQIc3D9rhxxT3QneP01scYuWc98\u002flJROprEr4D8m4Un1q4HgP0YupRTonuA\u002fCiyxaufU4D+Png26RKLgP0nMS4BvweE\u002fGuJ27+fP4T9uxnV31KThPw=="},"type":"scatter"},{"line":{"color":"green"},"mode":"lines","name":"Bear 95%","visible":"legendonly","x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"d5FvB5yyxD965VHID2LBP1zS97vEXL4\u002fzaAaCQLBuj+ZUDD+cMq3P1D3K2jgEbU\u002fPVYVl9Dysj\u002fxtazbW6qwP0+qHDbeKbA\u002fjr5n920\u002frT9VbVygiSeqP18jOQ\u002fy86c\u002fBGvn7cLQpj+buBfYq0SmPxSwQj9sSaU\u002fLs9t6b74oz8byVRgYqCiP1uHS0q6HqE\u002fuKDMpc7Enz9NgKRLkaCcP2wVOtvniJw\u002fI5weEcFPmj\u002frCNfW\u002fuWXPw=="},"type":"scatter"},{"line":{"color":"orange"},"mode":"lines","name":"Bull 95%","visible":"legendonly","x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"O\u002fdpP9eT0j9x3XKbtZzXP6Dh9Gqcs9s\u002fjzr2Q2sQ3z\u002fXdzqgaAbhP6vVHQd4OeI\u002flHvjRol64z8I8wkzqzbkPwN+iBtBh+Y\u002faFQWuyWK5z+ypxrvvTnoP3uwMRCkSOk\u002fZjszswc36z+\u002fa\u002fLlFcLtP5VRsdqt4O8\u002fcP4JLG7E8D\u002f4dC4tAIDxP5bQEHBoBPI\u002fC8gwBK+i8j9CdurE2NPyP5n\u002fZkwhbfQ\u002fTi0FbNXm9D\u002f7KXgLhCD1Pw=="},"type":"scatter"},{"line":{"color":"blue"},"mode":"lines","name":"Bear 99%","visible":"legendonly","x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"HTJCfsW4wT8FDa8cxIG6PwXxxlNuPrU\u002fdtZ1Gw5qsT+bLAUaFgutP7KDqSsdPKg\u002fBS9GXwmfpD+sS+ncuS6hP\u002fUiabJI058\u002fS5LCvUdtmz\u002fizO15FF+XP5FcSPJyc5Q\u002flrcucc+nkj\u002fAd982OXuRP0DRU+ijCJA\u002f6FVtXmPYjD\u002fxfgd7CsyJP2qwcoYnt4Y\u002fW0Eu4pw3hD9+dBZsaG2BPzKzCWqKzYA\u002fT2FKIqS7fT\u002fv0cK5xt55Pw=="},"type":"scatter"},{"line":{"color":"red"},"mode":"lines","name":"Bull 99%","visible":"legendonly","x":["2026-06-14T00:00:00","2026-06-21T00:00:00","2026-06-28T00:00:00","2026-07-05T00:00:00","2026-07-12T00:00:00","2026-07-19T00:00:00","2026-07-26T00:00:00","2026-08-02T00:00:00","2026-08-09T00:00:00","2026-08-16T00:00:00","2026-08-23T00:00:00","2026-08-30T00:00:00","2026-09-06T00:00:00","2026-09-13T00:00:00","2026-09-20T00:00:00","2026-09-27T00:00:00","2026-10-04T00:00:00","2026-10-11T00:00:00","2026-10-18T00:00:00","2026-10-25T00:00:00","2026-11-01T00:00:00","2026-11-08T00:00:00","2026-11-15T00:00:00"],"y":{"dtype":"f8","bdata":"KzdWe5B+1T8fdM9SsCHeP8twNK2W5+I\u002fNleC5tRc5j8u1ctZxqXpP8CYreyflOw\u002fncg+PVqq7z8hMsO+4\u002f7wPzAJl8bXevM\u002fIhohZt3x9D\u002f+2MGK9Sf2PzGxu8j2tvc\u002fdtS\u002fY7sg+j9Z0AYS+S\u002f9P56bsjux7\u002f8\u002f4EdkBuInAUAFw8OmnUYCQONFbG1ANANAkZ3yHztABECvq\u002fOgJ+AEQFbOtoI0\u002fAZAQ3v\u002fl1vyB0BmQr1Cp6YIQA=="},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"tickfont":{"size":14},"title":{"text":""},"tickformat":"%b %d, %Y","fixedrange":false,"showgrid":true},"yaxis":{"anchor":"x","domain":[0.0,1.0],"type":"log","tickfont":{"size":14},"title":{"text":"Price (USD) - Log Scale"},"tickformat":"~s","fixedrange":false,"showgrid":true,"gridcolor":"#1e293b","color":"#a0aab8"},"title":{"text":""},"font":{"size":14},"margin":{"l":60,"r":40,"t":20,"b":40},"legend":{"font":{"color":"white"},"orientation":"h","yanchor":"top","y":-0.1,"xanchor":"center","x":0.5},"showlegend":true,"height":650,"plot_bgcolor":"#0b0e14","paper_bgcolor":"#0b0e14","hovermode":"x unified"},                        {"displayModeBar": true, "scrollZoom": false, "responsive": true}                    )                };            </script>        </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="text-card">
+                    <h2>SARIMAX Forecasting Methodology</h2>
+                    <p>This analysis provides a forecast of <strong>FET</strong> prices using a Seasonal ARIMA model with Box-Cox transformation.</p>
+
+                    <ul style="padding-left: 20px;">
+                        <li><strong><span style="color:lime">Bear Case:</span></strong> The lower bound of the confidence interval, representing a pessimistic scenario.</li>
+                        <li><strong><span style="color:pink">Base Case:</span></strong> The average forecasted trajectory.</li>
+                        <li><strong><span style="color:yellow">Bull Case:</span></strong> The upper bound of the confidence interval, representing an optimistic scenario.</li>
+                    </ul>
+
+                    <p>The confidence levels used are 68%, 95%, and 99.7%. This acts as a mathematical cone illustrating the probability that the actual price will fall within the Bear and Bull bounds over the next 23 weeks.</p>
+                </div>
+
+                <div class="table-container">
+                    <h2 style="color: #64748b; font-size: 0.9rem; margin-top: 0; text-transform: uppercase;">Raw Data Matrix (USD)</h2>
+                    <table border="1" class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Bear_0.997</th>
+      <th>Bear_0.95</th>
+      <th>Bear_0.68</th>
+      <th>Base</th>
+      <th>Bull_0.68</th>
+      <th>Bull_0.95</th>
+      <th>Bull_0.997</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2026-06-14</th>
+      <td>0.14</td>
+      <td>0.16</td>
+      <td>0.19</td>
+      <td>0.22</td>
+      <td>0.25</td>
+      <td>0.29</td>
+      <td>0.34</td>
+    </tr>
+    <tr>
+      <th>2026-06-21</th>
+      <td>0.10</td>
+      <td>0.14</td>
+      <td>0.18</td>
+      <td>0.23</td>
+      <td>0.29</td>
+      <td>0.37</td>
+      <td>0.47</td>
+    </tr>
+    <tr>
+      <th>2026-06-28</th>
+      <td>0.08</td>
+      <td>0.12</td>
+      <td>0.17</td>
+      <td>0.23</td>
+      <td>0.32</td>
+      <td>0.43</td>
+      <td>0.59</td>
+    </tr>
+    <tr>
+      <th>2026-07-05</th>
+      <td>0.07</td>
+      <td>0.10</td>
+      <td>0.16</td>
+      <td>0.23</td>
+      <td>0.34</td>
+      <td>0.49</td>
+      <td>0.70</td>
+    </tr>
+    <tr>
+      <th>2026-07-12</th>
+      <td>0.06</td>
+      <td>0.09</td>
+      <td>0.15</td>
+      <td>0.23</td>
+      <td>0.35</td>
+      <td>0.53</td>
+      <td>0.80</td>
+    </tr>
+    <tr>
+      <th>2026-07-19</th>
+      <td>0.05</td>
+      <td>0.08</td>
+      <td>0.14</td>
+      <td>0.23</td>
+      <td>0.36</td>
+      <td>0.57</td>
+      <td>0.89</td>
+    </tr>
+    <tr>
+      <th>2026-07-26</th>
+      <td>0.04</td>
+      <td>0.07</td>
+      <td>0.13</td>
+      <td>0.22</td>
+      <td>0.37</td>
+      <td>0.61</td>
+      <td>0.99</td>
+    </tr>
+    <tr>
+      <th>2026-08-02</th>
+      <td>0.03</td>
+      <td>0.07</td>
+      <td>0.12</td>
+      <td>0.21</td>
+      <td>0.38</td>
+      <td>0.63</td>
+      <td>1.06</td>
+    </tr>
+    <tr>
+      <th>2026-08-09</th>
+      <td>0.03</td>
+      <td>0.06</td>
+      <td>0.12</td>
+      <td>0.22</td>
+      <td>0.41</td>
+      <td>0.70</td>
+      <td>1.22</td>
+    </tr>
+    <tr>
+      <th>2026-08-16</th>
+      <td>0.03</td>
+      <td>0.06</td>
+      <td>0.11</td>
+      <td>0.22</td>
+      <td>0.41</td>
+      <td>0.74</td>
+      <td>1.31</td>
+    </tr>
+    <tr>
+      <th>2026-08-23</th>
+      <td>0.02</td>
+      <td>0.05</td>
+      <td>0.11</td>
+      <td>0.21</td>
+      <td>0.41</td>
+      <td>0.76</td>
+      <td>1.38</td>
+    </tr>
+    <tr>
+      <th>2026-08-30</th>
+      <td>0.02</td>
+      <td>0.05</td>
+      <td>0.10</td>
+      <td>0.21</td>
+      <td>0.42</td>
+      <td>0.79</td>
+      <td>1.48</td>
+    </tr>
+    <tr>
+      <th>2026-09-06</th>
+      <td>0.02</td>
+      <td>0.04</td>
+      <td>0.10</td>
+      <td>0.21</td>
+      <td>0.44</td>
+      <td>0.85</td>
+      <td>1.63</td>
+    </tr>
+    <tr>
+      <th>2026-09-13</th>
+      <td>0.02</td>
+      <td>0.04</td>
+      <td>0.10</td>
+      <td>0.22</td>
+      <td>0.47</td>
+      <td>0.93</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>2026-09-20</th>
+      <td>0.02</td>
+      <td>0.04</td>
+      <td>0.10</td>
+      <td>0.23</td>
+      <td>0.49</td>
+      <td>1.00</td>
+      <td>2.00</td>
+    </tr>
+    <tr>
+      <th>2026-09-27</th>
+      <td>0.01</td>
+      <td>0.04</td>
+      <td>0.10</td>
+      <td>0.23</td>
+      <td>0.51</td>
+      <td>1.05</td>
+      <td>2.14</td>
+    </tr>
+    <tr>
+      <th>2026-10-04</th>
+      <td>0.01</td>
+      <td>0.04</td>
+      <td>0.09</td>
+      <td>0.23</td>
+      <td>0.52</td>
+      <td>1.09</td>
+      <td>2.28</td>
+    </tr>
+    <tr>
+      <th>2026-10-11</th>
+      <td>0.01</td>
+      <td>0.03</td>
+      <td>0.09</td>
+      <td>0.22</td>
+      <td>0.52</td>
+      <td>1.13</td>
+      <td>2.40</td>
+    </tr>
+    <tr>
+      <th>2026-10-18</th>
+      <td>0.01</td>
+      <td>0.03</td>
+      <td>0.08</td>
+      <td>0.22</td>
+      <td>0.53</td>
+      <td>1.16</td>
+      <td>2.53</td>
+    </tr>
+    <tr>
+      <th>2026-10-25</th>
+      <td>0.01</td>
+      <td>0.03</td>
+      <td>0.08</td>
+      <td>0.21</td>
+      <td>0.52</td>
+      <td>1.18</td>
+      <td>2.61</td>
+    </tr>
+    <tr>
+      <th>2026-11-01</th>
+      <td>0.01</td>
+      <td>0.03</td>
+      <td>0.08</td>
+      <td>0.22</td>
+      <td>0.55</td>
+      <td>1.28</td>
+      <td>2.87</td>
+    </tr>
+    <tr>
+      <th>2026-11-08</th>
+      <td>0.01</td>
+      <td>0.03</td>
+      <td>0.08</td>
+      <td>0.22</td>
+      <td>0.56</td>
+      <td>1.31</td>
+      <td>2.99</td>
+    </tr>
+    <tr>
+      <th>2026-11-15</th>
+      <td>0.01</td>
+      <td>0.02</td>
+      <td>0.07</td>
+      <td>0.21</td>
+      <td>0.55</td>
+      <td>1.32</td>
+      <td>3.08</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+            </div>
+
+        </div>
+    
+
+
+<!-- cw:seo-footer -->
+<style>
+.cw-seo-footer{max-width:1400px;margin:32px auto 0;padding:24px;border-top:1px solid #1e293b;
+background:#0b0e14;color:#94a3b8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+font-size:14px;line-height:1.6;border-radius:12px;}
+.cw-seo-footer h2{font-size:15px;color:#e2e8f0;margin:0 0 8px;font-weight:600;}
+.cw-seo-footer a{color:#38bdf8;text-decoration:none;}
+.cw-seo-footer a:hover{text-decoration:underline;}
+.cw-seo-footer ul{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-wrap:wrap;gap:8px 18px;}
+.cw-seo-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid #1e293b;}
+.cw-seo-cta a{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);
+padding:10px 16px;border-radius:8px;font-weight:600;}
+.cw-seo-cta a.cw-seo-play{background:#3DDC84;border-color:#3DDC84;color:#03050a;
+display:inline-flex;align-items:center;gap:8px;font-weight:700;}
+.cw-seo-play svg{width:18px;height:18px;flex:0 0 auto;}
+</style>
+<nav class="cw-seo-footer" aria-label="More CryptoWeeklies research">
+<h2>More Fetch.ai research</h2>
+<ul><li><a href="FET_Summary_Risk_Analysis.html">200-Week Moving Average Risk — Summary Risk Analysis</a></li><li><a href="fet-usd_price_with_risk.html">200-Week Moving Average Risk — Price With Risk (fet-usd_price_with_risk)</a></li><li><a href="fet_price_with_risk.html">200-Week Moving Average Risk — Price With Risk (fet_price_with_risk)</a></li><li><a href="FET_lin_reg_price_with_risk.html">DCA &amp; Regression Fair Value</a></li><li><a href="FET_Log_Reg.html">Log Regression Fair Value — Log Reg</a></li><li><a href="FET_Log_Reg_decay.html">Log Regression Fair Value — Log Reg Decay</a></li><li><a href="FET_BTC_Price_Forecast_And_Analysis.html">Price Forecast — Price Forecast And Analysis, BTC pair</a></li><li><a href="FET_Price_Forecast_Analysis.html">Price Forecast — Price Forecast Analysis</a></li><li><a href="FET_Price_Forecast_And_Analysis.html">Price Forecast — Price Forecast And Analysis</a></li><li><a href="FET_Price_TWAP_Gravity_Analysis.html">TWAP / Gravity Risk — Price Twap Gravity Analysis</a></li><li><a href="FET_Price_TWAP_Risk_Analysis.html">TWAP / Gravity Risk — Price Twap Risk Analysis</a></li></ul>
+<h2>Related assets</h2>
+<ul><li><a href="reports/GALA.html">Gala</a></li><li><a href="reports/GNO.html">Gnosis</a></li><li><a href="reports/GRT6719.html">The Graph</a></li><li><a href="reports/GT.html">GateToken</a></li></ul>
+<p>New here? <a href="price-forecast-explained.html">What is Price Forecast?</a> — plain-English explainer, no jargon.</p>
+<div class="cw-seo-cta">
+<a href="https://cryptoweeklies.com/reports/">See all 179 assets →</a>
+<a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">Watch the daily breakdown →</a>
+<a class="cw-seo-play" href="https://play.google.com/store/apps/details?id=com.cryptoweeklies.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#00A0FF" d="M1.6 1.4a2 2 0 0 0-.47 1.4v18.4c0 .58.17 1.05.5 1.4l.06.06L12 12.12v-.24z"/><path fill="#FFC107" d="M15.5 8.45 3.34 1.55C2.62 1.15 1.99 1.2 1.6 1.6L12 12z"/><path fill="#00E676" d="m15.4 15.6-3.4-3.48v-.24L15.4 8.4l.08.05 4.1 2.33c1.17.66 1.17 1.75 0 2.42l-4.1 2.33z"/><path fill="#FF3A44" d="M15.5 15.55 12 12 1.6 22.4c.39.4 1.02.45 1.74.05z"/></svg>Get Fetch.ai alerts on Android — free, no ads</a>
+</div>
+</nav>
+<script>
+/* The homepage embeds this exact file in #chart-iframe. The block above is in
+   the served markup for crawlers; inside a frame it is chrome the reader did
+   not ask for, so drop it there and only there. */
+(function () {
+  try {
+    if (window.self !== window.top) {
+      var nav = document.currentScript && document.currentScript.previousElementSibling;
+      while (nav && nav.className !== 'cw-seo-footer') { nav = nav.previousElementSibling; }
+      if (nav) { nav.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the block visible */ }
+})();
+</script>
+<!-- /cw:seo-footer -->
+</body>
+    </html>
+    

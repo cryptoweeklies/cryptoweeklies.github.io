@@ -1,0 +1,106 @@
+
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+    body, html { margin: 0; padding: 0; overflow: hidden; width: 100vw; height: 100vh; background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    #scatter-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; cursor: grab; } #scatter-container:active { cursor: grabbing; }
+    #tooltip { position: absolute; opacity: 0; background-color: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 12px; color: #fff; pointer-events: none; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.8); transition: opacity 0.1s ease; min-width: 240px; }
+    .tt-header { font-size: 1.1rem; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 6px; margin-bottom: 8px; } .tt-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; } .tt-lbl { color: #94a3b8; } .tt-val { font-weight: bold; font-family: monospace; font-size: 0.9rem; }
+    .axis-label-y { position: absolute; top: 50%; left: 15px; transform: translateY(-50%) rotate(-90deg); color: #64748b; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; pointer-events: none; }
+    .axis-label-x { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); color: #64748b; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; pointer-events: none; }
+
+    #widget-legend { position: absolute; bottom: 15px; right: 15px; background: rgba(15, 23, 42, 0.85); padding: 12px; border-radius: 8px; font-size: 12px; color: #cbd5e1; border: 1px solid #334155; z-index: 10; pointer-events: auto; backdrop-filter: blur(4px); }
+    .leg-item { margin-bottom: 5px; display: flex; align-items: center; gap: 6px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 10px; cursor: pointer; transition: 0.3s; user-select: none; } .leg-item:hover { transform: translateX(-2px); } .leg-item.dimmed { opacity: 0.3; filter: grayscale(50%); }
+    .report-link { display: inline-block; margin-top: 8px; color: #60a5fa; text-decoration: none; font-weight: bold; font-size: 12px; transition: color 0.2s; } .report-link:hover { color: #93c5fd; text-decoration: underline; }
+
+    @media (max-width: 600px) { #widget-legend { bottom: 10px; right: 10px; padding: 8px; font-size: 10px; } }
+</style></head><body>
+    <div id="scatter-container"><div class="axis-label-y">Ann. Return (Reward)</div><div class="axis-label-x">Ann. Volatility (Risk)</div><div id="tooltip"></div>
+        <div id="widget-legend">
+            <div class="leg-item" data-zone="Gem Zone" onclick="toggleScatterFilter('Gem Zone')"><span style="color:#22c55e; font-size:16px;">●</span> Gem Zone</div>
+            <div class="leg-item" data-zone="High Yield / High Risk" onclick="toggleScatterFilter('High Yield / High Risk')"><span style="color:#facc15; font-size:16px;">●</span> High Yield / Risk</div>
+            <div class="leg-item" data-zone="Safe Haven / Bleeding" onclick="toggleScatterFilter('Safe Haven / Bleeding')"><span style="color:#3b82f6; font-size:16px;">●</span> Safe Haven</div>
+            <div class="leg-item" data-zone="Danger Zone" onclick="toggleScatterFilter('Danger Zone')"><span style="color:#ef4444; font-size:16px;">●</span> Danger Zone</div>
+            <a href="https://cryptoweeklies.com/combined_portfolio_allocation.html" target="_top" class="report-link">View Full Report ↗</a>
+        </div>
+    </div>
+    <script>
+        const data = [{"Ticker": "BTC", "Safety_Score": 75.4, "Norm_Sortino": 0.6444084215041151, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 24.9, "Vol_Ann": 50.8, "Sortino": 0.66, "Max_DD": -66.9}, {"Ticker": "ETH", "Safety_Score": 61.2, "Norm_Sortino": 0.46683202889542086, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": 16.5, "Vol_Ann": 68.9, "Sortino": 0.31, "Max_DD": -74.1}, {"Ticker": "ADA", "Safety_Score": 40.1, "Norm_Sortino": 0.3073419456951051, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": 1.5, "Vol_Ann": 87.9, "Sortino": -0.01, "Max_DD": -91.0}, {"Ticker": "XRP", "Safety_Score": 70.7, "Norm_Sortino": 0.762230744197367, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 45.8, "Vol_Ann": 84.0, "Sortino": 0.89, "Max_DD": -72.1}, {"Ticker": "SOL", "Safety_Score": 45.0, "Norm_Sortino": 0.5802958627054768, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 35.6, "Vol_Ann": 93.1, "Sortino": 0.53, "Max_DD": -94.6}, {"Ticker": "DOT", "Safety_Score": 33.4, "Norm_Sortino": 0.0, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": -33.3, "Vol_Ann": 81.9, "Sortino": -0.62, "Max_DD": -97.5}, {"Ticker": "DOGE", "Safety_Score": 50.4, "Norm_Sortino": 0.5329893339774854, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 27.7, "Vol_Ann": 89.7, "Sortino": 0.44, "Max_DD": -85.2}, {"Ticker": "AVAX", "Safety_Score": 32.0, "Norm_Sortino": 0.23743807063870273, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": -7.4, "Vol_Ann": 92.2, "Sortino": -0.15, "Max_DD": -94.8}, {"Ticker": "LTC", "Safety_Score": 63.2, "Norm_Sortino": 0.40533052840418854, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": 11.5, "Vol_Ann": 73.5, "Sortino": 0.19, "Max_DD": -73.1}, {"Ticker": "LINK", "Safety_Score": 55.6, "Norm_Sortino": 0.5386804458705121, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 28.2, "Vol_Ann": 85.7, "Sortino": 0.45, "Max_DD": -81.6}, {"Ticker": "BCH", "Safety_Score": 60.3, "Norm_Sortino": 0.5713324286639055, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 28.7, "Vol_Ann": 84.7, "Sortino": 0.52, "Max_DD": -80.0}, {"Ticker": "ALGO", "Safety_Score": 33.4, "Norm_Sortino": 0.15416044115362537, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": -17.3, "Vol_Ann": 89.5, "Sortino": -0.31, "Max_DD": -95.7}, {"Ticker": "SHIB", "Safety_Score": 45.7, "Norm_Sortino": 0.4656772804412432, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 23.7, "Vol_Ann": 111.7, "Sortino": 0.31, "Max_DD": -88.9}, {"Ticker": "BNB", "Safety_Score": 79.4, "Norm_Sortino": 0.5943249504565411, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 23.9, "Vol_Ann": 56.1, "Sortino": 0.56, "Max_DD": -62.9}, {"Ticker": "FIL", "Safety_Score": 25.9, "Norm_Sortino": 0.12479406027069086, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": -23.1, "Vol_Ann": 103.9, "Sortino": -0.37, "Max_DD": -98.3}, {"Ticker": "ATOM", "Safety_Score": 35.1, "Norm_Sortino": 0.04941902955903069, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": -28.6, "Vol_Ann": 83.4, "Sortino": -0.52, "Max_DD": -97.2}, {"Ticker": "VET", "Safety_Score": 36.1, "Norm_Sortino": 0.20915654500631128, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": -9.9, "Vol_Ann": 86.1, "Sortino": -0.2, "Max_DD": -95.0}, {"Ticker": "TRX", "Safety_Score": 90.9, "Norm_Sortino": 0.9999999949588366, "Color": "#22c55e", "Quadrant": "Gem Zone", "Return_Ann": 48.7, "Vol_Ann": 64.2, "Sortino": 1.37, "Max_DD": -50.2}, {"Ticker": "ETC", "Safety_Score": 46.9, "Norm_Sortino": 0.3607228329659727, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": 7.4, "Vol_Ann": 84.3, "Sortino": 0.1, "Max_DD": -87.8}, {"Ticker": "MKR", "Safety_Score": 63.2, "Norm_Sortino": 0.5910827347849942, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 35.1, "Vol_Ann": 92.5, "Sortino": 0.55, "Max_DD": -79.6}, {"Ticker": "NEAR", "Safety_Score": 39.7, "Norm_Sortino": 0.5300459501055876, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 32.3, "Vol_Ann": 106.4, "Sortino": 0.43, "Max_DD": -95.2}, {"Ticker": "XTZ", "Safety_Score": 36.8, "Norm_Sortino": 0.10645831483149637, "Color": "#3b82f6", "Quadrant": "Safe Haven / Bleeding", "Return_Ann": -21.2, "Vol_Ann": 84.8, "Sortino": -0.41, "Max_DD": -96.1}, {"Ticker": "HBAR", "Safety_Score": 48.0, "Norm_Sortino": 0.4760286649983058, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 20.7, "Vol_Ann": 98.9, "Sortino": 0.33, "Max_DD": -88.8}, {"Ticker": "THETA", "Safety_Score": 27.6, "Norm_Sortino": 0.16350039776855904, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": -17.7, "Vol_Ann": 96.1, "Sortino": -0.29, "Max_DD": -97.5}, {"Ticker": "NEO", "Safety_Score": 36.6, "Norm_Sortino": 0.22347959111502497, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": -8.7, "Vol_Ann": 89.5, "Sortino": -0.17, "Max_DD": -94.1}, {"Ticker": "AAVE", "Safety_Score": 49.5, "Norm_Sortino": 0.570028183801849, "Color": "#facc15", "Quadrant": "High Yield / High Risk", "Return_Ann": 35.2, "Vol_Ann": 97.2, "Sortino": 0.51, "Max_DD": -84.1}, {"Ticker": "TON", "Safety_Score": NaN, "Norm_Sortino": NaN, "Color": "#ef4444", "Quadrant": "Danger Zone", "Return_Ann": NaN, "Vol_Ann": NaN, "Sortino": NaN, "Max_DD": NaN}]; const medRet = 18.613773884807916; const medVol = 86.96580855642966;
+        const width = window.innerWidth, height = window.innerHeight; const svg = d3.select("#scatter-container").append("svg").attr("width", "100%").attr("height", "100%");
+        const defs = svg.append("defs"); defs.append("clipPath").attr("id", "cClip").attr("clipPathUnits", "objectBoundingBox").append("circle").attr("cx", 0.5).attr("cy", 0.5).attr("r", 0.5);
+        let xScale = d3.scaleLinear().domain([d3.min(data, d=>d.Vol_Ann), d3.max(data, d=>d.Vol_Ann)]).range([80, width-80]);
+        let yScale = d3.scaleLinear().domain([d3.min(data, d=>d.Return_Ann), d3.max(data, d=>d.Return_Ann)]).range([height-80, 80]);
+        svg.append("line").attr("stroke","#334155").attr("stroke-dasharray","5,5").attr("stroke-width",2).attr("x1",xScale(medVol)).attr("x2",xScale(medVol)).attr("y1",0).attr("y2",height);
+        svg.append("line").attr("stroke","#334155").attr("stroke-dasharray","5,5").attr("stroke-width",2).attr("x1",0).attr("x2",width).attr("y1",yScale(medRet)).attr("y2",yScale(medRet));
+        const rScale = d3.scaleSqrt().domain([0,1]).range(width<600?[10,35]:[15,60]);
+        data.forEach(d=> { d.radius = rScale(d.Norm_Sortino); d.x=width/2+(Math.random()-0.5)*100; d.y=height/2+(Math.random()-0.5)*100; });
+        const sim = d3.forceSimulation(data).velocityDecay(0.25).alphaTarget(0.01)
+            .force("x", d3.forceX(d=>xScale(d.Vol_Ann)).strength(0.08)).force("y", d3.forceY(d=>yScale(d.Return_Ann)).strength(0.08))
+            .force("charge", d3.forceManyBody().strength(d=>-0.5*d.radius)).force("collision", d3.forceCollide().radius(d=>d.radius+3).strength(1).iterations(6));
+        const node = svg.append("g").selectAll("g").data(data).join("g").attr("class", "bubble-node").call(d3.drag().on("start", (e,d)=>{if(!e.active)sim.alphaTarget(0.05).restart(); d.fx=d.x; d.fy=d.y;}).on("drag",(e,d)=>{d.fx=e.x; d.fy=e.y;}).on("end",(e,d)=>{if(!e.active)sim.alphaTarget(0.01); d.fx=null; d.fy=null;}));
+        node.append("circle").attr("fill", "rgba(15,23,42,0.15)").attr("stroke", d=>d.Color).attr("stroke-width",2).attr("r", d=>d.radius).style("filter", d=>`drop-shadow(0px 0px 6px ${d.Color})`);
+        node.append("image").attr("href", d=>`https://assets.coincap.io/assets/icons/${d.Ticker.toLowerCase()}@2x.png`).attr("x", d=>-(d.radius*0.8)/2).attr("y", d=>-d.radius*0.75).attr("width", d=>d.radius*0.8).attr("height", d=>d.radius*0.8).attr("clip-path","url(#cClip)");
+        node.append("text").text(d=>d.Ticker).attr("y", d=>d.radius*0.25).style("font-size", d=>Math.min(16,d.radius/1.8)+"px").attr("text-anchor","middle").style("fill","white").style("font-weight","900").style("font-family","sans-serif");
+
+        const tt = d3.select("#tooltip");
+        node.on("mouseover", function(e, d) {
+            if(d3.select(this).style("opacity")<1) return;
+            d3.selectAll(".bubble-node circle").attr("stroke-width",2); d3.select(this).select("circle").attr("stroke-width",5);
+            tt.html(`<div class="tt-header" style="color:${d.Color}">${d.Ticker}</div><div class="tt-row"><span class="tt-lbl">Sortino:</span><span class="tt-val" style="color:${d.Color}">${d.Sortino.toFixed(2)}</span></div><div class="tt-row"><span class="tt-lbl">Return:</span><span class="tt-val">${d.Return_Ann.toFixed(1)}%</span></div><div class="tt-row"><span class="tt-lbl">Vol:</span><span class="tt-val">${d.Vol_Ann.toFixed(1)}%</span></div>`);
+            tt.style("opacity",1).style("border-color",d.Color);
+            let x=e.pageX+15; let y=e.pageY+15; if(x+250>width) x=e.pageX-265; if(y+150>height) y=e.pageY-165;
+            tt.style("left",x+"px").style("top",y+"px");
+        }).on("mouseout", function() { d3.selectAll(".bubble-node circle").attr("stroke-width",2); tt.style("opacity",0); });
+
+        // --- TRUE AABB EJECTION MATH ---
+        let bounds = { legend: null };
+        function updateBounds() {
+            let legEl = document.getElementById("widget-legend");
+            if(legEl) {
+                let rect = legEl.getBoundingClientRect();
+                bounds.legend = { left: rect.left - 15, right: rect.right + 15, top: rect.top - 15, bottom: rect.bottom + 15 };
+            }
+        }
+        setTimeout(updateBounds, 100);
+
+        function resolveRectCollision(d, rect) {
+            if (!rect) return;
+            let r = d.radius + 3;
+            // If bounding box overlaps
+            if (d.x > rect.left - r && d.x < rect.right + r && d.y > rect.top - r && d.y < rect.bottom + r) {
+                let overlapLeft = (d.x + r) - rect.left;
+                let overlapRight = rect.right - (d.x - r);
+                let overlapTop = (d.y + r) - rect.top;
+                let overlapBottom = rect.bottom - (d.y - r);
+
+                let minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+                if (minOverlap === overlapLeft) { d.x = rect.left - r; d.vx *= -0.8; }
+                else if (minOverlap === overlapRight) { d.x = rect.right + r; d.vx *= -0.8; }
+                else if (minOverlap === overlapTop) { d.y = rect.top - r; d.vy *= -0.8; }
+                else if (minOverlap === overlapBottom) { d.y = rect.bottom + r; d.vy *= -0.8; }
+            }
+        }
+
+        sim.on("tick", () => {
+            let t=Date.now()/1000;
+            data.forEach((d,i)=>{
+                d.vx+=Math.sin(t+i)*0.05; d.vy+=Math.cos(t+i)*0.05;
+
+                let r=d.radius+3;
+                if(d.x<r){d.x=r;d.vx*=-0.8;}else if(d.x>width-r){d.x=width-r;d.vx*=-0.8;}
+                if(d.y<r){d.y=r;d.vy*=-0.8;}else if(d.y>height-r){d.y=height-r;d.vy*=-0.8;}
+
+                resolveRectCollision(d, bounds.legend);
+            });
+            node.attr("transform", d=>`translate(${d.x},${d.y})`);
+        });
+
+        let actF = null;
+        window.toggleScatterFilter = function(z) {
+            if(actF===z) { actF=null; d3.selectAll('.leg-item').classed('dimmed',false); d3.selectAll('.bubble-node').transition().style('opacity',1); }
+            else { actF=z; d3.selectAll('.leg-item').classed('dimmed', function(){return this.getAttribute('data-zone')!==z;}); d3.selectAll('.bubble-node').transition().style('opacity', d=>d.Quadrant===z?1:0.05); }
+        }
+
+        window.addEventListener('resize', () => { updateBounds(); });
+    </script>
+</body></html>

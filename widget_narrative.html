@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Sentiment Widget</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; overflow: hidden; width: 100vw; height: 100vh; background-color: #000; font-family: -apple-system, sans-serif; }
+        #widget-container { width: 100vw; height: 100vh; position: relative; }
+        #barometer { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); width: 70px; height: 65vh; background: #070a13; border: 1px solid #1e293b; border-radius: 40px; display: flex; flex-direction: column; align-items: center; padding: 25px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10; }
+        #barometer-title { color: #94a3b8; font-size: 10px; text-transform: uppercase; font-weight: 800; text-align: center; letter-spacing: 1px; margin-bottom: 15px; }
+        .track { flex-grow: 1; width: 14px; background: linear-gradient(to top, #22c55e 0%, #facc15 50%, #ef4444 100%); border-radius: 7px; position: relative; }
+        #marker { position: absolute; left: -12px; right: -12px; height: 4px; background: #fff; border-radius: 2px; box-shadow: 0 0 15px #ffffff, 0 0 5px #ffffff; transition: top 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        #score-val { color: #fff; font-size: 24px; font-weight: 900; margin-top: 15px; font-family: monospace; text-shadow: 0 2px 10px rgba(0,0,0,1); }
+        #d3-canvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; cursor: grab; }
+        #d3-canvas:active { cursor: grabbing; }
+        .bubble-node circle { transition: stroke-width 0.2s; }
+        .bubble-node text { pointer-events: none; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+        .report-link { position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.85); padding: 10px 16px; border-radius: 8px; font-size: 12px; color: #60a5fa; border: 1px solid #334155; z-index: 20; text-decoration: none; font-weight: bold; transition: 0.2s; backdrop-filter: blur(4px); }
+        .report-link:hover { color: #93c5fd; text-decoration: underline; background: rgba(30, 41, 59, 0.95); }
+        @media (max-width: 768px) { #barometer { left: 10px; width: 50px; padding: 15px 0; } #barometer-title { font-size: 8px; } .track { width: 10px; } #score-val { font-size: 18px; } }
+    </style>
+</head>
+<body>
+    <div id="widget-container">
+        <div id="barometer">
+            <div id="barometer-title">Social<br>Risk</div>
+            <div class="track"><div id="marker" style="top: 61%;"></div></div>
+            <div id="score-val">39</div>
+        </div>
+        <div id="d3-canvas"></div>
+        <a href="narrative_dashboard.html" target="_blank" class="report-link">View Full Report ↗</a>
+    </div>
+
+    <script>
+        const rawData = [{"text": "Bitcoin", "size": 45, "color": "#facc15"}, {"text": "Bullish", "size": 26, "color": "#22c55e"}, {"text": "Solana", "size": 12, "color": "#facc15"}, {"text": "Bearish", "size": 10, "color": "#ef4444"}, {"text": "Xrp", "size": 10, "color": "#facc15"}, {"text": "Cardano", "size": 9, "color": "#3b82f6"}, {"text": "Cycle", "size": 8, "color": "#3b82f6"}, {"text": "Stellar", "size": 7, "color": "#3b82f6"}, {"text": "Exchange", "size": 6, "color": "#3b82f6"}, {"text": "Hedera", "size": 6, "color": "#3b82f6"}, {"text": "Wallet", "size": 6, "color": "#3b82f6"}, {"text": "Bottom", "size": 5, "color": "#3b82f6"}, {"text": "Fee", "size": 5, "color": "#3b82f6"}, {"text": "Chainlink", "size": 5, "color": "#3b82f6"}, {"text": "Sui", "size": 5, "color": "#3b82f6"}, {"text": "Ethereum", "size": 5, "color": "#facc15"}, {"text": "Altcoin", "size": 4, "color": "#3b82f6"}, {"text": "Leverage", "size": 4, "color": "#3b82f6"}, {"text": "Ondo", "size": 4, "color": "#3b82f6"}, {"text": "Inflation", "size": 4, "color": "#3b82f6"}, {"text": "Usdt", "size": 3, "color": "#3b82f6"}, {"text": "Algorand", "size": 3, "color": "#3b82f6"}, {"text": "Blockchain", "size": 3, "color": "#3b82f6"}, {"text": "Fed", "size": 3, "color": "#3b82f6"}, {"text": "Tradfi", "size": 3, "color": "#3b82f6"}, {"text": "Top", "size": 3, "color": "#3b82f6"}, {"text": "Liquidity", "size": 3, "color": "#3b82f6"}, {"text": "Avalanche", "size": 3, "color": "#3b82f6"}, {"text": "Target", "size": 2, "color": "#3b82f6"}, {"text": "Spot", "size": 2, "color": "#3b82f6"}, {"text": "Halving", "size": 2, "color": "#3b82f6"}, {"text": "Trump", "size": 2, "color": "#3b82f6"}, {"text": "Correction", "size": 2, "color": "#3b82f6"}, {"text": "Zcash", "size": 2, "color": "#3b82f6"}, {"text": "Zec", "size": 2, "color": "#3b82f6"}, {"text": "Fomo", "size": 2, "color": "#3b82f6"}, {"text": "Staking", "size": 2, "color": "#3b82f6"}, {"text": "Etf", "size": 2, "color": "#3b82f6"}, {"text": "Litecoin", "size": 2, "color": "#3b82f6"}, {"text": "Whale", "size": 1, "color": "#3b82f6"}, {"text": "Stacks", "size": 1, "color": "#3b82f6"}, {"text": "Smart", "size": 1, "color": "#3b82f6"}, {"text": "Protocol", "size": 1, "color": "#3b82f6"}, {"text": "Token", "size": 1, "color": "#3b82f6"}, {"text": "Resistance", "size": 1, "color": "#3b82f6"}];
+        const canvas = document.getElementById("d3-canvas");
+        let width = canvas.clientWidth, height = canvas.clientHeight;
+        const svg = d3.select("#d3-canvas").append("svg").attr("width", width).attr("height", height);
+
+        const maxFreq = d3.max(rawData, d => d.size) || 1;
+        const rScale = d3.scaleSqrt().domain([0, maxFreq]).range(width < 600 ? [15, 55] : [20, 85]);
+
+        rawData.forEach(d => {
+            d.radius = rScale(d.size);
+            if(!d.x) { d.x = (width / 2) + 50 + (Math.random() - 0.5) * 100; d.y = (height / 2) + (Math.random() - 0.5) * 100; }
+        });
+
+        const simulation = d3.forceSimulation(rawData).velocityDecay(0.25).alphaTarget(0.01)
+            .force("charge", d3.forceManyBody().strength(d => -1.5 * d.radius))
+            .force("collide", d3.forceCollide().radius(d => d.radius + 3).iterations(4).strength(0.8))
+            .force("x", d3.forceX((width / 2) + (width < 600 ? 20 : 60)).strength(0.015)).force("y", d3.forceY(height / 2).strength(0.015));
+
+        const node = svg.append("g").selectAll("g").data(rawData).join("g").attr("class", "bubble-node")
+            .call(d3.drag().on("start", (e,d) => { if(!e.active) simulation.alphaTarget(0.05).restart(); d.fx=d.x; d.fy=d.y; })
+            .on("drag", (e,d) => { d.fx=e.x; d.fy=e.y; }).on("end", (e,d) => { if(!e.active) simulation.alphaTarget(0.01); d.fx=null; d.fy=null; }));
+
+        node.append("circle").attr("r", d => d.radius).attr("fill", "rgba(15, 23, 42, 0.4)").attr("stroke", d => d.color).attr("stroke-width", 2).style("filter", d => `drop-shadow(0px 0px 8px ${d.color})`);
+        node.append("text").text(d => d.text).attr("text-anchor", "middle").attr("y", 5).style("fill", "#fff").style("font-weight", "900").style("font-family", "Inter, sans-serif").style("font-size", d => Math.min(18, d.radius / 2.5) + "px");
+
+        node.on("mouseover", function() { d3.select(this).select("circle").attr("stroke-width", 5); }).on("mouseout", function() { d3.select(this).select("circle").attr("stroke-width", 2); });
+
+        let barometerRect = null;
+        function updateBounds() {
+            let barEl = document.getElementById("barometer");
+            if(barEl) { let rect = barEl.getBoundingClientRect(); barometerRect = { left: rect.left - 10, right: rect.right + 10, top: rect.top - 10, bottom: rect.bottom + 10 }; }
+        }
+        setTimeout(updateBounds, 100);
+
+        function resolveCollision(d, rect) {
+            if (!rect) return; let r = d.radius + 3;
+            if (d.x > rect.left - r && d.x < rect.right + r && d.y > rect.top - r && d.y < rect.bottom + r) {
+                let overlapLeft = (d.x + r) - rect.left; let overlapRight = rect.right - (d.x - r);
+                let overlapTop = (d.y + r) - rect.top; let overlapBottom = rect.bottom - (d.y - r);
+                let minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+                if (minOverlap === overlapLeft) { d.x = rect.left - r; d.vx *= -0.8; } else if (minOverlap === overlapRight) { d.x = rect.right + r; d.vx *= -0.8; }
+                else if (minOverlap === overlapTop) { d.y = rect.top - r; d.vy *= -0.8; } else if (minOverlap === overlapBottom) { d.y = rect.bottom + r; d.vy *= -0.8; }
+            }
+        }
+
+        simulation.on("tick", () => {
+            let t = Date.now() / 1000;
+            rawData.forEach((d, i) => {
+                d.vx += (Math.sin(t + i) * 0.03) + (Math.random() - 0.5) * 0.02; d.vy += (Math.cos(t + i) * 0.03) + (Math.random() - 0.5) * 0.02;
+                let r = d.radius + 2;
+                if(d.x < r) { d.x = r; d.vx *= -0.8; } else if(d.x > width - r) { d.x = width - r; d.vx *= -0.8; }
+                if(d.y < r) { d.y = r; d.vy *= -0.8; } else if(d.y > height - r) { d.y = height - r; d.vy *= -0.8; }
+                resolveCollision(d, barometerRect);
+            });
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        window.addEventListener('resize', () => {
+            width = canvas.clientWidth; height = canvas.clientHeight; svg.attr("width", width).attr("height", height); updateBounds(); rScale.range(width < 600 ? [15, 55] : [20, 85]);
+            rawData.forEach(d => d.radius = rScale(d.size)); node.select("circle").attr("r", d => d.radius); node.select("text").style("font-size", d => Math.min(18, d.radius / 2.5) + "px");
+            simulation.force("x", d3.forceX((width / 2) + (width < 600 ? 20 : 60)).strength(0.015)).force("y", d3.forceY(height / 2).strength(0.015));
+            simulation.force("collide", d3.forceCollide().radius(d => d.radius + 3).iterations(4).strength(0.8)); simulation.alpha(0.3).restart();
+        });
+    </script>
+</body>
+</html>

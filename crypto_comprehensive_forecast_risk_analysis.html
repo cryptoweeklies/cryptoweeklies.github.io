@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>2029 Macro Cycle Targets</title>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+<style>
+  body { background-color: #050811; color: #d1d5db; font-family: -apple-system, sans-serif; margin: 0; padding: 25px; }
+  .cycle-header { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 25px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-left: 5px solid #4ade80; }
+  .cycle-title { font-size: 1.4rem; font-weight: 800; color: #ffffff; margin: 0 0 5px 0; }
+  .cycle-sub { font-size: 0.9rem; color: #94a3b8; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+  .progress-container { width: 300px; background-color: #1e293b; border-radius: 8px; overflow: hidden; height: 12px; margin-top: 10px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, #3b82f6, #4ade80); width: 61.0%; }
+  .dataTables_wrapper { color: #94a3b8 !important; margin-bottom: 15px; font-size: 0.95rem; } .dataTables_wrapper label { color: #94a3b8 !important; font-weight: 500; }
+  .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select { background-color: #0b0e14 !important; color: #ffffff !important; border: 1px solid #1e293b; border-radius: 6px; padding: 8px 12px; margin-left: 8px; outline: none; transition: all 0.2s; }
+  .dataTables_wrapper .dataTables_filter input:focus { border-color: #4ade80; box-shadow: 0 0 0 2px rgba(74,222,128,0.3); }
+  .dataTables_wrapper .dataTables_paginate .paginate_button { color: #cbd5e1 !important; border: 1px solid transparent; } .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #4ade80 !important; color: #000 !important; font-weight: bold; border: none; border-radius: 4px; }
+  table.dataTable { border-collapse: collapse; border-bottom: 1px solid #1e293b; margin-top: 15px !important; border-radius: 8px; overflow: hidden; font-family: monospace; font-size: 0.95rem; width: 100% !important; }
+  table.dataTable thead th { background-color: #0f141e; color: #f8fafc; border-bottom: 2px solid #4ade80; padding: 14px 12px; font-weight: 600; text-transform: uppercase; font-size: 0.80rem; letter-spacing: 0.5px; font-family: -apple-system, sans-serif; white-space: nowrap; }
+  table.dataTable tbody tr.odd { background-color: #0b0e14 !important; } table.dataTable tbody tr.even { background-color: #111620 !important; } table.dataTable tbody tr:hover { background-color: #1e293b !important; cursor: crosshair; }
+  table.dataTable tbody td { padding: 12px; color: #e2e8f0; border: none; border-top: 1px solid #1e293b; text-align: center; vertical-align: middle; } table.dataTable tbody td:first-child { text-align: left; }
+  #riskTable thead th:nth-child(7), #riskTable tbody td:nth-child(7), #riskTable thead th:nth-child(10), #riskTable tbody td:nth-child(10) { background-color: rgba(34, 197, 94, 0.08) !important; color: #4ade80; }
+  #riskTable thead th:nth-child(8), #riskTable tbody td:nth-child(8), #riskTable thead th:nth-child(11), #riskTable tbody td:nth-child(11) { background-color: rgba(245, 158, 11, 0.08) !important; color: #fbbf24; }
+  #riskTable thead th:nth-child(9), #riskTable tbody td:nth-child(9), #riskTable thead th:nth-child(12), #riskTable tbody td:nth-child(12) { background-color: rgba(239, 68, 68, 0.08) !important; color: #f87171; }
+  .desc-card { background-color: #090d16; border-left: 4px solid #4ade80; border-radius: 6px; padding: 25px; line-height: 1.6; font-size: 0.95rem; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); } .desc-card h3, .desc-card h4 { margin-top: 0; color: #fff; }
+</style>
+<script>
+  $(document).ready(function() { $('#riskTable').DataTable({ "pageLength": 10, "order": [] }); });
+</script>
+</head>
+<body>
+  <div class="cycle-header">
+    <div><h1 class="cycle-title">2029/2030 Macro Bull Targets</h1><p class="cycle-sub">THE AMALGAMATED CAGR & RISK MODEL</p></div>
+    <div style="text-align: right;"><p class="cycle-title">61.0%</p><p class="cycle-sub">1460-DAY CYCLE COMPLETION</p><div class="progress-container"><div class="progress-bar"></div></div></div>
+  </div>
+  <table border="1" class="dataframe display" id="riskTable">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Asset</th>
+      <th>Price</th>
+      <th>Market Cap</th>
+      <th>Est. Peak</th>
+      <th>Comp. Risk</th>
+      <th>Proj. 2026 Floor</th>
+      <th>Base Peak</th>
+      <th>Bull Peak</th>
+      <th>Moon Peak</th>
+      <th>Base X</th>
+      <th>Bull X</th>
+      <th>Moon X</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bitcoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BTC</span></div></div></td>
+      <td>$84,120</td>
+      <td>$1690.27B</td>
+      <td>Q4 2029 (Oct-Dec)</td>
+      <td>0.40</td>
+      <td>$49,325</td>
+      <td>$95,455</td>
+      <td>$128,864</td>
+      <td>$171,819</td>
+      <td>1.13x</td>
+      <td>1.53x</td>
+      <td>2.04x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethereum</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ETH</span></div></div></td>
+      <td>$2,691</td>
+      <td>$328.64B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.32</td>
+      <td>$1,655</td>
+      <td>$5,036</td>
+      <td>$6,799</td>
+      <td>$9,065</td>
+      <td>1.87x</td>
+      <td>2.53x</td>
+      <td>3.37x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bnb-bnb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">BNB</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BNB</span></div></div></td>
+      <td>$774</td>
+      <td>$103.09B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.35</td>
+      <td>$244</td>
+      <td>$824</td>
+      <td>$1,112</td>
+      <td>$1,483</td>
+      <td>1.06x</td>
+      <td>1.44x</td>
+      <td>1.92x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/xrp-xrp-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">XRP</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XRP</span></div></div></td>
+      <td>$1.5510</td>
+      <td>$97.59B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.30</td>
+      <td>$0.5937</td>
+      <td>$2.3406</td>
+      <td>$3.1598</td>
+      <td>$4.2130</td>
+      <td>1.51x</td>
+      <td>2.04x</td>
+      <td>2.72x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/solana-sol-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Solana</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SOL</span></div></div></td>
+      <td>$122</td>
+      <td>$71.63B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.24</td>
+      <td>$61</td>
+      <td>$304</td>
+      <td>$410</td>
+      <td>$547</td>
+      <td>2.49x</td>
+      <td>3.37x</td>
+      <td>4.49x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/tron-trx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">TRON</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">TRX</span></div></div></td>
+      <td>$0.3366</td>
+      <td>$31.96B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.37</td>
+      <td>$0.0813</td>
+      <td>$0.2595</td>
+      <td>$0.3503</td>
+      <td>$0.4670</td>
+      <td>0.77x</td>
+      <td>1.04x</td>
+      <td>1.39x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Dogecoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DOGE</span></div></div></td>
+      <td>$0.0986</td>
+      <td>$16.93B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.04</td>
+      <td>$0.0717</td>
+      <td>$0.6049</td>
+      <td>$0.8166</td>
+      <td>$1.0888</td>
+      <td>6.14x</td>
+      <td>8.28x</td>
+      <td>11.04x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/chainlink-link-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Chainlink</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LINK</span></div></div></td>
+      <td>$14</td>
+      <td>$10.66B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.26</td>
+      <td>$8.1522</td>
+      <td>$36</td>
+      <td>$49</td>
+      <td>$65</td>
+      <td>2.55x</td>
+      <td>3.44x</td>
+      <td>4.59x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/cardano-ada-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Cardano</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ADA</span></div></div></td>
+      <td>$0.2599</td>
+      <td>$9.56B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.10</td>
+      <td>$0.2599</td>
+      <td>$2.1931</td>
+      <td>$2.9607</td>
+      <td>$3.9475</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/stellar-xlm-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Stellar</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XLM</span></div></div></td>
+      <td>$0.2199</td>
+      <td>$7.71B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.18</td>
+      <td>$0.1257</td>
+      <td>$0.8338</td>
+      <td>$1.1256</td>
+      <td>$1.5008</td>
+      <td>3.79x</td>
+      <td>5.12x</td>
+      <td>6.82x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bitcoin Cash</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BCH</span></div></div></td>
+      <td>$335</td>
+      <td>$6.75B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.10</td>
+      <td>$241</td>
+      <td>$2,032</td>
+      <td>$2,743</td>
+      <td>$3,658</td>
+      <td>6.06x</td>
+      <td>8.19x</td>
+      <td>10.91x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/near-protocol-near-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">NEAR Protocol</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">NEAR</span></div></div></td>
+      <td>$4.8499</td>
+      <td>$6.33B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.40</td>
+      <td>$2.7988</td>
+      <td>$8.2091</td>
+      <td>$11</td>
+      <td>$15</td>
+      <td>1.69x</td>
+      <td>2.29x</td>
+      <td>3.05x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Litecoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LTC</span></div></div></td>
+      <td>$73</td>
+      <td>$5.67B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.16</td>
+      <td>$61</td>
+      <td>$447</td>
+      <td>$604</td>
+      <td>$805</td>
+      <td>6.13x</td>
+      <td>8.28x</td>
+      <td>11.04x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/avalanche-avax-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Avalanche</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AVAX</span></div></div></td>
+      <td>$11</td>
+      <td>$4.87B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.11</td>
+      <td>$11</td>
+      <td>$93</td>
+      <td>$125</td>
+      <td>$167</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/sui-sui-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Sui</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SUI</span></div></div></td>
+      <td>$1.1838</td>
+      <td>$4.85B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.25</td>
+      <td>$1.1838</td>
+      <td>$5.5612</td>
+      <td>$7.5077</td>
+      <td>$10</td>
+      <td>4.70x</td>
+      <td>6.34x</td>
+      <td>8.46x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/hedera-hbar-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Hedera</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">HBAR</span></div></div></td>
+      <td>$0.0951</td>
+      <td>$4.17B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.0845</td>
+      <td>$0.7127</td>
+      <td>$0.9622</td>
+      <td>$1.2829</td>
+      <td>7.49x</td>
+      <td>10.12x</td>
+      <td>13.49x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bittensor-tao-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bittensor</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">TAO</span></div></div></td>
+      <td>$337</td>
+      <td>$3.92B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.44</td>
+      <td>$205</td>
+      <td>$557</td>
+      <td>$752</td>
+      <td>$1,003</td>
+      <td>1.65x</td>
+      <td>2.23x</td>
+      <td>2.98x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/cronos-cro-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Cronos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">CRO</span></div></div></td>
+      <td>$0.0658</td>
+      <td>$3.28B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.0658</td>
+      <td>$0.5555</td>
+      <td>$0.7500</td>
+      <td>$0.9999</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethena-ena-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethena</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ENA</span></div></div></td>
+      <td>$0.2744</td>
+      <td>$2.77B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.47</td>
+      <td>$0.2744</td>
+      <td>$0.6927</td>
+      <td>$0.9352</td>
+      <td>$1.2469</td>
+      <td>2.52x</td>
+      <td>3.41x</td>
+      <td>4.54x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ondo-ondo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ondo</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ONDO</span></div></div></td>
+      <td>$0.5449</td>
+      <td>$2.66B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.49</td>
+      <td>$0.5080</td>
+      <td>$1.2212</td>
+      <td>$1.6486</td>
+      <td>$2.1982</td>
+      <td>2.24x</td>
+      <td>3.03x</td>
+      <td>4.03x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aave-aave-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Aave</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AAVE</span></div></div></td>
+      <td>$155</td>
+      <td>$2.39B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.12</td>
+      <td>$115</td>
+      <td>$966</td>
+      <td>$1,305</td>
+      <td>$1,740</td>
+      <td>6.24x</td>
+      <td>8.43x</td>
+      <td>11.24x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/mantle-mnt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Mantle</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">MNT</span></div></div></td>
+      <td>$0.6998</td>
+      <td>$2.31B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.15</td>
+      <td>$0.5587</td>
+      <td>$4.3461</td>
+      <td>$5.8672</td>
+      <td>$7.8229</td>
+      <td>6.21x</td>
+      <td>8.38x</td>
+      <td>11.18x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/polkadot-dot-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Polkadot</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DOT</span></div></div></td>
+      <td>$1.2889</td>
+      <td>$2.18B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.13</td>
+      <td>$1.2889</td>
+      <td>$11</td>
+      <td>$15</td>
+      <td>$20</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/worldcoin-wld-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Worldcoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">WLD</span></div></div></td>
+      <td>$0.5468</td>
+      <td>$2.01B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.13</td>
+      <td>$0.5468</td>
+      <td>$4.6136</td>
+      <td>$6.2284</td>
+      <td>$8.3045</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/internet-computer-icp-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Internet Computer</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ICP</span></div></div></td>
+      <td>$3.3034</td>
+      <td>$1.84B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.14</td>
+      <td>$3.3034</td>
+      <td>$27</td>
+      <td>$37</td>
+      <td>$49</td>
+      <td>8.22x</td>
+      <td>11.10x</td>
+      <td>14.80x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethereum-classic-etc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethereum Classic</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ETC</span></div></div></td>
+      <td>$9.6130</td>
+      <td>$1.52B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.06</td>
+      <td>$9.6130</td>
+      <td>$81</td>
+      <td>$109</td>
+      <td>$146</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/quant-qnt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Quant</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">QNT</span></div></div></td>
+      <td>$116</td>
+      <td>$1.41B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.31</td>
+      <td>$52</td>
+      <td>$198</td>
+      <td>$267</td>
+      <td>$356</td>
+      <td>1.71x</td>
+      <td>2.31x</td>
+      <td>3.08x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/kaspa-kas-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Kaspa</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">KAS</span></div></div></td>
+      <td>$0.0479</td>
+      <td>$1.33B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.50</td>
+      <td>$0.0475</td>
+      <td>$0.1132</td>
+      <td>$0.1528</td>
+      <td>$0.2037</td>
+      <td>2.36x</td>
+      <td>3.19x</td>
+      <td>4.25x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/polygon-pol28321-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Polygon</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">POL28321</span></div></div></td>
+      <td>$0.1200</td>
+      <td>$1.28B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.40</td>
+      <td>$0.1200</td>
+      <td>$0.3504</td>
+      <td>$0.4730</td>
+      <td>$0.6307</td>
+      <td>2.92x</td>
+      <td>3.94x</td>
+      <td>5.26x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/gatetoken-gt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">GateToken</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">GT</span></div></div></td>
+      <td>$11</td>
+      <td>$1.17B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.29</td>
+      <td>$4.4765</td>
+      <td>$18</td>
+      <td>$24</td>
+      <td>$33</td>
+      <td>1.66x</td>
+      <td>2.23x</td>
+      <td>2.98x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/algorand-algo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Algorand</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ALGO</span></div></div></td>
+      <td>$0.1224</td>
+      <td>$1.10B</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.12</td>
+      <td>$0.1224</td>
+      <td>$1.0328</td>
+      <td>$1.3942</td>
+      <td>$1.8590</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/cosmos-atom-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Cosmos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ATOM</span></div></div></td>
+      <td>$1.8801</td>
+      <td>$998.71M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.17</td>
+      <td>$1.8801</td>
+      <td>$13</td>
+      <td>$18</td>
+      <td>$24</td>
+      <td>6.96x</td>
+      <td>9.39x</td>
+      <td>12.52x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/filecoin-fil-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Filecoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FIL</span></div></div></td>
+      <td>$1.2043</td>
+      <td>$995.53M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.09</td>
+      <td>$1.2043</td>
+      <td>$10</td>
+      <td>$14</td>
+      <td>$18</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aerodrome-aero-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Aerodrome</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AERO</span></div></div></td>
+      <td>$0.8944</td>
+      <td>$893.06M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.51</td>
+      <td>$0.5462</td>
+      <td>$1.2689</td>
+      <td>$1.7130</td>
+      <td>$2.2839</td>
+      <td>1.42x</td>
+      <td>1.92x</td>
+      <td>2.55x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/vechain-vet-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">VeChain</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">VET</span></div></div></td>
+      <td>$0.0096</td>
+      <td>$826.18M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.09</td>
+      <td>$0.0096</td>
+      <td>$0.0812</td>
+      <td>$0.1097</td>
+      <td>$0.1462</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/injective-inj-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Injective</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">INJ</span></div></div></td>
+      <td>$7.8690</td>
+      <td>$787.29M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.13</td>
+      <td>$7.7023</td>
+      <td>$65</td>
+      <td>$88</td>
+      <td>$117</td>
+      <td>8.26x</td>
+      <td>11.15x</td>
+      <td>14.87x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aptos-apt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Aptos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">APT</span></div></div></td>
+      <td>$0.8789</td>
+      <td>$765.01M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.28</td>
+      <td>$0.8789</td>
+      <td>$3.7126</td>
+      <td>$5.0121</td>
+      <td>$6.6827</td>
+      <td>4.22x</td>
+      <td>5.70x</td>
+      <td>7.60x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/xdc-network-xdc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">XDC Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XDC</span></div></div></td>
+      <td>$0.0304</td>
+      <td>$652.87M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.07</td>
+      <td>$0.0261</td>
+      <td>$0.2205</td>
+      <td>$0.2977</td>
+      <td>$0.3969</td>
+      <td>7.25x</td>
+      <td>9.79x</td>
+      <td>13.05x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/flare-flr-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Flare</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FLR</span></div></div></td>
+      <td>$0.0074</td>
+      <td>$642.06M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.16</td>
+      <td>$0.0074</td>
+      <td>$0.0548</td>
+      <td>$0.0740</td>
+      <td>$0.0987</td>
+      <td>7.41x</td>
+      <td>10.01x</td>
+      <td>13.35x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/fetch.ai-fet-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Fetch.ai</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FET</span></div></div></td>
+      <td>$0.2533</td>
+      <td>$584.25M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.2533</td>
+      <td>$2.1371</td>
+      <td>$2.8850</td>
+      <td>$3.8467</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/sei-sei-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Sei</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SEI</span></div></div></td>
+      <td>$0.0743</td>
+      <td>$563.41M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.40</td>
+      <td>$0.0743</td>
+      <td>$0.2169</td>
+      <td>$0.2928</td>
+      <td>$0.3904</td>
+      <td>2.92x</td>
+      <td>3.94x</td>
+      <td>5.26x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/nexo-nexo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Nexo</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">NEXO</span></div></div></td>
+      <td>$0.8648</td>
+      <td>$558.78M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.10</td>
+      <td>$0.6437</td>
+      <td>$5.4315</td>
+      <td>$7.3325</td>
+      <td>$9.7767</td>
+      <td>6.28x</td>
+      <td>8.48x</td>
+      <td>11.31x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/pendle-pendle-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Pendle</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">PENDLE</span></div></div></td>
+      <td>$2.6015</td>
+      <td>$451.94M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.23</td>
+      <td>$1.3133</td>
+      <td>$6.6244</td>
+      <td>$8.9430</td>
+      <td>$12</td>
+      <td>2.55x</td>
+      <td>3.44x</td>
+      <td>4.58x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bitcoin-sv-bsv-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bitcoin SV</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BSV</span></div></div></td>
+      <td>$22</td>
+      <td>$438.44M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.16</td>
+      <td>$22</td>
+      <td>$165</td>
+      <td>$223</td>
+      <td>$298</td>
+      <td>7.57x</td>
+      <td>10.22x</td>
+      <td>13.62x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/tezos-xtz-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Tezos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XTZ</span></div></div></td>
+      <td>$0.3337</td>
+      <td>$366.49M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.17</td>
+      <td>$0.3337</td>
+      <td>$2.3219</td>
+      <td>$3.1346</td>
+      <td>$4.1795</td>
+      <td>6.96x</td>
+      <td>9.39x</td>
+      <td>12.52x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/optimism-op-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Optimism</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">OP</span></div></div></td>
+      <td>$0.1500</td>
+      <td>$344.24M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.22</td>
+      <td>$0.1500</td>
+      <td>$0.8124</td>
+      <td>$1.0968</td>
+      <td>$1.4623</td>
+      <td>5.42x</td>
+      <td>7.31x</td>
+      <td>9.75x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/immutable-imx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Immutable</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">IMX</span></div></div></td>
+      <td>$0.1691</td>
+      <td>$338.07M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.14</td>
+      <td>$0.1691</td>
+      <td>$1.4261</td>
+      <td>$1.9253</td>
+      <td>$2.5671</td>
+      <td>8.43x</td>
+      <td>11.38x</td>
+      <td>15.18x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/arweave-ar-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Arweave</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AR</span></div></div></td>
+      <td>$4.8624</td>
+      <td>$318.94M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.20</td>
+      <td>$4.8624</td>
+      <td>$29</td>
+      <td>$39</td>
+      <td>$51</td>
+      <td>5.88x</td>
+      <td>7.94x</td>
+      <td>10.59x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/gnosis-gno-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Gnosis</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">GNO</span></div></div></td>
+      <td>$116</td>
+      <td>$306.55M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.13</td>
+      <td>$97</td>
+      <td>$818</td>
+      <td>$1,105</td>
+      <td>$1,473</td>
+      <td>7.06x</td>
+      <td>9.53x</td>
+      <td>12.71x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethereum-name-service-ens-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethereum Name Service</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ENS</span></div></div></td>
+      <td>$7.1650</td>
+      <td>$302.03M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.14</td>
+      <td>$7.1650</td>
+      <td>$60</td>
+      <td>$82</td>
+      <td>$109</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/conflux-cfx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Conflux</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">CFX</span></div></div></td>
+      <td>$0.0565</td>
+      <td>$296.39M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.0565</td>
+      <td>$0.4770</td>
+      <td>$0.6440</td>
+      <td>$0.8586</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/thorchain-rune-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">THORChain</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">RUNE</span></div></div></td>
+      <td>$0.7578</td>
+      <td>$248.87M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.14</td>
+      <td>$0.7578</td>
+      <td>$6.3943</td>
+      <td>$8.6323</td>
+      <td>$12</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/iota-iota-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">IOTA</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">IOTA</span></div></div></td>
+      <td>$0.0518</td>
+      <td>$241.25M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.25</td>
+      <td>$0.0518</td>
+      <td>$0.2460</td>
+      <td>$0.3322</td>
+      <td>$0.4429</td>
+      <td>4.75x</td>
+      <td>6.41x</td>
+      <td>8.55x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/theta-network-theta-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Theta Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">THETA</span></div></div></td>
+      <td>$0.2377</td>
+      <td>$237.77M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.09</td>
+      <td>$0.2377</td>
+      <td>$2.0060</td>
+      <td>$2.7081</td>
+      <td>$3.6108</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/jasmycoin-jasmy-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">JasmyCoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">JASMY</span></div></div></td>
+      <td>$0.0048</td>
+      <td>$237.03M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.0048</td>
+      <td>$0.0404</td>
+      <td>$0.0546</td>
+      <td>$0.0727</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/akash-network-akt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Akash Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AKT</span></div></div></td>
+      <td>$0.7316</td>
+      <td>$215.62M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.09</td>
+      <td>$0.7316</td>
+      <td>$6.1729</td>
+      <td>$8.3334</td>
+      <td>$11</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/axie-infinity-axs-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Axie Infinity</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AXS</span></div></div></td>
+      <td>$1.1991</td>
+      <td>$209.48M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.11</td>
+      <td>$1.1991</td>
+      <td>$10</td>
+      <td>$14</td>
+      <td>$18</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/neo-neo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">NEO</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">NEO</span></div></div></td>
+      <td>$2.7000</td>
+      <td>$190.45M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.09</td>
+      <td>$2.7000</td>
+      <td>$23</td>
+      <td>$31</td>
+      <td>$41</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/decentraland-mana-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Decentraland</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">MANA</span></div></div></td>
+      <td>$0.0929</td>
+      <td>$184.40M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.0929</td>
+      <td>$0.7838</td>
+      <td>$1.0582</td>
+      <td>$1.4109</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aioz-network-aioz-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">AIOZ Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AIOZ</span></div></div></td>
+      <td>$0.1277</td>
+      <td>$160.89M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.11</td>
+      <td>$0.1277</td>
+      <td>$1.0779</td>
+      <td>$1.4552</td>
+      <td>$1.9402</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/multiversx-egld-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">MultiversX</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">EGLD</span></div></div></td>
+      <td>$4.7631</td>
+      <td>$146.07M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.13</td>
+      <td>$4.7631</td>
+      <td>$40</td>
+      <td>$54</td>
+      <td>$72</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/the-sandbox-sand-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">The Sandbox</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SAND</span></div></div></td>
+      <td>$0.0463</td>
+      <td>$135.40M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.06</td>
+      <td>$0.0463</td>
+      <td>$0.3907</td>
+      <td>$0.5274</td>
+      <td>$0.7032</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/dydx-dydx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">dYdX</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DYDX</span></div></div></td>
+      <td>$0.1512</td>
+      <td>$127.43M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.16</td>
+      <td>$0.1512</td>
+      <td>$1.1071</td>
+      <td>$1.4946</td>
+      <td>$1.9927</td>
+      <td>7.32x</td>
+      <td>9.88x</td>
+      <td>13.18x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/gala-gala-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Gala</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">GALA</span></div></div></td>
+      <td>$0.0023</td>
+      <td>$113.73M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.30</td>
+      <td>$0.0016</td>
+      <td>$0.0062</td>
+      <td>$0.0084</td>
+      <td>$0.0112</td>
+      <td>2.76x</td>
+      <td>3.72x</td>
+      <td>4.96x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/0x-zrx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">0x</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ZRX</span></div></div></td>
+      <td>$0.1294</td>
+      <td>$109.64M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.12</td>
+      <td>$0.1294</td>
+      <td>$1.0921</td>
+      <td>$1.4743</td>
+      <td>$1.9657</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/helium-hnt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Helium</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">HNT</span></div></div></td>
+      <td>$0.5393</td>
+      <td>$100.28M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.10</td>
+      <td>$0.5393</td>
+      <td>$4.5503</td>
+      <td>$6.1430</td>
+      <td>$8.1906</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/livepeer-lpt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Livepeer</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LPT</span></div></div></td>
+      <td>$1.7932</td>
+      <td>$89.24M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.06</td>
+      <td>$1.7932</td>
+      <td>$15</td>
+      <td>$20</td>
+      <td>$27</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/wormhole-w-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Wormhole</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">W</span></div></div></td>
+      <td>$0.0128</td>
+      <td>$83.46M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.18</td>
+      <td>$0.0128</td>
+      <td>$0.0836</td>
+      <td>$0.1129</td>
+      <td>$0.1505</td>
+      <td>6.53x</td>
+      <td>8.82x</td>
+      <td>11.76x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/nervos-network-ckb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Nervos Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">CKB</span></div></div></td>
+      <td>$0.0015</td>
+      <td>$72.42M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.08</td>
+      <td>$0.0015</td>
+      <td>$0.0123</td>
+      <td>$0.0166</td>
+      <td>$0.0222</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/tellor-trb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Tellor</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">TRB</span></div></div></td>
+      <td>$20</td>
+      <td>$57.29M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.09</td>
+      <td>$20</td>
+      <td>$172</td>
+      <td>$232</td>
+      <td>$309</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/flow-flow-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Flow</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FLOW</span></div></div></td>
+      <td>$0.0329</td>
+      <td>$55.68M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.11</td>
+      <td>$0.0329</td>
+      <td>$0.2773</td>
+      <td>$0.3744</td>
+      <td>$0.4992</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ronin-ron-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ronin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">RON</span></div></div></td>
+      <td>$0.0671</td>
+      <td>$51.78M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.14</td>
+      <td>$0.0671</td>
+      <td>$0.5607</td>
+      <td>$0.7570</td>
+      <td>$1.0093</td>
+      <td>8.36x</td>
+      <td>11.28x</td>
+      <td>15.04x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/osmosis-osmo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Osmosis</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">OSMO</span></div></div></td>
+      <td>$0.0386</td>
+      <td>$30.45M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.20</td>
+      <td>$0.0386</td>
+      <td>$0.2286</td>
+      <td>$0.3086</td>
+      <td>$0.4115</td>
+      <td>5.92x</td>
+      <td>8.00x</td>
+      <td>10.66x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/dia-dia-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">DIA</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DIA</span></div></div></td>
+      <td>$0.1622</td>
+      <td>$19.40M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.10</td>
+      <td>$0.1622</td>
+      <td>$1.3690</td>
+      <td>$1.8481</td>
+      <td>$2.4642</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/loopring-lrc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Loopring</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LRC</span></div></div></td>
+      <td>$0.0100</td>
+      <td>$13.63M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.05</td>
+      <td>$0.0100</td>
+      <td>$0.0841</td>
+      <td>$0.1135</td>
+      <td>$0.1513</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ampleforth-governance-forth-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ampleforth Governance</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FORTH</span></div></div></td>
+      <td>$0.3000</td>
+      <td>$4.30M</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.16</td>
+      <td>$0.3000</td>
+      <td>$2.2616</td>
+      <td>$3.0531</td>
+      <td>$4.0708</td>
+      <td>7.54x</td>
+      <td>10.18x</td>
+      <td>13.57x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/starknet-strk-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Starknet</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">STRK</span></div></div></td>
+      <td>$0.0427</td>
+      <td>$243,063</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.12</td>
+      <td>$0.0427</td>
+      <td>$0.3607</td>
+      <td>$0.4869</td>
+      <td>$0.6492</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/maker-mkr-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Maker</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">MKR</span></div></div></td>
+      <td>$1,779</td>
+      <td>N/A</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.20</td>
+      <td>$972</td>
+      <td>$5,872</td>
+      <td>$7,927</td>
+      <td>$10,569</td>
+      <td>3.30x</td>
+      <td>4.46x</td>
+      <td>5.94x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/eos-eos-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">EOS</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">EOS</span></div></div></td>
+      <td>$0.1026</td>
+      <td>N/A</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.10</td>
+      <td>$0.1026</td>
+      <td>$0.8660</td>
+      <td>$1.1691</td>
+      <td>$1.5588</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/apecoin-ape-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">ApeCoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">APE</span></div></div></td>
+      <td>$0.1593</td>
+      <td>N/A</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.04</td>
+      <td>$0.1593</td>
+      <td>$1.3437</td>
+      <td>$1.8140</td>
+      <td>$2.4187</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/klaytn-klay-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Klaytn</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">KLAY</span></div></div></td>
+      <td>$0.0347</td>
+      <td>N/A</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.07</td>
+      <td>$0.0347</td>
+      <td>$0.2931</td>
+      <td>$0.3957</td>
+      <td>$0.5276</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/mantra-om-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">MANTRA</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">OM</span></div></div></td>
+      <td>$0.0028</td>
+      <td>N/A</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.06</td>
+      <td>$0.0028</td>
+      <td>$0.0237</td>
+      <td>$0.0320</td>
+      <td>$0.0426</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/arbitrum-arb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Arbitrum</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ARB</span></div></div></td>
+      <td>$0.0006</td>
+      <td>N/A</td>
+      <td>Q1 2030 (Jan-Mar)</td>
+      <td>0.04</td>
+      <td>$0.0006</td>
+      <td>$0.0053</td>
+      <td>$0.0072</td>
+      <td>$0.0096</td>
+      <td>8.44x</td>
+      <td>11.39x</td>
+      <td>15.19x</td>
+    </tr>
+  </tbody>
+</table>
+  <div class="desc-card">
+    <h3>📊 Methodology: The Amalgamated Target Engine</h3>
+    <p>Projecting bull targets solely from today's spot price is statistically flawed during a macro bear market down-trend. Alternatively, relying exclusively on a flat CAGR multiplier generates identical, un-nuanced targets for every asset. This proprietary model fixes this by merging standard compounding with live, individualized standard-deviation risk.</p>
+  </div>
+</body>
+</html>

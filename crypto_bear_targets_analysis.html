@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Macro Bear Target Analysis</title>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+<style>
+  body { background-color: #050811; color: #d1d5db; font-family: -apple-system, sans-serif; margin: 0; padding: 25px; }
+  .cycle-header { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 25px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-left: 5px solid #ef4444; }
+  .cycle-title { font-size: 1.4rem; font-weight: 800; color: #ffffff; margin: 0 0 5px 0; }
+  .cycle-sub { font-size: 0.9rem; color: #94a3b8; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+  .progress-container { width: 300px; background-color: #1e293b; border-radius: 8px; overflow: hidden; height: 12px; margin-top: 10px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, #f59e0b, #ef4444); width: 86.5%; }
+  .dataTables_wrapper { color: #94a3b8 !important; margin-bottom: 15px; font-size: 0.95rem; } .dataTables_wrapper label { color: #94a3b8 !important; font-weight: 500; }
+  .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select { background-color: #0b0e14 !important; color: #ffffff !important; border: 1px solid #1e293b; border-radius: 6px; padding: 8px 12px; margin-left: 8px; outline: none; transition: all 0.2s; }
+  .dataTables_wrapper .dataTables_filter input:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.3); }
+  .dataTables_wrapper .dataTables_paginate .paginate_button { color: #cbd5e1 !important; border: 1px solid transparent; } .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #3b82f6 !important; color: white !important; border: none; border-radius: 4px; }
+  table.dataTable { border-collapse: collapse; border-bottom: 1px solid #1e293b; margin-top: 15px !important; border-radius: 8px; overflow: hidden; font-family: monospace; font-size: 0.95rem; width: 100% !important; }
+  table.dataTable thead th { background-color: #0f141e; color: #f8fafc; border-bottom: 2px solid #3b82f6; padding: 14px 12px; font-weight: 600; text-transform: uppercase; font-size: 0.80rem; letter-spacing: 0.5px; font-family: -apple-system, sans-serif; white-space: nowrap; }
+  table.dataTable tbody tr.odd { background-color: #0b0e14 !important; } table.dataTable tbody tr.even { background-color: #111620 !important; } table.dataTable tbody tr:hover { background-color: #1e293b !important; cursor: crosshair; }
+  table.dataTable tbody td { padding: 12px; color: #e2e8f0; border: none; border-top: 1px solid #1e293b; text-align: center; vertical-align: middle; } table.dataTable tbody td:first-child { text-align: left; }
+  #bearTable thead th:nth-child(7), #bearTable tbody td:nth-child(7), #bearTable thead th:nth-child(10), #bearTable tbody td:nth-child(10) { background-color: rgba(250, 204, 21, 0.08) !important; color: #facc15; }
+  #bearTable thead th:nth-child(8), #bearTable tbody td:nth-child(8), #bearTable thead th:nth-child(11), #bearTable tbody td:nth-child(11) { background-color: rgba(245, 158, 11, 0.08) !important; color: #fbbf24; }
+  #bearTable thead th:nth-child(9), #bearTable tbody td:nth-child(9), #bearTable thead th:nth-child(12), #bearTable tbody td:nth-child(12) { background-color: rgba(239, 68, 68, 0.08) !important; color: #f87171; }
+  .desc-card { background-color: #090d16; border-left: 4px solid #ef4444; border-radius: 6px; padding: 25px; line-height: 1.6; font-size: 0.95rem; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); } .desc-card h3, .desc-card h4 { margin-top: 0; color: #fff; }
+</style>
+<script>
+  $(document).ready(function() { $('#bearTable').DataTable({ "pageLength": 10, "order": [] }); });
+</script>
+</head>
+<body>
+  <div class="cycle-header">
+    <div><h1 class="cycle-title">Macro Bear Market Targets</h1></div>
+    <div style="text-align: right;"><p class="cycle-title">86.5%</p><p class="cycle-sub">400-DAY CAPITULATION COMPLETION</p><div class="progress-container"><div class="progress-bar"></div></div></div>
+  </div>
+  <p style="color: #64748b; font-size: 0.85rem; margin-top: 0; margin-bottom: 25px;">LAST UPDATE: 2026-09-26 16:06 UTC | SORTED BY MARKET CAP</p>
+  <table border="1" class="dataframe display" id="bearTable">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Asset</th>
+      <th>Latest Price</th>
+      <th>Market Cap</th>
+      <th>TWAP Price</th>
+      <th>Below TWAP?</th>
+      <th>Comp. Risk</th>
+      <th>Base Bear ($)</th>
+      <th>Panic Bear ($)</th>
+      <th>Blood Bear ($)</th>
+      <th>Base DD (%)</th>
+      <th>Panic DD (%)</th>
+      <th>Blood DD (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bitcoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BTC</span></div></div></td>
+      <td>$84,133</td>
+      <td>$1689.91B</td>
+      <td>$29,670</td>
+      <td>❌</td>
+      <td>0.41</td>
+      <td>$51,340</td>
+      <td>$41,072</td>
+      <td>$28,186</td>
+      <td>-38.98%</td>
+      <td>-51.18%</td>
+      <td>-66.50%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethereum</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ETH</span></div></div></td>
+      <td>$2,691</td>
+      <td>$328.57B</td>
+      <td>$1,727</td>
+      <td>❌</td>
+      <td>0.49</td>
+      <td>$1,900</td>
+      <td>$1,555</td>
+      <td>$1,296</td>
+      <td>-29.39%</td>
+      <td>-42.23%</td>
+      <td>-51.86%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bnb-bnb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">BNB</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BNB</span></div></div></td>
+      <td>$774</td>
+      <td>$103.09B</td>
+      <td>$318</td>
+      <td>❌</td>
+      <td>0.49</td>
+      <td>$391</td>
+      <td>$313</td>
+      <td>$156</td>
+      <td>-49.45%</td>
+      <td>-59.56%</td>
+      <td>-79.78%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/xrp-xrp-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">XRP</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XRP</span></div></div></td>
+      <td>$1.5505</td>
+      <td>$97.58B</td>
+      <td>$0.8397</td>
+      <td>❌</td>
+      <td>0.35</td>
+      <td>$1.1116</td>
+      <td>$0.8893</td>
+      <td>$0.4446</td>
+      <td>-28.31%</td>
+      <td>-42.65%</td>
+      <td>-71.32%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/solana-sol-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Solana</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SOL</span></div></div></td>
+      <td>$122</td>
+      <td>$71.61B</td>
+      <td>$87</td>
+      <td>❌</td>
+      <td>0.57</td>
+      <td>$53</td>
+      <td>$43</td>
+      <td>$35</td>
+      <td>-56.15%</td>
+      <td>-64.92%</td>
+      <td>-71.52%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/tron-trx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">TRON</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">TRX</span></div></div></td>
+      <td>$0.3366</td>
+      <td>$31.97B</td>
+      <td>$0.1097</td>
+      <td>❌</td>
+      <td>0.28</td>
+      <td>$0.3005</td>
+      <td>$0.2404</td>
+      <td>$0.1202</td>
+      <td>-10.73%</td>
+      <td>-28.59%</td>
+      <td>-64.29%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Dogecoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DOGE</span></div></div></td>
+      <td>$0.0985</td>
+      <td>$16.93B</td>
+      <td>$0.0935</td>
+      <td>❌</td>
+      <td>0.36</td>
+      <td>$0.0678</td>
+      <td>$0.0543</td>
+      <td>$0.0374</td>
+      <td>-31.14%</td>
+      <td>-44.91%</td>
+      <td>-62.04%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/chainlink-link-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Chainlink</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LINK</span></div></div></td>
+      <td>$14</td>
+      <td>$10.66B</td>
+      <td>$11</td>
+      <td>❌</td>
+      <td>0.69</td>
+      <td>$5.1869</td>
+      <td>$4.1495</td>
+      <td>$3.3196</td>
+      <td>-63.54%</td>
+      <td>-70.84%</td>
+      <td>-76.67%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/cardano-ada-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Cardano</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ADA</span></div></div></td>
+      <td>$0.2597</td>
+      <td>$9.56B</td>
+      <td>$0.4827</td>
+      <td>✅</td>
+      <td>0.38</td>
+      <td>$0.1727</td>
+      <td>$0.1382</td>
+      <td>$0.1105</td>
+      <td>-33.49%</td>
+      <td>-46.79%</td>
+      <td>-57.43%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/stellar-xlm-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Stellar</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XLM</span></div></div></td>
+      <td>$0.2199</td>
+      <td>$7.70B</td>
+      <td>$0.1899</td>
+      <td>❌</td>
+      <td>0.40</td>
+      <td>$0.1366</td>
+      <td>$0.1093</td>
+      <td>$0.0759</td>
+      <td>-37.88%</td>
+      <td>-50.30%</td>
+      <td>-65.47%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bitcoin Cash</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BCH</span></div></div></td>
+      <td>$336</td>
+      <td>$6.75B</td>
+      <td>$426</td>
+      <td>✅</td>
+      <td>0.38</td>
+      <td>$219</td>
+      <td>$175</td>
+      <td>$170</td>
+      <td>-34.87%</td>
+      <td>-47.89%</td>
+      <td>-49.30%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/near-protocol-near-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">NEAR Protocol</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">NEAR</span></div></div></td>
+      <td>$4.8545</td>
+      <td>$6.34B</td>
+      <td>$3.9983</td>
+      <td>❌</td>
+      <td>0.94</td>
+      <td>$1.2954</td>
+      <td>$1.0363</td>
+      <td>$0.8291</td>
+      <td>-73.31%</td>
+      <td>-78.65%</td>
+      <td>-82.92%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Litecoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LTC</span></div></div></td>
+      <td>$73</td>
+      <td>$5.67B</td>
+      <td>$71</td>
+      <td>❌</td>
+      <td>0.66</td>
+      <td>$28</td>
+      <td>$22</td>
+      <td>$18</td>
+      <td>-62.30%</td>
+      <td>-69.84%</td>
+      <td>-75.87%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/avalanche-avax-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Avalanche</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AVAX</span></div></div></td>
+      <td>$11</td>
+      <td>$4.87B</td>
+      <td>$27</td>
+      <td>✅</td>
+      <td>0.55</td>
+      <td>$4.9562</td>
+      <td>$4.2127</td>
+      <td>$3.3702</td>
+      <td>-54.75%</td>
+      <td>-61.53%</td>
+      <td>-69.23%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/sui-sui-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Sui</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SUI</span></div></div></td>
+      <td>$1.1812</td>
+      <td>$4.85B</td>
+      <td>$1.7094</td>
+      <td>✅</td>
+      <td>0.54</td>
+      <td>$0.5448</td>
+      <td>$0.4358</td>
+      <td>$0.3487</td>
+      <td>-53.88%</td>
+      <td>-63.10%</td>
+      <td>-70.48%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/hedera-hbar-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Hedera</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">HBAR</span></div></div></td>
+      <td>$0.0951</td>
+      <td>$4.17B</td>
+      <td>$0.1207</td>
+      <td>✅</td>
+      <td>0.39</td>
+      <td>$0.0616</td>
+      <td>$0.0492</td>
+      <td>$0.0483</td>
+      <td>-35.24%</td>
+      <td>-48.19%</td>
+      <td>-49.22%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bittensor-tao-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bittensor</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">TAO</span></div></div></td>
+      <td>$337</td>
+      <td>$3.91B</td>
+      <td>$294</td>
+      <td>❌</td>
+      <td>0.72</td>
+      <td>$117</td>
+      <td>$94</td>
+      <td>$75</td>
+      <td>-65.23%</td>
+      <td>-72.18%</td>
+      <td>-77.75%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/cronos-cro-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Cronos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">CRO</span></div></div></td>
+      <td>$0.0659</td>
+      <td>$3.28B</td>
+      <td>$0.1198</td>
+      <td>✅</td>
+      <td>0.42</td>
+      <td>$0.0389</td>
+      <td>$0.0311</td>
+      <td>$0.0249</td>
+      <td>-41.02%</td>
+      <td>-52.81%</td>
+      <td>-62.25%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethena-ena-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethena</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ENA</span></div></div></td>
+      <td>$0.2760</td>
+      <td>$2.77B</td>
+      <td>$0.4045</td>
+      <td>✅</td>
+      <td>0.75</td>
+      <td>$0.0922</td>
+      <td>$0.0737</td>
+      <td>$0.0590</td>
+      <td>-66.61%</td>
+      <td>-73.29%</td>
+      <td>-78.63%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ondo-ondo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ondo</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ONDO</span></div></div></td>
+      <td>$0.5457</td>
+      <td>$2.66B</td>
+      <td>$0.7258</td>
+      <td>✅</td>
+      <td>0.69</td>
+      <td>$0.1971</td>
+      <td>$0.1576</td>
+      <td>$0.1261</td>
+      <td>-63.89%</td>
+      <td>-71.11%</td>
+      <td>-76.89%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aave-aave-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Aave</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AAVE</span></div></div></td>
+      <td>$154</td>
+      <td>$2.39B</td>
+      <td>$164</td>
+      <td>✅</td>
+      <td>0.46</td>
+      <td>$84</td>
+      <td>$68</td>
+      <td>$65</td>
+      <td>-45.30%</td>
+      <td>-56.24%</td>
+      <td>-57.63%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/mantle-mnt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Mantle</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">MNT</span></div></div></td>
+      <td>$0.7003</td>
+      <td>$2.31B</td>
+      <td>$0.7981</td>
+      <td>✅</td>
+      <td>0.55</td>
+      <td>$0.3161</td>
+      <td>$0.2529</td>
+      <td>$0.2023</td>
+      <td>-54.86%</td>
+      <td>-63.89%</td>
+      <td>-71.11%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/polkadot-dot-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Polkadot</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DOT</span></div></div></td>
+      <td>$1.2832</td>
+      <td>$2.19B</td>
+      <td>$9.7176</td>
+      <td>✅</td>
+      <td>0.48</td>
+      <td>$0.6752</td>
+      <td>$0.5740</td>
+      <td>$0.4592</td>
+      <td>-47.38%</td>
+      <td>-55.27%</td>
+      <td>-64.22%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/worldcoin-wld-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Worldcoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">WLD</span></div></div></td>
+      <td>$0.5438</td>
+      <td>$2.01B</td>
+      <td>$1.2749</td>
+      <td>✅</td>
+      <td>0.65</td>
+      <td>$0.2084</td>
+      <td>$0.1771</td>
+      <td>$0.1417</td>
+      <td>-61.68%</td>
+      <td>-67.43%</td>
+      <td>-73.94%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/internet-computer-icp-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Internet Computer</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ICP</span></div></div></td>
+      <td>$3.2955</td>
+      <td>$1.84B</td>
+      <td>$14</td>
+      <td>✅</td>
+      <td>0.49</td>
+      <td>$1.6961</td>
+      <td>$1.4417</td>
+      <td>$1.1533</td>
+      <td>-48.53%</td>
+      <td>-56.25%</td>
+      <td>-65.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethereum-classic-etc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethereum Classic</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ETC</span></div></div></td>
+      <td>$9.5810</td>
+      <td>$1.52B</td>
+      <td>$19</td>
+      <td>✅</td>
+      <td>0.43</td>
+      <td>$5.5916</td>
+      <td>$4.7529</td>
+      <td>$3.8023</td>
+      <td>-41.64%</td>
+      <td>-50.39%</td>
+      <td>-60.31%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/quant-qnt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Quant</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">QNT</span></div></div></td>
+      <td>$116</td>
+      <td>$1.40B</td>
+      <td>$74</td>
+      <td>❌</td>
+      <td>0.90</td>
+      <td>$32</td>
+      <td>$26</td>
+      <td>$21</td>
+      <td>-72.22%</td>
+      <td>-77.77%</td>
+      <td>-82.22%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/kaspa-kas-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Kaspa</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">KAS</span></div></div></td>
+      <td>$0.0478</td>
+      <td>$1.33B</td>
+      <td>$0.0678</td>
+      <td>✅</td>
+      <td>0.69</td>
+      <td>$0.0174</td>
+      <td>$0.0139</td>
+      <td>$0.0111</td>
+      <td>-63.60%</td>
+      <td>-70.88%</td>
+      <td>-76.70%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/polygon-pol28321-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Polygon</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">POL28321</span></div></div></td>
+      <td>$0.1201</td>
+      <td>$1.28B</td>
+      <td>$0.3727</td>
+      <td>✅</td>
+      <td>0.68</td>
+      <td>$0.0442</td>
+      <td>$0.0376</td>
+      <td>$0.0301</td>
+      <td>-63.19%</td>
+      <td>-68.71%</td>
+      <td>-74.97%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/gatetoken-gt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">GateToken</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">GT</span></div></div></td>
+      <td>$11</td>
+      <td>$1.17B</td>
+      <td>$6.3949</td>
+      <td>❌</td>
+      <td>0.48</td>
+      <td>$5.6542</td>
+      <td>$4.5234</td>
+      <td>$2.5580</td>
+      <td>-48.42%</td>
+      <td>-58.74%</td>
+      <td>-76.67%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/algorand-algo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Algorand</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ALGO</span></div></div></td>
+      <td>$0.1219</td>
+      <td>$1.11B</td>
+      <td>$0.4114</td>
+      <td>✅</td>
+      <td>0.52</td>
+      <td>$0.0591</td>
+      <td>$0.0502</td>
+      <td>$0.0402</td>
+      <td>-51.53%</td>
+      <td>-58.80%</td>
+      <td>-67.04%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/cosmos-atom-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Cosmos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ATOM</span></div></div></td>
+      <td>$1.8764</td>
+      <td>$1.00B</td>
+      <td>$9.1190</td>
+      <td>✅</td>
+      <td>0.58</td>
+      <td>$0.8041</td>
+      <td>$0.6835</td>
+      <td>$0.5468</td>
+      <td>-57.15%</td>
+      <td>-63.57%</td>
+      <td>-70.86%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/filecoin-fil-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Filecoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FIL</span></div></div></td>
+      <td>$1.1989</td>
+      <td>$996.65M</td>
+      <td>$14</td>
+      <td>✅</td>
+      <td>0.65</td>
+      <td>$0.4634</td>
+      <td>$0.3939</td>
+      <td>$0.3151</td>
+      <td>-61.35%</td>
+      <td>-67.15%</td>
+      <td>-73.72%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aerodrome-aero-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Aerodrome</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AERO</span></div></div></td>
+      <td>$0.8944</td>
+      <td>$893.06M</td>
+      <td>$0.7803</td>
+      <td>❌</td>
+      <td>0.82</td>
+      <td>$0.2735</td>
+      <td>$0.2188</td>
+      <td>$0.1751</td>
+      <td>-69.42%</td>
+      <td>-75.53%</td>
+      <td>-80.43%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/vechain-vet-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">VeChain</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">VET</span></div></div></td>
+      <td>$0.0096</td>
+      <td>$826.17M</td>
+      <td>$0.0299</td>
+      <td>✅</td>
+      <td>0.55</td>
+      <td>$0.0044</td>
+      <td>$0.0037</td>
+      <td>$0.0030</td>
+      <td>-54.77%</td>
+      <td>-61.56%</td>
+      <td>-69.24%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/injective-inj-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Injective</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">INJ</span></div></div></td>
+      <td>$7.8660</td>
+      <td>$786.79M</td>
+      <td>$11</td>
+      <td>✅</td>
+      <td>0.55</td>
+      <td>$3.5987</td>
+      <td>$2.8789</td>
+      <td>$2.3031</td>
+      <td>-54.25%</td>
+      <td>-63.40%</td>
+      <td>-70.72%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aptos-apt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Aptos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">APT</span></div></div></td>
+      <td>$0.8794</td>
+      <td>$765.87M</td>
+      <td>$6.2324</td>
+      <td>✅</td>
+      <td>0.60</td>
+      <td>$0.3691</td>
+      <td>$0.3137</td>
+      <td>$0.2510</td>
+      <td>-58.03%</td>
+      <td>-64.32%</td>
+      <td>-71.46%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/xdc-network-xdc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">XDC Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XDC</span></div></div></td>
+      <td>$0.0304</td>
+      <td>$653.26M</td>
+      <td>$0.0358</td>
+      <td>✅</td>
+      <td>0.35</td>
+      <td>$0.0219</td>
+      <td>$0.0175</td>
+      <td>$0.0143</td>
+      <td>-27.95%</td>
+      <td>-42.36%</td>
+      <td>-52.86%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/flare-flr-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Flare</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FLR</span></div></div></td>
+      <td>$0.0074</td>
+      <td>$642.44M</td>
+      <td>$0.0191</td>
+      <td>✅</td>
+      <td>0.41</td>
+      <td>$0.0045</td>
+      <td>$0.0038</td>
+      <td>$0.0037</td>
+      <td>-39.45%</td>
+      <td>-48.53%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/fetch.ai-fet-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Fetch.ai</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FET</span></div></div></td>
+      <td>$0.2531</td>
+      <td>$583.90M</td>
+      <td>$0.4550</td>
+      <td>✅</td>
+      <td>0.46</td>
+      <td>$0.1376</td>
+      <td>$0.1100</td>
+      <td>$0.0880</td>
+      <td>-45.66%</td>
+      <td>-56.53%</td>
+      <td>-65.22%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/sei-sei-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Sei</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SEI</span></div></div></td>
+      <td>$0.0740</td>
+      <td>$563.19M</td>
+      <td>$0.2838</td>
+      <td>✅</td>
+      <td>0.63</td>
+      <td>$0.0294</td>
+      <td>$0.0250</td>
+      <td>$0.0200</td>
+      <td>-60.25%</td>
+      <td>-66.21%</td>
+      <td>-72.97%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/nexo-nexo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Nexo</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">NEXO</span></div></div></td>
+      <td>$0.8648</td>
+      <td>$559.00M</td>
+      <td>$0.8883</td>
+      <td>✅</td>
+      <td>0.53</td>
+      <td>$0.4062</td>
+      <td>$0.3250</td>
+      <td>$0.2600</td>
+      <td>-53.03%</td>
+      <td>-62.42%</td>
+      <td>-69.94%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/pendle-pendle-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Pendle</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">PENDLE</span></div></div></td>
+      <td>$2.5985</td>
+      <td>$451.48M</td>
+      <td>$1.8761</td>
+      <td>❌</td>
+      <td>0.47</td>
+      <td>$1.3895</td>
+      <td>$1.1116</td>
+      <td>$0.7504</td>
+      <td>-46.53%</td>
+      <td>-57.22%</td>
+      <td>-71.12%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/bitcoin-sv-bsv-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Bitcoin SV</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">BSV</span></div></div></td>
+      <td>$22</td>
+      <td>$438.51M</td>
+      <td>$90</td>
+      <td>✅</td>
+      <td>0.68</td>
+      <td>$8.0439</td>
+      <td>$6.8373</td>
+      <td>$5.4698</td>
+      <td>-63.15%</td>
+      <td>-68.68%</td>
+      <td>-74.94%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/tezos-xtz-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Tezos</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">XTZ</span></div></div></td>
+      <td>$0.3342</td>
+      <td>$366.54M</td>
+      <td>$1.8031</td>
+      <td>✅</td>
+      <td>0.49</td>
+      <td>$0.1712</td>
+      <td>$0.1455</td>
+      <td>$0.1164</td>
+      <td>-48.79%</td>
+      <td>-56.47%</td>
+      <td>-65.18%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/optimism-op-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Optimism</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">OP</span></div></div></td>
+      <td>$0.1497</td>
+      <td>$344.23M</td>
+      <td>$1.1660</td>
+      <td>✅</td>
+      <td>0.64</td>
+      <td>$0.0587</td>
+      <td>$0.0499</td>
+      <td>$0.0399</td>
+      <td>-60.81%</td>
+      <td>-66.69%</td>
+      <td>-73.35%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/immutable-imx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Immutable</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">IMX</span></div></div></td>
+      <td>$0.1688</td>
+      <td>$338.10M</td>
+      <td>$1.1721</td>
+      <td>✅</td>
+      <td>0.50</td>
+      <td>$0.0843</td>
+      <td>$0.0716</td>
+      <td>$0.0573</td>
+      <td>-50.07%</td>
+      <td>-57.56%</td>
+      <td>-66.04%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/arweave-ar-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Arweave</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AR</span></div></div></td>
+      <td>$4.8570</td>
+      <td>$318.74M</td>
+      <td>$14</td>
+      <td>✅</td>
+      <td>0.72</td>
+      <td>$1.6863</td>
+      <td>$1.4333</td>
+      <td>$1.1467</td>
+      <td>-65.28%</td>
+      <td>-70.49%</td>
+      <td>-76.39%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/gnosis-gno-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Gnosis</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">GNO</span></div></div></td>
+      <td>$116</td>
+      <td>$306.63M</td>
+      <td>$136</td>
+      <td>✅</td>
+      <td>0.41</td>
+      <td>$70</td>
+      <td>$56</td>
+      <td>$54</td>
+      <td>-39.40%</td>
+      <td>-51.52%</td>
+      <td>-53.11%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ethereum-name-service-ens-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ethereum Name Service</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ENS</span></div></div></td>
+      <td>$7.1390</td>
+      <td>$301.98M</td>
+      <td>$16</td>
+      <td>✅</td>
+      <td>0.43</td>
+      <td>$4.1627</td>
+      <td>$3.5383</td>
+      <td>$2.8307</td>
+      <td>-41.69%</td>
+      <td>-50.44%</td>
+      <td>-60.35%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/conflux-cfx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Conflux</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">CFX</span></div></div></td>
+      <td>$0.0566</td>
+      <td>$296.53M</td>
+      <td>$0.1840</td>
+      <td>✅</td>
+      <td>0.41</td>
+      <td>$0.0346</td>
+      <td>$0.0294</td>
+      <td>$0.0283</td>
+      <td>-38.90%</td>
+      <td>-48.07%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/thorchain-rune-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">THORChain</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">RUNE</span></div></div></td>
+      <td>$0.7572</td>
+      <td>$248.76M</td>
+      <td>$2.9919</td>
+      <td>✅</td>
+      <td>0.69</td>
+      <td>$0.2763</td>
+      <td>$0.2349</td>
+      <td>$0.1879</td>
+      <td>-63.51%</td>
+      <td>-68.98%</td>
+      <td>-75.18%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/iota-iota-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">IOTA</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">IOTA</span></div></div></td>
+      <td>$0.0518</td>
+      <td>$241.04M</td>
+      <td>$0.1674</td>
+      <td>✅</td>
+      <td>0.54</td>
+      <td>$0.0238</td>
+      <td>$0.0202</td>
+      <td>$0.0162</td>
+      <td>-54.05%</td>
+      <td>-60.94%</td>
+      <td>-68.76%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/theta-network-theta-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Theta Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">THETA</span></div></div></td>
+      <td>$0.2377</td>
+      <td>$237.65M</td>
+      <td>$1.4577</td>
+      <td>✅</td>
+      <td>0.52</td>
+      <td>$0.1148</td>
+      <td>$0.0976</td>
+      <td>$0.0781</td>
+      <td>-51.69%</td>
+      <td>-58.93%</td>
+      <td>-67.15%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/jasmycoin-jasmy-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">JasmyCoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">JASMY</span></div></div></td>
+      <td>$0.0048</td>
+      <td>$236.88M</td>
+      <td>$0.1132</td>
+      <td>✅</td>
+      <td>0.36</td>
+      <td>$0.0033</td>
+      <td>$0.0028</td>
+      <td>$0.0024</td>
+      <td>-30.22%</td>
+      <td>-40.69%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/akash-network-akt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Akash Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AKT</span></div></div></td>
+      <td>$0.7299</td>
+      <td>$217.12M</td>
+      <td>$1.7344</td>
+      <td>✅</td>
+      <td>0.46</td>
+      <td>$0.3962</td>
+      <td>$0.3367</td>
+      <td>$0.2694</td>
+      <td>-45.73%</td>
+      <td>-53.87%</td>
+      <td>-63.09%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/axie-infinity-axs-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Axie Infinity</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AXS</span></div></div></td>
+      <td>$1.1975</td>
+      <td>$209.51M</td>
+      <td>$16</td>
+      <td>✅</td>
+      <td>0.63</td>
+      <td>$0.4770</td>
+      <td>$0.4055</td>
+      <td>$0.3244</td>
+      <td>-60.17%</td>
+      <td>-66.14%</td>
+      <td>-72.91%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/neo-neo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">NEO</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">NEO</span></div></div></td>
+      <td>$2.7000</td>
+      <td>$190.44M</td>
+      <td>$19</td>
+      <td>✅</td>
+      <td>0.43</td>
+      <td>$1.5668</td>
+      <td>$1.3318</td>
+      <td>$1.0654</td>
+      <td>-41.97%</td>
+      <td>-50.67%</td>
+      <td>-60.54%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/decentraland-mana-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Decentraland</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">MANA</span></div></div></td>
+      <td>$0.0927</td>
+      <td>$184.52M</td>
+      <td>$0.4526</td>
+      <td>✅</td>
+      <td>0.44</td>
+      <td>$0.0531</td>
+      <td>$0.0451</td>
+      <td>$0.0361</td>
+      <td>-42.75%</td>
+      <td>-51.34%</td>
+      <td>-61.07%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/aioz-network-aioz-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">AIOZ Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">AIOZ</span></div></div></td>
+      <td>$0.1274</td>
+      <td>$161.37M</td>
+      <td>$0.2737</td>
+      <td>✅</td>
+      <td>0.47</td>
+      <td>$0.0673</td>
+      <td>$0.0572</td>
+      <td>$0.0458</td>
+      <td>-47.15%</td>
+      <td>-55.08%</td>
+      <td>-64.06%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/multiversx-egld-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">MultiversX</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">EGLD</span></div></div></td>
+      <td>$4.7561</td>
+      <td>$146.37M</td>
+      <td>$60</td>
+      <td>✅</td>
+      <td>0.63</td>
+      <td>$1.8962</td>
+      <td>$1.6118</td>
+      <td>$1.2894</td>
+      <td>-60.13%</td>
+      <td>-66.11%</td>
+      <td>-72.89%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/the-sandbox-sand-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">The Sandbox</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">SAND</span></div></div></td>
+      <td>$0.0463</td>
+      <td>$135.47M</td>
+      <td>$0.7089</td>
+      <td>✅</td>
+      <td>0.46</td>
+      <td>$0.0252</td>
+      <td>$0.0214</td>
+      <td>$0.0171</td>
+      <td>-45.68%</td>
+      <td>-53.83%</td>
+      <td>-63.06%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/dydx-dydx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">dYdX</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DYDX</span></div></div></td>
+      <td>$0.1512</td>
+      <td>$126.56M</td>
+      <td>$2.5042</td>
+      <td>✅</td>
+      <td>0.51</td>
+      <td>$0.0735</td>
+      <td>$0.0624</td>
+      <td>$0.0499</td>
+      <td>-51.42%</td>
+      <td>-58.71%</td>
+      <td>-66.97%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/0x-zrx-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">0x</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ZRX</span></div></div></td>
+      <td>$0.1295</td>
+      <td>$109.66M</td>
+      <td>$0.4615</td>
+      <td>✅</td>
+      <td>0.48</td>
+      <td>$0.0673</td>
+      <td>$0.0572</td>
+      <td>$0.0457</td>
+      <td>-48.04%</td>
+      <td>-55.84%</td>
+      <td>-64.67%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/helium-hnt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Helium</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">HNT</span></div></div></td>
+      <td>$0.5372</td>
+      <td>$100.28M</td>
+      <td>$6.7079</td>
+      <td>✅</td>
+      <td>0.44</td>
+      <td>$0.3038</td>
+      <td>$0.2583</td>
+      <td>$0.2066</td>
+      <td>-43.44%</td>
+      <td>-51.92%</td>
+      <td>-61.54%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/livepeer-lpt-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Livepeer</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LPT</span></div></div></td>
+      <td>$1.7942</td>
+      <td>$89.18M</td>
+      <td>$9.4992</td>
+      <td>✅</td>
+      <td>0.41</td>
+      <td>$1.0893</td>
+      <td>$0.9259</td>
+      <td>$0.8971</td>
+      <td>-39.29%</td>
+      <td>-48.39%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/wormhole-w-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Wormhole</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">W</span></div></div></td>
+      <td>$0.0128</td>
+      <td>$83.50M</td>
+      <td>$1.9182</td>
+      <td>✅</td>
+      <td>0.50</td>
+      <td>$0.0064</td>
+      <td>$0.0054</td>
+      <td>$0.0043</td>
+      <td>-50.27%</td>
+      <td>-57.73%</td>
+      <td>-66.18%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/nervos-network-ckb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Nervos Network</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">CKB</span></div></div></td>
+      <td>$0.0015</td>
+      <td>$72.39M</td>
+      <td>$0.0077</td>
+      <td>✅</td>
+      <td>0.46</td>
+      <td>$0.0008</td>
+      <td>$0.0007</td>
+      <td>$0.0005</td>
+      <td>-45.21%</td>
+      <td>-53.43%</td>
+      <td>-62.74%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/tellor-trb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Tellor</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">TRB</span></div></div></td>
+      <td>$20</td>
+      <td>$57.33M</td>
+      <td>$37</td>
+      <td>✅</td>
+      <td>0.55</td>
+      <td>$9.3418</td>
+      <td>$7.4735</td>
+      <td>$5.9788</td>
+      <td>-54.16%</td>
+      <td>-63.33%</td>
+      <td>-70.66%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/flow-flow-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Flow</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FLOW</span></div></div></td>
+      <td>$0.0329</td>
+      <td>$55.65M</td>
+      <td>$4.0767</td>
+      <td>✅</td>
+      <td>0.35</td>
+      <td>$0.0232</td>
+      <td>$0.0198</td>
+      <td>$0.0164</td>
+      <td>-29.27%</td>
+      <td>-39.88%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ronin-ron-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ronin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">RON</span></div></div></td>
+      <td>$0.0670</td>
+      <td>$51.78M</td>
+      <td>$0.9929</td>
+      <td>✅</td>
+      <td>0.53</td>
+      <td>$0.0315</td>
+      <td>$0.0268</td>
+      <td>$0.0214</td>
+      <td>-53.04%</td>
+      <td>-60.09%</td>
+      <td>-68.07%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/osmosis-osmo-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Osmosis</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">OSMO</span></div></div></td>
+      <td>$0.0387</td>
+      <td>$30.45M</td>
+      <td>$1.3054</td>
+      <td>✅</td>
+      <td>0.44</td>
+      <td>$0.0219</td>
+      <td>$0.0186</td>
+      <td>$0.0149</td>
+      <td>-43.36%</td>
+      <td>-51.85%</td>
+      <td>-61.48%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/dia-dia-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">DIA</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">DIA</span></div></div></td>
+      <td>$0.1628</td>
+      <td>$19.43M</td>
+      <td>$0.8123</td>
+      <td>✅</td>
+      <td>0.35</td>
+      <td>$0.1166</td>
+      <td>$0.0991</td>
+      <td>$0.0814</td>
+      <td>-28.38%</td>
+      <td>-39.12%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/loopring-lrc-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Loopring</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">LRC</span></div></div></td>
+      <td>$0.0099</td>
+      <td>$13.58M</td>
+      <td>$0.2816</td>
+      <td>✅</td>
+      <td>0.29</td>
+      <td>$0.0084</td>
+      <td>$0.0074</td>
+      <td>$0.0050</td>
+      <td>-14.89%</td>
+      <td>-25.00%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/ampleforth-governance-forth-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Ampleforth Governance</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">FORTH</span></div></div></td>
+      <td>$0.3000</td>
+      <td>$4.30M</td>
+      <td>$5.0233</td>
+      <td>✅</td>
+      <td>0.36</td>
+      <td>$0.2098</td>
+      <td>$0.1783</td>
+      <td>$0.1500</td>
+      <td>-30.07%</td>
+      <td>-40.56%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/starknet-strk-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Starknet</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">STRK</span></div></div></td>
+      <td>$0.0427</td>
+      <td>$243,063</td>
+      <td>$16</td>
+      <td>✅</td>
+      <td>0.43</td>
+      <td>$0.0251</td>
+      <td>$0.0214</td>
+      <td>$0.0171</td>
+      <td>-41.18%</td>
+      <td>-50.01%</td>
+      <td>-60.01%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/apecoin-ape-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">ApeCoin</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">APE</span></div></div></td>
+      <td>$0.1590</td>
+      <td>N/A</td>
+      <td>$0.4532</td>
+      <td>✅</td>
+      <td>0.38</td>
+      <td>$0.1037</td>
+      <td>$0.0881</td>
+      <td>$0.0795</td>
+      <td>-34.78%</td>
+      <td>-44.57%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/klaytn-klay-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Klaytn</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">KLAY</span></div></div></td>
+      <td>$0.0347</td>
+      <td>N/A</td>
+      <td>$0.4427</td>
+      <td>✅</td>
+      <td>0.37</td>
+      <td>$0.0235</td>
+      <td>$0.0200</td>
+      <td>$0.0174</td>
+      <td>-32.40%</td>
+      <td>-42.54%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/eos-eos-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">EOS</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">EOS</span></div></div></td>
+      <td>$0.1026</td>
+      <td>N/A</td>
+      <td>$2.6977</td>
+      <td>✅</td>
+      <td>0.43</td>
+      <td>$0.0600</td>
+      <td>$0.0510</td>
+      <td>$0.0408</td>
+      <td>-41.57%</td>
+      <td>-50.33%</td>
+      <td>-60.27%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/maker-mkr-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Maker</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">MKR</span></div></div></td>
+      <td>$1,779</td>
+      <td>N/A</td>
+      <td>$1,335</td>
+      <td>❌</td>
+      <td>0.65</td>
+      <td>$687</td>
+      <td>$549</td>
+      <td>$534</td>
+      <td>-61.39%</td>
+      <td>-69.11%</td>
+      <td>-69.98%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/mantra-om-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">MANTRA</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">OM</span></div></div></td>
+      <td>$0.0028</td>
+      <td>N/A</td>
+      <td>$0.5519</td>
+      <td>✅</td>
+      <td>0.34</td>
+      <td>$0.0021</td>
+      <td>$0.0018</td>
+      <td>$0.0014</td>
+      <td>-26.64%</td>
+      <td>-37.64%</td>
+      <td>-50.00%</td>
+    </tr>
+    <tr>
+      <td><div style="display: flex; align-items: center; gap: 10px;"><img src="https://cryptologos.cc/logos/arbitrum-arb-logo.png?v=032" onerror="this.style.display='none'" style="width: 24px; height: 24px; border-radius: 50%;"><div style="display: flex; flex-direction: column; line-height: 1.1;"><span style="font-weight: 700; color: #ffffff;">Arbitrum</span><span style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;">ARB</span></div></div></td>
+      <td>$0.0006</td>
+      <td>N/A</td>
+      <td>$0.0450</td>
+      <td>✅</td>
+      <td>0.26</td>
+      <td>$0.0006</td>
+      <td>$0.0005</td>
+      <td>$0.0003</td>
+      <td>-4.95%</td>
+      <td>-25.00%</td>
+      <td>-50.00%</td>
+    </tr>
+  </tbody>
+</table>
+  <div class="desc-card">
+    <h3>📊 Methodology: The S.O.T.A Downside Engine</h3>
+    <p>We estimate mathematical downside “bottoms” for three capitulation scenarios—<b>Base Bear</b>, <b>Panic Bear</b>, and <b>Blood Bear</b>—by analyzing current price relative to a normalized composite risk score.</p>
+  </div>
+</body>
+</html>

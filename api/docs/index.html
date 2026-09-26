@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CryptoWeeklies API reference — risk models as JSON</title>
+<meta name="description" content="Reference for the CryptoWeeklies read-only JSON API: endpoints, response shape, model definitions and errors. Educational use only." />
+<link rel="canonical" href="https://cryptoweeklies.com/api/docs/" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="CryptoWeeklies API reference — risk models as JSON" />
+<meta property="og:description" content="Reference for the CryptoWeeklies read-only JSON API: endpoints, response shape, model definitions and errors. Educational use only." />
+<meta property="og:url" content="https://cryptoweeklies.com/api/docs/" />
+<meta property="og:image" content="https://cryptoweeklies.com/cw_logo_192_192.png" />
+<link rel="icon" type="image/png" href="../../cw_logo_192_192.png" />
+<style>
+body{background:#050811;color:#cbd5e1;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+margin:0;padding:32px 20px 64px;line-height:1.65;}
+main{max-width:1100px;margin:0 auto;}
+a{color:#38bdf8;text-decoration:none;} a:hover{text-decoration:underline;}
+h1{color:#f1f5f9;font-size:28px;margin:0 0 10px;}
+h2{color:#e2e8f0;font-size:19px;margin:36px 0 12px;border-bottom:1px solid #1e293b;padding-bottom:8px;}
+h3{color:#e2e8f0;font-size:16px;margin:24px 0 6px;}
+.lede{color:#94a3b8;font-size:16px;margin:0 0 8px;max-width:70ch;}
+.crumb{font-size:13px;color:#64748b;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;}
+.card{background:#0b0e14;border:1px solid #1e293b;border-radius:10px;padding:12px 14px;}
+.card .ticker{color:#64748b;font-size:12px;font-weight:700;letter-spacing:.6px;}
+ul.links{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px 16px;}
+footer{margin-top:48px;padding-top:20px;border-top:1px solid #1e293b;color:#64748b;font-size:13px;}
+.cw-play-cta{display:inline-flex;align-items:center;gap:9px;background:#3DDC84;color:#03050a;
+border-radius:8px;padding:10px 16px;font-weight:700;margin:22px 0 4px;}
+.cw-play-cta:hover{filter:brightness(1.08);text-decoration:none;}
+.cw-play-cta svg{width:20px;height:20px;flex:0 0 auto;}
+</style>
+</head>
+<body>
+<main>
+<style>
+.cw-code{background:#0b0e14;border:1px solid #1e293b;border-radius:8px;padding:12px 14px;
+overflow-x:auto;font-size:12.5px;line-height:1.55;color:#cbd5e1;}
+.cw-table{border-collapse:collapse;width:100%;margin:10px 0 18px;font-size:14px;}
+.cw-table th{text-align:left;color:#94a3b8;font-weight:600;border-bottom:1px solid #1e293b;padding:6px 10px 6px 0;}
+.cw-table td{border-bottom:1px solid #131c2b;padding:6px 10px 6px 0;vertical-align:top;}
+.cw-verb{background:#0f2f2a;color:#6effd8;border-radius:5px;padding:1px 7px;font-size:12px;
+font-weight:700;letter-spacing:.5px;margin-right:6px;vertical-align:middle;}
+code{background:#0d1520;border:1px solid #17212f;border-radius:4px;padding:1px 5px;font-size:13px;}
+.cw-code code{background:none;border:none;padding:0;}
+.cw-note{border-left:3px solid #1e3a35;padding:2px 0 2px 14px;color:#94a3b8;margin:14px 0;}
+.cw-example{margin:10px 0 18px;}
+.cw-example>summary{cursor:pointer;color:#38bdf8;font-size:14px;padding:4px 0;
+list-style:none;display:inline-flex;align-items:center;gap:6px;}
+.cw-example>summary::-webkit-details-marker{display:none;}
+.cw-example>summary::before{content:"\25B8";display:inline-block;transition:transform .15s;color:#64748b;}
+.cw-example[open]>summary::before{transform:rotate(90deg);}
+.cw-example>summary:hover{text-decoration:underline;}
+.cw-example .cw-code{max-height:420px;overflow:auto;margin-top:6px;}
+</style>
+<p class="crumb"><a href="../../">CryptoWeeklies</a> · <a href="../">API</a> · Reference</p>
+<h1>API reference</h1>
+<p class="lede">Quantitative risk readings for crypto and equity assets, as published on cryptoweeklies.com.</p>
+<p class="lede">Version 1.0.0. The machine-readable contract is
+<a href="https://cryptoweeklies.com/data/api/v1/openapi.json">OpenAPI 3.1</a>, also served by the gateway at
+<code>/v1/openapi.json</code>.</p>
+
+<h2>Getting started</h2>
+<p class="lede"><strong>Access is not currently sold.</strong> No keys are being issued and nobody can subscribe today; this page documents the API as built, and the plans are what it would offer if it opens.</p>
+<p>Requests go to <code>https://api.cryptoweeklies.com</code>. Every request needs a key,
+which comes from the marketplace listing; the two headers below are what its own code
+snippets send.</p>
+<pre class="cw-code"><code>curl &quot;https://api.cryptoweeklies.com/v1/assets/BTC/risk&quot; \\
+  -H &quot;x-rapidapi-key: YOUR_KEY&quot; \\
+  -H &quot;x-rapidapi-host: YOUR_HOST&quot;</code></pre>
+<p><code>GET /v1/health</code> answers without a key, so you can check the service before
+you have one.</p>
+
+<h2>How every response is shaped</h2>
+<p>The payload is under <code>data</code>. Three fields sit outside it on every response,
+including every error:</p>
+<table class="cw-table"><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>as_of</code></td><td>When the newest reading in the response was published.
+Not when you asked for it, and not when the file was written.</td></tr>
+<tr><td><code>model_version</code></td><td>Each model's version. A version changes only when
+what a reading <em>means</em> changes, never on a refresh.</td></tr>
+<tr><td><code>disclaimer</code></td><td>Educational use only. Present on every response.</td></tr>
+</tbody></table>
+<p class="cw-note">A model an asset does not have is an explicit <code>null</code>, never an
+omitted key. An equity with no regression page returns <code>"dca": null</code>, so a
+consumer can tell "no model" from "not sent".</p>
+
+<h2>Freshness</h2>
+<p>The pipeline regenerates the underlying model pages three times a day and the API is
+rebuilt from them in the same run. Poll harder than that and you will read the same numbers.
+Every reading carries its own <code>as_of</code>, and <code>stale_models</code> names any
+model whose page is more than three days behind the asset's newest one.</p>
+
+<h2>Assets</h2>
+<h3 id="listAssets"><span class="cw-verb">GET</span> <code>/v1/assets</code></h3>
+<p class="lede">Every asset the API covers.</p>
+<p>The roster, with each asset's universes, the models it has and the source page behind each one. A free-plan caller receives the assets it may read plus <code>total_asset_count</code>, so the rest of the catalogue is visible without being fetchable.</p>
+
+<details class="cw-example"><summary>Example response</summary><pre class="cw-code"><code>{
+  &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+  &quot;model_version&quot;: {
+    &quot;twap_gravity_crypto&quot;: &quot;1&quot;,
+    &quot;dca_regression&quot;: &quot;1&quot;,
+    &quot;sma_20w_crypto&quot;: &quot;1&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;,
+  &quot;data&quot;: {
+    &quot;assets&quot;: [
+      {
+        &quot;symbol&quot;: &quot;BTC&quot;,
+        &quot;name&quot;: &quot;Bitcoin&quot;,
+        &quot;asset_class&quot;: &quot;CRYPTO&quot;,
+        &quot;universes&quot;: [
+          &quot;crypto&quot;
+        ],
+        &quot;free_tier&quot;: true,
+        &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+        &quot;models&quot;: [
+          &quot;dca&quot;,
+          &quot;gravity&quot;,
+          &quot;phase&quot;,
+          &quot;sma_composite&quot;,
+          &quot;twap&quot;
+        ],
+        &quot;pages&quot;: {
+          &quot;Price_TWAP_Gravity_Analysis&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+        }
+      }
+    ],
+    &quot;universes&quot;: {
+      &quot;crypto&quot;: [
+        &quot;BTC&quot;
+      ]
+    },
+    &quot;free_tier&quot;: {
+      &quot;rule&quot;: &quot;crypto galaxy Market_Cap_Rank &lt;= 10, recomputed each refresh&quot;,
+      &quot;symbols&quot;: [
+        &quot;BTC&quot;
+      ]
+    },
+    &quot;asset_count&quot;: 1,
+    &quot;total_asset_count&quot;: 161,
+    &quot;tier&quot;: &quot;pro&quot;
+  }
+}</code></pre></details>
+<p><strong>Errors</strong></p><table class="cw-table"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td><code>401</code></td><td>No valid credential. Call the API through its marketplace listing.</td></tr><tr><td><code>403</code></td><td>The plan does not cover this asset or endpoint.</td></tr><tr><td><code>405</code></td><td>This API is read-only.</td></tr><tr><td><code>502</code></td><td>The data origin could not be read.</td></tr><tr><td><code>503</code></td><td>The gateway has no credential source configured.</td></tr></tbody></table>
+<h3 id="getAssetRisk"><span class="cw-verb">GET</span> <code>/v1/assets/{symbol}/risk</code></h3>
+<p class="lede">Current readings for one asset.</p>
+<table class="cw-table"><thead><tr><th>Parameter</th><th>In</th><th></th><th>Meaning</th></tr></thead><tbody><tr><td><code>symbol</code></td><td>path</td><td>required</td><td>Canonical symbol, case-insensitive. See GET /v1/assets.</td></tr></tbody></table>
+<details class="cw-example"><summary>Example response</summary><pre class="cw-code"><code>{
+  &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+  &quot;model_version&quot;: {
+    &quot;twap_gravity_crypto&quot;: &quot;1&quot;,
+    &quot;dca_regression&quot;: &quot;1&quot;,
+    &quot;sma_20w_crypto&quot;: &quot;1&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;,
+  &quot;data&quot;: {
+    &quot;symbol&quot;: &quot;BTC&quot;,
+    &quot;name&quot;: &quot;Bitcoin&quot;,
+    &quot;asset_class&quot;: &quot;CRYPTO&quot;,
+    &quot;universes&quot;: [
+      &quot;crypto&quot;
+    ],
+    &quot;free_tier&quot;: true,
+    &quot;market_cap_rank&quot;: 1,
+    &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+    &quot;price&quot;: {
+      &quot;value&quot;: 79798.52,
+      &quot;currency&quot;: &quot;USD&quot;,
+      &quot;source_page&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+    },
+    &quot;gravity&quot;: {
+      &quot;score&quot;: 22.6,
+      &quot;risk_level&quot;: 3,
+      &quot;verdict&quot;: &quot;historically an accumulation zone, well below past tops&quot;,
+      &quot;model&quot;: &quot;twap_gravity_crypto@1&quot;,
+      &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+      &quot;as_of_basis&quot;: &quot;page_stamp&quot;,
+      &quot;source_page&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+    },
+    &quot;twap&quot;: {
+      &quot;baseline&quot;: 29427.42,
+      &quot;premium_pct&quot;: 171.17,
+      &quot;risk_level&quot;: 7,
+      &quot;risk_level_model&quot;: &quot;twap_risk_level_crypto@1&quot;,
+      &quot;model&quot;: &quot;twap_gravity_crypto@1&quot;,
+      &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+      &quot;as_of_basis&quot;: &quot;page_stamp&quot;,
+      &quot;source_page&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+    },
+    &quot;sma_composite&quot;: {
+      &quot;score&quot;: 51.0,
+      &quot;page_value&quot;: 0.51,
+      &quot;band&quot;: &quot;0.5-0.6&quot;,
+      &quot;model&quot;: &quot;sma_20w_crypto@1&quot;,
+      &quot;as_of&quot;: &quot;2026-09-05T15:54:00Z&quot;,
+      &quot;as_of_basis&quot;: &quot;page_stamp&quot;,
+      &quot;source_page&quot;: &quot;btc-usd_price_with_risk.html&quot;
+    },
+    &quot;phase&quot;: {
+      &quot;label&quot;: &quot;Bull Phase Expansion&quot;,
+      &quot;completion_pct&quot;: 51.9,
+      &quot;fair_value&quot;: null,
+      &quot;max_euphoria_target&quot;: 172747.36,
+      &quot;model&quot;: &quot;polynomial_phase_crypto@1&quot;,
+      &quot;as_of&quot;: &quot;2026-09-07&quot;,
+      &quot;as_of_basis&quot;: &quot;trace_end&quot;,
+      &quot;source_page&quot;: &quot;BTC_Polynomial_Phase_Detector.html&quot;
+    },
+    &quot;dca&quot;: {
+      &quot;band&quot;: &quot;0.3-0.4&quot;,
+      &quot;risk&quot;: 0.35,
+      &quot;price&quot;: 79798.52,
+      &quot;fair_value&quot;: 76564.3,
+      &quot;floor&quot;: 43056.64,
+      &quot;ceiling&quot;: 188256.47,
+      &quot;premium_pct&quot;: 4.22,
+      &quot;premium_source&quot;: &quot;printed&quot;,
+      &quot;reading_date&quot;: &quot;2026-09-05&quot;,
+      &quot;model&quot;: &quot;dca_regression@1&quot;,
+      &quot;as_of&quot;: &quot;2026-09-05&quot;,
+      &quot;as_of_basis&quot;: &quot;trace_end&quot;,
+      &quot;source_page&quot;: &quot;BTC_lin_reg_price_with_risk.html&quot;
+    },
+    &quot;market_context&quot;: {
+      &quot;universe&quot;: &quot;crypto&quot;,
+      &quot;peak_valley&quot;: {
+        &quot;score&quot;: 40.1,
+        &quot;zone&quot;: &quot;Moderate Zone&quot;,
+        &quot;series&quot;: &quot;leading_btc_eth&quot;,
+        &quot;scope&quot;: &quot;market&quot;,
+        &quot;model&quot;: &quot;peak_valley_crypto@1&quot;,
+        &quot;as_of&quot;: &quot;2026-09-05T15:53:00Z&quot;,
+        &quot;as_of_basis&quot;: &quot;page_stamp&quot;
+      },
+      &quot;fear_greed&quot;: {
+        &quot;value&quot;: 73,
+        &quot;label&quot;: &quot;greed&quot;,
+        &quot;label_source&quot;: &quot;site_band_table&quot;,
+        &quot;sma_30&quot;: 53,
+        &quot;provider&quot;: &quot;alternative.me&quot;,
+        &quot;scope&quot;: &quot;market&quot;,
+        &quot;model&quot;: &quot;fear_greed_crypto@1&quot;,
+        &quot;as_of&quot;: &quot;2026-09-05&quot;,
+        &quot;as_of_basis&quot;: &quot;trace_end&quot;
+      }
+    },
+    &quot;stale_models&quot;: []
+  }
+}</code></pre></details>
+<p><strong>Errors</strong></p><table class="cw-table"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td><code>400</code></td><td>The symbol is not a valid shape.</td></tr><tr><td><code>401</code></td><td>No valid credential. Call the API through its marketplace listing.</td></tr><tr><td><code>403</code></td><td>The plan does not cover this asset or endpoint.</td></tr><tr><td><code>404</code></td><td>No asset by that symbol.</td></tr><tr><td><code>405</code></td><td>This API is read-only.</td></tr><tr><td><code>502</code></td><td>The data origin could not be read.</td></tr><tr><td><code>503</code></td><td>The gateway has no credential source configured.</td></tr></tbody></table>
+<h3 id="getAssetHistory"><span class="cw-verb">GET</span> <code>/v1/assets/{symbol}/history</code></h3>
+<p class="lede">Dated readings for one asset.</p>
+<p>Oldest first. Page with <code>limit</code> and <code>cursor</code>; narrow with <code>from</code> and <code>to</code>. Each row states the basis it was recorded on: <code>as_published</code> for a daily row taken from that day's page, <code>weekly_archive</code> for a row mined from the weekly record that predates the daily one.</p>
+<table class="cw-table"><thead><tr><th>Parameter</th><th>In</th><th></th><th>Meaning</th></tr></thead><tbody><tr><td><code>symbol</code></td><td>path</td><td>required</td><td>Canonical symbol, case-insensitive. See GET /v1/assets.</td></tr><tr><td><code>limit</code></td><td>query</td><td>optional</td><td>Rows per page. Free plan caps at 90; paid at 1000.</td></tr><tr><td><code>cursor</code></td><td>query</td><td>optional</td><td>Return rows after this date, exclusive. Use <code>next_cursor</code> from the previous page.</td></tr><tr><td><code>from</code></td><td>query</td><td>optional</td><td></td></tr><tr><td><code>to</code></td><td>query</td><td>optional</td><td></td></tr></tbody></table>
+<details class="cw-example"><summary>Example response</summary><pre class="cw-code"><code>{
+  &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+  &quot;model_version&quot;: {
+    &quot;twap_gravity_crypto&quot;: &quot;1&quot;,
+    &quot;dca_regression&quot;: &quot;1&quot;,
+    &quot;sma_20w_crypto&quot;: &quot;1&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;,
+  &quot;data&quot;: {
+    &quot;symbol&quot;: &quot;BTC&quot;,
+    &quot;cadence&quot;: &quot;daily from launch; weekly_archive rows before it&quot;,
+    &quot;from&quot;: &quot;2024-06-18&quot;,
+    &quot;through&quot;: &quot;2026-09-05&quot;,
+    &quot;row_count&quot;: 2,
+    &quot;total_row_count&quot;: 125,
+    &quot;limit&quot;: 2,
+    &quot;max_limit&quot;: 1000,
+    &quot;next_cursor&quot;: &quot;2024-06-25&quot;,
+    &quot;rows&quot;: [
+      {
+        &quot;date&quot;: &quot;2024-06-18&quot;,
+        &quot;basis&quot;: &quot;weekly_archive&quot;,
+        &quot;price&quot;: 65376.93,
+        &quot;gravity&quot;: null,
+        &quot;twap_premium_pct&quot;: 253.0,
+        &quot;twap_risk_level&quot;: 6,
+        &quot;sma_composite&quot;: null,
+        &quot;phase_completion_pct&quot;: null,
+        &quot;dca_band&quot;: &quot;0.5-0.6&quot;,
+        &quot;dca_risk&quot;: 0.55,
+        &quot;dca_premium_pct&quot;: null
+      },
+      {
+        &quot;date&quot;: &quot;2024-06-25&quot;,
+        &quot;basis&quot;: &quot;weekly_archive&quot;,
+        &quot;price&quot;: 61184.07,
+        &quot;gravity&quot;: null,
+        &quot;twap_premium_pct&quot;: 241.4,
+        &quot;twap_risk_level&quot;: 6,
+        &quot;sma_composite&quot;: null,
+        &quot;phase_completion_pct&quot;: null,
+        &quot;dca_band&quot;: &quot;0.4-0.5&quot;,
+        &quot;dca_risk&quot;: 0.45,
+        &quot;dca_premium_pct&quot;: null
+      }
+    ]
+  }
+}</code></pre></details>
+<p><strong>Errors</strong></p><table class="cw-table"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td><code>400</code></td><td>A parameter is malformed.</td></tr><tr><td><code>401</code></td><td>No valid credential. Call the API through its marketplace listing.</td></tr><tr><td><code>403</code></td><td>The plan does not cover this asset or endpoint.</td></tr><tr><td><code>404</code></td><td>No asset by that symbol.</td></tr><tr><td><code>405</code></td><td>This API is read-only.</td></tr><tr><td><code>502</code></td><td>The data origin could not be read.</td></tr><tr><td><code>503</code></td><td>The gateway has no credential source configured.</td></tr></tbody></table>
+<h3 id="getBulkRisk"><span class="cw-verb">GET</span> <code>/v1/bulk/risk</code></h3>
+<p class="lede">Current readings for many assets.</p>
+<p>Paid plans only. Up to 25 symbols per request. Symbols the API does not cover are named in <code>missing</code> rather than dropped.</p>
+<table class="cw-table"><thead><tr><th>Parameter</th><th>In</th><th></th><th>Meaning</th></tr></thead><tbody><tr><td><code>symbols</code></td><td>query</td><td>required</td><td>Comma-separated, up to 25.</td></tr></tbody></table>
+<details class="cw-example"><summary>Example response</summary><pre class="cw-code"><code>{
+  &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+  &quot;model_version&quot;: {
+    &quot;twap_gravity_crypto&quot;: &quot;1&quot;,
+    &quot;dca_regression&quot;: &quot;1&quot;,
+    &quot;sma_20w_crypto&quot;: &quot;1&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;,
+  &quot;data&quot;: {
+    &quot;assets&quot;: {
+      &quot;BTC&quot;: {
+        &quot;symbol&quot;: &quot;BTC&quot;,
+        &quot;name&quot;: &quot;Bitcoin&quot;,
+        &quot;asset_class&quot;: &quot;CRYPTO&quot;,
+        &quot;universes&quot;: [
+          &quot;crypto&quot;
+        ],
+        &quot;free_tier&quot;: true,
+        &quot;market_cap_rank&quot;: 1,
+        &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+        &quot;price&quot;: {
+          &quot;value&quot;: 79798.52,
+          &quot;currency&quot;: &quot;USD&quot;,
+          &quot;source_page&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+        },
+        &quot;gravity&quot;: {
+          &quot;score&quot;: 22.6,
+          &quot;risk_level&quot;: 3,
+          &quot;verdict&quot;: &quot;historically an accumulation zone, well below past tops&quot;,
+          &quot;model&quot;: &quot;twap_gravity_crypto@1&quot;,
+          &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+          &quot;as_of_basis&quot;: &quot;page_stamp&quot;,
+          &quot;source_page&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+        },
+        &quot;twap&quot;: {
+          &quot;baseline&quot;: 29427.42,
+          &quot;premium_pct&quot;: 171.17,
+          &quot;risk_level&quot;: 7,
+          &quot;risk_level_model&quot;: &quot;twap_risk_level_crypto@1&quot;,
+          &quot;model&quot;: &quot;twap_gravity_crypto@1&quot;,
+          &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+          &quot;as_of_basis&quot;: &quot;page_stamp&quot;,
+          &quot;source_page&quot;: &quot;BTC_Price_TWAP_Gravity_Analysis.html&quot;
+        },
+        &quot;sma_composite&quot;: {
+          &quot;score&quot;: 51.0,
+          &quot;page_value&quot;: 0.51,
+          &quot;band&quot;: &quot;0.5-0.6&quot;,
+          &quot;model&quot;: &quot;sma_20w_crypto@1&quot;,
+          &quot;as_of&quot;: &quot;2026-09-05T15:54:00Z&quot;,
+          &quot;as_of_basis&quot;: &quot;page_stamp&quot;,
+          &quot;source_page&quot;: &quot;btc-usd_price_with_risk.html&quot;
+        },
+        &quot;phase&quot;: {
+          &quot;label&quot;: &quot;Bull Phase Expansion&quot;,
+          &quot;completion_pct&quot;: 51.9,
+          &quot;fair_value&quot;: null,
+          &quot;max_euphoria_target&quot;: 172747.36,
+          &quot;model&quot;: &quot;polynomial_phase_crypto@1&quot;,
+          &quot;as_of&quot;: &quot;2026-09-07&quot;,
+          &quot;as_of_basis&quot;: &quot;trace_end&quot;,
+          &quot;source_page&quot;: &quot;BTC_Polynomial_Phase_Detector.html&quot;
+        },
+        &quot;dca&quot;: {
+          &quot;band&quot;: &quot;0.3-0.4&quot;,
+          &quot;risk&quot;: 0.35,
+          &quot;price&quot;: 79798.52,
+          &quot;fair_value&quot;: 76564.3,
+          &quot;floor&quot;: 43056.64,
+          &quot;ceiling&quot;: 188256.47,
+          &quot;premium_pct&quot;: 4.22,
+          &quot;premium_source&quot;: &quot;printed&quot;,
+          &quot;reading_date&quot;: &quot;2026-09-05&quot;,
+          &quot;model&quot;: &quot;dca_regression@1&quot;,
+          &quot;as_of&quot;: &quot;2026-09-05&quot;,
+          &quot;as_of_basis&quot;: &quot;trace_end&quot;,
+          &quot;source_page&quot;: &quot;BTC_lin_reg_price_with_risk.html&quot;
+        },
+        &quot;market_context&quot;: {
+          &quot;universe&quot;: &quot;crypto&quot;,
+          &quot;peak_valley&quot;: {
+            &quot;score&quot;: 40.1,
+            &quot;zone&quot;: &quot;Moderate Zone&quot;,
+            &quot;series&quot;: &quot;leading_btc_eth&quot;,
+            &quot;scope&quot;: &quot;market&quot;,
+            &quot;model&quot;: &quot;peak_valley_crypto@1&quot;,
+            &quot;as_of&quot;: &quot;2026-09-05T15:53:00Z&quot;,
+            &quot;as_of_basis&quot;: &quot;page_stamp&quot;
+          },
+          &quot;fear_greed&quot;: {
+            &quot;value&quot;: 73,
+            &quot;label&quot;: &quot;greed&quot;,
+            &quot;label_source&quot;: &quot;site_band_table&quot;,
+            &quot;sma_30&quot;: 53,
+            &quot;provider&quot;: &quot;alternative.me&quot;,
+            &quot;scope&quot;: &quot;market&quot;,
+            &quot;model&quot;: &quot;fear_greed_crypto@1&quot;,
+            &quot;as_of&quot;: &quot;2026-09-05&quot;,
+            &quot;as_of_basis&quot;: &quot;trace_end&quot;
+          }
+        },
+        &quot;stale_models&quot;: []
+      }
+    },
+    &quot;requested&quot;: [
+      &quot;BTC&quot;,
+      &quot;NOSUCH&quot;
+    ],
+    &quot;missing&quot;: [
+      &quot;NOSUCH&quot;
+    ],
+    &quot;count&quot;: 1
+  }
+}</code></pre></details>
+<p><strong>Errors</strong></p><table class="cw-table"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td><code>400</code></td><td>No symbols, or too many.</td></tr><tr><td><code>401</code></td><td>No valid credential. Call the API through its marketplace listing.</td></tr><tr><td><code>403</code></td><td>The plan does not cover this asset or endpoint.</td></tr><tr><td><code>405</code></td><td>This API is read-only.</td></tr><tr><td><code>502</code></td><td>The data origin could not be read.</td></tr><tr><td><code>503</code></td><td>The gateway has no credential source configured.</td></tr></tbody></table>
+<h2>Market</h2>
+<h3 id="getUniverseSummary"><span class="cw-verb">GET</span> <code>/v1/market/{universe}/summary</code></h3>
+<p class="lede">The barometer for one universe.</p>
+<table class="cw-table"><thead><tr><th>Parameter</th><th>In</th><th></th><th>Meaning</th></tr></thead><tbody><tr><td><code>universe</code></td><td>path</td><td>required</td><td></td></tr></tbody></table>
+<details class="cw-example"><summary>Example response</summary><pre class="cw-code"><code>{
+  &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+  &quot;model_version&quot;: {
+    &quot;twap_gravity_crypto&quot;: &quot;1&quot;,
+    &quot;dca_regression&quot;: &quot;1&quot;,
+    &quot;sma_20w_crypto&quot;: &quot;1&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;,
+  &quot;data&quot;: {
+    &quot;universe&quot;: &quot;crypto&quot;,
+    &quot;asset_count&quot;: 85,
+    &quot;gravity&quot;: {
+      &quot;median&quot;: 2.5,
+      &quot;mean&quot;: 6.1,
+      &quot;bands&quot;: {
+        &quot;accumulation&quot;: 80,
+        &quot;mid_cycle&quot;: 2,
+        &quot;late_cycle&quot;: 1,
+        &quot;cycle_top&quot;: 0
+      },
+      &quot;lowest&quot;: [
+        {
+          &quot;symbol&quot;: &quot;FIL&quot;,
+          &quot;score&quot;: 0.0
+        }
+      ],
+      &quot;highest&quot;: [
+        {
+          &quot;symbol&quot;: &quot;TRX&quot;,
+          &quot;score&quot;: 63.3
+        }
+      ]
+    },
+    &quot;twap_premium_pct&quot;: {
+      &quot;median&quot;: -72.34,
+      &quot;share_above_twap&quot;: 0.133
+    },
+    &quot;sma_composite&quot;: {
+      &quot;median&quot;: 43.0
+    },
+    &quot;barometer&quot;: {
+      &quot;peak_valley&quot;: {
+        &quot;score&quot;: 40.1,
+        &quot;zone&quot;: &quot;Moderate Zone&quot;,
+        &quot;scope&quot;: &quot;market&quot;
+      },
+      &quot;fear_greed&quot;: {
+        &quot;value&quot;: 73,
+        &quot;label&quot;: &quot;greed&quot;,
+        &quot;provider&quot;: &quot;alternative.me&quot;
+      }
+    }
+  }
+}</code></pre></details>
+<p><strong>Errors</strong></p><table class="cw-table"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td><code>400</code></td><td>The universe name is not a valid shape.</td></tr><tr><td><code>401</code></td><td>No valid credential. Call the API through its marketplace listing.</td></tr><tr><td><code>403</code></td><td>The plan does not cover this asset or endpoint.</td></tr><tr><td><code>404</code></td><td>No universe by that name.</td></tr><tr><td><code>405</code></td><td>This API is read-only.</td></tr><tr><td><code>502</code></td><td>The data origin could not be read.</td></tr><tr><td><code>503</code></td><td>The gateway has no credential source configured.</td></tr></tbody></table>
+<h2>Signals</h2>
+<h3 id="getDcaSignal"><span class="cw-verb">GET</span> <code>/v1/signals/dca/{symbol}</code></h3>
+<p class="lede">DCA regression state for one asset.</p>
+<p>Returns <code>multiplier: null</code> by design. This model publishes a risk band; it has no position-sizing rule, and inventing one would be advice.</p>
+<table class="cw-table"><thead><tr><th>Parameter</th><th>In</th><th></th><th>Meaning</th></tr></thead><tbody><tr><td><code>symbol</code></td><td>path</td><td>required</td><td>Canonical symbol, case-insensitive. See GET /v1/assets.</td></tr></tbody></table>
+<details class="cw-example"><summary>Example response</summary><pre class="cw-code"><code>{
+  &quot;as_of&quot;: &quot;2026-09-05T15:57:00Z&quot;,
+  &quot;model_version&quot;: {
+    &quot;twap_gravity_crypto&quot;: &quot;1&quot;,
+    &quot;dca_regression&quot;: &quot;1&quot;,
+    &quot;sma_20w_crypto&quot;: &quot;1&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;,
+  &quot;data&quot;: {
+    &quot;symbol&quot;: &quot;BTC&quot;,
+    &quot;free_tier&quot;: true,
+    &quot;as_of&quot;: &quot;2026-09-05&quot;,
+    &quot;reading_date&quot;: &quot;2026-09-05&quot;,
+    &quot;state&quot;: {
+      &quot;band&quot;: &quot;0.3-0.4&quot;,
+      &quot;risk&quot;: 0.35,
+      &quot;band_label&quot;: &quot;Risk Level 0.3-0.4&quot;,
+      &quot;price&quot;: 79798.52,
+      &quot;fair_value&quot;: 76564.3,
+      &quot;floor&quot;: 43056.64,
+      &quot;ceiling&quot;: 188256.47,
+      &quot;premium_pct&quot;: 4.22,
+      &quot;premium_source&quot;: &quot;printed&quot;
+    },
+    &quot;multiplier&quot;: null,
+    &quot;multiplier_note&quot;: &quot;This model publishes a risk band and no position-sizing rule; sizing is the reader&#x27;s decision.&quot;,
+    &quot;model&quot;: &quot;dca_regression@1&quot;,
+    &quot;source_page&quot;: &quot;BTC_lin_reg_price_with_risk.html&quot;
+  }
+}</code></pre></details>
+<p><strong>Errors</strong></p><table class="cw-table"><thead><tr><th>Status</th><th>When</th></tr></thead><tbody><tr><td><code>400</code></td><td>The symbol is not a valid shape.</td></tr><tr><td><code>401</code></td><td>No valid credential. Call the API through its marketplace listing.</td></tr><tr><td><code>403</code></td><td>The plan does not cover this asset or endpoint.</td></tr><tr><td><code>404</code></td><td>That asset has no regression model.</td></tr><tr><td><code>405</code></td><td>This API is read-only.</td></tr><tr><td><code>502</code></td><td>The data origin could not be read.</td></tr><tr><td><code>503</code></td><td>The gateway has no credential source configured.</td></tr></tbody></table>
+<h2>Service</h2>
+<h3 id="getHealth"><span class="cw-verb">GET</span> <code>/v1/health</code></h3>
+<p class="lede">Liveness, without a key.</p>
+
+<h3 id="getOpenApi"><span class="cw-verb">GET</span> <code>/v1/openapi.json</code></h3>
+<p class="lede">This document.</p>
+
+
+<h2>The models</h2>
+<p>Each reading names the model that produced it. This is what those names mean.</p>
+<table class="cw-table"><thead><tr><th>Model</th><th>Scale</th><th>Definition</th></tr></thead>
+<tbody><tr><td><code>dca_regression@1</code></td><td>0-1</td><td>Polynomial regression of log daily close (degree 2; degree 1 for SPY/QQQ); z = rolling z-score of proportional distance to the fit (730 days; 504 for SPY/QQQ); risk = sigmoid(z), reported as the chart's tenth band and its midpoint; floor/ceiling are the page's own regression bands; premium = price / fair - 1, printed on the page where a card exists and derived from the same two traces otherwise. No position-sizing rule exists in this model.</td></tr><tr><td><code>fear_greed_crypto@1</code></td><td>0-100</td><td>alternative.me Fear &amp; Greed index (0-100) as the site reprints it, with the site's 30-day SMA. Market-wide. The label is the site's own band table, not the provider's classification.</td></tr><tr><td><code>peak_valley_crypto@1</code></td><td>0-100</td><td>Leading Risk Score (BTC + ETH): mean of 730-day min-max normalised inverse drawdown and price/200-day-SMA extension, EWM span 14, x100. Market-wide, not per asset. Zone label quoted from the page.</td></tr><tr><td><code>polynomial_phase_crypto@1</code></td><td>0-100</td><td>Degree-2 OLS on log weekly-mean price; bands at +/-1/2/3 decayed sigma; completion = (clamped z + 3) / 6 x 100, a position between -3 sigma (0) and +3 sigma (100), not elapsed time.</td></tr><tr><td><code>polynomial_phase_equity@1</code></td><td>0-100</td><td>Degree-2 OLS on log weekly-mean price since 2020; bands at +/-1/2/3 decayed sigma; completion = log-space position between the -3 and +3 sigma bands x 100.</td></tr><tr><td><code>sector_indicators_equity@1</code></td><td>0-100</td><td>Per-sector breadth Fear &amp; Greed, Peak/Valley leading oscillator and weekly 20/100/200-week macro risk from the stock indicator engine, as published on the website's sector strips. Sector-wide.</td></tr><tr><td><code>sma_20w_crypto@1</code></td><td>0-100</td><td>20-week (140 daily closes) SMA; risk = mean of the winsorised (2nd-98th pct) min-max linear and proportional distances to the SMA, 0-1 on the page, x100 here.</td></tr><tr><td><code>sma_composite_equity@1</code></td><td>0-100</td><td>Weekly mean prices; 20/100/200-week SMAs; per-horizon rolling z-score (window = horizon, clipped +/-4) through a sigmoid; composite = mean of the three, 0-1 on the page, x100 here. The date is the weekly bar's label.</td></tr><tr><td><code>twap_gravity_crypto@1</code></td><td>0-100</td><td>Lifetime expanding TWAP of daily closes since first listing; premium = (price - TWAP) / TWAP; Gravity = premium clipped to the asset's own 1st-99th percentile, min-max scaled, x100. Risk level is the chart's own bin, read from the card.</td></tr><tr><td><code>twap_gravity_equity@1</code></td><td>0-100</td><td>Expanding TWAP of daily closes since 2020-01-01 (the 2020 epoch, not lifetime); premium = (price - TWAP) / TWAP; Gravity = premium clipped to the 1st-99th percentile, min-max scaled, x100; level = int(g/10)+1.</td></tr><tr><td><code>twap_risk_level_crypto@1</code></td><td>1-10</td><td>Lifetime expanding TWAP; TWAP risk = ((price - TWAP) / price) floored at 0 and divided by its lifetime maximum; level = int(x * 9.99) + 1. A different normalisation from Gravity, never interchangeable.</td></tr></tbody></table>
+<p class="cw-note">Several of these share a word without sharing a model. The crypto
+Gravity page measures premium against a <em>lifetime</em> baseline; the equity one against a
+2020 epoch; the galaxy against a rolling window. That is why every reading carries its
+model name, and why two Gravity scores should never be compared without checking it.</p>
+
+<h2>Errors</h2>
+<p>Errors carry a stable <code>error.code</code>. Match on that, not on the message, which
+may be reworded.</p>
+<pre class="cw-code"><code>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;plan_required&quot;,
+    &quot;message&quot;: &quot;IONQ is available on the Pro plan. The free plan covers the top 10 crypto assets by market cap.&quot;
+  },
+  &quot;disclaimer&quot;: &quot;Descriptive statistics on past price, for educational use only. Not financial, investment, legal or professional advice. Past performance does not guarantee future results. Every value here is published free at cryptoweeklies.com.&quot;
+}</code></pre>
+
+<h2>Versioning</h2>
+<p><code>v1</code> is additive-only. New fields may appear; existing fields will not change
+meaning or disappear. A breaking change becomes <code>/v2</code>, and <code>v1</code> keeps
+answering.</p>
+
+<h2>What this API will not do</h2>
+<p>No order execution, no portfolio management, no personalised advice, no position sizing.
+The DCA endpoint returns <code>"multiplier": null</code> deliberately: the model publishes a
+risk band, and inventing a size from it would be advice rather than description.</p>
+
+<a class="cw-play-cta" href="https://play.google.com/store/apps/details?id=com.cryptoweeklies.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#00A0FF" d="M1.6 1.4a2 2 0 0 0-.47 1.4v18.4c0 .58.17 1.05.5 1.4l.06.06L12 12.12v-.24z"/><path fill="#FFC107" d="M15.5 8.45 3.34 1.55C2.62 1.15 1.99 1.2 1.6 1.6L12 12z"/><path fill="#00E676" d="m15.4 15.6-3.4-3.48v-.24L15.4 8.4l.08.05 4.1 2.33c1.17.66 1.17 1.75 0 2.42l-4.1 2.33z"/><path fill="#FF3A44" d="M15.5 15.55 12 12 1.6 22.4c.39.4 1.02.45 1.74.05z"/></svg>Get it on Google Play — free, no ads</a>
+<footer>
+<p><a href="../../">CryptoWeeklies</a> · <a href="../../reports/">All reports</a>
+· <a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">YouTube</a></p>
+<p>Free quantitative research. No opinions, no hopium. Not financial advice.</p>
+</footer>
+</main>
+</body>
+</html>

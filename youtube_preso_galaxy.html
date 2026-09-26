@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>YouTube Preso Galaxy</title>
+<style>
+  :root {
+    --bg: #01030a;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+  }
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #stage {
+    width: 100vw;
+    height: 100dvh;
+    display: block;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(14, 165, 233, .16), transparent 24%),
+      radial-gradient(circle at 18% 72%, rgba(34, 197, 94, .16), transparent 22%),
+      radial-gradient(circle at 82% 26%, rgba(250, 204, 21, .13), transparent 21%),
+      linear-gradient(135deg, #01030a 0%, #020611 48%, #030712 100%);
+  }
+  .orbit {
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 18 18;
+    opacity: .58;
+  }
+  .orbit-glow {
+    fill: none;
+    opacity: .16;
+  }
+  .bubble {
+    cursor: default;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .bubble-shell {
+    stroke-width: 4;
+  }
+  .bubble-halo {
+    opacity: .55;
+  }
+  .ticker,
+  .metric,
+  .state {
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: rgba(0, 0, 0, .62);
+    stroke-linejoin: round;
+  }
+  .ticker {
+    fill: #ffffff;
+    font-weight: 950;
+    letter-spacing: 0;
+    stroke-width: 7px;
+    text-shadow: 0 8px 24px rgba(0, 0, 0, .9);
+  }
+  .metric {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-weight: 950;
+    stroke-width: 5px;
+  }
+  .state {
+    fill: #dbeafe;
+    font-weight: 900;
+    stroke-width: 4px;
+    opacity: .94;
+  }
+  .core {
+    fill: rgba(3, 7, 18, .70);
+    stroke: rgba(148, 163, 184, .22);
+    stroke-width: 1.5;
+  }
+  .core-glow {
+    fill: url(#coreGradient);
+    opacity: .78;
+  }
+  .grain {
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: .18;
+  }
+</style>
+</head>
+<body>
+<svg id="stage" role="img" aria-label="Presentation galaxy"></svg>
+<script>
+const ASSETS = [{"ticker":"BTC","group":"PRIMARY","zone":"Golden Breakout","state":"Neutral DCA","stateShort":"Neutral","orbit":"impulse","color":"#facc15","zoneColor":"#facc15","return90":18.4,"impact":95.0,"risk":42.0,"gravity":68.0,"dcaMult":1.0,"rank":1},{"ticker":"SOL","group":"PRIMARY","zone":"Euphoria","state":"100% Cash Hoard","stateShort":"Hoard","orbit":"impulse","color":"#ef4444","zoneColor":"#a855f7","return90":34.0,"impact":90.0,"risk":91.0,"gravity":84.0,"dcaMult":0.0,"rank":3},{"ticker":"AVAX","group":"PRIMARY","zone":"Euphoria","state":"Suppressed Buy","stateShort":"Light Buy","orbit":"impulse","color":"#fb923c","zoneColor":"#a855f7","return90":27.7,"impact":86.0,"risk":99.0,"gravity":78.0,"dcaMult":0.5,"rank":7},{"ticker":"LINK","group":"PRIMARY","zone":"Golden Breakout","state":"Dip Accumulation","stateShort":"Dip Buy","orbit":"impulse","color":"#22c55e","zoneColor":"#facc15","return90":16.9,"impact":80.0,"risk":49.0,"gravity":64.0,"dcaMult":1.6,"rank":6},{"ticker":"BNB","group":"PRIMARY","zone":"Golden Breakout","state":"Neutral DCA","stateShort":"Neutral","orbit":"impulse","color":"#facc15","zoneColor":"#facc15","return90":11.5,"impact":76.0,"risk":38.0,"gravity":59.0,"dcaMult":1.0,"rank":4},{"ticker":"ETH","group":"PRIMARY","zone":"Deep Accumulation","state":"Dip Accumulation","stateShort":"Dip Buy","orbit":"accumulation","color":"#22c55e","zoneColor":"#3b82f6","return90":-4.8,"impact":82.0,"risk":55.0,"gravity":46.0,"dcaMult":1.6,"rank":2},{"ticker":"ADA","group":"PRIMARY","zone":"Deep Accumulation","state":"Aggressive Crash Buy","stateShort":"Crash Buy","orbit":"accumulation","color":"#60a5fa","zoneColor":"#3b82f6","return90":-8.4,"impact":66.0,"risk":61.0,"gravity":41.0,"dcaMult":2.5,"rank":5}];
+const CONFIG = {"generatedAt":"2026-07-09 04:46","source":"fallback","focus":"PRIMARY","metric":"dca"};
+const svg = document.getElementById("stage");
+const NS = "http://www.w3.org/2000/svg";
+const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let nodes = [];
+let center = { x: 0, y: 0 };
+let start = performance.now();
+let raf = 0;
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function create(name, attrs = {}, parent = svg) {
+  const el = document.createElementNS(NS, name);
+  for (const [key, value] of Object.entries(attrs)) {
+    el.setAttribute(key, value);
+  }
+  parent.appendChild(el);
+  return el;
+}
+
+function colorWithAlpha(hex, alpha) {
+  const raw = String(hex || "#38bdf8").replace("#", "");
+  const full = raw.length === 3 ? raw.split("").map(ch => ch + ch).join("") : raw.padEnd(6, "0").slice(0, 6);
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function pct(value) {
+  const num = Number(value || 0);
+  const sign = num > 0 ? "+" : "";
+  return `${sign}${Math.round(num)}%`;
+}
+
+function metricText(asset) {
+  const metric = new URLSearchParams(window.location.search).get("metric") || CONFIG.metric || "dca";
+  if (metric === "return") return pct(asset.return90);
+  if (metric === "gravity") return `${Math.round(asset.gravity)}`;
+  return `${Number(asset.dcaMult || 0).toFixed(asset.dcaMult % 1 ? 1 : 0)}x`;
+}
+
+function stateText(asset) {
+  const metric = new URLSearchParams(window.location.search).get("metric") || CONFIG.metric || "dca";
+  if (metric === "return") return asset.zone === "Golden Breakout" ? "Breakout" : asset.zone === "Deep Accumulation" ? "Accum" : asset.zone;
+  if (metric === "gravity") return "Gravity";
+  return asset.stateShort || "";
+}
+
+function orbitColor(name) {
+  return name === "impulse" ? "#facc15" : "#60a5fa";
+}
+
+function prepareAssets() {
+  const params = new URLSearchParams(window.location.search);
+  const focus = String(params.get("focus") || CONFIG.focus || "PRIMARY").toUpperCase();
+  let rows = ASSETS.slice();
+  if (focus !== "ALL") {
+    const scoped = rows.filter(item => String(item.group || "PRIMARY").toUpperCase() === focus);
+    if (scoped.length) rows = scoped;
+  }
+  rows.sort((a, b) => (b.impact - a.impact) || (b.gravity - a.gravity));
+  return rows;
+}
+
+function layout() {
+  cancelAnimationFrame(raf);
+  svg.replaceChildren();
+  nodes = [];
+
+  const width = Math.max(320, window.innerWidth || document.documentElement.clientWidth || 1280);
+  const height = Math.max(420, window.innerHeight || document.documentElement.clientHeight || 720);
+  const side = Math.min(width, height);
+  const portrait = height > width * 1.12;
+  const data = prepareAssets();
+  const maxImpact = Math.max(1, ...data.map(item => Number(item.impact || 0)));
+  const baseBubble = clamp(side * (portrait ? 0.155 : 0.118), 54, portrait ? 86 : 108);
+  const maxBubble = clamp(baseBubble * 1.18, 62, portrait ? width * 0.205 : 124);
+  const cx = width * 0.5;
+  const cy = height * (portrait ? 0.505 : 0.515);
+  center = { x: cx, y: cy };
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+  const defs = create("defs");
+  const blur = create("filter", { id: "blur", x: "-80%", y: "-80%", width: "260%", height: "260%" }, defs);
+  create("feGaussianBlur", { stdDeviation: "18" }, blur);
+  const soft = create("filter", { id: "softGlow", x: "-90%", y: "-90%", width: "280%", height: "280%" }, defs);
+  create("feGaussianBlur", { in: "SourceGraphic", stdDeviation: "10", result: "blurred" }, soft);
+  const merge = create("feMerge", {}, soft);
+  create("feMergeNode", { in: "blurred" }, merge);
+  create("feMergeNode", { in: "SourceGraphic" }, merge);
+  const coreGradient = create("radialGradient", { id: "coreGradient", cx: "50%", cy: "45%", r: "65%" }, defs);
+  create("stop", { offset: "0%", "stop-color": "#0f172a", "stop-opacity": ".96" }, coreGradient);
+  create("stop", { offset: "62%", "stop-color": "#020617", "stop-opacity": ".82" }, coreGradient);
+  create("stop", { offset: "100%", "stop-color": "#000000", "stop-opacity": ".12" }, coreGradient);
+
+  let lanes = [];
+  const impulse = data.filter(item => item.orbit === "impulse");
+  const accumulation = data.filter(item => item.orbit !== "impulse");
+  if (impulse.length) lanes.push({ name: "impulse", rows: impulse });
+  if (accumulation.length) lanes.push({ name: "accumulation", rows: accumulation });
+  if (!lanes.length) lanes.push({ name: "impulse", rows: data });
+  if (lanes.length === 2 && data.length >= 6 && Math.min(lanes[0].rows.length, lanes[1].rows.length) < 3) {
+    lanes = [
+      { name: "impulse", rows: data.filter((_, index) => index % 2 === 1) },
+      { name: "accumulation", rows: data.filter((_, index) => index % 2 === 0) },
+    ];
+  }
+
+  const outerRx = clamp(width * (portrait ? 0.34 : 0.41), width * 0.23, Math.max(20, width / 2 - maxBubble - 12));
+  const outerRy = clamp(height * (portrait ? 0.405 : 0.385), height * 0.24, Math.max(20, height / 2 - maxBubble - 12));
+  const ringSet = lanes.length === 1
+    ? [{ rx: outerRx, ry: outerRy }]
+    : [
+        { rx: outerRx * 0.54, ry: outerRy * 0.52 },
+        { rx: outerRx, ry: outerRy },
+      ];
+
+  const backdrop = create("g", { class: "backdrop" });
+  create("circle", { cx, cy, r: Math.min(outerRx, outerRy) * 0.88, fill: "rgba(14, 165, 233, .11)", filter: "url(#blur)" }, backdrop);
+  create("circle", { cx, cy, r: Math.min(outerRx, outerRy) * 0.42, class: "core-glow", filter: "url(#blur)" }, backdrop);
+  create("circle", { cx, cy, r: clamp(side * 0.038, 18, 42), class: "core" }, backdrop);
+
+  const orbitLayer = create("g", { class: "orbits" });
+  lanes.forEach((lane, laneIndex) => {
+    const ring = ringSet[Math.min(laneIndex, ringSet.length - 1)];
+    const color = orbitColor(lane.name);
+    create("ellipse", {
+      cx,
+      cy,
+      rx: ring.rx,
+      ry: ring.ry,
+      class: "orbit-glow",
+      stroke: color,
+      "stroke-width": Math.max(22, side * 0.04),
+      filter: "url(#blur)",
+    }, orbitLayer);
+    create("ellipse", {
+      cx,
+      cy,
+      rx: ring.rx,
+      ry: ring.ry,
+      class: "orbit",
+      stroke: color,
+      "stroke-width": Math.max(2.5, side * 0.005),
+    }, orbitLayer);
+  });
+
+  const nodeLayer = create("g", { class: "nodes" });
+  lanes.forEach((lane, laneIndex) => {
+    const ring = ringSet[Math.min(laneIndex, ringSet.length - 1)];
+    const count = lane.rows.length;
+    let phase = lane.name === "impulse" ? -Math.PI / 2.6 : -Math.PI / 1.9;
+    if (count === 3) phase = Math.PI / 2;
+    if (count === 2) phase = -Math.PI / 2;
+    lane.rows.forEach((asset, i) => {
+      const strength = clamp(Number(asset.impact || 50) / maxImpact, 0.48, 1);
+      const r = clamp(baseBubble * (0.82 + strength * 0.28), 48, maxBubble);
+      const angle = phase + (Math.PI * 2 * i / Math.max(1, count));
+      const color = asset.color || asset.zoneColor || orbitColor(lane.name);
+      const group = create("g", { class: "bubble" }, nodeLayer);
+      const gradId = `grad-${laneIndex}-${i}`;
+      const grad = create("radialGradient", { id: gradId, cx: "38%", cy: "28%", r: "74%" }, defs);
+      create("stop", { offset: "0%", "stop-color": "#ffffff", "stop-opacity": ".20" }, grad);
+      create("stop", { offset: "38%", "stop-color": color, "stop-opacity": ".48" }, grad);
+      create("stop", { offset: "100%", "stop-color": "#07111f", "stop-opacity": ".96" }, grad);
+
+      create("circle", {
+        r: r * 1.18,
+        fill: colorWithAlpha(color, .22),
+        class: "bubble-halo",
+        filter: "url(#blur)",
+      }, group);
+      create("circle", {
+        r,
+        fill: `url(#${gradId})`,
+        stroke: color,
+        class: "bubble-shell",
+        filter: "url(#softGlow)",
+      }, group);
+      create("text", {
+        y: -r * 0.10,
+        class: "ticker",
+        "font-size": clamp(r * 0.46, portrait ? 24 : 28, portrait ? 44 : 56),
+      }, group).textContent = asset.ticker;
+      create("text", {
+        y: r * 0.30,
+        class: "metric",
+        fill: color,
+        "font-size": clamp(r * 0.26, portrait ? 15 : 18, portrait ? 27 : 34),
+      }, group).textContent = metricText(asset);
+      create("text", {
+        y: r * 0.57,
+        class: "state",
+        "font-size": clamp(r * 0.17, 11, portrait ? 18 : 22),
+      }, group).textContent = stateText(asset);
+
+      nodes.push({
+        element: group,
+        rx: ring.rx,
+        ry: ring.ry,
+        angle,
+        radius: r,
+        speed: prefersReducedMotion ? 0 : (lane.name === "impulse" ? 0.030 : -0.022),
+        seed: (i + 1) * 1.913 + laneIndex * 2.4,
+      });
+    });
+  });
+
+  tick(performance.now());
+}
+
+function tick(now) {
+  const t = (now - start) / 1000;
+  nodes.forEach(node => {
+    const angle = node.angle + t * node.speed;
+    const drift = Math.sin(t * 0.9 + node.seed) * node.radius * 0.035;
+    const x = center.x + Math.cos(angle) * node.rx + Math.cos(angle + Math.PI / 2) * drift;
+    const y = center.y + Math.sin(angle) * node.ry + Math.sin(angle + Math.PI / 2) * drift;
+    node.element.setAttribute("transform", `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
+  });
+  raf = requestAnimationFrame(tick);
+}
+
+window.addEventListener("resize", layout, { passive: true });
+layout();
+</script>
+</body>
+</html>
