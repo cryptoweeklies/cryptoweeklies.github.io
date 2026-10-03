@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Infrastructure Indicators</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; padding: 0; background: transparent; color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.strip {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.tile {
+    background: #0f141e; border: 1px solid #1e293b; border-radius: 10px;
+    padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 6px;
+    border-top: 2px solid var(--tile-accent); min-width: 0;
+    cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover, .tile:focus-visible {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+    outline: none;
+}
+/* No published page behind it: do not offer a click that goes nowhere. */
+.tile-inert { cursor: default; }
+.tile-inert:hover { transform: none; border-color: #1e293b; box-shadow: none; }
+.tile-head { display: flex; align-items: center; gap: 6px; }
+.tile-icon { font-size: 12px; line-height: 1; }
+.tile-title {
+    font-size: 11px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.tile-body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.value-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.score { font-size: 26px; font-weight: 900; font-family: monospace; line-height: 1; color: #fff; }
+/* Phase and status names run to "Bear Market / Accumulation" and "Guarded
+   Accumulation", which no ellipsis can shorten usefully. Wrap instead of
+   truncating: the label is the reader's only classification, and short ones
+   such as "Fear" still sit on one line. */
+.pill {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor;
+    font-family: monospace; text-align: right; line-height: 1.3; max-width: 60%;
+}
+.meter { width: 100%; height: 7px; background: #1e293b; border-radius: 4px; position: relative; overflow: hidden; }
+.meter-fill { position: absolute; inset: 0; }
+.meter-marker { position: absolute; top: 0; width: 3px; height: 100%; background: #fff; box-shadow: 0 0 6px #fff; }
+.scale { display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-family: monospace; }
+.dual { display: flex; align-items: center; gap: 8px; }
+.dual-cell { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.dual-value { font-size: 15px; font-weight: 800; font-family: monospace; color: #cbd5e1; }
+.dual-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.dual-divider { width: 1px; align-self: stretch; background: #1e293b; }
+.spark { width: 100%; height: 40px; }
+.spark-empty { font-size: 10px; color: #64748b; font-family: monospace; }
+.targets { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.target { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+.target-icon { font-size: 11px; line-height: 1; }
+.target-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.target-value { font-size: 12px; font-weight: 700; font-family: monospace; color: #cbd5e1; }
+.target-bear .target-value { color: #f87171; }
+.target-bull .target-value { color: #4ade80; }
+.target-spot .target-value { color: #fff; }
+.tile-foot { font-size: 9px; color: #64748b; font-family: monospace; border-top: 1px solid #1e293b; padding-top: 5px; }
+.strip-foot {
+    margin-top: 8px; font-size: 10px; color: #475569; font-family: monospace;
+    display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+@media (max-width: 520px) { .score { font-size: 22px; } }
+</style>
+<!-- cw:seo-noindex --><meta name="robots" content="noindex,follow" /><!-- /cw:seo-noindex -->
+</head>
+<body>
+<div class="strip"><article class="tile tile-fear_greed" style="--tile-accent:#ffb648;" data-url="https://cryptoweeklies.com/AI_Table_Terminal.html" data-title="AI Infrastructure Table Terminal" data-sub="Fear &amp; Greed" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#129517;</span><span class="tile-title">Fear &amp; Greed</span></header><div class="tile-body"><div class="value-row"><span class="score">79</span><span class="pill" style="color:#ffb648;">Greed</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #ef4444, #f97316, #eab308, #4ade80, #22c55e);"></div><div class="meter-marker" style="left:78.80%;"></div></div><div class="scale"><span>0 Extreme Fear</span><span>Extreme Greed 100</span></div></div><footer class="tile-foot">30-day average 70</footer></article><article class="tile tile-peak_valley" style="--tile-accent:#00d4aa;" data-url="https://cryptoweeklies.com/AI_Table_Terminal.html" data-title="AI Infrastructure Table Terminal" data-sub="Peak / Valley Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#9889;</span><span class="tile-title">Peak / Valley Risk</span></header><div class="tile-body"><div class="value-row"><span class="score">80.3%</span><span class="pill" style="color:#00d4aa;">Euphoria Risk</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #3b82f6, #22c55e, #eab308, #f59e0b, #f97316, #ef4444);"></div><div class="meter-marker" style="left:80.30%;"></div></div><div class="scale"><span>0 Safe Trough</span><span>Danger Peak 100</span></div></div><footer class="tile-foot">Lagging confirmation 66.9</footer></article><article class="tile tile-macro_risk" style="--tile-accent:#10b981;" data-url="https://cryptoweeklies.com/AI_Table_Terminal.html" data-title="AI Infrastructure Table Terminal" data-sub="Macro Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128208;</span><span class="tile-title">Macro Risk</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#ef4444;">82</span><span class="pill" style="color:#ef4444;">Overextended</span></div><div class="dual"><div class="dual-cell"><span class="dual-value">69</span><span class="dual-label">20W</span></div><div class="dual-divider"></div><div class="dual-cell"><span class="dual-value">88</span><span class="dual-label">100W / 200W</span></div></div></div><footer class="tile-foot">Weekly SMA z-score sigmoid composite</footer></article><article class="tile tile-roi" style="--tile-accent:#eab308;" data-url="https://cryptoweeklies.com/AI_Table_Terminal.html" data-title="AI Infrastructure Table Terminal" data-sub="Year-to-Date ROI" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128200;</span><span class="tile-title">Year-to-Date ROI</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#22c55e;">+28.78%</span><span class="pill" style="color:#eab308;">AIQ YTD</span></div><div class="spark"><svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:100%;overflow:visible;" aria-hidden="true"><path d="M 0.0,27.1 0.6,26.4 1.3,25.7 1.9,25.8 2.5,26.3 3.1,25.8 3.8,25.7 4.4,26.1 5.0,26.0 5.7,26.1 6.3,27.7 6.9,26.6 7.5,25.9 8.2,26.0 8.8,25.1 9.4,24.6 10.1,25.2 10.7,26.0 11.3,27.6 11.9,29.6 12.6,30.6 13.2,28.7 13.8,27.8 14.5,28.2 15.1,29.8 15.7,29.5 16.4,30.0 17.0,29.4 17.6,29.0 18.2,30.6 18.9,29.4 19.5,28.2 20.1,28.2 20.8,28.5 21.4,30.2 22.0,28.9 22.6,29.2 23.3,29.9 23.9,29.0 24.5,28.9 25.2,30.5 25.8,30.8 26.4,29.6 27.0,29.3 27.7,30.2 28.3,31.9 28.9,30.6 29.6,31.7 30.2,31.3 30.8,33.1 31.4,35.0 32.1,32.8 32.7,32.0 33.3,32.1 34.0,31.5 34.6,31.4 35.2,29.6 35.8,29.6 36.5,28.1 37.1,26.7 37.7,25.6 38.4,24.0 39.0,24.2 39.6,24.5 40.3,22.9 40.9,24.7 41.5,22.7 42.1,23.5 42.8,22.9 43.4,21.9 44.0,20.8 44.7,20.4 45.3,16.6 45.9,17.0 46.5,14.3 47.2,13.6 47.8,15.8 48.4,14.5 49.1,15.8 49.7,16.1 50.3,16.5 50.9,14.8 51.6,13.9 52.2,10.8 52.8,11.0 53.5,9.5 54.1,8.3 54.7,5.8 55.3,5.0 56.0,7.4 56.6,14.0 57.2,11.7 57.9,13.3 58.5,15.4 59.1,12.3 59.7,9.2 60.4,11.5 61.0,11.9 61.6,9.0 62.3,8.6 62.9,13.0 63.5,12.1 64.2,13.3 64.8,12.0 65.4,10.4 66.0,14.8 66.7,12.5 67.3,14.5 67.9,14.0 68.6,12.5 69.2,12.9 69.8,14.7 70.4,15.7 71.1,17.8 71.7,18.5 72.3,18.0 73.0,16.8 73.6,17.8 74.2,19.4 74.8,19.0 75.5,20.3 76.1,21.8 76.7,18.3 77.4,16.3 78.0,13.3 78.6,14.2 79.2,14.7 79.9,12.8 80.5,13.2 81.1,12.5 81.8,11.5 82.4,12.0 83.0,12.3 83.6,13.5 84.3,13.4 84.9,12.9 85.5,14.3 86.2,13.4 86.8,11.6 87.4,12.0 88.1,11.9 88.7,13.4 89.3,13.4 89.9,11.9 90.6,11.9 91.2,12.1 91.8,13.4 92.5,12.3 93.1,12.9 93.7,13.4 94.3,11.8 95.0,12.1 95.6,9.5 96.2,9.0 96.9,9.9 97.5,9.9 98.1,11.4 98.7,11.0 99.4,10.9 100.0,9.6 L 100,40 L 0,40 Z" fill="#22c55e26" stroke="none"></path><path d="M 0.0,27.1 0.6,26.4 1.3,25.7 1.9,25.8 2.5,26.3 3.1,25.8 3.8,25.7 4.4,26.1 5.0,26.0 5.7,26.1 6.3,27.7 6.9,26.6 7.5,25.9 8.2,26.0 8.8,25.1 9.4,24.6 10.1,25.2 10.7,26.0 11.3,27.6 11.9,29.6 12.6,30.6 13.2,28.7 13.8,27.8 14.5,28.2 15.1,29.8 15.7,29.5 16.4,30.0 17.0,29.4 17.6,29.0 18.2,30.6 18.9,29.4 19.5,28.2 20.1,28.2 20.8,28.5 21.4,30.2 22.0,28.9 22.6,29.2 23.3,29.9 23.9,29.0 24.5,28.9 25.2,30.5 25.8,30.8 26.4,29.6 27.0,29.3 27.7,30.2 28.3,31.9 28.9,30.6 29.6,31.7 30.2,31.3 30.8,33.1 31.4,35.0 32.1,32.8 32.7,32.0 33.3,32.1 34.0,31.5 34.6,31.4 35.2,29.6 35.8,29.6 36.5,28.1 37.1,26.7 37.7,25.6 38.4,24.0 39.0,24.2 39.6,24.5 40.3,22.9 40.9,24.7 41.5,22.7 42.1,23.5 42.8,22.9 43.4,21.9 44.0,20.8 44.7,20.4 45.3,16.6 45.9,17.0 46.5,14.3 47.2,13.6 47.8,15.8 48.4,14.5 49.1,15.8 49.7,16.1 50.3,16.5 50.9,14.8 51.6,13.9 52.2,10.8 52.8,11.0 53.5,9.5 54.1,8.3 54.7,5.8 55.3,5.0 56.0,7.4 56.6,14.0 57.2,11.7 57.9,13.3 58.5,15.4 59.1,12.3 59.7,9.2 60.4,11.5 61.0,11.9 61.6,9.0 62.3,8.6 62.9,13.0 63.5,12.1 64.2,13.3 64.8,12.0 65.4,10.4 66.0,14.8 66.7,12.5 67.3,14.5 67.9,14.0 68.6,12.5 69.2,12.9 69.8,14.7 70.4,15.7 71.1,17.8 71.7,18.5 72.3,18.0 73.0,16.8 73.6,17.8 74.2,19.4 74.8,19.0 75.5,20.3 76.1,21.8 76.7,18.3 77.4,16.3 78.0,13.3 78.6,14.2 79.2,14.7 79.9,12.8 80.5,13.2 81.1,12.5 81.8,11.5 82.4,12.0 83.0,12.3 83.6,13.5 84.3,13.4 84.9,12.9 85.5,14.3 86.2,13.4 86.8,11.6 87.4,12.0 88.1,11.9 88.7,13.4 89.3,13.4 89.9,11.9 90.6,11.9 91.2,12.1 91.8,13.4 92.5,12.3 93.1,12.9 93.7,13.4 94.3,11.8 95.0,12.1 95.6,9.5 96.2,9.0 96.9,9.9 97.5,9.9 98.1,11.4 98.7,11.0 99.4,10.9 100.0,9.6" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path><circle cx="100.0" cy="9.6" r="2.5" fill="#fff" stroke="#22c55e" stroke-width="1.5"></circle></svg></div></div><footer class="tile-foot">Through 2026-10-02</footer></article><article class="tile tile-bull_bear" style="--tile-accent:#4ade80;" data-url="https://cryptoweeklies.com/AI_Table_Terminal.html" data-title="AI Infrastructure Table Terminal" data-sub="Bull / Bear Targets" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128002;</span><span class="tile-title">Bull / Bear Targets</span></header><div class="tile-body"><div class="value-row"><span class="score" style="font-size:20px;">$74.77</span><span class="pill" style="color:#FACC15;">Bull Phase Expansion</span></div><div class="targets"><div class="target target-bear"><span class="target-icon">&#128060;</span><span class="target-value">$56.85</span></div><div class="target target-spot"><span class="target-label">Spot</span><span class="target-value">$65.36</span></div><div class="target target-bull"><span class="target-icon">&#128002;</span><span class="target-value">$102.05</span></div></div></div><footer class="tile-foot">26-week base: 29/33 assets positive</footer></article></div>
+<div class="strip-foot"><span>Reference: Global X Artificial Intelligence &amp; Technology ETF</span><span>33 assets &middot; market close 2026-10-02</span></div>
+<script>
+(function () {
+    var last = 0;
+    function report() {
+        var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
+        if (!height || Math.abs(height - last) < 2) return;
+        last = height;
+        try {
+            parent.postMessage({ action: 'cw_widget_height', height: height }, '*');
+        } catch (error) {
+            return;
+        }
+    }
+    window.addEventListener('load', report);
+    window.addEventListener('resize', report);
+    window.addEventListener('message', function (event) {
+        if (!event.data || event.data.action !== 'cw_widget_measure') return;
+        last = 0;
+        report();
+        // The host asks the moment it reveals the view, which can precede the
+        // relayout. Measure again once the frame has been painted at its real
+        // width; this is a no-op when the first answer was already right.
+        if (window.requestAnimationFrame) window.requestAnimationFrame(report);
+    });
+    function openTile(tile) {
+        // The destination is resolved and existence-checked at build time; a
+        // tile with no data-url has no published page behind it and stays inert.
+        var url = tile && tile.getAttribute('data-url');
+        if (!url) return;
+        try {
+            parent.postMessage({
+                action: 'open-chart',
+                url: url,
+                title: tile.getAttribute('data-title') || '',
+                sub: tile.getAttribute('data-sub') || ''
+            }, '*');
+        } catch (err) {}
+    }
+    document.addEventListener('click', function (e) {
+        openTile(e.target.closest('.tile[data-url]'));
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var tile = e.target.closest && e.target.closest('.tile[data-url]');
+        if (!tile) return;
+        e.preventDefault();
+        openTile(tile);
+    });
+    if (window.ResizeObserver) {
+        new ResizeObserver(report).observe(document.body);
+    }
+    report();
+})();
+</script>
+</body>
+</html>

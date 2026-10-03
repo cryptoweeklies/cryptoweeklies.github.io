@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Interactive Composite Risk Dashboard</title>
+        <style>
+            body { background-color: #050811; color: #d1d5db; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 30px 20px; overflow-x: hidden; }
+            .container { max-width: 1500px; margin: 0 auto; }
+            .main-wrapper { display: grid; grid-template-columns: 1fr 380px; gap: 30px; align-items: start; }
+            .metric-header { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-left: 5px solid #a855f7; }
+            .metric-title { font-size: 1.6rem; font-weight: 800; color: #ffffff; margin: 0 0 5px 0; }
+            .metric-sub { font-size: 0.9rem; color: #94a3b8; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+            .legend-card { background-color: #0f141e; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 30px; font-size: 0.95rem; font-weight: 500; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+            .badge { padding: 6px 12px; border-radius: 6px; color: #000; font-weight: 700; letter-spacing: 0.5px; }
+            .badge.green { background-color: #22c55e; } .badge.yellow { background-color: #facc15; } .badge.red { background-color: #ef4444; color: #fff; }
+            .gauge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+            .gauge-card { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; }
+            .sidebar-right { position: sticky; top: 20px; height: fit-content; }
+            .interactive-panel { background-color: #090d16; border: 1px solid #1e293b; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+            .interactive-panel h2 { color: #ffffff; margin-top: 0; font-size: 1.3rem; margin-bottom: 10px; }
+            .interactive-panel p { margin-top: 0; margin-bottom: 25px; line-height: 1.6; color: #94a3b8; font-size: 0.9rem; }
+            .slider-group { margin-bottom: 20px; } .slider-group label { display: flex; justify-content: space-between; font-weight: 600; color: #d1d5db; margin-bottom: 8px; font-size: 0.85rem; }
+            .weight-badge { color: #3b82f6; font-family: monospace; font-weight: 800; font-size: 1rem; }
+            input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; } input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #3b82f6; cursor: pointer; margin-top: -6px; box-shadow: 0 0 5px rgba(59,130,246,0.5); } input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #1e293b; border-radius: 2px; }
+            .text-card { background-color: #090d16; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 30px; line-height: 1.7; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); } .text-card h2 { color: #ffffff; margin-top: 0; border-bottom: 1px solid #1e293b; padding-bottom: 10px; font-size: 1.3rem; margin-bottom: 20px; }
+            .method-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; margin-top: 25px; background: #0b0e14; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; } .method-table th { background-color: #0f141e; color: #f8fafc; padding: 14px 15px; border-bottom: 2px solid #1e293b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; } .method-table td { padding: 14px 15px; border-bottom: 1px solid #1e293b; color: #d1d5db; }
+            @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .sidebar-right { position: relative; top: 0; } }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="main-wrapper">
+                <div class="content-left">
+                    <div class="metric-header">
+                        <div>
+                            <h1 class="metric-title">Crypto Composite Risk Model</h1>
+                            <p class="metric-sub">INTERACTIVE 7-FACTOR Z-SCORE ENGINE</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p class="metric-title">Macro Sandbox</p>
+                            <p class="metric-sub">UPDATED: October 03, 2026 - 16:08 UTC</p>
+                        </div>
+                    </div>
+                    <div class="legend-card">
+                        <span style="color: #94a3b8; margin-right: 10px;">Risk Scale (0.0 to 1.0):</span>
+                        <span class="badge green">0.0 - 0.33 Accumulation</span>
+                        <span class="badge yellow">0.34 - 0.66 Hold / Neutral</span>
+                        <span class="badge red">0.67 - 1.0 Distribution</span>
+                    </div>
+                    <div id="native-gauge-grid" class="gauge-grid"></div>
+                    <div class="text-card">
+                        <h2>Methodology & S.O.T.A Mathematical Framework</h2>
+                        <p>The Composite Risk Score (0.0 to 1.0) is an algorithm of 7 distinct financial and technical factors.</p>
+                        <table class="method-table">
+                            <tr><th>Category</th><th>Metric</th><th>Description</th></tr>
+                            <tr><td rowspan="3" style="color: #fff; font-weight: bold;">Trend & Valuation</td><td>Log-Regression</td><td>Z-Score deviation from logarithmic growth curve.</td></tr>
+                            <tr><td>TWAP Deviation</td><td>Z-Score deviation relative to lifetime TWAP.</td></tr>
+                            <tr><td>SMA Deviation</td><td>Z-Score extension relative to 20-week Moving Average.</td></tr>
+                            <tr><td style="color: #fff; font-weight: bold;">Market Cycle</td><td>Drawdown from ATH</td><td>Near ATH = Max Risk. Deep Drawdown = Min Risk.</td></tr>
+                            <tr><td rowspan="3" style="color: #fff; font-weight: bold;">Stability</td><td>Volatility</td><td>Standard deviation of returns.</td></tr>
+                            <tr><td>Beta</td><td>Correlation to S&P 500.</td></tr>
+                            <tr><td>Sharpe Ratio</td><td>Risk-adjusted returns (inverted).</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="sidebar-right">
+                    <div class="interactive-panel">
+                        <h2>⚙️ Engine Calibration Sandbox</h2>
+                        <p>Adjust structural weights. Gauges instantly recalibrate.</p>
+                        <div class="slider-grid">
+                            <div class="slider-group"><label>Log-Regression Dev <span class="weight-badge" id="lbl_reg">23.5%</span></label><input type="range" id="w_reg" min="0" max="5" step="0.5" value="2.0" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Drawdown from ATH <span class="weight-badge" id="lbl_dd">23.5%</span></label><input type="range" id="w_dd" min="0" max="5" step="0.5" value="2.0" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>TWAP Deviation <span class="weight-badge" id="lbl_twap">17.6%</span></label><input type="range" id="w_twap" min="0" max="5" step="0.5" value="1.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>SMA Deviation (140D) <span class="weight-badge" id="lbl_sma">17.6%</span></label><input type="range" id="w_sma" min="0" max="5" step="0.5" value="1.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Volatility <span class="weight-badge" id="lbl_vol">5.9%</span></label><input type="range" id="w_vol" min="0" max="5" step="0.5" value="0.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Beta (SPX Correlation) <span class="weight-badge" id="lbl_beta">5.9%</span></label><input type="range" id="w_beta" min="0" max="5" step="0.5" value="0.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Sharpe Ratio <span class="weight-badge" id="lbl_sharpe">5.9%</span></label><input type="range" id="w_sharpe" min="0" max="5" step="0.5" value="0.5" oninput="updateScores()"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const rawData = {"BTC-USD": {"reg": 0.2578353567165547, "twap": 0.31776522899681137, "sma": 0.5827437303860672, "dd": 0.6773186090161998, "vol": 0.5213145519661065, "beta": 0.23406218785807925, "sharpe": 0.2936789795010004, "default_score": 0.44065873296499053}, "ETH-USD": {"reg": 0.354002210586648, "twap": 0.3578508148961341, "sma": 0.6754667518521578, "dd": 0.552258039282429, "vol": 0.6820554452895417, "beta": 0.4400126749859694, "sharpe": 0.3067898959001143, "default_score": 0.4796383362292241}, "XRP-USD": {"reg": 0.2958538195912749, "twap": 0.4066152256063258, "sma": 0.5165339715201093, "dd": 0.4176282769719295, "vol": 0.8997357580683301, "beta": 0.3661287670185288, "sharpe": 0.304753023064563, "default_score": 0.42317608975197324}, "BNB-USD": {"reg": 0.5544296697035217, "twap": 0.3948695291149599, "sma": 0.5788453096847332, "dd": 0.5862769670695136, "vol": 0.7815089017220699, "beta": 0.3109973117819932, "sharpe": 0.2043389672757795, "default_score": 0.5165186026041801}, "SOL-USD": {"reg": 0.7157233038854223, "twap": 0.2987551616827689, "sma": 0.5867363232630413, "dd": 0.4611116370634586, "vol": 0.9724260786376933, "beta": 0.7660944677193824, "sharpe": 0.19137182235182337, "default_score": 0.546688622784815}, "TRX-USD": {"reg": 0.16132298981454368, "twap": 0.4813324496491905, "sma": 0.3230702677049332, "dd": 0.7855757552861636, "vol": 1.0, "beta": 0.23151624492256245, "sharpe": 0.24554678219516046, "default_score": 0.451639185857819}, "DOGE-USD": {"reg": 0.2998170268850148, "twap": 0.2842939773814775, "sma": 0.5002776998315975, "dd": 0.13576097744104354, "vol": 1.0, "beta": 0.4187491802057731, "sharpe": 0.27556240034138446, "default_score": 0.3406081546759186}, "BCH-USD": {"reg": 0.17201627772747743, "twap": 0.3201108937151096, "sma": 0.4677771860900698, "dd": 0.07935468649213273, "vol": 0.8350795160535496, "beta": 0.31196450887397487, "sharpe": 0.40429906720142983, "default_score": 0.2894406581425255}, "ADA-USD": {"reg": 0.30988176142350526, "twap": 0.24998150830290963, "sma": 0.5748113133186064, "dd": 0.08232996052032426, "vol": 1.0, "beta": 0.497557027328971, "sharpe": 0.2988165554540414, "default_score": 0.34350581973075756}, "LINK-USD": {"reg": 0.9416008135971848, "twap": 0.4158930767012363, "sma": 0.7373008678507406, "dd": 0.27914626968141387, "vol": 0.9148261116065003, "beta": 0.5406727821566837, "sharpe": 0.23922915236320874, "default_score": 0.5904293066409834}, "XLM-USD": {"reg": 0.3806087296610755, "twap": 0.4856309852642439, "sma": 0.5540590441788699, "dd": 0.24045358486329715, "vol": 0.8937900292070514, "beta": 0.3965540910215357, "sharpe": 0.30615475098019385, "default_score": 0.4235187186844478}, "LTC-USD": {"reg": 0.5033021517999909, "twap": 0.4265561567549146, "sma": 0.842264665042183, "dd": 0.18503531297538567, "vol": 0.7343364031052211, "beta": 0.3656984089701155, "sharpe": 0.3726391074918868, "default_score": 0.47249919082706016}, "HBAR-USD": {"reg": 0.4921428036094934, "twap": 0.395772397909255, "sma": 0.566558719045578, "dd": 0.20250908667422485, "vol": 1.0, "beta": 0.5363964675762869, "sharpe": 0.33784692608622935, "default_score": 0.44352025327422867}, "AVAX-USD": {"reg": 0.6775661346170151, "twap": 0.2814954453403341, "sma": 0.6556885160624825, "dd": 0.08031129198403109, "vol": 0.919432539498918, "beta": 0.8047265087664988, "sharpe": 0.31658123143883277, "default_score": 0.46375305119511084}, "DOT-USD": {"reg": 0.47553708537613154, "twap": 0.2205513437419498, "sma": 0.6510428519353187, "dd": 0.021434054639320577, "vol": 0.8009418421291284, "beta": 0.6913579619709601, "sharpe": 0.408746971122826, "default_score": 0.3825714071950899}};
+            function generateSvgGauge(name, score) {
+                const cleanName = name.split('-')[0];
+                const angle = (score * 180) - 90;
+                return `
+                <div class="gauge-card">
+                    <div style="font-weight: 800; font-size: 1.3rem; margin-bottom: 2px;">${cleanName}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 20px; text-transform: uppercase;">Composite Risk</div>
+                    <svg viewBox="0 0 100 55" style="width: 100%; overflow: visible; margin-bottom: 10px;">
+                        <path d="M 10 50 A 40 40 0 0 1 30 15.36" fill="none" stroke="#22c55e" stroke-width="12" />
+                        <path d="M 30 15.36 A 40 40 0 0 1 70 15.36" fill="none" stroke="#facc15" stroke-width="12" />
+                        <path d="M 70 15.36 A 40 40 0 0 1 90 50" fill="none" stroke="#ef4444" stroke-width="12" />
+                        <g transform="translate(50, 50) rotate(${angle})">
+                            <path d="M -2.5 0 L 0 -45 L 2.5 0 Z" fill="#ffffff" />
+                            <circle cx="0" cy="0" r="5" fill="#ffffff" />
+                        </g>
+                    </svg>
+                    <div style="font-family: monospace; font-size: 2.2rem; font-weight: bold; line-height: 1;">${score.toFixed(2)}</div>
+                </div>`;
+            }
+
+            function updateScores() {
+                let w = {
+                    reg: parseFloat(document.getElementById('w_reg').value), twap: parseFloat(document.getElementById('w_twap').value),
+                    sma: parseFloat(document.getElementById('w_sma').value), dd: parseFloat(document.getElementById('w_dd').value),
+                    vol: parseFloat(document.getElementById('w_vol').value), beta: parseFloat(document.getElementById('w_beta').value),
+                    sharpe: parseFloat(document.getElementById('w_sharpe').value)
+                };
+                let total = Object.values(w).reduce((a, b) => a + b, 0);
+                if (total > 0) {
+                    document.getElementById('lbl_reg').innerText = ((w.reg / total) * 100).toFixed(1) + '%'; document.getElementById('lbl_twap').innerText = ((w.twap / total) * 100).toFixed(1) + '%';
+                    document.getElementById('lbl_sma').innerText = ((w.sma / total) * 100).toFixed(1) + '%'; document.getElementById('lbl_dd').innerText = ((w.dd / total) * 100).toFixed(1) + '%';
+                    document.getElementById('lbl_vol').innerText = ((w.vol / total) * 100).toFixed(1) + '%'; document.getElementById('lbl_beta').innerText = ((w.beta / total) * 100).toFixed(1) + '%';
+                    document.getElementById('lbl_sharpe').innerText = ((w.sharpe / total) * 100).toFixed(1) + '%';
+                    let gridHtml = ''; const cryptoOrder = ["BTC-USD", "ETH-USD", "XRP-USD", "BNB-USD", "SOL-USD", "TRX-USD", "DOGE-USD", "BCH-USD", "ADA-USD", "LINK-USD", "XLM-USD", "LTC-USD", "HBAR-USD", "AVAX-USD", "DOT-USD"];
+                    cryptoOrder.forEach(crypto => {
+                        if(rawData[crypto]) {
+                            let d = rawData[crypto];
+                            let newScore = ((d.reg * w.reg) + (d.twap * w.twap) + (d.sma * w.sma) + (d.dd * w.dd) + (d.vol * w.vol) + (d.beta * w.beta) + (d.sharpe * w.sharpe)) / total;
+                            gridHtml += generateSvgGauge(crypto, newScore);
+                        }
+                    });
+                    document.getElementById('native-gauge-grid').innerHTML = gridHtml;
+                }
+            }
+            updateScores();
+        </script>
+    </body>
+    </html>
