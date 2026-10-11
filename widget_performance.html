@@ -1,0 +1,142 @@
+
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+    body, html { margin: 0; padding: 0; overflow: hidden; width: 100vw; height: 100vh; background-color: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    #bubble-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; cursor: grab; } #bubble-container:active { cursor: grabbing; }
+    #tooltip { position: absolute; opacity: 0; background-color: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 12px; color: #fff; pointer-events: none; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.8); transition: opacity 0.1s ease; min-width: 220px; }
+    .tt-header { font-size: 1.1rem; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 6px; margin-bottom: 8px; } .tt-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; } .tt-lbl { color: #94a3b8; } .tt-val { font-weight: bold; font-family: monospace; font-size: 0.9rem; }
+
+    /* Filter Bar positioned at bottom center */
+    .filter-wrapper { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(7, 10, 19, 0.85); padding: 8px; border-radius: 30px; border: 1px solid #334155; backdrop-filter: blur(4px); z-index: 10; display: flex; gap: 8px; }
+    .filter-btn { background-color: transparent; border: none; color: #94a3b8; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: all 0.2s; }
+    .filter-btn:hover { color: #fff; }
+    .filter-btn.active { background-color: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+
+    .report-link { position: absolute; top: 15px; right: 15px; background: rgba(15, 23, 42, 0.85); padding: 10px 16px; border-radius: 8px; font-size: 12px; color: #60a5fa; border: 1px solid #334155; z-index: 10; text-decoration: none; font-weight: bold; transition: 0.2s; backdrop-filter: blur(4px); }
+    .report-link:hover { color: #93c5fd; text-decoration: underline; }
+
+    @media (max-width: 600px) { .filter-btn { padding: 6px 10px; font-size: 0.75rem; } .report-link { top: 10px; right: 10px; padding: 8px; font-size: 10px; } }
+</style><!-- cw:seo-noindex --><meta name="robots" content="noindex,follow" /><!-- /cw:seo-noindex -->
+</head><body>
+    <div id="bubble-container"><div id="tooltip"></div>
+        <a href="https://cryptoweeklies.com/combined_crypto_heatmaps.html" target="_top" class="report-link">View Full Report ↗</a>
+        <div class="filter-wrapper" id="filter-wrapper">
+            <button class="filter-btn active" onclick="switchTimeframe('chg_24h', this)">24H View</button>
+            <button class="filter-btn" onclick="switchTimeframe('chg_7d', this)">7D View</button>
+            <button class="filter-btn" onclick="switchTimeframe('chg_30d', this)">30D View</button>
+            <button class="filter-btn" onclick="switchTimeframe('chg_90d', this)">90D View</button>
+        </div>
+    </div>
+    <script>
+        const data = [{"Ticker": "BTC", "chg_24h": 0.5, "chg_7d": -2.2, "chg_30d": 8.3, "chg_90d": 30.1, "Overall": 9.2}, {"Ticker": "ETH", "chg_24h": 0.8, "chg_7d": -6.8, "chg_30d": 2.8, "chg_90d": 38.8, "Overall": 8.9}, {"Ticker": "BNB", "chg_24h": 1.0, "chg_7d": -4.8, "chg_30d": 5.7, "chg_90d": 30.6, "Overall": 8.1}, {"Ticker": "SOL", "chg_24h": 0.8, "chg_7d": -8.0, "chg_30d": 11.5, "chg_90d": 43.1, "Overall": 11.8}, {"Ticker": "XRP", "chg_24h": 0.5, "chg_7d": -5.7, "chg_30d": 5.0, "chg_90d": 29.1, "Overall": 7.2}, {"Ticker": "ADA", "chg_24h": 2.3, "chg_7d": 1.7, "chg_30d": 21.3, "chg_90d": 53.4, "Overall": 19.7}, {"Ticker": "DOGE", "chg_24h": 0.5, "chg_7d": -7.6, "chg_30d": 3.5, "chg_90d": 18.1, "Overall": 3.6}, {"Ticker": "AVAX", "chg_24h": 0.2, "chg_7d": -6.9, "chg_30d": 39.4, "chg_90d": 61.8, "Overall": 23.6}, {"Ticker": "LINK", "chg_24h": 1.5, "chg_7d": -7.9, "chg_30d": 13.5, "chg_90d": 62.7, "Overall": 17.4}, {"Ticker": "DOT", "chg_24h": 1.4, "chg_7d": 5.9, "chg_30d": 14.5, "chg_90d": 48.7, "Overall": 17.6}, {"Ticker": "TRX", "chg_24h": -0.3, "chg_7d": -1.5, "chg_30d": -2.7, "chg_90d": -0.2, "Overall": -1.2}, {"Ticker": "POL", "chg_24h": 1.1, "chg_7d": -7.5, "chg_30d": 10.8, "chg_90d": 26.0, "Overall": 7.6}, {"Ticker": "SHIB", "chg_24h": 8.4, "chg_7d": -9.7, "chg_30d": 8.4, "chg_90d": 35.5, "Overall": 10.6}, {"Ticker": "BCH", "chg_24h": 1.2, "chg_7d": -12.4, "chg_30d": 25.2, "chg_90d": 16.7, "Overall": 7.7}, {"Ticker": "LTC", "chg_24h": 0.7, "chg_7d": -9.0, "chg_30d": 22.7, "chg_90d": 45.4, "Overall": 15.0}, {"Ticker": "NEAR", "chg_24h": 8.1, "chg_7d": 9.9, "chg_30d": 117.0, "chg_90d": 179.6, "Overall": 78.6}, {"Ticker": "ATOM", "chg_24h": -5.6, "chg_7d": 13.4, "chg_30d": 8.8, "chg_90d": 24.5, "Overall": 10.3}, {"Ticker": "UNI", "chg_24h": 3.8, "chg_7d": -16.0, "chg_30d": 27.9, "chg_90d": 111.7, "Overall": 31.8}, {"Ticker": "ICP", "chg_24h": 2.1, "chg_7d": -7.0, "chg_30d": 11.3, "chg_90d": 40.9, "Overall": 11.8}, {"Ticker": "ETC", "chg_24h": 0.3, "chg_7d": -5.1, "chg_30d": 10.9, "chg_90d": 22.7, "Overall": 7.2}, {"Ticker": "XLM", "chg_24h": 1.0, "chg_7d": -9.0, "chg_30d": 12.4, "chg_90d": 5.4, "Overall": 2.4}, {"Ticker": "HBAR", "chg_24h": -0.0, "chg_7d": -9.5, "chg_30d": 23.3, "chg_90d": 36.6, "Overall": 12.6}, {"Ticker": "FIL", "chg_24h": 3.1, "chg_7d": 4.7, "chg_30d": 43.2, "chg_90d": 44.9, "Overall": 24.0}, {"Ticker": "INJ", "chg_24h": 12.0, "chg_7d": 1.4, "chg_30d": 30.9, "chg_90d": 59.8, "Overall": 26.0}, {"Ticker": "RUNE", "chg_24h": -1.8, "chg_7d": -7.7, "chg_30d": 38.2, "chg_90d": 70.9, "Overall": 24.9}, {"Ticker": "OP", "chg_24h": 5.0, "chg_7d": 2.0, "chg_30d": 48.2, "chg_90d": 38.8, "Overall": 23.5}, {"Ticker": "AR", "chg_24h": 0.6, "chg_7d": -8.5, "chg_30d": 57.6, "chg_90d": 111.4, "Overall": 40.3}, {"Ticker": "MKR", "chg_24h": 1.9, "chg_7d": -14.0, "chg_30d": 26.2, "chg_90d": 27.9, "Overall": 10.5}, {"Ticker": "VET", "chg_24h": 0.4, "chg_7d": -9.7, "chg_30d": 3.6, "chg_90d": 62.6, "Overall": 14.2}, {"Ticker": "LDO", "chg_24h": 2.5, "chg_7d": -7.7, "chg_30d": 17.2, "chg_90d": 40.5, "Overall": 13.1}, {"Ticker": "CRO", "chg_24h": -1.7, "chg_7d": -8.8, "chg_30d": 8.2, "chg_90d": 8.5, "Overall": 1.5}, {"Ticker": "QNT", "chg_24h": -3.5, "chg_7d": -6.6, "chg_30d": 271.4, "chg_90d": 266.3, "Overall": 131.9}, {"Ticker": "ALGO", "chg_24h": 3.1, "chg_7d": -10.2, "chg_30d": 29.2, "chg_90d": 41.4, "Overall": 15.9}, {"Ticker": "GRT", "chg_24h": -1.0, "chg_7d": -4.5, "chg_30d": 52.4, "chg_90d": 54.8, "Overall": 25.4}, {"Ticker": "AAVE", "chg_24h": 0.7, "chg_7d": -7.2, "chg_30d": 39.3, "chg_90d": 73.5, "Overall": 26.6}, {"Ticker": "SNX", "chg_24h": 0.4, "chg_7d": -4.7, "chg_30d": 19.4, "chg_90d": -0.9, "Overall": 3.5}, {"Ticker": "STX", "chg_24h": 1.8, "chg_7d": 4.7, "chg_30d": 58.6, "chg_90d": 138.2, "Overall": 50.8}, {"Ticker": "EOS", "chg_24h": -1.1, "chg_7d": 8.1, "chg_30d": 33.7, "chg_90d": 44.6, "Overall": 21.3}, {"Ticker": "THETA", "chg_24h": -1.7, "chg_7d": -0.8, "chg_30d": 33.1, "chg_90d": 53.7, "Overall": 21.1}, {"Ticker": "RENDER", "chg_24h": 1.7, "chg_7d": -2.9, "chg_30d": 38.2, "chg_90d": 26.3, "Overall": 15.8}, {"Ticker": "SAND", "chg_24h": -2.9, "chg_7d": -10.7, "chg_30d": 92.5, "chg_90d": 40.1, "Overall": 29.8}, {"Ticker": "MANA", "chg_24h": -0.6, "chg_7d": -9.7, "chg_30d": 34.3, "chg_90d": 35.8, "Overall": 15.0}, {"Ticker": "XTZ", "chg_24h": 0.4, "chg_7d": -6.6, "chg_30d": 18.6, "chg_90d": 32.3, "Overall": 11.2}, {"Ticker": "CHZ", "chg_24h": -0.7, "chg_7d": -9.0, "chg_30d": 13.8, "chg_90d": -8.4, "Overall": -1.1}, {"Ticker": "AXS", "chg_24h": 3.2, "chg_7d": 3.5, "chg_30d": 39.2, "chg_90d": 25.6, "Overall": 17.9}, {"Ticker": "ENJ", "chg_24h": -1.1, "chg_7d": -5.3, "chg_30d": 24.9, "chg_90d": 12.1, "Overall": 7.6}, {"Ticker": "IOTA", "chg_24h": -0.0, "chg_7d": -5.7, "chg_30d": 30.3, "chg_90d": 33.2, "Overall": 14.4}, {"Ticker": "NEO", "chg_24h": 5.7, "chg_7d": 1.6, "chg_30d": 24.0, "chg_90d": 33.1, "Overall": 16.1}, {"Ticker": "KAS", "chg_24h": -1.4, "chg_7d": -5.4, "chg_30d": 15.2, "chg_90d": 43.4, "Overall": 13.0}]; let currentTf = 'chg_24h';
+        const width = window.innerWidth; let height = window.innerHeight;
+        const svg = d3.select("#bubble-container").append("svg").attr("width", "100%").attr("height", "100%");
+        const defs = svg.append("defs"); defs.append("clipPath").attr("id", "cClip").attr("clipPathUnits", "objectBoundingBox").append("circle").attr("cx", 0.5).attr("cy", 0.5).attr("r", 0.5);
+
+        let radScale = d3.scaleSqrt();
+        function getColor(val) { return val > 0 ? "#22c55e" : val < 0 ? "#ef4444" : "#94a3b8"; }
+
+        function applySizing() {
+            const maxAbs = d3.max(data, d => Math.abs(d[currentTf])) || 1;
+
+            // STRICT CLAMPING: Drastically reduce maximum size range so bubbles aren't violent
+            radScale.domain([0, maxAbs]).range(width < 600 ? [12, 35] : [16, 50]);
+
+            data.forEach(d => {
+                d.val = d[currentTf];
+                // Smooth, clamped radius without exponential 'dampedSize' bloat
+                d.radius = radScale(Math.abs(d.val));
+                // Hard safety limits
+                d.radius = Math.max(12, Math.min(d.radius, width < 600 ? 40 : 60));
+
+                if (!d.x) { d.x=width/2+(Math.random()-0.5)*100; d.y=height/2+(Math.random()-0.5)*100; }
+            });
+        }
+        applySizing();
+
+        // SOFTER PHYSICS: Higher friction, lower repulsion
+        const sim = d3.forceSimulation(data).velocityDecay(0.35).alphaTarget(0.01)
+            .force("charge", d3.forceManyBody().strength(d => -0.8 * d.radius))
+            .force("collide", d3.forceCollide().radius(d => d.radius + 2).strength(0.5).iterations(4))
+            .force("x", d3.forceX(width / 2).strength(0.02)).force("y", d3.forceY(height / 2).strength(0.02));
+
+        const node = svg.append("g").selectAll("g").data(data).join("g").attr("class", "bubble-node").call(d3.drag().on("start", (e,d)=>{if(!e.active)sim.alphaTarget(0.05).restart(); d.fx=d.x; d.fy=d.y;}).on("drag",(e,d)=>{d.fx=e.x; d.fy=e.y;}).on("end",(e,d)=>{if(!e.active)sim.alphaTarget(0.01); d.fx=null; d.fy=null;}));
+
+        node.append("circle").attr("fill", "rgba(15,23,42,0.2)").attr("stroke", d=>getColor(d.val)).attr("stroke-width",3).attr("r", d=>d.radius).style("filter", d=>`drop-shadow(0px 0px 6px ${getColor(d.val)})`);
+        node.append("image").attr("href", d=>`https://assets.coincap.io/assets/icons/${d.Ticker.toLowerCase()}@2x.png`).attr("clip-path","url(#cClip)");
+        node.append("text").attr("class","t1").text(d=>d.Ticker).attr("text-anchor","middle").style("fill","white").style("font-weight","900").style("font-family","sans-serif");
+        node.append("text").attr("class","t2").text(d=>(d.val>0?"+":"")+d.val.toFixed(1)+"%").attr("text-anchor","middle").style("font-weight","bold").style("font-family","monospace");
+
+        function updateDOMSizes() {
+            node.select("image")
+                .attr("x", d => -(d.radius * 0.7) / 2).attr("y", d => -d.radius * 0.65)
+                .attr("width", d => d.radius * 0.7).attr("height", d => d.radius * 0.7);
+            node.select(".t1").style("font-size", d => Math.min(14, d.radius / 1.8) + "px").attr("y", d => d.radius * 0.25);
+            node.select(".t2").style("fill", d => getColor(d.val)).style("font-size", d => Math.min(11, d.radius / 2.2) + "px").attr("y", d => d.radius * 0.65);
+        }
+        updateDOMSizes();
+
+        const tt = d3.select("#tooltip");
+        node.on("mouseover", function(e, d) {
+            if(d3.select(this).style("opacity")<1) return;
+            d3.selectAll(".bubble-node circle").attr("stroke-width",2); d3.select(this).select("circle").attr("stroke-width",5);
+            tt.html(`<div class="tt-header" style="color:${getColor(d.val)}">${d.Ticker}</div><div class="tt-row"><span class="tt-lbl">Current View:</span><span class="tt-val" style="color:${getColor(d.val)}">${(d.val>0?"+":"")+d.val.toFixed(1)}%</span></div><div class="tt-row"><span class="tt-lbl">90D Trend:</span><span class="tt-val" style="color:${getColor(d.chg_90d)}">${(d.chg_90d>0?"+":"")+d.chg_90d.toFixed(1)}%</span></div><div class="tt-row"><span class="tt-lbl">Avg Score:</span><span class="tt-val">${d.Overall.toFixed(1)}</span></div>`);
+            tt.style("opacity",1).style("border-color",getColor(d.val));
+            let x=e.pageX+15; let y=e.pageY-15; if(x+250>width) x=e.pageX-265; if(y+150>height) y=e.pageY-165;
+            tt.style("left",x+"px").style("top",y+"px");
+        }).on("mouseout", function() { d3.selectAll(".bubble-node circle").attr("stroke-width",3); tt.style("opacity",0); });
+
+        let bounds = { wrapper: null };
+        function updateBounds() {
+            let filterEl = document.getElementById("filter-wrapper");
+            if(filterEl) { let rect = filterEl.getBoundingClientRect(); bounds.wrapper = { left: rect.left - 15, right: rect.right + 15, top: rect.top - 15, bottom: rect.bottom + 15 }; }
+        }
+        setTimeout(updateBounds, 100);
+
+        function resolveRectCollision(d, rect) {
+            if (!rect) return; let r = d.radius + 3;
+            if (d.x > rect.left - r && d.x < rect.right + r && d.y > rect.top - r && d.y < rect.bottom + r) {
+                let overlapLeft = (d.x + r) - rect.left; let overlapRight = rect.right - (d.x - r);
+                let overlapTop = (d.y + r) - rect.top; let overlapBottom = rect.bottom - (d.y - r);
+                let minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+                if (minOverlap === overlapLeft) { d.x = rect.left - r; d.vx *= -0.8; } else if (minOverlap === overlapRight) { d.x = rect.right + r; d.vx *= -0.8; }
+                else if (minOverlap === overlapTop) { d.y = rect.top - r; d.vy *= -0.8; } else if (minOverlap === overlapBottom) { d.y = rect.bottom + r; d.vy *= -0.8; }
+            }
+        }
+
+        sim.on("tick", () => {
+            let t=Date.now()/1000;
+            data.forEach((d,i)=>{
+                d.vx+=Math.sin(t+i)*0.05; d.vy+=Math.cos(t+i)*0.05;
+                let r=d.radius+2;
+                if(d.x<r){d.x=r;d.vx*=-0.8;}else if(d.x>width-r){d.x=width-r;d.vx*=-0.8;}
+                if(d.y<r){d.y=r;d.vy*=-0.8;}else if(d.y>height-r){d.y=height-r;d.vy*=-0.8;}
+                resolveRectCollision(d, bounds.wrapper);
+            });
+            node.attr("transform", d=>`translate(${d.x},${d.y})`);
+        });
+
+        window.switchTimeframe = function(tf, btnElement) {
+            currentTf = tf;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            applySizing();
+
+            node.select("circle").transition().duration(600).attr("r", d=>d.radius).attr("stroke", d=>getColor(d.val)).style("filter", d=>`drop-shadow(0px 0px 6px ${getColor(d.val)})`);
+            node.select("image").transition().duration(600).attr("x", d=>-(d.radius*0.7)/2).attr("y", d=>-d.radius*0.65).attr("width", d=>d.radius*0.7).attr("height", d=>d.radius*0.7);
+            node.select(".t1").transition().duration(600).style("font-size", d=>Math.min(14,d.radius/1.8)+"px").attr("y", d=>d.radius*0.25);
+            node.select(".t2").transition().duration(600).text(d=>(d.val>0?"+":"")+d.val.toFixed(1)+"%").style("fill", d=>getColor(d.val)).style("font-size", d=>Math.min(11,d.radius/2.2)+"px").attr("y", d=>d.radius*0.65);
+
+            sim.force("collide", d3.forceCollide().radius(d=>d.radius+2).strength(0.5).iterations(4));
+            sim.alpha(0.3).restart();
+        };
+
+        window.addEventListener('resize', () => {
+            width = window.innerWidth; height = window.innerHeight;
+            svg.attr("width", width).attr("height", height);
+            updateBounds(); applySizing(); updateDOMSizes();
+            sim.force("x", d3.forceX(width / 2).strength(0.02)).force("y", d3.forceY(height / 2).strength(0.02));
+            sim.alpha(0.3).restart();
+        });
+    </script>
+</body></html>

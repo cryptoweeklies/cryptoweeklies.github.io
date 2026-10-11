@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Confluence Gravity Orbit</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Force True Black Background */
+        body { background: #000; color: #d1d5db; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; overflow: hidden; }
+
+        .controls { display: flex; flex-wrap: wrap; gap: 10px; padding: 15px; background: #070a13; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 10px; justify-content: center; z-index: 10; position: relative; }
+
+        /* Updated Slider Group & Badges */
+        .slider-group { display: flex; flex-direction: column; align-items: center; width: 100px; }
+        .slider-group label { font-size: 10px; color: #94a3b8; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; text-align: center; display: flex; flex-direction: column; gap: 3px; }
+        .weight-badge { color: #60a5fa; font-family: monospace; font-size: 11px; font-weight: 800; }
+
+        .slider-group input { width: 100%; -webkit-appearance: none; background: transparent; height: 4px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 12px; width: 12px; border-radius: 50%; background: #3b82f6; cursor: pointer; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #1e293b; border-radius: 2px; }
+
+        /* Solid Black Matrix Container */
+        #matrix-container { width: 100%; height: calc(100vh - 90px); position: relative; border-radius: 12px; background: #000; overflow: hidden; }
+
+        /* D3 Nodes & Tooltips */
+        .node circle { transition: stroke 0.3s, fill 0.3s; cursor: grab; }
+        .node:active circle { cursor: grabbing; }
+        .node text.ticker { font-family: 'Inter', sans-serif; font-weight: 900; fill: #fff; pointer-events: none; text-anchor: middle; text-shadow: 0px 2px 4px rgba(0,0,0,0.9); }
+        .node text.score { font-family: monospace; font-weight: bold; pointer-events: none; text-anchor: middle; text-shadow: 0px 1px 3px rgba(0,0,0,1); }
+
+        /* Brighter, thicker orbits */
+        .orbit-ring { fill: none; stroke-dasharray: 6,6; opacity: 0.55; stroke-width: 1.5px; pointer-events: none; }
+        .orbit-label { font-family: monospace; font-size: 11px; font-weight: bold; text-transform: uppercase; opacity: 0.8; pointer-events: none; text-anchor: middle; letter-spacing: 1px; }
+
+        /* View Full Report Link */
+        .report-link { position: absolute; top: 15px; right: 15px; background: rgba(15, 23, 42, 0.85); padding: 10px 16px; border-radius: 8px; font-size: 12px; color: #60a5fa; border: 1px solid #334155; z-index: 20; text-decoration: none; font-weight: bold; transition: 0.2s; backdrop-filter: blur(4px); }
+        .report-link:hover { color: #93c5fd; text-decoration: underline; background: rgba(30, 41, 59, 0.95); }
+    </style>
+<!-- cw:seo-noindex --><meta name="robots" content="noindex,follow" /><!-- /cw:seo-noindex -->
+</head>
+<body>
+
+    <div class="controls">
+        <div class="slider-group"><label>Regression <span class="weight-badge" id="lbl_reg">23.5%</span></label><input type="range" id="w_reg" min="0" max="5" step="0.5" value="2.0"></div>
+        <div class="slider-group"><label>TWAP <span class="weight-badge" id="lbl_twap">17.6%</span></label><input type="range" id="w_twap" min="0" max="5" step="0.5" value="1.5"></div>
+        <div class="slider-group"><label>SMA <span class="weight-badge" id="lbl_sma">17.6%</span></label><input type="range" id="w_sma" min="0" max="5" step="0.5" value="1.5"></div>
+        <div class="slider-group"><label>Drawdown <span class="weight-badge" id="lbl_dd">23.5%</span></label><input type="range" id="w_dd" min="0" max="5" step="0.5" value="2.0"></div>
+        <div class="slider-group"><label>Volatility <span class="weight-badge" id="lbl_vol">5.9%</span></label><input type="range" id="w_vol" min="0" max="5" step="0.5" value="0.5"></div>
+        <div class="slider-group"><label>Beta <span class="weight-badge" id="lbl_beta">5.9%</span></label><input type="range" id="w_beta" min="0" max="5" step="0.5" value="0.5"></div>
+        <div class="slider-group"><label>Sharpe <span class="weight-badge" id="lbl_sharpe">5.9%</span></label><input type="range" id="w_sharpe" min="0" max="5" step="0.5" value="0.5"></div>
+    </div>
+
+    <div id="matrix-container">
+        <a href="https://cryptoweeklies.com/individual_crypto_risk_scores" target="_top" class="report-link">View Full Report ↗</a>
+    </div>
+
+    <script>
+        const rawData = [{"id": "BTC", "name": "Bitcoin", "marketCap": 1666565144576, "reg": 0.24341696392387363, "twap": 0.2977172434259722, "sma": 0.5479499476811809, "dd": 0.6616805245184154, "vol": 0.5208388351661745, "beta": 0.2343262128996222, "sharpe": 0.29492582744303886}, {"id": "ETH", "name": "Ethereum", "marketCap": 305820368896, "reg": 0.31201484397952794, "twap": 0.31400876233455405, "sma": 0.602451574155581, "dd": 0.514460611957914, "vol": 0.68152351502897, "beta": 0.44038350082081623, "sharpe": 0.3094041862184477}, {"id": "XRP", "name": "XRP", "marketCap": 88485412864, "reg": 0.2851663674325019, "twap": 0.38571116123706894, "sma": 0.48546070695461757, "dd": 0.3924173990286549, "vol": 0.8989030790973942, "beta": 0.36649019345832834, "sharpe": 0.306544464124082}, {"id": "BNB", "name": "BNB", "marketCap": 99822747648, "reg": 0.5115265674942737, "twap": 0.3579960836586229, "sma": 0.5347081455736624, "dd": 0.5663916124024017, "vol": 0.7808000999627748, "beta": 0.31138178252693405, "sharpe": 0.20539213690299707}, {"id": "SOL", "name": "Solana", "marketCap": 64783093760, "reg": 0.6378586448953647, "twap": 0.2693466804740971, "sma": 0.5338388841400002, "dd": 0.42427525941512045, "vol": 0.9712557204690366, "beta": 0.7666655488751053, "sharpe": 0.1937256374367291}, {"id": "TRX", "name": "TRON", "marketCap": 31402016768, "reg": 0.15639328354200308, "twap": 0.46362238004935064, "sma": 0.31034233529170724, "dd": 0.7787141665827149, "vol": 1.0, "beta": 0.2313269882475837, "sharpe": 0.24596274677447238}, {"id": "DOGE", "name": "Dogecoin", "marketCap": 14743270400, "reg": 0.2820989827701348, "twap": 0.26936058877128144, "sma": 0.45621697379974885, "dd": 0.12463765331215537, "vol": 1.0, "beta": 0.4193185589316334, "sharpe": 0.27709694267702234}, {"id": "BCH", "name": "Bitcoin Cash", "marketCap": 5625832448, "reg": 0.15153017146198666, "twap": 0.26034391760997094, "sma": 0.3957798541772632, "dd": 0.07049170929301607, "vol": 0.8347112276294227, "beta": 0.31295278932177106, "sharpe": 0.4079950927925843}, {"id": "ADA", "name": "Cardano", "marketCap": 9167855616, "reg": 0.31062126457876654, "twap": 0.2501813205989432, "sma": 0.5734627877889554, "dd": 0.08183875880674041, "vol": 1.0, "beta": 0.49947549345570263, "sharpe": 0.29904360205996605}, {"id": "LINK", "name": "Chainlink", "marketCap": 9731627008, "reg": 0.911604123083368, "twap": 0.37045482155535364, "sma": 0.6735080085192806, "dd": 0.2590947832672318, "vol": 0.9140083588072802, "beta": 0.5410538666341128, "sharpe": 0.24109360963455517}];
+        const container = document.getElementById('matrix-container');
+        let width = container.clientWidth;
+        let height = container.clientHeight;
+
+        const svg = d3.select("#matrix-container").append("svg").attr("width", width).attr("height", height);
+        const defs = svg.append("defs");
+        defs.append("clipPath").attr("id", "cClip").attr("clipPathUnits", "objectBoundingBox")
+            .append("circle").attr("cx", 0.5).attr("cy", 0.5).attr("r", 0.5);
+
+        let cx = width / 2;
+        let cy = height / 2;
+
+        let maxRadius = Math.min(width, height) / 2 - 30;
+        let rScale = d3.scaleLinear().domain([0, 1]).range([50, maxRadius]);
+
+        let maxCap = d3.max(rawData, d => d.marketCap) || 1;
+        let bubbleScale = d3.scaleSqrt().domain([0, maxCap]).range(width < 600 ? [20, 50] : [25, 75]);
+
+        function getColor(score) {
+            if (score <= 0.33) return { fill: "rgba(34,197,94,0.15)", stroke: "#22c55e", text: "#4ade80" };
+            if (score <= 0.66) return { fill: "rgba(250,204,21,0.15)", stroke: "#facc15", text: "#fde047" };
+            return { fill: "rgba(239,68,68,0.15)", stroke: "#ef4444", text: "#f87171" };
+        }
+
+        // Brighter Neon Background Orbits
+        const orbits = [
+            { score: 0.33, label: "Accumulation", color: "#00ff7f" }, // Neon Spring Green
+            { score: 0.66, label: "Neutral", color: "#ffd700" },      // Bright Gold
+            { score: 1.0, label: "Distribution", color: "#ff3333" }   // Bright Red
+        ];
+
+        const orbitG = svg.append("g").attr("class", "orbits");
+
+        function drawOrbits() {
+            orbitG.selectAll("*").remove();
+            orbits.forEach(o => {
+                let rad = rScale(o.score);
+                orbitG.append("circle")
+                    .attr("class", "orbit-ring")
+                    .attr("cx", cx).attr("cy", cy).attr("r", rad)
+                    .attr("stroke", o.color);
+
+                orbitG.append("text")
+                    .attr("class", "orbit-label")
+                    .attr("x", cx).attr("y", cy - rad - 8)
+                    .attr("fill", o.color).text(o.label);
+            });
+        }
+        drawOrbits();
+
+        function getWeights() {
+            return {
+                reg: +document.getElementById('w_reg').value,
+                twap: +document.getElementById('w_twap').value,
+                sma: +document.getElementById('w_sma').value,
+                dd: +document.getElementById('w_dd').value,
+                vol: +document.getElementById('w_vol').value,
+                beta: +document.getElementById('w_beta').value,
+                sharpe: +document.getElementById('w_sharpe').value
+            };
+        }
+
+        function computeScores(nodes) {
+            const w = getWeights();
+
+            // Dynamic Percentage Update Logic
+            let total = Object.values(w).reduce((a, b) => a + b, 0);
+            let effectiveTotal = total > 0 ? total : 1; // Prevent division-by-zero crashes
+
+            if (total > 0) {
+                document.getElementById('lbl_reg').innerText = ((w.reg / total) * 100).toFixed(1) + '%';
+                document.getElementById('lbl_twap').innerText = ((w.twap / total) * 100).toFixed(1) + '%';
+                document.getElementById('lbl_sma').innerText = ((w.sma / total) * 100).toFixed(1) + '%';
+                document.getElementById('lbl_dd').innerText = ((w.dd / total) * 100).toFixed(1) + '%';
+                document.getElementById('lbl_vol').innerText = ((w.vol / total) * 100).toFixed(1) + '%';
+                document.getElementById('lbl_beta').innerText = ((w.beta / total) * 100).toFixed(1) + '%';
+                document.getElementById('lbl_sharpe').innerText = ((w.sharpe / total) * 100).toFixed(1) + '%';
+            } else {
+                // If user sets everything to 0
+                document.getElementById('lbl_reg').innerText = '0.0%';
+                document.getElementById('lbl_twap').innerText = '0.0%';
+                document.getElementById('lbl_sma').innerText = '0.0%';
+                document.getElementById('lbl_dd').innerText = '0.0%';
+                document.getElementById('lbl_vol').innerText = '0.0%';
+                document.getElementById('lbl_beta').innerText = '0.0%';
+                document.getElementById('lbl_sharpe').innerText = '0.0%';
+            }
+
+            // Apply calculated scores
+            nodes.forEach(d => {
+                d.radius = bubbleScale(d.marketCap);
+                d.score = ((d.reg*w.reg) + (d.twap*w.twap) + (d.sma*w.sma) + (d.dd*w.dd) + (d.vol*w.vol) + (d.beta*w.beta) + (d.sharpe*w.sharpe)) / effectiveTotal;
+
+                if(!d.x) {
+                    let angle = Math.random() * Math.PI * 2;
+                    let r = rScale(d.score);
+                    d.x = cx + Math.cos(angle) * r;
+                    d.y = cy + Math.sin(angle) * r;
+                }
+            });
+        }
+
+        // Initialize Scores and Badges immediately
+        computeScores(rawData);
+
+        // Calmed Down Soft Bounce Physics
+        const simulation = d3.forceSimulation(rawData)
+            .velocityDecay(0.45)
+            .alphaTarget(0.01)
+            .force("radial", d3.forceRadial(d => rScale(d.score), cx, cy).strength(0.8))
+            .force("collide", d3.forceCollide().radius(d => d.radius + 4).iterations(4).strength(0.8))
+            .force("charge", d3.forceManyBody().strength(d => -0.5 * d.radius));
+
+        const node = svg.append("g").selectAll(".node")
+            .data(rawData).enter().append("g").attr("class", "node")
+            .call(d3.drag()
+                .on("start", (event, d) => { if (!event.active) simulation.alphaTarget(0.1).restart(); d.fx = d.x; d.fy = d.y; })
+                .on("drag", (event, d) => { d.fx = event.x; d.fy = event.y; })
+                .on("end", (event, d) => { if (!event.active) simulation.alphaTarget(0.01); d.fx = null; d.fy = null; })
+            );
+
+        node.append("circle")
+            .attr("r", d => d.radius)
+            .attr("stroke-width", 2)
+            .attr("fill", d => getColor(d.score).fill)
+            .attr("stroke", d => getColor(d.score).stroke);
+
+        node.append("image")
+            .attr("href", d => `https://assets.coincap.io/assets/icons/${d.id.toLowerCase()}@2x.png`)
+            .attr("x", d => -(d.radius * 0.7) / 2)
+            .attr("y", d => -d.radius * 0.6)
+            .attr("width", d => d.radius * 0.7)
+            .attr("height", d => d.radius * 0.7)
+            .attr("opacity", 0.85).attr("clip-path", "url(#cClip)");
+
+        node.append("text").attr("class", "ticker")
+            .text(d => d.id)
+            .style("font-size", d => Math.max(10, d.radius / 2.5) + "px")
+            .attr("y", d => d.radius * 0.25);
+
+        node.append("text").attr("class", "score")
+            .attr("y", d => d.radius * 0.65)
+            .style("font-size", d => Math.max(9, d.radius / 3) + "px")
+            .attr("fill", d => getColor(d.score).text).text(d => d.score.toFixed(2));
+
+        node.on("mouseover", function() {
+            d3.selectAll(".node").transition().duration(200).style("opacity", 0.2);
+            d3.select(this).transition().duration(200).style("opacity", 1);
+            d3.select(this).select("circle").attr("stroke-width", 5);
+        }).on("mouseout", function() {
+            d3.selectAll(".node").transition().duration(200).style("opacity", 1);
+            d3.select(this).select("circle").attr("stroke-width", 2);
+        });
+
+        simulation.on("tick", () => {
+            let t = Date.now() / 1000;
+            rawData.forEach((d, i) => {
+                d.vx += (Math.sin(t + i) * 0.02) + (Math.random() - 0.5) * 0.02;
+                d.vy += (Math.cos(t + i) * 0.02) + (Math.random() - 0.5) * 0.02;
+            });
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        d3.selectAll("input[type=range]").on("input", () => {
+            computeScores(rawData);
+            simulation.force("radial", d3.forceRadial(d => rScale(d.score), cx, cy).strength(0.8));
+            simulation.alpha(0.3).restart();
+
+            node.select("circle").transition().duration(400)
+                .attr("fill", d => getColor(d.score).fill)
+                .attr("stroke", d => getColor(d.score).stroke);
+
+            node.select("text.score").transition().duration(400)
+                .attr("fill", d => getColor(d.score).text)
+                .text(d => d.score.toFixed(2));
+        });
+
+        window.addEventListener("resize", () => {
+            width = container.clientWidth; height = container.clientHeight;
+            svg.attr("width", width).attr("height", height);
+
+            cx = width / 2; cy = height / 2;
+            maxRadius = Math.min(width, height) / 2 - 30;
+            rScale.range([50, maxRadius]);
+
+            bubbleScale.range(width < 600 ? [20, 50] : [25, 75]);
+            rawData.forEach(d => d.radius = bubbleScale(d.marketCap));
+
+            node.select("circle").attr("r", d => d.radius);
+            node.select("image")
+                .attr("x", d => -(d.radius * 0.7) / 2).attr("y", d => -d.radius * 0.6)
+                .attr("width", d => d.radius * 0.7).attr("height", d => d.radius * 0.7);
+            node.select(".ticker").style("font-size", d => Math.max(10, d.radius / 2.5) + "px").attr("y", d => d.radius * 0.25);
+            node.select(".score").style("font-size", d => Math.max(9, d.radius / 3) + "px").attr("y", d => d.radius * 0.65);
+
+            drawOrbits();
+            simulation.force("collide", d3.forceCollide().radius(d => d.radius + 4).iterations(4).strength(0.8));
+            simulation.force("radial", d3.forceRadial(d => rScale(d.score), cx, cy).strength(0.8));
+            simulation.alpha(0.3).restart();
+        });
+    </script>
+</body>
+</html>

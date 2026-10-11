@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,follow" />
+<title>CryptoWeeklies risk badge</title>
+<style>
+html,body{margin:0;height:100%;background:transparent;}
+.badge{box-sizing:border-box;height:100%;min-height:150px;padding:14px 16px;display:flex;
+flex-direction:column;justify-content:space-between;background:#0a0e14;border:1px solid #2d3a4d;
+border-radius:14px;color:#e6edf5;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14px;font-weight:700;}
+.name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.quiet{color:#9ba8b8;font-weight:500;}
+.date{font-size:11px;white-space:nowrap;}
+.mid{display:flex;align-items:baseline;gap:8px;font-size:13px;}
+.level{font:700 32px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+.score{margin-left:auto;font-size:12px;}
+.score b{color:#e6edf5;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+.scale{display:flex;align-items:flex-end;gap:3px;height:12px;}
+.scale i{flex:1;height:6px;border-radius:2px;opacity:.3;}
+.scale i.on{height:12px;opacity:1;}
+a{font-size:12px;font-weight:600;color:#6effd8;text-decoration:none;}
+a:hover{text-decoration:underline;}
+.light .badge{background:#ffffff;border-color:#cbd5e1;color:#0f172a;}
+.light .quiet{color:#475569;}
+.light .score b{color:#0f172a;}
+.light a{color:#0f766e;}
+</style>
+</head>
+<body>
+<div class="badge">
+<div class="top"><span class="name"><span id="name">CryptoWeeklies</span> <span class="quiet" id="symbol"></span></span><span class="quiet date" id="date"></span></div>
+<div class="mid"><span class="quiet">Risk Level</span><span class="level" id="level">&ndash;</span><span class="quiet">/10</span><span class="quiet score">Gravity <b id="score">&ndash;</b></span></div>
+<div class="scale" id="scale" role="img" aria-label="Risk Level on a scale of 1 to 10"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<a id="link" href="https://cryptoweeklies.com/reports/" target="_blank" rel="noopener">Full report on cryptoweeklies.com &rsaquo;</a>
+</div>
+<script>
+/* The badge states the API's number and nothing else: it reads the same
+   per-asset document the JSON API serves. Every value reaches the page
+   through textContent, never innerHTML, because ?asset= is a stranger's
+   input on a page other sites frame. */
+(function () {
+  var HUBS = {"AERO":"AERO29270","APE":"APE18876","APT":"APT21794","ARB":"ARB11841","COMP":"COMP5692","GRT":"GRT6719","IMX":"IMX10603","MNT":"MNT27075","POL":"POL28321","RON":"RON14101","STX":"STX4847","SUI":"SUI20947","TAO":"TAO22974","TON":"TON11419","UNI":"UNI7083"};
+  var COLORS = ['#00d4aa', '#33d79c', '#66d98d', '#99d67a', '#c9d166',
+                '#f2c655', '#ffb648', '#ff974c', '#ff7852', '#ff5a5a'];
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var query = new URLSearchParams(window.location.search);
+  var asset = (query.get('asset') || 'BTC').toUpperCase();
+  if (!/^[A-Z0-9.-]{1,12}$/.test(asset)) { asset = 'BTC'; }
+  var light = query.get('theme') === 'light';
+  if (light) { document.documentElement.className = 'light'; }
+
+  function put(id, text) { document.getElementById(id).textContent = text; }
+
+  var bars = document.getElementById('scale').children;
+  for (var i = 0; i < bars.length; i++) { bars[i].style.background = COLORS[i]; }
+
+  var hub = HUBS.hasOwnProperty(asset) ? HUBS[asset] : asset;
+  document.getElementById('link').href = 'https://cryptoweeklies.com/reports/' + hub;
+  put('name', asset);
+
+  fetch('../data/api/v1/assets/' + asset + '/risk.json')
+    .then(function (response) {
+      if (!response.ok) { throw new Error('no document'); }
+      return response.json();
+    })
+    .then(function (doc) {
+      var gravity = doc.gravity || {};
+      var level = Math.round(Number(gravity.risk_level));
+      put('name', doc.name || asset);
+      put('symbol', doc.symbol || '');
+      if (!(level >= 1 && level <= 10)) { put('date', 'no reading'); return; }
+      put('level', String(level));
+      if (!light) { document.getElementById('level').style.color = COLORS[level - 1]; }
+      bars[level - 1].className = 'on';
+      if (typeof gravity.score === 'number') { put('score', gravity.score.toFixed(1)); }
+      var stamp = /^(\d{4})-(\d{2})-(\d{2})/.exec(gravity.as_of || doc.as_of || '');
+      if (stamp) { put('date', Number(stamp[3]) + ' ' + MONTHS[Number(stamp[2]) - 1] + ' ' + stamp[1]); }
+    })
+    .catch(function () {
+      /* No such asset: its hub would be a 404, so point at the directory. */
+      document.getElementById('link').href = 'https://cryptoweeklies.com/reports/';
+      put('date', 'no reading');
+    });
+})();
+</script>
+</body>
+</html>
