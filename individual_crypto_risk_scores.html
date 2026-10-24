@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body { background-color: #050811; color: #d1d5db; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 30px 20px; overflow-x: hidden; }
+            .container { max-width: 1500px; margin: 0 auto; }
+            .main-wrapper { display: grid; grid-template-columns: 1fr 380px; gap: 30px; align-items: start; }
+            .metric-header { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-left: 5px solid #a855f7; }
+            .metric-title { font-size: 1.6rem; font-weight: 800; color: #ffffff; margin: 0 0 5px 0; }
+            .metric-sub { font-size: 0.9rem; color: #94a3b8; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+            .legend-card { background-color: #0f141e; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 30px; font-size: 0.95rem; font-weight: 500; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+            .badge { padding: 6px 12px; border-radius: 6px; color: #000; font-weight: 700; letter-spacing: 0.5px; }
+            .badge.green { background-color: #22c55e; } .badge.yellow { background-color: #facc15; } .badge.red { background-color: #ef4444; color: #fff; }
+            .gauge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+            .gauge-card { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; }
+            .sidebar-right { position: sticky; top: 20px; height: fit-content; }
+            .interactive-panel { background-color: #090d16; border: 1px solid #1e293b; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+            .interactive-panel h2 { color: #ffffff; margin-top: 0; font-size: 1.3rem; margin-bottom: 10px; }
+            .interactive-panel p { margin-top: 0; margin-bottom: 25px; line-height: 1.6; color: #94a3b8; font-size: 0.9rem; }
+            .slider-group { margin-bottom: 20px; } .slider-group label { display: flex; justify-content: space-between; font-weight: 600; color: #d1d5db; margin-bottom: 8px; font-size: 0.85rem; }
+            .weight-badge { color: #3b82f6; font-family: monospace; font-weight: 800; font-size: 1rem; }
+            input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; } input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #3b82f6; cursor: pointer; margin-top: -6px; box-shadow: 0 0 5px rgba(59,130,246,0.5); } input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #1e293b; border-radius: 2px; }
+            .text-card { background-color: #090d16; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 30px; line-height: 1.7; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); } .text-card h2 { color: #ffffff; margin-top: 0; border-bottom: 1px solid #1e293b; padding-bottom: 10px; font-size: 1.3rem; margin-bottom: 20px; }
+            .method-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; margin-top: 25px; background: #0b0e14; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; } .method-table th { background-color: #0f141e; color: #f8fafc; padding: 14px 15px; border-bottom: 2px solid #1e293b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; } .method-table td { padding: 14px 15px; border-bottom: 1px solid #1e293b; color: #d1d5db; }
+            @media (max-width: 1024px) { .main-wrapper { grid-template-columns: 1fr; } .sidebar-right { position: relative; top: 0; } }
+        </style>
+    <!-- cw:seo-head -->
+<meta name="apple-itunes-app" content="app-id=6815463434" />
+<script data-cw-analytics>(function(){if(window.top!==window.self)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"05b13bdf423f4331960046d4a74f032b"}');document.head.appendChild(s);})();</script>
+<title>Crypto Risk Score: 7-Factor Composite Risk by Coin</title>
+<meta name="description" content="A crypto risk score from 0.0 to 1.0 for the major coins, built from seven factors including valuation, drawdown, volatility and beta. Free, updated daily." />
+<link rel="canonical" href="https://cryptoweeklies.com/individual_crypto_risk_scores" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Crypto Risk Score: 7-Factor Composite Risk by Coin" />
+<meta property="og:description" content="A crypto risk score from 0.0 to 1.0 for the major coins, built from seven factors including valuation, drawdown, volatility and beta. Free, updated daily." />
+<meta property="og:url" content="https://cryptoweeklies.com/individual_crypto_risk_scores" />
+<meta property="og:image" content="https://cryptoweeklies.com/share/cryptoweeklies.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="CryptoWeeklies: free risk, valuation and forecast models for crypto, AI and quantum assets" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://cryptoweeklies.com/share/cryptoweeklies.png" />
+<meta name="twitter:image:alt" content="CryptoWeeklies: free risk, valuation and forecast models for crypto, AI and quantum assets" />
+<meta name="twitter:title" content="Crypto Risk Score: 7-Factor Composite Risk by Coin" />
+<meta name="twitter:description" content="A crypto risk score from 0.0 to 1.0 for the major coins, built from seven factors including valuation, drawdown, volatility and beta. Free, updated daily." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CryptoWeeklies","item":"https://cryptoweeklies.com/"},{"@type":"ListItem","position":2,"name":"Reports","item":"https://cryptoweeklies.com/reports/"},{"@type":"ListItem","position":3,"name":"Crypto risk scores","item":"https://cryptoweeklies.com/individual_crypto_risk_scores"}]}</script>
+<!-- /cw:seo-head -->
+</head>
+    <body>
+        <div class="container">
+            <div class="main-wrapper">
+                <div class="content-left">
+                    <div class="metric-header">
+                        <div>
+                            <h1 class="metric-title">Crypto Composite Risk Model</h1>
+                            <p class="metric-sub">INTERACTIVE 7-FACTOR Z-SCORE ENGINE</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p class="metric-title">Macro Sandbox</p>
+                            <p class="metric-sub">UPDATED: October 24, 2026 - 16:12 UTC</p>
+                        </div>
+                    </div>
+                    <div class="legend-card">
+                        <span style="color: #94a3b8; margin-right: 10px;">Risk Scale (0.0 to 1.0):</span>
+                        <span class="badge green">0.0 - 0.33 Accumulation</span>
+                        <span class="badge yellow">0.34 - 0.66 Hold / Neutral</span>
+                        <span class="badge red">0.67 - 1.0 Distribution</span>
+                    </div>
+                    <div id="native-gauge-grid" class="gauge-grid"></div>
+                    <div class="text-card">
+                        <h2>Methodology & S.O.T.A Mathematical Framework</h2>
+                        <p>The Composite Risk Score (0.0 to 1.0) is an algorithm of 7 distinct financial and technical factors.</p>
+                        <table class="method-table">
+                            <tr><th>Category</th><th>Metric</th><th>Description</th></tr>
+                            <tr><td rowspan="3" style="color: #fff; font-weight: bold;">Trend & Valuation</td><td>Log-Regression</td><td>Z-Score deviation from logarithmic growth curve.</td></tr>
+                            <tr><td>TWAP Deviation</td><td>Z-Score deviation relative to lifetime TWAP.</td></tr>
+                            <tr><td>SMA Deviation</td><td>Z-Score extension relative to 20-week Moving Average.</td></tr>
+                            <tr><td style="color: #fff; font-weight: bold;">Market Cycle</td><td>Drawdown from ATH</td><td>Near ATH = Max Risk. Deep Drawdown = Min Risk.</td></tr>
+                            <tr><td rowspan="3" style="color: #fff; font-weight: bold;">Stability</td><td>Volatility</td><td>Standard deviation of returns.</td></tr>
+                            <tr><td>Beta</td><td>Correlation to S&P 500.</td></tr>
+                            <tr><td>Sharpe Ratio</td><td>Risk-adjusted returns (inverted).</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="sidebar-right">
+                    <div class="interactive-panel">
+                        <h2>⚙️ Engine Calibration Sandbox</h2>
+                        <p>Adjust structural weights. Gauges instantly recalibrate.</p>
+                        <div class="slider-grid">
+                            <div class="slider-group"><label>Log-Regression Dev <span class="weight-badge" id="lbl_reg">23.5%</span></label><input type="range" id="w_reg" min="0" max="5" step="0.5" value="2.0" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Drawdown from ATH <span class="weight-badge" id="lbl_dd">23.5%</span></label><input type="range" id="w_dd" min="0" max="5" step="0.5" value="2.0" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>TWAP Deviation <span class="weight-badge" id="lbl_twap">17.6%</span></label><input type="range" id="w_twap" min="0" max="5" step="0.5" value="1.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>SMA Deviation (140D) <span class="weight-badge" id="lbl_sma">17.6%</span></label><input type="range" id="w_sma" min="0" max="5" step="0.5" value="1.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Volatility <span class="weight-badge" id="lbl_vol">5.9%</span></label><input type="range" id="w_vol" min="0" max="5" step="0.5" value="0.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Beta (SPX Correlation) <span class="weight-badge" id="lbl_beta">5.9%</span></label><input type="range" id="w_beta" min="0" max="5" step="0.5" value="0.5" oninput="updateScores()"></div>
+                            <div class="slider-group"><label>Sharpe Ratio <span class="weight-badge" id="lbl_sharpe">5.9%</span></label><input type="range" id="w_sharpe" min="0" max="5" step="0.5" value="0.5" oninput="updateScores()"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const rawData = {"BTC-USD": {"reg": 0.23152791354736757, "twap": 0.2797592890159056, "sma": 0.5126557353559673, "dd": 0.6498801001282288, "vol": 0.5198389601477252, "beta": 0.23497775263455245, "sharpe": 0.29616551631670207, "default_score": 0.40905055040688143}, "ETH-USD": {"reg": 0.2929827571927645, "twap": 0.29221529120284, "sma": 0.5532782816448993, "dd": 0.493460019917931, "vol": 0.6802026017675944, "beta": 0.4409391984374682, "sharpe": 0.3112340468590564, "default_score": 0.4185075102382423}, "XRP-USD": {"reg": 0.27408244030508633, "twap": 0.3618707821916375, "sma": 0.4507614403543676, "dd": 0.3639000549753423, "vol": 0.8971555626916178, "beta": 0.36761417643117333, "sharpe": 0.308873525438065, "default_score": 0.3860864654894462}, "BNB-USD": {"reg": 0.5008051851061969, "twap": 0.3418749276341724, "sma": 0.5150538876164333, "dd": 0.5639057916706884, "vol": 0.7791483186303663, "beta": 0.3116565319937128, "sharpe": 0.20601503266255283, "default_score": 0.4780264844791759}, "SOL-USD": {"reg": 0.585537476011626, "twap": 0.25181777503809727, "sma": 0.49880501663646754, "dd": 0.3995526122787648, "vol": 0.9685111962922095, "beta": 0.7668956858180553, "sharpe": 0.19588497363882862, "default_score": 0.4778541519961383}, "TRX-USD": {"reg": 0.15266303834051503, "twap": 0.44137550055978575, "sma": 0.30265386637790603, "dd": 0.7736459277790837, "vol": 1.0, "beta": 0.23039672352125629, "sharpe": 0.24657523118253866, "default_score": 0.4361350541173686}, "DOGE-USD": {"reg": 0.26921831913969096, "twap": 0.2577691180514821, "sma": 0.4213914981634207, "dd": 0.11468989138151287, "vol": 1.0, "beta": 0.4199146969702432, "sharpe": 0.2788255090265731, "default_score": 0.31010911157213766}, "BCH-USD": {"reg": 0.1585688427125333, "twap": 0.2674391135459722, "sma": 0.4450783342859192, "dd": 0.07191507256721763, "vol": 0.8331544523963719, "beta": 0.3134569489341915, "sharpe": 0.4075238866915004, "default_score": 0.2713896054492201}, "ADA-USD": {"reg": 0.2761002740587886, "twap": 0.22945468587907533, "sma": 0.493627157932195, "dd": 0.0709009624892879, "vol": 1.0, "beta": 0.5004262784520095, "sharpe": 0.3026256666054138, "default_score": 0.31531190721667884}, "LINK-USD": {"reg": 0.8714203550604241, "twap": 0.32941801044494784, "sma": 0.5998146144809986, "dd": 0.23901408618097508, "vol": 0.9122131064281107, "beta": 0.5418250647284062, "sharpe": 0.24334172348062655, "default_score": 0.5251067961400341}, "XLM-USD": {"reg": 0.3155205962761583, "twap": 0.39197368575824154, "sma": 0.44205678997779846, "dd": 0.19322002296591811, "vol": 0.8912941507513188, "beta": 0.3979186514666647, "sharpe": 0.3124112358214044, "default_score": 0.3610987024832832}, "LTC-USD": {"reg": 0.3458378189158014, "twap": 0.2929184491651705, "sma": 0.6223124046237062, "dd": 0.15149896379475924, "vol": 0.7324799749482181, "beta": 0.3673523220669397, "sharpe": 0.37993977483224783, "default_score": 0.36557716259154577}, "HBAR-USD": {"reg": 0.38094160696853485, "twap": 0.31797504391302306, "sma": 0.44307405400752126, "dd": 0.15293039721233992, "vol": 1.0, "beta": 0.5377834846486378, "sharpe": 0.3467415195711917, "default_score": 0.3707741361591154}, "AVAX-USD": {"reg": 0.5392768665416512, "twap": 0.2528081366107201, "sma": 0.5485293864697566, "dd": 0.06725095291554839, "vol": 0.9161373038865591, "beta": 0.8073486548674433, "sharpe": 0.3239992809880269, "default_score": 0.404565240400721}, "DOT-USD": {"reg": 0.4542024258957821, "twap": 0.2223672855263515, "sma": 0.6194229055718345, "dd": 0.020108374042542176, "vol": 0.7993173822223971, "beta": 0.6922892334734202, "sharpe": 0.4117572527221477, "default_score": 0.37211633185093057}};
+            function generateSvgGauge(name, score) {
+                const cleanName = name.split('-')[0];
+                const angle = (score * 180) - 90;
+                return `
+                <div class="gauge-card">
+                    <div style="font-weight: 800; font-size: 1.3rem; margin-bottom: 2px;">${cleanName}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 20px; text-transform: uppercase;">Composite Risk</div>
+                    <svg viewBox="0 0 100 55" style="width: 100%; overflow: visible; margin-bottom: 10px;">
+                        <path d="M 10 50 A 40 40 0 0 1 30 15.36" fill="none" stroke="#22c55e" stroke-width="12" />
+                        <path d="M 30 15.36 A 40 40 0 0 1 70 15.36" fill="none" stroke="#facc15" stroke-width="12" />
+                        <path d="M 70 15.36 A 40 40 0 0 1 90 50" fill="none" stroke="#ef4444" stroke-width="12" />
+                        <g transform="translate(50, 50) rotate(${angle})">
+                            <path d="M -2.5 0 L 0 -45 L 2.5 0 Z" fill="#ffffff" />
+                            <circle cx="0" cy="0" r="5" fill="#ffffff" />
+                        </g>
+                    </svg>
+                    <div style="font-family: monospace; font-size: 2.2rem; font-weight: bold; line-height: 1;">${score.toFixed(2)}</div>
+                </div>`;
+            }
+
+            function updateScores() {
+                let w = {
+                    reg: parseFloat(document.getElementById('w_reg').value), twap: parseFloat(document.getElementById('w_twap').value),
+                    sma: parseFloat(document.getElementById('w_sma').value), dd: parseFloat(document.getElementById('w_dd').value),
+                    vol: parseFloat(document.getElementById('w_vol').value), beta: parseFloat(document.getElementById('w_beta').value),
+                    sharpe: parseFloat(document.getElementById('w_sharpe').value)
+                };
+                let total = Object.values(w).reduce((a, b) => a + b, 0);
+                if (total > 0) {
+                    document.getElementById('lbl_reg').innerText = ((w.reg / total) * 100).toFixed(1) + '%'; document.getElementById('lbl_twap').innerText = ((w.twap / total) * 100).toFixed(1) + '%';
+                    document.getElementById('lbl_sma').innerText = ((w.sma / total) * 100).toFixed(1) + '%'; document.getElementById('lbl_dd').innerText = ((w.dd / total) * 100).toFixed(1) + '%';
+                    document.getElementById('lbl_vol').innerText = ((w.vol / total) * 100).toFixed(1) + '%'; document.getElementById('lbl_beta').innerText = ((w.beta / total) * 100).toFixed(1) + '%';
+                    document.getElementById('lbl_sharpe').innerText = ((w.sharpe / total) * 100).toFixed(1) + '%';
+                    let gridHtml = ''; const cryptoOrder = ["BTC-USD", "ETH-USD", "XRP-USD", "BNB-USD", "SOL-USD", "TRX-USD", "DOGE-USD", "BCH-USD", "ADA-USD", "LINK-USD", "XLM-USD", "LTC-USD", "HBAR-USD", "AVAX-USD", "DOT-USD"];
+                    cryptoOrder.forEach(crypto => {
+                        if(rawData[crypto]) {
+                            let d = rawData[crypto];
+                            let newScore = ((d.reg * w.reg) + (d.twap * w.twap) + (d.sma * w.sma) + (d.dd * w.dd) + (d.vol * w.vol) + (d.beta * w.beta) + (d.sharpe * w.sharpe)) / total;
+                            gridHtml += generateSvgGauge(crypto, newScore);
+                        }
+                    });
+                    document.getElementById('native-gauge-grid').innerHTML = gridHtml;
+                }
+            }
+            updateScores();
+        </script>
+    <!-- cw:seo-footer -->
+<style>
+.cw-seo-rollup{max-width:1400px;margin:32px auto 0;padding:24px;background:#0b0e14;
+border:1px solid #1e293b;border-radius:12px;color:#cbd5e1;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.65;}
+.cw-seo-rollup h2{font-size:19px;color:#e2e8f0;margin:26px 0 8px;font-weight:700;}
+.cw-seo-rollup h2:first-of-type{margin-top:0;}
+.cw-seo-rollup p,.cw-seo-rollup ul{margin:0 0 12px;max-width:80ch;}
+.cw-seo-rollup a{color:#38bdf8;text-decoration:none;}
+.cw-seo-rollup a:hover{text-decoration:underline;}
+.cw-seo-scroll{overflow-x:auto;}
+.cw-seo-rollup table{border-collapse:collapse;width:100%;max-width:720px;margin:0 0 12px;}
+.cw-seo-rollup th,.cw-seo-rollup td{text-align:left;padding:8px 12px;border-bottom:1px solid #1e293b;}
+.cw-seo-rollup th{color:#94a3b8;font-size:13px;font-weight:600;}
+</style>
+<section class="cw-seo-rollup" aria-label="About the crypto risk score">
+<h2>What is a crypto risk score?</h2>
+<p>A crypto risk score compresses how stretched a coin's price is into one number between 0.0 and 1.0.
+Near 0 the coin is trading low on the measures below; near 1 it is trading high. It describes where the
+price sits today. It does not say where the price goes next.</p>
+<h2>How this score is built</h2>
+<p>Each coin's score blends seven measurements:</p>
+<ul>
+<li><strong>Log-regression deviation</strong>: how far the price sits from its logarithmic growth curve.</li>
+<li><strong>TWAP deviation</strong>: how far it sits from its lifetime Time-Weighted Average Price (TWAP).</li>
+<li><strong>Moving-average deviation</strong>: its extension relative to the 20-week moving average.</li>
+<li><strong>Drawdown from the all-time high</strong>: a price near the high scores as high risk, a deep drawdown as low.</li>
+<li><strong>Volatility</strong>: the standard deviation of returns.</li>
+<li><strong>Beta</strong>: correlation to the S&amp;P 500.</li>
+<li><strong>Sharpe ratio</strong>, inverted: risk-adjusted returns.</li>
+</ul>
+<p>The gauges above use the model's default weights. The sandbox beside them changes the weights and
+recalculates every score. The weights themselves, and what the score cannot see, are set out in
+<a href="crypto-risk-score-explained">how a crypto risk score is calculated</a>.</p>
+<h2>Risk score by coin</h2>
+<p>Default-weight scores as published on this page. The zone is the model's own label for the range a score falls in, not a recommendation.</p>
+<div class="cw-seo-scroll"><table>
+<tr><th>Coin</th><th>Symbol</th><th>Risk score (0.0 to 1.0)</th><th>Zone</th></tr>
+<tr><td><a href="reports/BTC">Bitcoin</a></td><td>BTC</td><td>0.41</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/ETH">Ethereum</a></td><td>ETH</td><td>0.42</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/XRP">XRP</a></td><td>XRP</td><td>0.39</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/BNB">BNB</a></td><td>BNB</td><td>0.48</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/SOL">Solana</a></td><td>SOL</td><td>0.48</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/TRX">Tron</a></td><td>TRX</td><td>0.44</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/DOGE">Dogecoin</a></td><td>DOGE</td><td>0.31</td><td>Accumulation</td></tr>
+<tr><td><a href="reports/BCH">Bitcoin Cash</a></td><td>BCH</td><td>0.27</td><td>Accumulation</td></tr>
+<tr><td><a href="reports/ADA">Cardano</a></td><td>ADA</td><td>0.32</td><td>Accumulation</td></tr>
+<tr><td><a href="reports/LINK">Chainlink</a></td><td>LINK</td><td>0.53</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/XLM">Stellar</a></td><td>XLM</td><td>0.36</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/LTC">Litecoin</a></td><td>LTC</td><td>0.37</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/HBAR">Hedera</a></td><td>HBAR</td><td>0.37</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/AVAX">Avalanche</a></td><td>AVAX</td><td>0.40</td><td>Hold / Neutral</td></tr>
+<tr><td><a href="reports/DOT">Polkadot</a></td><td>DOT</td><td>0.37</td><td>Hold / Neutral</td></tr>
+</table></div>
+<h2>What a risk score cannot tell you</h2>
+<p>A low score does not mean a price cannot fall further, and a high score does not mean it cannot keep
+rising. The score is built from price history alone: it knows nothing about news, regulation or a
+project's fundamentals. It is descriptive statistics, not financial advice.</p>
+</section>
+<script>
+(function () {
+  try {
+    if (window.self !== window.top) {
+      var about = document.currentScript && document.currentScript.previousElementSibling;
+      if (about) { about.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the section visible */ }
+})();
+</script>
+<style>
+.cw-seo-footer{max-width:1400px;margin:32px auto 0;padding:24px;border-top:1px solid #1e293b;
+background:#0b0e14;color:#94a3b8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+font-size:14px;line-height:1.6;border-radius:12px;}
+.cw-seo-footer h2{font-size:15px;color:#e2e8f0;margin:0 0 8px;font-weight:600;}
+.cw-seo-footer a{color:#38bdf8;text-decoration:none;}
+.cw-seo-footer a:hover{text-decoration:underline;}
+.cw-seo-footer ul{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-wrap:wrap;gap:8px 18px;}
+.cw-seo-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid #1e293b;}
+.cw-seo-cta a{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);
+padding:10px 16px;border-radius:8px;font-weight:600;}
+.cw-seo-footer .cw-app-card{width:auto;margin:18px 0 0;}
+</style>
+<nav class="cw-seo-footer" aria-label="More CryptoWeeklies research">
+<h2>More crypto risk research</h2>
+<ul><li><a href="reports/">Browse all reports</a></li></ul>
+<h2>Related assets</h2>
+<ul><li><a href="reports/BTC">Bitcoin</a></li><li><a href="reports/ETH">Ethereum</a></li><li><a href="reports/SOL">Solana</a></li><li><a href="reports/XRP">XRP</a></li><li><a href="reports/DOGE">Dogecoin</a></li><li><a href="reports/ADA">Cardano</a></li><li><a href="reports/LINK">Chainlink</a></li><li><a href="reports/AVAX">Avalanche</a></li></ul>
+<p>New here? <a href="gravity-risk-explained">What is Gravity Risk?</a> — plain-English explainer, no jargon.</p>
+<div class="cw-seo-cta">
+<a href="https://cryptoweeklies.com/reports/">See all 168 assets →</a>
+<a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">Watch the daily breakdown →</a>
+</div>
+<!-- cw:app-card -->
+<style>
+.cw-app-card{box-sizing:border-box;width:auto;max-width:1400px;margin:24px auto;padding:16px 20px;
+display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;
+background:#0b0e14;border:1px solid #1e293b;border-radius:12px;text-align:left;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.cw-app-card.cw-app-inset{width:min(1400px,calc(100% - 32px));}
+.cw-app-card *{box-sizing:border-box;}
+.cw-app-card .cw-app-copy{flex:1 1 300px;min-width:0;}
+.cw-app-card p{margin:0;padding:0;}
+.cw-app-card p.cw-app-kicker{font-size:12px;line-height:1.4;font-weight:700;letter-spacing:.6px;
+text-transform:uppercase;color:#38bdf8;}
+.cw-app-card p.cw-app-line{margin-top:4px;font-size:15px;line-height:1.5;font-weight:500;color:#e2e8f0;}
+.cw-app-card .cw-app-stores{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;}
+.cw-app-card a.cw-app-ios,.cw-app-card a.cw-app-play{display:inline-flex;align-items:center;gap:9px;
+min-height:44px;padding:8px 16px;border-radius:8px;font-size:15px;line-height:1;font-weight:700;
+text-decoration:none;white-space:nowrap;}
+.cw-app-card a.cw-app-ios{background:#000;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);}
+.cw-app-card a.cw-app-play{background:#3DDC84;color:#03050a;}
+.cw-app-card a.cw-app-ios:hover,.cw-app-card a.cw-app-play:hover{filter:brightness(1.12);text-decoration:none;}
+.cw-app-card a.cw-app-ios:hover{color:#fff;}
+.cw-app-card a.cw-app-play:hover{color:#03050a;}
+.cw-app-card a svg{width:20px;height:20px;flex:0 0 auto;}
+.cw-app-card a.cw-app-android{display:inline-block;padding:8px 0;font-size:13px;line-height:1.4;
+color:#94a3b8;text-decoration:underline;text-underline-offset:3px;}
+.cw-app-card a.cw-app-android:hover{color:#e2e8f0;}
+</style>
+<aside class="cw-app-card" aria-label="The CryptoWeeklies iPhone app">
+<div class="cw-app-copy">
+<p class="cw-app-kicker">In the free iPhone app</p>
+<p class="cw-app-line">The Charts tab draws TWAP, Gravity Risk, SMA, phase and forecast charts for 170+ assets, and Alerts can notify you when a reading you pick changes.</p>
+</div>
+<div class="cw-app-stores">
+<a class="cw-app-ios" href="https://apps.apple.com/us/app/cryptoweeklies-risk-alerts/id6815463434" target="_blank" rel="noopener" aria-label="Download CryptoWeeklies for iPhone on the App Store"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="1.5" width="12" height="21" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 4.4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="18.9" r="1.1" fill="currentColor"/></svg>App Store</a>
+<a class="cw-app-play" href="https://play.google.com/store/apps/details?id=com.cryptoweeklies.app" target="_blank" rel="noopener" aria-label="Get CryptoWeeklies for Android on Google Play"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#00A0FF" d="M1.6 1.4a2 2 0 0 0-.47 1.4v18.4c0 .58.17 1.05.5 1.4l.06.06L12 12.12v-.24z"/><path fill="#FFC107" d="M15.5 8.45 3.34 1.55C2.62 1.15 1.99 1.2 1.6 1.6L12 12z"/><path fill="#00E676" d="m15.4 15.6-3.4-3.48v-.24L15.4 8.4l.08.05 4.1 2.33c1.17.66 1.17 1.75 0 2.42l-4.1 2.33z"/><path fill="#FF3A44" d="M15.5 15.55 12 12 1.6 22.4c.39.4 1.02.45 1.74.05z"/></svg>Google Play</a>
+</div>
+</aside>
+<script>
+(function () {
+  try {
+    if (window.self !== window.top ||
+        String(navigator.userAgent || '').indexOf('CryptoWeekliesApp') !== -1) {
+      var card = document.currentScript && document.currentScript.previousElementSibling;
+      if (card) { card.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the card visible */ }
+})();
+</script>
+<!-- /cw:app-card -->
+</nav>
+<script>
+/* The homepage embeds this exact file in #chart-iframe. The block above is in
+   the served markup for crawlers; inside a frame it is chrome the reader did
+   not ask for, so drop it there and only there. */
+(function () {
+  try {
+    if (window.self !== window.top) {
+      var nav = document.currentScript && document.currentScript.previousElementSibling;
+      while (nav && nav.className !== 'cw-seo-footer') { nav = nav.previousElementSibling; }
+      if (nav) { nav.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the block visible */ }
+})();
+</script>
+<!-- /cw:seo-footer -->
+</body>
+    </html>

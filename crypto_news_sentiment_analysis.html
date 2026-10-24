@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            body { background-color: #050811; color: #92a7d3; font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 30px 15px; }
+            .card-terminal { background-color: #0a0e1c; border: 1px solid #141c30; border-radius: 12px; padding: 25px; margin-bottom: 25px; }
+            .metric-box { border-left: 3px solid #3d5afe; padding-left: 15px; }
+            .metric-val { font-size: 1.8rem; font-weight: 700; color: #ffffff; font-family: monospace; }
+            .native-chart-title { font-size: 1.1rem; color: #ffffff; font-weight: 600; margin-bottom: 20px; border-bottom: 1px solid #141c30; padding-bottom: 10px; }
+            .native-bar-row { display: flex; align-items: center; margin-bottom: 16px; width: 100%; }
+            .native-bar-label { width: 140px; font-size: 0.9rem; color: #b0c4de; padding-right: 10px; flex-shrink: 0; }
+            .native-bar-container { flex-grow: 1; background-color: #111726; height: 18px; border-radius: 4px; overflow: hidden; margin-right: 15px; position: relative; }
+            .native-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease-in-out; }
+            .native-bar-value { width: 130px; text-align: right; font-size: 0.9rem; color: #ffffff; flex-shrink: 0; }
+            .native-gauge-container { position: relative; width: 100%; padding: 10px 0; }
+            .native-gauge-track { display: flex; width: 100%; height: 24px; border-radius: 6px; overflow: hidden; margin-bottom: 12px; border: 1px solid #202b47; }
+            .native-gauge-segment { height: 100%; text-align: center; color: rgba(0,0,0,0.6); font-weight: bold; font-size: 11px; line-height: 24px; }
+            .native-gauge-marker { position: absolute; top: -4px; height: 32px; width: 4px; background-color: #ffffff; box-shadow: 0 0 8px #ffffff; border-radius: 2px; transition: left 0.4s cubic-bezier(0.1, 0.8, 0.3, 1); }
+            .native-gauge-score { font-size: 3rem; font-weight: 800; color: #ffffff; font-family: monospace; line-height: 1; margin: 15px 0 5px 0; }
+            .table-terminal th { border-top: none !important; border-bottom: 2px solid #141c30 !important; color: #516691; font-size: 0.85rem; text-transform: uppercase; }
+            .table-terminal td { border-bottom: 1px solid #141c30 !important; padding: 14px 8px; font-size: 0.9rem; vertical-align: middle; }
+            .badge-bullish { background-color: rgba(34, 197, 94, 0.15) !important; color: #4ade80 !important; border: 1px solid rgba(34, 197, 94, 0.3); padding: 5px 10px; }
+            .badge-bearish { background-color: rgba(239, 68, 68, 0.15) !important; color: #f87171 !important; border: 1px solid rgba(239, 68, 68, 0.3); padding: 5px 10px;}
+            .badge-neutral { background-color: rgba(250, 204, 21, 0.15) !important; color: #facc15 !important; border: 1px solid rgba(250, 204, 21, 0.3); padding: 5px 10px;}
+            .font-mono { font-family: monospace; }
+        </style>
+    <!-- cw:seo-head -->
+<meta name="apple-itunes-app" content="app-id=6815463434" />
+<script data-cw-analytics>(function(){if(window.top!==window.self)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"05b13bdf423f4331960046d4a74f032b"}');document.head.appendChild(s);})();</script>
+<title>Crypto News Sentiment Today: 24-Hour Pulse | CryptoWeeklies</title>
+<meta name="description" content="Today&#x27;s crypto news and commentary scored bullish, neutral or bearish, weighted by reach, with the topics drawing the most attention. Updated daily." />
+<link rel="canonical" href="https://cryptoweeklies.com/crypto_news_sentiment_analysis" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Crypto News Sentiment Today: 24-Hour Pulse | CryptoWeeklies" />
+<meta property="og:description" content="Today&#x27;s crypto news and commentary scored bullish, neutral or bearish, weighted by reach, with the topics drawing the most attention. Updated daily." />
+<meta property="og:url" content="https://cryptoweeklies.com/crypto_news_sentiment_analysis" />
+<meta property="og:image" content="https://cryptoweeklies.com/share/cryptoweeklies.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="CryptoWeeklies: free risk, valuation and forecast models for crypto, AI and quantum assets" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://cryptoweeklies.com/share/cryptoweeklies.png" />
+<meta name="twitter:image:alt" content="CryptoWeeklies: free risk, valuation and forecast models for crypto, AI and quantum assets" />
+<meta name="twitter:title" content="Crypto News Sentiment Today: 24-Hour Pulse | CryptoWeeklies" />
+<meta name="twitter:description" content="Today&#x27;s crypto news and commentary scored bullish, neutral or bearish, weighted by reach, with the topics drawing the most attention. Updated daily." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CryptoWeeklies","item":"https://cryptoweeklies.com/"},{"@type":"ListItem","position":2,"name":"Reports","item":"https://cryptoweeklies.com/reports/"},{"@type":"ListItem","position":3,"name":"News sentiment","item":"https://cryptoweeklies.com/crypto_news_sentiment_analysis"}]}</script>
+<!-- /cw:seo-head -->
+</head>
+    <body>
+        <div class="container-fluid" style="max-width: 1400px;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-1 text-white font-weight-bold">Daily Crypto Ingestion Pulse</h1>
+                    <p class="text-muted mb-0">Fluid-responsive data execution architecture tracking sentiment paired dynamically with runtime content analysis pipelines.</p>
+                </div>
+                <div class="text-right font-mono text-muted" style="font-size: 0.8rem;">
+                    TIMESTAMP: 2026-10-24 07:43 UTC
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card-terminal metric-box">
+                        <div class="text-muted small text-uppercase font-weight-bold">Active 24h Audience Reach</div>
+                        <div class="metric-val text-truncate">636,491</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-terminal metric-box" style="border-left-color: #22c55e;">
+                        <div class="text-muted small text-uppercase font-weight-bold">Ingestion Nodes Evaluated</div>
+                        <div class="metric-val">39</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-terminal metric-box" style="border-left-color: #facc15;">
+                        <div class="text-muted small text-uppercase font-weight-bold">Crypto Sentiment</div>
+                        <div class="metric-val">Neutral</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-12">
+                    <div class="card-terminal d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 380px;">
+                        <div class="w-100">
+                            <div class="native-chart-title text-left">News Pulse Index</div>
+                            <div class="native-gauge-score">43</div>
+                            <div class="native-gauge-container">
+                                <div class="native-gauge-track">
+                                    <div class="native-gauge-segment" style="width: 33%; background-color: #ef4444;">BEARISH</div>
+                                    <div class="native-gauge-segment" style="width: 33%; background-color: #facc15;">NEUTRAL</div>
+                                    <div class="native-gauge-segment" style="width: 34%; background-color: #22c55e;">BULLISH</div>
+                                </div>
+                                <div class="native-gauge-marker" style="left: calc(43% - 2px);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-12">
+                    <div class="card-terminal d-flex flex-column justify-content-between" style="min-height: 380px;">
+                        <div class="w-100">
+                            <div class="native-chart-title">Engagement Normalization (Avg Views per Post Type)</div>
+                            <div class="pt-2">
+        <div class="native-bar-row">
+            <div class="native-bar-label text-uppercase font-weight-bold">bearish</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 16.45071000231667%; background-color: #ef4444;"></div>
+            </div>
+            <div class="native-bar-value font-mono">8,663 <span class="text-muted" style="font-size:11px;">(25 items)</span></div>
+        </div>
+        <div class="native-bar-row">
+            <div class="native-bar-label text-uppercase font-weight-bold">neutral</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 100.0%; background-color: #facc15;"></div>
+            </div>
+            <div class="native-bar-value font-mono">52,661 <span class="text-muted" style="font-size:11px;">(5 items)</span></div>
+        </div>
+        <div class="native-bar-row">
+            <div class="native-bar-label text-uppercase font-weight-bold">bullish</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 33.0412388317739%; background-color: #22c55e;"></div>
+            </div>
+            <div class="native-bar-value font-mono">17,400 <span class="text-muted" style="font-size:11px;">(9 items)</span></div>
+        </div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-terminal">
+                        <div class="native-chart-title">Active Volumetric Footprint by Topic</div>
+                        <div class="pt-2">
+        <div class="native-bar-row">
+            <div class="native-bar-label text-truncate">Bitcoin</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 100.0%; background-color: #facc15;"></div>
+            </div>
+            <div class="native-bar-value font-mono">443,376</div>
+        </div>
+        <div class="native-bar-row">
+            <div class="native-bar-label text-truncate">Crypto</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 36.52227454801342%; background-color: #ef4444;"></div>
+            </div>
+            <div class="native-bar-value font-mono">161,931</div>
+        </div>
+        <div class="native-bar-row">
+            <div class="native-bar-label text-truncate">General Misc Crypto</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 3.9715726606762662%; background-color: #ef4444;"></div>
+            </div>
+            <div class="native-bar-value font-mono">17,609</div>
+        </div>
+        <div class="native-bar-row">
+            <div class="native-bar-label text-truncate">Solana</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 2.3580437371440945%; background-color: #ef4444;"></div>
+            </div>
+            <div class="native-bar-value font-mono">10,455</div>
+        </div>
+        <div class="native-bar-row">
+            <div class="native-bar-label text-truncate">Altcoin</div>
+            <div class="native-bar-container">
+                <div class="native-bar-fill" style="width: 0.703691674786186%; background-color: #ef4444;"></div>
+            </div>
+            <div class="native-bar-value font-mono">3,120</div>
+        </div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-terminal">
+                <h3 class="h5 mb-3 text-white font-weight-bold">Narrative Stream Breakdown & Core Logic</h3>
+                <div class="table-responsive">
+                    <table class="table table-terminal text-white">
+                        <thead>
+                            <tr>
+                                <th style="width: 12%;">Sentiment</th>
+                                <th style="width: 60%;">Content Item & Analytical Rationale</th>
+                                <th style="width: 16%;" class="text-right">Platform Vector</th>
+                                <th style="width: 12%;" class="text-right">Reach Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        <tr>
+            <td><span class="badge badge-neutral">NEUTRAL</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Bitcoin Bull Market Support Band</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 41h. Projected 24h views: 70,373 vs channel normal baseline of 56,029.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: IntoTheCryptoVerse</td>
+            <td class="text-right font-mono" style="color: #64ffda">120,713</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-neutral">NEUTRAL</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">AI Running Out of Cash, Not Chips: 21 Charts and Where I'm Buying 🔥</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 39h. Projected 24h views: 44,279 vs channel normal baseline of 64,277.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: InvestAnswers</td>
+            <td class="text-right font-mono" style="color: #64ffda">72,065</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Chamath Palihapitiya: An Urgent Alert To All Crypto Investors</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 30h. Projected 24h views: 34,192 vs channel normal baseline of 78,709. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Coin Telegraph</td>
+            <td class="text-right font-mono" style="color: #64ffda">43,833</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-neutral">NEUTRAL</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Bitcoin: A Precarious Position</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 6h. Projected 24h views: 142,960 vs channel normal baseline of 56,029.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: IntoTheCryptoVerse</td>
+            <td class="text-right font-mono" style="color: #64ffda">41,177</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">I Can't Stay Silent about this Crypto Crash Any Longer!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 8h. Projected 24h views: 87,254 vs channel normal baseline of 78,709.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Coin Telegraph</td>
+            <td class="text-right font-mono" style="color: #64ffda">32,382</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">BITCOIN: SELL OFF AGAIN!!! WTF IS GOING ON!!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 45h. Projected 24h views: 16,214 vs channel normal baseline of 23,616.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Ivan on Tech</td>
+            <td class="text-right font-mono" style="color: #64ffda">30,654</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Bitcoin Faces a Global Market Bloodbath</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 41h. Projected 24h views: 17,422 vs channel normal baseline of 62,913. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: CryptosRUs</td>
+            <td class="text-right font-mono" style="color: #64ffda">29,905</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Why Jordi Visser Is Buying Altcoins NOW | Wall Street Veteran Reveals His Bets</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 16h. Projected 24h views: 39,523 vs channel normal baseline of 13,570.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Cointelegraph Markets Pro</td>
+            <td class="text-right font-mono" style="color: #64ffda">26,696</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">BITCOIN: HOLDING ON FOR DEAR LIFE!!!!!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 21h. Projected 24h views: 29,493 vs channel normal baseline of 23,616.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Ivan on Tech</td>
+            <td class="text-right font-mono" style="color: #64ffda">26,245</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-neutral">NEUTRAL</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">🚀 Last Normal Year: Merger, Synergy, Compute, Space & Why It's All Accelerating!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 14h. Projected 24h views: 41,916 vs channel normal baseline of 64,277.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: InvestAnswers</td>
+            <td class="text-right font-mono" style="color: #64ffda">24,914</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">If You’ve Been Buying Altcoins For A Year, Watch This Before The Breakout</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 39h. Projected 24h views: 12,304 vs channel normal baseline of 21,912. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Crypto Capital Venture</td>
+            <td class="text-right font-mono" style="color: #64ffda">20,043</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">I'm Bearish On Bitcoin But LOADING UP On These Altcoins</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 21h. Projected 24h views: 21,175 vs channel normal baseline of 38,514. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Crypto Banter</td>
+            <td class="text-right font-mono" style="color: #64ffda">19,206</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Bitcoin's Next Move...ETF Flows Turn Negative</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 16h. Projected 24h views: 25,737 vs channel normal baseline of 62,913. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: CryptosRUs</td>
+            <td class="text-right font-mono" style="color: #64ffda">18,035</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">The Writing Is On The Wall (But Don’t Panic yet)</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 29h. Projected 24h views: 14,130 vs channel normal baseline of 35,396. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Jason Pizzino</td>
+            <td class="text-right font-mono" style="color: #64ffda">17,609</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Bitcoin Could Have a BULLISH Weekend... But There's a Catch!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 15h. Projected 24h views: 20,496 vs channel normal baseline of 38,514. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Crypto Banter</td>
+            <td class="text-right font-mono" style="color: #64ffda">13,310</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">The Internet Is Under Attack. Is Crypto Next?</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 21h. Projected 24h views: 12,561 vs channel normal baseline of 11,212.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Bankless</td>
+            <td class="text-right font-mono" style="color: #64ffda">11,098</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Stellar Lumens XLM And Meta (3.5 Billion People) ..... JUST WATCH!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 14h. Projected 24h views: 17,975 vs channel normal baseline of 9,367.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: All In Crypto</td>
+            <td class="text-right font-mono" style="color: #64ffda">10,635</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">NFA LIVE: Bitcoin Breaks $82K Support as Everything Sells Off.</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 41h. Projected 24h views: 5,978 vs channel normal baseline of 18,037. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Digital Asset News</td>
+            <td class="text-right font-mono" style="color: #64ffda">10,402</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Michael Saylor Predicts "Trillions Coming into Crypto"</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 15h. Projected 24h views: 15,451 vs channel normal baseline of 78,709. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Coin Telegraph</td>
+            <td class="text-right font-mono" style="color: #64ffda">9,927</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">The OCC Stablecoin Loophole. Visa Crypto & BTC Mining Resurgence.</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 11h. Projected 24h views: 17,889 vs channel normal baseline of 18,037.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Digital Asset News</td>
+            <td class="text-right font-mono" style="color: #64ffda">8,438</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bullish">BULLISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">How S&P Global Ratings Assesses DeFi Vault Risks</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 19h. Projected 24h views: 8,626 vs channel normal baseline of 13,570.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Cointelegraph Markets Pro</td>
+            <td class="text-right font-mono" style="color: #64ffda">7,011</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">Spending Bitcoin (XBT) At Steak 'n Shake</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as bullish. Live for 17h. Projected 24h views: 8,392 vs channel normal baseline of 17,950. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Bitcoin University</td>
+            <td class="text-right font-mono" style="color: #64ffda">6,144</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">🚨 EVERYONE IS WRONG About Bitcoin's 4-Year Cycle!</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 40h. Projected 24h views: 3,443 vs channel normal baseline of 27,444. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: DataDash</td>
+            <td class="text-right font-mono" style="color: #64ffda">5,839</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-neutral">NEUTRAL</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">BITCOIN LIVE TRADING: BIG MOVE COMING FOMC WEEK</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 15h. Projected 24h views: 6,774 vs channel normal baseline of 10,283.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: Tom Crown</td>
+            <td class="text-right font-mono" style="color: #64ffda">4,440</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-bearish">BEARISH</span></td>
+            <td>
+                <div class="text-white font-weight-bold" style="white-space: normal;">NEAR VS ICP | SHOTS FIRED</div>
+                <div class="text-muted small mt-1"><b>Diagnostic Basis:</b> AI Content Evaluation: Classified as neutral. Live for 16h. Projected 24h views: 5,663 vs channel normal baseline of 11,007. Underperforming dynamic projection velocity triggers an active bearish adjustment.</div>
+            </td>
+            <td class="text-muted text-right">YouTube: AltcoinBuzz</td>
+            <td class="text-right font-mono" style="color: #64ffda">3,919</td>
+        </tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <!-- cw:seo-footer -->
+<style>
+.cw-seo-footer{max-width:1400px;margin:32px auto 0;padding:24px;border-top:1px solid #1e293b;
+background:#0b0e14;color:#94a3b8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+font-size:14px;line-height:1.6;border-radius:12px;}
+.cw-seo-footer h2{font-size:15px;color:#e2e8f0;margin:0 0 8px;font-weight:600;}
+.cw-seo-footer a{color:#38bdf8;text-decoration:none;}
+.cw-seo-footer a:hover{text-decoration:underline;}
+.cw-seo-footer ul{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-wrap:wrap;gap:8px 18px;}
+.cw-seo-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid #1e293b;}
+.cw-seo-cta a{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);
+padding:10px 16px;border-radius:8px;font-weight:600;}
+</style>
+<nav class="cw-seo-footer" aria-label="More CryptoWeeklies research">
+<h2>More crypto news sentiment research</h2>
+<ul><li><a href="reports/">Browse all reports</a></li></ul>
+<h2>Related assets</h2>
+<ul><li><a href="reports/BTC">Bitcoin</a></li><li><a href="reports/ETH">Ethereum</a></li><li><a href="reports/SOL">Solana</a></li><li><a href="reports/XRP">XRP</a></li><li><a href="reports/DOGE">Dogecoin</a></li><li><a href="reports/ADA">Cardano</a></li><li><a href="reports/LINK">Chainlink</a></li><li><a href="reports/AVAX">Avalanche</a></li></ul>
+<p>New here? <a href="crypto-fear-and-greed-index-explained">What is the crypto Fear &amp; Greed Index?</a> — plain-English explainer, no jargon.</p>
+<div class="cw-seo-cta">
+<a href="https://cryptoweeklies.com/reports/">See all 168 assets →</a>
+<a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">Watch the daily breakdown →</a>
+</div>
+</nav>
+<script>
+/* The homepage embeds this exact file in #chart-iframe. The block above is in
+   the served markup for crawlers; inside a frame it is chrome the reader did
+   not ask for, so drop it there and only there. */
+(function () {
+  try {
+    if (window.self !== window.top) {
+      var nav = document.currentScript && document.currentScript.previousElementSibling;
+      while (nav && nav.className !== 'cw-seo-footer') { nav = nav.previousElementSibling; }
+      if (nav) { nav.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the block visible */ }
+})();
+</script>
+<!-- /cw:seo-footer -->
+</body>
+    </html>
