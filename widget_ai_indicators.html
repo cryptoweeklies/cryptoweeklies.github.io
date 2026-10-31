@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-itunes-app" content="app-id=6815463434" />
+<script data-cw-analytics>(function(){if(window.top!==window.self)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"05b13bdf423f4331960046d4a74f032b"}');document.head.appendChild(s);})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Infrastructure Indicators</title>
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0; padding: 0; background: transparent; color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.strip {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.tile {
+    background: #0f141e; border: 1px solid #1e293b; border-radius: 10px;
+    padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 6px;
+    border-top: 2px solid var(--tile-accent); min-width: 0;
+    cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover, .tile:focus-visible {
+    transform: translateY(-2px);
+    border-color: #38bdf8;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+    outline: none;
+}
+/* No published page behind it: do not offer a click that goes nowhere. */
+.tile-inert { cursor: default; }
+.tile-inert:hover { transform: none; border-color: #1e293b; box-shadow: none; }
+.tile-head { display: flex; align-items: center; gap: 6px; }
+.tile-icon { font-size: 12px; line-height: 1; }
+.tile-title {
+    font-size: 11px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.tile-body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.value-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.score { font-size: 26px; font-weight: 900; font-family: monospace; line-height: 1; color: #fff; }
+/* Phase and status names run to "Bear Market / Accumulation" and "Guarded
+   Accumulation", which no ellipsis can shorten usefully. Wrap instead of
+   truncating: the label is the reader's only classification, and short ones
+   such as "Fear" still sit on one line. */
+.pill {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 2px 6px; border-radius: 4px; border: 1px solid currentColor;
+    font-family: monospace; text-align: right; line-height: 1.3; max-width: 60%;
+}
+.meter { width: 100%; height: 7px; background: #1e293b; border-radius: 4px; position: relative; overflow: hidden; }
+.meter-fill { position: absolute; inset: 0; }
+.meter-marker { position: absolute; top: 0; width: 3px; height: 100%; background: #fff; box-shadow: 0 0 6px #fff; }
+.scale { display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-family: monospace; }
+.dual { display: flex; align-items: center; gap: 8px; }
+.dual-cell { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.dual-value { font-size: 15px; font-weight: 800; font-family: monospace; color: #cbd5e1; }
+.dual-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.dual-divider { width: 1px; align-self: stretch; background: #1e293b; }
+.spark { width: 100%; height: 40px; }
+.spark-empty { font-size: 10px; color: #64748b; font-family: monospace; }
+.targets { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.target { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+.target-icon { font-size: 11px; line-height: 1; }
+.target-label { font-size: 9px; color: #64748b; font-family: monospace; text-transform: uppercase; }
+.target-value { font-size: 12px; font-weight: 700; font-family: monospace; color: #cbd5e1; }
+.target-bear .target-value { color: #f87171; }
+.target-bull .target-value { color: #4ade80; }
+.target-spot .target-value { color: #fff; }
+.tile-foot { font-size: 9px; color: #64748b; font-family: monospace; border-top: 1px solid #1e293b; padding-top: 5px; }
+.strip-foot {
+    margin-top: 8px; font-size: 10px; color: #475569; font-family: monospace;
+    display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+@media (max-width: 520px) { .score { font-size: 22px; } }
+</style>
+<!-- cw:seo-noindex --><meta name="robots" content="noindex,follow" /><!-- /cw:seo-noindex -->
+</head>
+<body>
+<div class="strip"><article class="tile tile-fear_greed" style="--tile-accent:#ffb648;" data-url="AI_Sector_Fear_Greed" data-title="AI Infrastructure Fear &amp; Greed" data-sub="Fear &amp; Greed" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#129517;</span><span class="tile-title">Fear &amp; Greed</span></header><div class="tile-body"><div class="value-row"><span class="score">43</span><span class="pill" style="color:#ffb648;">Neutral</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #ef4444, #f97316, #eab308, #4ade80, #22c55e);"></div><div class="meter-marker" style="left:42.60%;"></div></div><div class="scale"><span>0 Extreme Fear</span><span>Extreme Greed 100</span></div></div><footer class="tile-foot">30-day average 68</footer></article><article class="tile tile-peak_valley" style="--tile-accent:#00d4aa;" data-url="AI_Sector_Cycle_Position" data-title="AI Infrastructure Cycle Position" data-sub="Cycle Position" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#9889;</span><span class="tile-title">Cycle Position</span></header><div class="tile-body"><div class="value-row"><span class="score">56.6%</span><span class="pill" style="color:#00d4aa;">Balanced</span></div><div class="meter"><div class="meter-fill" style="background:linear-gradient(90deg, #3b82f6, #22c55e, #eab308, #f59e0b, #f97316, #ef4444);"></div><div class="meter-marker" style="left:56.60%;"></div></div><div class="scale"><span>0 Valley</span><span>Peak 100</span></div></div><footer class="tile-foot">Lagging confirmation 56.4</footer></article><article class="tile tile-macro_risk" style="--tile-accent:#10b981;" data-url="AI_Table_Terminal" data-title="AI Infrastructure Table Terminal" data-sub="Macro Risk" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128208;</span><span class="tile-title">Macro Risk</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#f97316;">70</span><span class="pill" style="color:#f97316;">Heated Expansion</span></div><div class="dual"><div class="dual-cell"><span class="dual-value">44</span><span class="dual-label">20W</span></div><div class="dual-divider"></div><div class="dual-cell"><span class="dual-value">83</span><span class="dual-label">100W / 200W</span></div></div></div><footer class="tile-foot">Weekly SMA z-score sigmoid composite</footer></article><article class="tile tile-roi" style="--tile-accent:#eab308;" data-url="AI_Sector_YTD_ROI" data-title="AI Infrastructure Year-to-Date ROI" data-sub="Year-to-Date ROI" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128200;</span><span class="tile-title">Year-to-Date ROI</span></header><div class="tile-body"><div class="value-row"><span class="score" style="color:#22c55e;">+16.94%</span><span class="pill" style="color:#eab308;">AIQ YTD</span></div><div class="spark"><svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:100%;overflow:visible;" aria-hidden="true"><path d="M 0.0,27.8 0.6,27.0 1.3,26.3 1.9,26.4 2.5,26.4 3.1,25.7 3.8,26.3 4.4,26.6 5.0,26.6 5.7,28.3 6.3,26.5 6.9,26.4 7.5,26.5 8.2,25.7 8.8,25.8 9.4,27.1 10.1,26.6 10.7,30.2 11.3,31.4 11.9,29.4 12.6,28.6 13.2,28.8 13.8,30.5 14.5,30.7 15.1,30.0 15.7,30.2 16.4,29.6 17.0,30.1 17.6,28.8 18.2,28.9 18.9,29.4 19.5,30.9 20.1,29.6 20.8,30.6 21.4,29.7 22.0,29.9 22.6,31.2 23.3,31.5 23.9,30.3 24.5,30.0 25.2,31.0 25.8,32.7 26.4,31.3 27.0,32.0 27.7,33.9 28.3,35.0 28.9,33.5 29.6,32.7 30.2,32.8 30.8,32.1 31.4,30.0 32.1,30.3 32.7,30.3 33.3,27.3 34.0,26.2 34.6,25.2 35.2,24.7 35.8,25.0 36.5,23.4 37.1,23.2 37.7,22.9 38.4,24.0 39.0,23.4 39.6,21.2 40.3,20.8 40.9,19.2 41.5,17.3 42.1,14.5 42.8,13.9 43.4,14.8 44.0,14.4 44.7,16.1 45.3,16.8 45.9,15.1 46.5,14.2 47.2,13.9 47.8,11.1 48.4,9.6 49.1,8.4 49.7,5.0 50.3,6.2 50.9,7.5 51.6,11.9 52.2,13.5 52.8,15.7 53.5,12.5 54.1,9.4 54.7,11.7 55.3,12.1 56.0,8.7 56.6,13.3 57.2,13.2 57.9,13.5 58.5,12.2 59.1,10.5 59.7,15.1 60.4,12.7 61.0,14.8 61.6,12.7 62.3,13.1 62.9,15.7 63.5,14.9 64.2,18.2 64.8,18.9 65.4,18.4 66.0,17.2 66.7,18.1 67.3,19.8 67.9,20.7 68.6,22.2 69.2,18.9 69.8,18.7 70.4,13.5 71.1,14.5 71.7,15.0 72.3,13.1 73.0,13.4 73.6,12.7 74.2,12.2 74.8,12.5 75.5,14.3 76.1,13.6 76.7,13.2 77.4,14.5 78.0,13.6 78.6,11.8 79.2,12.2 79.9,12.1 80.5,13.6 81.1,12.1 81.8,12.1 82.4,12.3 83.0,13.6 83.6,12.5 84.3,13.7 84.9,13.7 85.5,12.0 86.2,12.3 86.8,9.2 87.4,10.0 88.1,10.1 88.7,11.6 89.3,11.2 89.9,11.1 90.6,9.8 91.2,9.0 91.8,8.8 92.5,10.5 93.1,9.3 93.7,10.1 94.3,10.2 95.0,12.4 95.6,14.9 96.2,13.7 96.9,12.5 97.5,14.8 98.1,14.5 98.7,12.9 99.4,12.0 100.0,17.2 L 100,40 L 0,40 Z" fill="#22c55e26" stroke="none"></path><path d="M 0.0,27.8 0.6,27.0 1.3,26.3 1.9,26.4 2.5,26.4 3.1,25.7 3.8,26.3 4.4,26.6 5.0,26.6 5.7,28.3 6.3,26.5 6.9,26.4 7.5,26.5 8.2,25.7 8.8,25.8 9.4,27.1 10.1,26.6 10.7,30.2 11.3,31.4 11.9,29.4 12.6,28.6 13.2,28.8 13.8,30.5 14.5,30.7 15.1,30.0 15.7,30.2 16.4,29.6 17.0,30.1 17.6,28.8 18.2,28.9 18.9,29.4 19.5,30.9 20.1,29.6 20.8,30.6 21.4,29.7 22.0,29.9 22.6,31.2 23.3,31.5 23.9,30.3 24.5,30.0 25.2,31.0 25.8,32.7 26.4,31.3 27.0,32.0 27.7,33.9 28.3,35.0 28.9,33.5 29.6,32.7 30.2,32.8 30.8,32.1 31.4,30.0 32.1,30.3 32.7,30.3 33.3,27.3 34.0,26.2 34.6,25.2 35.2,24.7 35.8,25.0 36.5,23.4 37.1,23.2 37.7,22.9 38.4,24.0 39.0,23.4 39.6,21.2 40.3,20.8 40.9,19.2 41.5,17.3 42.1,14.5 42.8,13.9 43.4,14.8 44.0,14.4 44.7,16.1 45.3,16.8 45.9,15.1 46.5,14.2 47.2,13.9 47.8,11.1 48.4,9.6 49.1,8.4 49.7,5.0 50.3,6.2 50.9,7.5 51.6,11.9 52.2,13.5 52.8,15.7 53.5,12.5 54.1,9.4 54.7,11.7 55.3,12.1 56.0,8.7 56.6,13.3 57.2,13.2 57.9,13.5 58.5,12.2 59.1,10.5 59.7,15.1 60.4,12.7 61.0,14.8 61.6,12.7 62.3,13.1 62.9,15.7 63.5,14.9 64.2,18.2 64.8,18.9 65.4,18.4 66.0,17.2 66.7,18.1 67.3,19.8 67.9,20.7 68.6,22.2 69.2,18.9 69.8,18.7 70.4,13.5 71.1,14.5 71.7,15.0 72.3,13.1 73.0,13.4 73.6,12.7 74.2,12.2 74.8,12.5 75.5,14.3 76.1,13.6 76.7,13.2 77.4,14.5 78.0,13.6 78.6,11.8 79.2,12.2 79.9,12.1 80.5,13.6 81.1,12.1 81.8,12.1 82.4,12.3 83.0,13.6 83.6,12.5 84.3,13.7 84.9,13.7 85.5,12.0 86.2,12.3 86.8,9.2 87.4,10.0 88.1,10.1 88.7,11.6 89.3,11.2 89.9,11.1 90.6,9.8 91.2,9.0 91.8,8.8 92.5,10.5 93.1,9.3 93.7,10.1 94.3,10.2 95.0,12.4 95.6,14.9 96.2,13.7 96.9,12.5 97.5,14.8 98.1,14.5 98.7,12.9 99.4,12.0 100.0,17.2" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path><circle cx="100.0" cy="17.2" r="2.5" fill="#fff" stroke="#22c55e" stroke-width="1.5"></circle></svg></div></div><footer class="tile-foot">Through 2026-10-30</footer></article><article class="tile tile-bull_bear" style="--tile-accent:#4ade80;" data-url="AI_Table_Terminal" data-title="AI Infrastructure Table Terminal" data-sub="Bull / Bear Targets" tabindex="0" role="link"><header class="tile-head"><span class="tile-icon" aria-hidden="true">&#128002;</span><span class="tile-title">Bull / Bear Targets</span></header><div class="tile-body"><div class="value-row"><span class="score" style="font-size:20px;">$71.06</span><span class="pill" style="color:#A3E635;">Bear Market / Accumulation</span></div><div class="targets"><div class="target target-bear"><span class="target-icon">&#128060;</span><span class="target-value">$55.23</span></div><div class="target target-spot"><span class="target-label">Spot</span><span class="target-value">$62.82</span></div><div class="target target-bull"><span class="target-icon">&#128002;</span><span class="target-value">$94.37</span></div></div></div><footer class="tile-foot">26-week base: 30/33 assets positive</footer></article></div>
+<div class="strip-foot"><span>Reference: Global X Artificial Intelligence &amp; Technology ETF</span><span>33 assets &middot; market close 2026-10-30</span></div>
+<script>
+(function () {
+    var last = 0;
+    function report() {
+        var height = Math.ceil(document.documentElement.getBoundingClientRect().height);
+        if (!height || Math.abs(height - last) < 2) return;
+        last = height;
+        try {
+            parent.postMessage({ action: 'cw_widget_height', height: height }, '*');
+        } catch (error) {
+            return;
+        }
+    }
+    window.addEventListener('load', report);
+    window.addEventListener('resize', report);
+    window.addEventListener('message', function (event) {
+        if (!event.data || event.data.action !== 'cw_widget_measure') return;
+        last = 0;
+        report();
+        // The host asks the moment it reveals the view, which can precede the
+        // relayout. Measure again once the frame has been painted at its real
+        // width; this is a no-op when the first answer was already right.
+        if (window.requestAnimationFrame) window.requestAnimationFrame(report);
+    });
+    function openTile(tile) {
+        // The destination is resolved and existence-checked at build time; a
+        // tile with no data-url has no published page behind it and stays inert.
+        var url = tile && tile.getAttribute('data-url');
+        if (!url) return;
+        try {
+            parent.postMessage({
+                action: 'open-chart',
+                url: url,
+                title: tile.getAttribute('data-title') || '',
+                sub: tile.getAttribute('data-sub') || ''
+            }, '*');
+        } catch (err) {}
+    }
+    document.addEventListener('click', function (e) {
+        openTile(e.target.closest('.tile[data-url]'));
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var tile = e.target.closest && e.target.closest('.tile[data-url]');
+        if (!tile) return;
+        e.preventDefault();
+        openTile(tile);
+    });
+    if (window.ResizeObserver) {
+        new ResizeObserver(report).observe(document.body);
+    }
+    report();
+})();
+</script>
+</body>
+</html>

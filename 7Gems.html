@@ -1,0 +1,379 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta name="apple-itunes-app" content="app-id=6815463434" />
+<script data-cw-analytics>(function(){if(window.top!==window.self)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"05b13bdf423f4331960046d4a74f032b"}');document.head.appendChild(s);})();</script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Crypto Gravity Matrix</title>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            body { background-color: #03050a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; overflow-x: hidden; }
+            .container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+            .header-title { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 15px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; }
+            .grid-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 15px; }
+
+            .card { background-color: #070a13; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+            .card:hover { transform: translateY(-2px); border-color: #475569; }
+            .card.dimmed { opacity: 0.3; filter: grayscale(50%); }
+
+            .card-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; font-weight: bold; }
+            .card-title { font-size: 1.8rem; font-weight: 800; color: #fff; margin: 5px 0 0 0; }
+
+            .chart-box { background-color: #000; border: 1px solid #1e293b; border-radius: 12px; height: 80vh; min-height: 500px; width: 100%; position: relative; overflow: hidden; cursor: grab; }
+            .chart-box:active { cursor: grabbing; }
+
+            .mini-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 5px; }
+            .mini-card { background-color: #070a13; border: 1px solid #1e293b; border-radius: 20px; padding: 8px 16px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; user-select: none; }
+            .mini-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+            .mini-card.dimmed { opacity: 0.3; filter: grayscale(50%); }
+
+            .detailed-description { background: #090d16; border: 1px solid #1e293b; padding: 30px; border-radius: 12px; color: #cbd5e1; font-size: 0.95rem; line-height: 1.7; margin-top: 25px; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+            .detailed-description h3 { color: #fff; margin: 0 0 20px 0; font-size: 1.4rem; border-bottom: 1px solid #334155; padding-bottom: 10px; font-weight: 800; }
+            .math-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+            .math-item strong { color: #60a5fa; display: block; margin-bottom: 6px; font-size: 1.1rem; }
+            .math-item em { color: #94a3b8; font-style: normal; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px; }
+            .math-item code { display: block; background: #0f172a; padding: 10px; border-radius: 6px; color: #facc15; font-family: monospace; border: 1px solid #334155; font-size: 0.95rem; margin-top: 8px; }
+
+            #tooltip { position: absolute; opacity: 0; background-color: #0f172a; border: 2px solid #334155; border-radius: 8px; padding: 15px; color: #fff; pointer-events: none; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.8); transition: opacity 0.1s ease; min-width: 260px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+            .tt-header { font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 10px; }
+            .tt-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.95rem; }
+            .tt-lbl { color: #94a3b8; }
+            .tt-val { font-weight: bold; font-family: monospace; font-size: 1rem; }
+
+            @media (max-width: 950px) {
+                .chart-box { height: 75vh; }
+                .math-grid { grid-template-columns: 1fr; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="chart-box" id="bubble-container">
+                <div id="tooltip"></div>
+            </div>
+
+            <div class="mini-legend">
+                <div class="mini-card" data-zone="Golden Breakout" onclick="toggleFilter('Golden Breakout')" style="color: #facc15; border-color: rgba(250,204,21,0.4);">
+                    <span style="font-size:16px;">●</span> Golden Breakout (10)
+                </div>
+                <div class="mini-card" data-zone="Euphoria" onclick="toggleFilter('Euphoria')" style="color: #f87171; border-color: rgba(248,113,113,0.4);">
+                    <span style="font-size:16px;">●</span> Euphoria (15)
+                </div>
+                <div class="mini-card" data-zone="Deep Accumulation" onclick="toggleFilter('Deep Accumulation')" style="color: #60a5fa; border-color: rgba(96,165,250,0.4);">
+                    <span style="font-size:16px;">●</span> Deep Accumulation (14)
+                </div>
+                <div class="mini-card" data-zone="Value Trap" onclick="toggleFilter('Value Trap')" style="color: #a855f7; border-color: rgba(168,85,247,0.4);">
+                    <span style="font-size:16px;">●</span> Value Trap (10)
+                </div>
+            </div>
+
+            <div class="detailed-description">
+                <h3>Mathematical Engine & Methodology</h3>
+                <div class="math-grid">
+                    <div class="math-item">
+                        <strong>1. Cycle-Adjusted Gravity Index (<i>G</i>)</strong>
+                        <em>Motivation:</em> Measure market structure strictly against the current liquidity cycle, filtering out historical 'Dino Coin' noise.<br>
+                        <em>Logic:</em> An asset's current deviation from its Cycle TWAP (since Jan 1, 2023) is measured purely against its <b>own historical absolute maximum and minimum</b> stretch in this cycle. 50 is equilibrium. This actively penalizes assets from prior cycles that have failed to generate new momentum, naturally excluding them from the Breakout zones.<br>
+                        <code><i>G</i> = [ (&Delta;<sub>current</sub> - &Delta;<sub>min</sub>) / (&Delta;<sub>max</sub> - &Delta;<sub>min</sub>) ] &times; 100</code>
+                    </div>
+                    <div class="math-item">
+                        <strong>2. Composite Risk Score (Y-Axis)</strong>
+                        <em>Motivation:</em> Pure gravity is noisy. A micro-cap resting at a Gravity of 80 is fundamentally far riskier than Bitcoin resting at a Gravity of 80.<br>
+                        <em>Logic:</em> We scale true systemic risk by dividing Raw Gravity by a Logarithmic Dominance Multiplier. Bitcoin maintains a baseline of 1.0x, while micro-caps receive a heavy division penalty (bounded at 0.15). To prevent dead "Dino Coins" from appearing low-risk simply because their gravity is 0, we enforce a Base Risk Floor of 10.<br>
+                        <code><i>Risk</i> = max(<i>G</i>, 10) &div; <i>Dominance</i></code>
+                    </div>
+                    <div class="math-item">
+                        <strong>3. Bubble Size (Impact Score)</strong>
+                        <em>Motivation:</em> Visually identify which assets are genuinely moving the market right now.<br>
+                        <em>Logic:</em> The physical size of the bubble is completely decoupled from the Risk calculations. It simply multiplies current Logarithmic Volume, Absolute 90D Momentum, and the Gravity Weight to highlight active liquidity flow, letting market data dictate the size natively.<br>
+                        <code><i>Size</i> = log<sub>10</sub>(Vol<sub>30D</sub>) &times; &radic;(|Ret<sub>90D</sub>| + 1) &times; <i>G<sub>weight</sub></i></code>
+                    </div>
+                    <div class="math-item" style="grid-column: 1 / -1; margin-top: 10px; padding-top: 20px; border-top: 1px solid #1e293b;">
+                        <strong style="color: #fff; font-size: 1.2rem;">Relative Matrix Assignment (Cross-Sectional Quadrants)</strong><br>
+                        <em>Logic:</em> Quadrants are strictly Relative. An asset's zone is determined by comparing its Momentum and Risk against the <b>Median of all 50 assets</b>. This eliminates "false signals" when the entire macro market is bleeding.
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div><span style="color:#facc15; font-weight: bold;">Golden Breakout:</span> Momentum > Median & Risk &lt; Median. Historically cheap against its peers but currently absorbing capital fast. A new markup phase.</div>
+                            <div><span style="color:#f87171; font-weight: bold;">Euphoria (Red):</span> Momentum > Median & Risk > Median. Leading the market, but structurally overextended and highly susceptible to mean-reversion.</div>
+                            <div><span style="color:#60a5fa; font-weight: bold;">Deep Accumulation:</span> Momentum &lt; Median & Risk &lt; Median. Cheap but bleeding. The "boring" zone representing deep consolidation and bottoms.</div>
+                            <div><span style="color:#a855f7; font-weight: bold;">Value Trap (Purple):</span> Momentum &lt; Median & Risk > Median. Dead momentum, yet mathematically hovering in a high-risk premium tier. Stagnation.</div>
+                        </div>
+                    </div>
+                    <div class="math-item" style="grid-column: 1 / -1; margin-top: 5px; padding-top: 20px; border-top: 1px solid #1e293b;">
+                        <strong style="color: #fff; font-size: 1.2rem;">The Ultimate Strategy: Macro Phase Alignment</strong><br>
+                        <em>Logic:</em> What works as the "Holy Grail" in a bull market is often a trap in a bear market. Align your strategy with the macro liquidity cycle:
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div><span style="color:#60a5fa; font-weight: bold;">🐻 Mid-Bear Market (Deep Accumulation):</span> The undisputed target. Build positions at the mathematical floor when volatility and momentum are dead for maximum asymmetric upside.</div>
+                            <div><span style="color:#facc15; font-weight: bold;">🐂 Early-Bull Market (Golden Breakout):</span> The ideal rotation. When macro liquidity returns, target assets flashing sudden momentum while still carrying low TWAP risk.</div>
+                            <div><span style="color:#f87171; font-weight: bold;">🔥 Mid/Late-Bull Market (Euphoria):</span> The scaling-out phase. As assets cross the median risk threshold, retail FOMO takes over, signaling an imminent mean-reversion.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const data = [{"Ticker":"BTC","Gravity_Score":19.4,"Dominance_Multiplier":1.0,"Composite_Risk":19.4,"TWAP_Price":67339.1373786272,"Return_90D":22.0,"Avg_Volume":26837378155,"Composite_Impact":65.37,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"ETH","Gravity_Score":18.8,"Dominance_Multiplier":0.83,"Composite_Risk":22.6,"TWAP_Price":2548.1849149867,"Return_90D":19.4,"Avg_Volume":11544239907,"Composite_Impact":59.61,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"BNB","Gravity_Score":27.1,"Dominance_Multiplier":0.73,"Composite_Risk":37.2,"TWAP_Price":559.1130468096,"Return_90D":19.8,"Avg_Volume":1486546738,"Composite_Impact":51.42,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"SOL","Gravity_Score":7.6,"Dominance_Multiplier":0.68,"Composite_Risk":14.7,"TWAP_Price":112.6558062056,"Return_90D":30.4,"Avg_Volume":2698074677,"Composite_Impact":75.27,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"XRP","Gravity_Score":4.8,"Dominance_Multiplier":0.71,"Composite_Risk":14.0,"TWAP_Price":1.2762218281,"Return_90D":15.4,"Avg_Volume":2111914189,"Composite_Impact":54.8,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"ADA","Gravity_Score":4.7,"Dominance_Multiplier":0.48,"Composite_Risk":20.8,"TWAP_Price":0.4663723398,"Return_90D":2.2,"Avg_Volume":431006109,"Composite_Impact":22.57,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"DOGE","Gravity_Score":1.7,"Dominance_Multiplier":0.54,"Composite_Risk":18.6,"TWAP_Price":0.1371292358,"Return_90D":7.0,"Avg_Volume":770350623,"Composite_Impact":37.29,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"AVAX","Gravity_Score":5.1,"Dominance_Multiplier":0.42,"Composite_Risk":23.8,"TWAP_Price":21.0451037553,"Return_90D":30.4,"Avg_Volume":374405035,"Composite_Impact":69.65,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"LINK","Gravity_Score":17.5,"Dominance_Multiplier":0.5,"Composite_Risk":35.1,"TWAP_Price":12.8291211884,"Return_90D":38.2,"Avg_Volume":304178682,"Composite_Impact":70.35,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"DOT","Gravity_Score":3.0,"Dominance_Multiplier":0.34,"Composite_Risk":29.5,"TWAP_Price":4.4498897802,"Return_90D":20.2,"Avg_Volume":141363538,"Composite_Impact":55.17,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"TRX","Gravity_Score":20.6,"Dominance_Multiplier":0.62,"Composite_Risk":33.3,"TWAP_Price":0.2020979883,"Return_90D":-4.2,"Avg_Volume":505622537,"Composite_Impact":25.8,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"POL","Gravity_Score":6.5,"Dominance_Multiplier":0.29,"Composite_Risk":34.5,"TWAP_Price":0.3640234308,"Return_90D":27.2,"Avg_Volume":106824912,"Composite_Impact":61.23,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"SHIB","Gravity_Score":2.2,"Dominance_Multiplier":0.39,"Composite_Risk":25.7,"TWAP_Price":0.0000120705,"Return_90D":-5.8,"Avg_Volume":62081196,"Composite_Impact":30.03,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"BCH","Gravity_Score":10.8,"Dominance_Multiplier":0.46,"Composite_Risk":23.4,"TWAP_Price":351.0667021125,"Return_90D":35.7,"Avg_Volume":189997294,"Composite_Impact":69.82,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"LTC","Gravity_Score":16.3,"Dominance_Multiplier":0.43,"Composite_Risk":37.8,"TWAP_Price":79.6123574393,"Return_90D":24.3,"Avg_Volume":253871551,"Composite_Impact":56.56,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"NEAR","Gravity_Score":29.9,"Dominance_Multiplier":0.46,"Composite_Risk":64.7,"TWAP_Price":3.0039925219,"Return_90D":160.4,"Avg_Volume":1027754364,"Composite_Impact":137.53,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"ATOM","Gravity_Score":4.7,"Dominance_Multiplier":0.27,"Composite_Risk":36.8,"TWAP_Price":6.0974376893,"Return_90D":19.9,"Avg_Volume":50598099,"Composite_Impact":51.16,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"UNI","Gravity_Score":29.8,"Dominance_Multiplier":0.43,"Composite_Risk":68.6,"TWAP_Price":6.826768133,"Return_90D":68.4,"Avg_Volume":514744910,"Composite_Impact":87.26,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"ICP","Gravity_Score":4.0,"Dominance_Multiplier":0.32,"Composite_Risk":30.9,"TWAP_Price":6.0989021596,"Return_90D":20.9,"Avg_Volume":64208558,"Composite_Impact":53.33,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"ETC","Gravity_Score":4.3,"Dominance_Multiplier":0.3,"Composite_Risk":33.0,"TWAP_Price":18.1233610286,"Return_90D":7.7,"Avg_Volume":41645119,"Composite_Impact":32.83,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"XLM","Gravity_Score":3.5,"Dominance_Multiplier":0.46,"Composite_Risk":21.5,"TWAP_Price":0.18869016,"Return_90D":-1.3,"Avg_Volume":144664585,"Composite_Impact":18.18,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"HBAR","Gravity_Score":1.6,"Dominance_Multiplier":0.4,"Composite_Risk":24.8,"TWAP_Price":0.1132393999,"Return_90D":3.1,"Avg_Volume":93157539,"Composite_Impact":23.82,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"FIL","Gravity_Score":3.6,"Dominance_Multiplier":0.26,"Composite_Risk":38.2,"TWAP_Price":3.5293872996,"Return_90D":22.6,"Avg_Volume":150839023,"Composite_Impact":58.12,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"INJ","Gravity_Score":7.3,"Dominance_Multiplier":0.26,"Composite_Risk":38.0,"TWAP_Price":13.5191951817,"Return_90D":46.6,"Avg_Volume":121529937,"Composite_Impact":79.56,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"RUNE","Gravity_Score":4.6,"Dominance_Multiplier":0.15,"Composite_Risk":65.3,"TWAP_Price":2.4045626054,"Return_90D":63.2,"Avg_Volume":11211818,"Composite_Impact":82.17,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"OP","Gravity_Score":1.2,"Dominance_Multiplier":0.16,"Composite_Risk":62.1,"TWAP_Price":1.325160379,"Return_90D":30.9,"Avg_Volume":95284386,"Composite_Impact":67.02,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"AR","Gravity_Score":3.4,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":10.5864382943,"Return_90D":81.7,"Avg_Volume":13278243,"Composite_Impact":95.02,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"MKR","Gravity_Score":15.7,"Dominance_Multiplier":0.29,"Composite_Risk":53.8,"TWAP_Price":1599.5027089364,"Return_90D":-1.4,"Avg_Volume":164949,"Composite_Impact":10.96,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"VET","Gravity_Score":3.1,"Dominance_Multiplier":0.23,"Composite_Risk":44.1,"TWAP_Price":0.0222158136,"Return_90D":26.9,"Avg_Volume":12121905,"Composite_Impact":54.99,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"LDO","Gravity_Score":5.0,"Dominance_Multiplier":0.17,"Composite_Risk":59.2,"TWAP_Price":1.4186015412,"Return_90D":4.2,"Avg_Volume":58074760,"Composite_Impact":25.69,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"CRO","Gravity_Score":2.3,"Dominance_Multiplier":0.38,"Composite_Risk":26.0,"TWAP_Price":0.0943055086,"Return_90D":-5.5,"Avg_Volume":6199308,"Composite_Impact":25.59,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"QNT","Gravity_Score":61.3,"Dominance_Multiplier":0.38,"Composite_Risk":162.8,"TWAP_Price":96.7713241604,"Return_90D":232.8,"Avg_Volume":126500508,"Composite_Impact":137.87,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"ALGO","Gravity_Score":4.8,"Dominance_Multiplier":0.28,"Composite_Risk":35.9,"TWAP_Price":0.1726347171,"Return_90D":12.3,"Avg_Volume":90062450,"Composite_Impact":42.11,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"GRT","Gravity_Score":2.1,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.1211573965,"Return_90D":42.0,"Avg_Volume":17617737,"Composite_Impact":70.25,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"AAVE","Gravity_Score":15.6,"Dominance_Multiplier":0.36,"Composite_Risk":42.9,"TWAP_Price":141.8158197893,"Return_90D":47.4,"Avg_Volume":285946713,"Composite_Impact":79.07,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"SNX","Gravity_Score":0.2,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":1.60058228,"Return_90D":-11.6,"Avg_Volume":8838481,"Composite_Impact":36.98,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"STX","Gravity_Score":5.8,"Dominance_Multiplier":0.24,"Composite_Risk":41.4,"TWAP_Price":0.9398691714,"Return_90D":130.1,"Avg_Volume":30491141,"Composite_Impact":123.57,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"EOS","Gravity_Score":3.0,"Dominance_Multiplier":0.29,"Composite_Risk":34.4,"TWAP_Price":0.5620590229,"Return_90D":29.4,"Avg_Volume":409317,"Composite_Impact":45.5,"Quadrant":"Golden Breakout","Color":"#eab308"},{"Ticker":"THETA","Gravity_Score":1.4,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.953256115,"Return_90D":29.7,"Avg_Volume":4802919,"Composite_Impact":54.97,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"RENDER","Gravity_Score":3.1,"Dominance_Multiplier":0.27,"Composite_Risk":36.8,"TWAP_Price":3.6979290555,"Return_90D":14.1,"Avg_Volume":38533870,"Composite_Impact":43.28,"Quadrant":"Deep Accumulation","Color":"#3b82f6"},{"Ticker":"SAND","Gravity_Score":2.2,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.3323043164,"Return_90D":9.5,"Avg_Volume":110285542,"Composite_Impact":38.44,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"MANA","Gravity_Score":3.3,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.3279259928,"Return_90D":11.8,"Avg_Volume":24811926,"Composite_Impact":38.77,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"XTZ","Gravity_Score":5.5,"Dominance_Multiplier":0.17,"Composite_Risk":59.2,"TWAP_Price":0.7401263068,"Return_90D":28.1,"Avg_Volume":7528876,"Composite_Impact":53.58,"Quadrant":"Euphoria","Color":"#ef4444"},{"Ticker":"CHZ","Gravity_Score":1.0,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.0668478086,"Return_90D":-3.3,"Avg_Volume":18994937,"Composite_Impact":22.53,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"AXS","Gravity_Score":2.9,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":4.5695659751,"Return_90D":5.6,"Avg_Volume":33761120,"Composite_Impact":28.36,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"ENJ","Gravity_Score":2.6,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.1829664686,"Return_90D":-1.6,"Avg_Volume":12290545,"Composite_Impact":16.92,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"IOTA","Gravity_Score":2.7,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":0.163679719,"Return_90D":17.8,"Avg_Volume":8343883,"Composite_Impact":44.23,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"NEO","Gravity_Score":2.4,"Dominance_Multiplier":0.15,"Composite_Risk":66.7,"TWAP_Price":8.3175077773,"Return_90D":10.4,"Avg_Volume":5195382,"Composite_Impact":33.45,"Quadrant":"Value Trap","Color":"#a855f7"},{"Ticker":"KAS","Gravity_Score":2.7,"Dominance_Multiplier":0.28,"Composite_Risk":35.4,"TWAP_Price":0.0770147251,"Return_90D":23.2,"Avg_Volume":12649631,"Composite_Impact":51.51,"Quadrant":"Golden Breakout","Color":"#eab308"}];
+            const container = document.getElementById("bubble-container");
+            let width = container.clientWidth;
+            let height = container.clientHeight;
+            const svg = d3.select("#bubble-container").append("svg").attr("width", "100%").attr("height", "100%");
+            const tooltip = d3.select("#tooltip");
+
+            const defs = svg.append("defs");
+            defs.append("clipPath")
+                .attr("id", "circleClip")
+                .attr("clipPathUnits", "objectBoundingBox")
+                .append("circle")
+                .attr("cx", 0.5)
+                .attr("cy", 0.5)
+                .attr("r", 0.5);
+
+            const maxImpact = d3.max(data, d => d.Composite_Impact);
+            const minImpact = d3.min(data, d => d.Composite_Impact);
+            const radiusScale = d3.scaleSqrt().domain([minImpact, maxImpact]);
+
+            function getRadii(w) {
+                if (w < 600) return [14, 40];
+                if (w < 900) return [18, 55];
+                return [24, 90];
+            }
+
+            function applySizing() {
+                let [minR, maxR] = getRadii(width);
+                radiusScale.range([minR, maxR]);
+
+                data.forEach(d => {
+                    d.radius = radiusScale(d.Composite_Impact);
+                    if (!d.x) {
+                        let rand = Math.random();
+                        if (rand < 0.30) { d.x = d.radius + (Math.random() * width * 0.2); d.y = d.radius + (Math.random() * height * 0.2); }
+                        else if (rand < 0.50) { d.x = d.radius + (Math.random() * width * 0.15); d.y = (height * 0.4) + (Math.random() * height * 0.2); }
+                        else if (rand < 0.70) { d.x = (width * 0.2) + (Math.random() * width * 0.6); d.y = height - d.radius - (Math.random() * height * 0.15); }
+                        else { d.x = d.radius + (Math.random() * (width - 2 * d.radius)); d.y = d.radius + (Math.random() * (height - 2 * d.radius)); }
+                    }
+                });
+            }
+            applySizing();
+
+            let isCentered = false;
+
+            const simulation = d3.forceSimulation(data)
+                .velocityDecay(0.18)
+                .alphaTarget(0.025)
+                .force("charge", d3.forceManyBody().strength(d => (width < 600 ? -2.0 : -4.0) * d.radius))
+                .force("collision", d3.forceCollide().radius(d => d.radius + 3).strength(0.8).iterations(4))
+                .force("x", d3.forceX(width * 0.5).strength(width < 600 ? 0.005 : 0.003))
+                .force("y", d3.forceY(height * 0.5).strength(width < 600 ? 0.005 : 0.003));
+
+            const node = svg.append("g").selectAll("g").data(data).join("g").attr("class", "bubble-node")
+                .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+
+            node.append("circle")
+                .attr("fill", "rgba(15, 23, 42, 0.15)")
+                .attr("stroke", d => d.Color).attr("stroke-width", 3)
+                .style("filter", d => `drop-shadow(0px 0px 8px ${d.Color})`);
+
+            node.append("image")
+                .attr("class", "bubble-logo")
+                .attr("href", d => `https://assets.coincap.io/assets/icons/${d.Ticker.toLowerCase()}@2x.png`)
+                .attr("opacity", 0.90)
+                .attr("clip-path", "url(#circleClip)")
+                .style("pointer-events", "none")
+                .on("error", function(event, d) {
+                    let img = d3.select(this);
+                    if (!img.classed("fallback")) {
+                        img.classed("fallback", true);
+                        img.attr("href", `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/color/${d.Ticker.toLowerCase()}.svg`);
+                    } else {
+                        img.style("display", "none");
+                    }
+                });
+
+            node.append("text").attr("class", "ticker-txt").text(d => d.Ticker)
+                .attr("text-anchor", "middle").style("fill", "white")
+                .style("font-weight", "900").style("font-family", "Inter, sans-serif").style("pointer-events", "none")
+                .style("text-shadow", "0px 2px 6px rgba(0,0,0,0.9), 0px -1px 4px rgba(0,0,0,0.8)");
+
+            node.append("text").attr("class", "val-txt").text(d => (d.Return_90D > 0 ? "+" : "") + d.Return_90D.toFixed(1) + "%")
+                .attr("text-anchor", "middle").style("fill", d => d.Color)
+                .style("font-weight", "800").style("font-family", "monospace").style("pointer-events", "none")
+                .style("text-shadow", "0px 2px 4px rgba(0,0,0,1)");
+
+            function updateDOMSizes() {
+                node.select("circle").attr("r", d => d.radius);
+
+                let logoSize = d => d.radius * 0.8;
+                node.select(".bubble-logo")
+                    .attr("x", d => -logoSize(d) / 2)
+                    .attr("y", d => -d.radius * 0.75)
+                    .attr("width", d => logoSize(d))
+                    .attr("height", d => logoSize(d));
+
+                node.select(".ticker-txt")
+                    .style("font-size", d => Math.min(18, d.radius / 2.2) + "px")
+                    .attr("y", d => d.radius * 0.25);
+
+                node.select(".val-txt")
+                    .style("font-size", d => Math.min(14, d.radius / 2.8) + "px")
+                    .attr("y", d => d.radius * 0.65);
+
+                simulation.force("collision", d3.forceCollide().radius(d => d.radius + 3).strength(0.8).iterations(4));
+            }
+            updateDOMSizes();
+
+            function formatPrice(price) { return price < 1 ? price.toFixed(4) : price.toFixed(2); }
+
+            let activeTooltip = null;
+
+            function showTooltip(event, d, nodeElement) {
+                d3.selectAll(".bubble-node circle").attr("stroke-width", 3);
+                d3.select(nodeElement).select("circle").attr("stroke-width", 6);
+
+                tooltip.html(`
+                    <div class="tt-header" style="color: ${d.Color};">${d.Ticker} - ${d.Quadrant}</div>
+                    <div class="tt-row"><span class="tt-lbl">Composite Risk:</span> <span class="tt-val" style="color: ${d.Color};">${d.Composite_Risk.toLocaleString(undefined, {maximumFractionDigits: 1})}</span></div>
+                    <div class="tt-row"><span class="tt-lbl">Raw Gravity:</span> <span class="tt-val">${d.Gravity_Score.toFixed(1)}</span></div>
+                    <div class="tt-row"><span class="tt-lbl">Dominance Multiplier:</span> <span class="tt-val">${d.Dominance_Multiplier.toFixed(2)}x</span></div>
+                    <div class="tt-row"><span class="tt-lbl">Cycle TWAP ('23):</span> <span class="tt-val">$${formatPrice(d.TWAP_Price)}</span></div>
+                    <div class="tt-row"><span class="tt-lbl">90D Momentum:</span> <span class="tt-val">${(d.Return_90D > 0 ? '+' : '') + d.Return_90D.toFixed(1)}%</span></div>
+                    <div class="tt-row"><span class="tt-lbl">Impact Score:</span> <span class="tt-val">${d.Composite_Impact.toFixed(1)}</span></div>
+                `);
+                tooltip.style("opacity", 1).style("border-color", d.Color);
+
+                let ttNode = tooltip.node();
+                let ttWidth = ttNode.offsetWidth || 270; let ttHeight = ttNode.offsetHeight || 180;
+
+                let ex = event.pageX; let ey = event.pageY;
+                if (event.touches && event.touches.length > 0) { ex = event.touches[0].pageX; ey = event.touches[0].pageY; }
+                if (!ex || !ey) { ex = d.x + container.getBoundingClientRect().left; ey = d.y + container.getBoundingClientRect().top; }
+
+                let x = ex + 20;
+                let y = ey - 20;
+
+                let scrollX = window.scrollX || window.pageXOffset || 0;
+                let scrollY = window.scrollY || window.pageYOffset || 0;
+
+                if (x + ttWidth > window.innerWidth + scrollX) {
+                    x = ex - ttWidth - 20;
+                }
+                if (x < scrollX) { x = scrollX + 10; }
+
+                if (y + ttHeight > window.innerHeight + scrollY) {
+                    y = ey - ttHeight - 20;
+                }
+                if (y < scrollY) { y = scrollY + 10; }
+
+                tooltip.style("left", x + "px").style("top", y + "px");
+            }
+
+            node.on("mouseover", function(event, d) {
+                if (d3.select(this).style("opacity") < 1) return;
+                showTooltip(event, d, this);
+            })
+            .on("mousemove", function(event, d) {
+                if (activeTooltip !== d.Ticker) showTooltip(event, d, this);
+            })
+            .on("mouseout", function(event, d) {
+                if (activeTooltip === d.Ticker) return;
+                d3.select(this).select("circle").attr("stroke-width", 3); tooltip.style("opacity", 0);
+            });
+
+            node.on("click", function(event, d) {
+                event.stopPropagation();
+                activeTooltip = d.Ticker;
+                showTooltip(event, d, this);
+
+                window.parent.postMessage({
+                    action: 'open_asset_menu',
+                    ticker: d.Ticker,
+                    stats: {
+                        color: d.Color,
+                        quadrant: d.Quadrant,
+                        risk_score: d.Composite_Risk.toLocaleString(undefined, {maximumFractionDigits: 1}),
+                        gravity: d.Gravity_Score.toFixed(1),
+                        dominance: d.Dominance_Multiplier.toFixed(2),
+                        twap: formatPrice(d.TWAP_Price),
+                        momentum: (d.Return_90D > 0 ? '+' : '') + d.Return_90D.toFixed(1) + '%',
+                        impact: d.Composite_Impact.toFixed(1)
+                    }
+                }, '*');
+            });
+
+            svg.on("click", function() {
+                activeTooltip = null;
+                d3.selectAll(".bubble-node circle").attr("stroke-width", 3);
+                tooltip.style("opacity", 0);
+            });
+
+            let activeFilter = null;
+            window.toggleFilter = function(zone) {
+                if (activeFilter === zone) {
+                    activeFilter = null;
+                    d3.selectAll('.mini-card').classed('dimmed', false);
+                    d3.selectAll('.bubble-node').transition().duration(400).style('opacity', 1);
+                } else {
+                    activeFilter = zone;
+                    d3.selectAll('.mini-card').classed('dimmed', function() { return this.getAttribute('data-zone') !== zone; });
+                    d3.selectAll('.bubble-node').transition().duration(400).style('opacity', function(d) { return d.Quadrant === zone ? 1 : 0.05; });
+                }
+            }
+
+            function triggerPulse() {
+                data.forEach(d => {
+                    d.vx += (Math.random() - 0.5) * 0.5;
+                    d.vy += (Math.random() - 0.5) * 0.5;
+                });
+                simulation.alpha(0.05).restart();
+                setTimeout(triggerPulse, 2500 + Math.random() * 1500);
+            }
+            setTimeout(triggerPulse, 2500 + Math.random() * 1500);
+
+            setTimeout(() => {
+                isCentered = true;
+                let forceXStrength = width < 600 ? 0.028 : 0.015;
+                let forceYStrength = width < 600 ? 0.010 : 0.008;
+                simulation.force("x", d3.forceX(width * 0.5).strength(forceXStrength));
+                simulation.force("y", d3.forceY(height * 0.5).strength(forceYStrength));
+                simulation.alpha(0.2).restart();
+            }, 500);
+
+            simulation.on("tick", () => {
+                let time = Date.now() / 1000;
+                data.forEach((d, i) => {
+                    d.vx += (Math.sin(time + i) * 0.05) + (Math.random() - 0.5) * 0.03;
+                    d.vy += (Math.cos(time + i) * 0.05) + (Math.random() - 0.5) * 0.03;
+
+                    let r = d.radius + 2;
+
+                    if (d.x < r) { d.x = r; d.vx *= -0.8; }
+                    else if (d.x > width - r) { d.x = width - r; d.vx *= -0.8; }
+
+                    if (d.y < r) { d.y = r; d.vy *= -0.8; }
+                    else if (d.y > height - r) { d.y = height - r; d.vy *= -0.8; }
+                });
+                node.attr("transform", d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event, d) { if (!event.active) simulation.alphaTarget(0.05).restart(); d.fx = d.x; d.fy = d.y; }
+            function dragged(event, d) { d.fx = Math.max(d.radius, Math.min(width - d.radius, event.x)); d.fy = Math.max(d.radius, Math.min(height - d.radius, event.y)); }
+            function dragended(event, d) { if (!event.active) simulation.alphaTarget(0.025); d.fx = null; d.fy = null; }
+
+            window.addEventListener('resize', () => {
+                width = container ? container.clientWidth : window.innerWidth;
+                height = container ? container.clientHeight : window.innerHeight;
+                svg.attr("width", width).attr("height", height);
+                applySizing(); updateDOMSizes();
+
+                let forceXStrength = isCentered ? (width < 600 ? 0.028 : 0.015) : (width < 600 ? 0.005 : 0.003);
+                let forceYStrength = isCentered ? (width < 600 ? 0.010 : 0.008) : (width < 600 ? 0.001 : 0.003);
+                simulation.force("x", d3.forceX(width * 0.5).strength(forceXStrength));
+                simulation.force("y", d3.forceY(height * 0.5).strength(forceYStrength));
+                simulation.alpha(0.1).restart();
+            });
+        </script>
+    </body>
+    </html>
+    
