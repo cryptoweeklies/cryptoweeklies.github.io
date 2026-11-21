@@ -1,0 +1,455 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+            <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+            <style>
+                body { background-color: #050811; color: #d1d5db; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 30px 15px; }
+                .container { max-width: 1400px; margin: 0 auto; }
+                .forecast-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+                .metric-card { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+                .metric-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin: 0; font-weight: bold; }
+                .metric-value { font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 5px 0 0 0; font-family: monospace; }
+                .chart-card { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin-bottom: 30px; width: 100%; box-sizing: border-box; }
+                .table-container { background-color: #0b0e14; border: 1px solid #1e293b; border-radius: 8px; padding: 20px; margin-bottom: 30px; overflow-x: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+                .text-card { background-color: #0f141e; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 25px; line-height: 1.7; }
+                h2 { color: #ffffff; margin-top: 0; border-bottom: 1px solid #1e293b; padding-bottom: 10px; font-size: 1.2rem; }
+                .dataTables_wrapper { color: #94a3b8 !important; font-size: 0.95rem; }
+                .dataTables_wrapper label { color: #94a3b8 !important; font-weight: 500; }
+                .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select { background-color: #0b0e14 !important; color: #ffffff !important; border: 1px solid #1e293b; border-radius: 6px; padding: 8px 12px; margin-left: 8px; outline: none; }
+                .dataTables_wrapper .dataTables_filter input:focus { border-color: #3b82f6; }
+                .dataTables_wrapper .dataTables_paginate .paginate_button { color: #cbd5e1 !important; border: 1px solid transparent; }
+                .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #3b82f6 !important; color: white !important; border: none; border-radius: 4px; }
+                .dataTables_info { color: #94a3b8 !important; }
+                .data-table { width: 100%; border-collapse: collapse; text-align: right; font-family: monospace; font-size: 0.9rem; }
+                .data-table th { background-color: #0f141e; color: #f8fafc; padding: 14px 12px; border-bottom: 2px solid #3b82f6; text-align: center; text-transform: uppercase; font-family: -apple-system, sans-serif; white-space: nowrap; font-size: 0.8rem; }
+                .data-table td { padding: 12px; border-bottom: 1px solid #1e293b; color: #d1d5db; text-align: center; vertical-align: middle; }
+                .data-table tr { background-color: #0b0e14 !important; }
+                .data-table tr:hover { background-color: #1e293b !important; cursor: crosshair; }
+                .data-table td:first-child { text-align: left; font-weight: bold; color: #ffffff; background-color: #0f141e !important; }
+                .data-table th:first-child { text-align: left; background-color: #0f141e !important; color: #f8fafc; }
+                #forecastTable thead th:nth-child(2), #forecastTable tbody td:nth-child(2) { background-color: blue !important; color: white !important; font-weight: bold; border-color: #1e293b !important; }
+                #forecastTable thead th:nth-child(3), #forecastTable tbody td:nth-child(3) { background-color: green !important; color: white !important; font-weight: bold; border-color: #1e293b !important; }
+                #forecastTable thead th:nth-child(4), #forecastTable tbody td:nth-child(4) { background-color: lime !important; color: black !important; font-weight: bold; border-color: #1e293b !important; }
+                #forecastTable thead th:nth-child(5), #forecastTable tbody td:nth-child(5) { background-color: pink !important; color: black !important; font-weight: bold; border-color: #1e293b !important; }
+                #forecastTable thead th:nth-child(6), #forecastTable tbody td:nth-child(6) { background-color: yellow !important; color: black !important; font-weight: bold; border-color: #1e293b !important; }
+                #forecastTable thead th:nth-child(7), #forecastTable tbody td:nth-child(7) { background-color: orange !important; color: black !important; font-weight: bold; border-color: #1e293b !important; }
+                #forecastTable thead th:nth-child(8), #forecastTable tbody td:nth-child(8) { background-color: red !important; color: white !important; font-weight: bold; border-color: #1e293b !important; }
+                @media (max-width: 768px) {
+                    .forecast-grid { grid-template-columns: 1fr; }
+                    .metric-value { font-size: 1.8rem; }
+                }
+            </style>
+            <script>
+                $(document).ready(function() {
+                    $('#forecastTable').DataTable({ "pageLength": 10, "order": [] });
+                });
+            </script>
+        <!-- cw:seo-head -->
+<meta name="apple-itunes-app" content="app-id=6815463434" />
+<script data-cw-analytics>(function(){if(window.top!==window.self)return;var s=document.createElement("script");s.defer=true;s.src="https://static.cloudflareinsights.com/beacon.min.js";s.setAttribute("data-cf-beacon",'{"token":"05b13bdf423f4331960046d4a74f032b"}');document.head.appendChild(s);})();</script>
+<script data-cw-android-bar>(function(){try{if(window.top!==window.self)return;var u=String(navigator.userAgent||"");if(u.indexOf("Android")<0||u.indexOf("CryptoWeekliesApp")>=0)return;try{if(localStorage.getItem("cwAppBannerDismissed")==="1")return;}catch(e){}var show=function(){var d=document,b=d.body;if(!b||d.getElementById("cw-android-bar")||d.getElementById("app-smart-banner"))return;var bar=d.createElement("div");bar.id="cw-android-bar";bar.setAttribute("role","complementary");bar.setAttribute("aria-label","Get the CryptoWeeklies Android app");bar.style.cssText="position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;gap:11px;margin:0;padding:9px 12px calc(9px + env(safe-area-inset-bottom,0px));background:rgba(7,10,19,.97);border-top:1px solid rgba(61,220,132,.32);box-shadow:0 -8px 24px rgba(0,0,0,.45);box-sizing:border-box;text-align:left;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif";var N="http://www.w3.org/2000/svg",g=d.createElementNS(N,"svg");g.setAttribute("viewBox","0 0 24 24");g.setAttribute("aria-hidden","true");g.setAttribute("width","30");g.setAttribute("height","30");g.style.cssText="flex:0 0 auto";[["#00A0FF","M1.6 1.4a2 2 0 0 0-.47 1.4v18.4c0 .58.17 1.05.5 1.4l.06.06L12 12.12v-.24z"],["#FFC107","M15.5 8.45 3.34 1.55C2.62 1.15 1.99 1.2 1.6 1.6L12 12z"],["#00E676","m15.4 15.6-3.4-3.48v-.24L15.4 8.4l.08.05 4.1 2.33c1.17.66 1.17 1.75 0 2.42l-4.1 2.33z"],["#FF3A44","M15.5 15.55 12 12 1.6 22.4c.39.4 1.02.45 1.74.05z"]].forEach(function(p){var e=d.createElementNS(N,"path");e.setAttribute("fill",p[0]);e.setAttribute("d",p[1]);g.appendChild(e);});var c=d.createElement("div");c.style.cssText="display:flex;flex-direction:column;min-width:0;flex:1 1 auto";var t=d.createElement("span");t.textContent="CryptoWeeklies app";t.style.cssText="font-size:13px;line-height:1.3;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis";var s=d.createElement("span");s.textContent="Free \u00b7 No ads \u00b7 Alerts on 170+ assets";s.style.cssText="font-size:11px;line-height:1.3;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis";c.appendChild(t);c.appendChild(s);var a=d.createElement("a");a.setAttribute("href","https://play.google.com/store/apps/details?id=com.cryptoweeklies.app");a.setAttribute("target","_blank");a.setAttribute("rel","noopener");a.setAttribute("aria-label","Get CryptoWeeklies for Android on Google Play");a.textContent="Google Play";a.style.cssText="flex:0 0 auto;background:#3DDC84;border-radius:99px;padding:7px 18px;color:#03050a;font-size:13px;line-height:1.3;font-weight:800;text-decoration:none";var x=d.createElement("button");x.setAttribute("type","button");x.setAttribute("aria-label","Dismiss the app banner");x.textContent="\u2715";x.style.cssText="flex:0 0 auto;background:none;border:0;margin:0;padding:6px;color:#94a3b8;font-size:16px;line-height:1;cursor:pointer";var pad=b.style.paddingBottom;x.addEventListener("click",function(){if(bar.parentNode)bar.parentNode.removeChild(bar);b.style.paddingBottom=pad;try{localStorage.setItem("cwAppBannerDismissed","1");}catch(e){}});bar.appendChild(g);bar.appendChild(c);bar.appendChild(a);bar.appendChild(x);b.appendChild(bar);b.style.paddingBottom=((parseFloat(getComputedStyle(b).paddingBottom)||0)+bar.offsetHeight)+"px";};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",show);else show();}catch(e){}})();</script>
+<title>Mantra (OM) Price Forecast and Prediction, Updated Daily</title>
+<meta name="description" content="Mantra model base target $0.0078, with a 68% range of $0.0028 to $0.025. Free, updated daily. No opinions, no hopium." />
+<link rel="canonical" href="https://cryptoweeklies.com/OM_Price_Forecast_And_Analysis" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Mantra (OM) Price Forecast and Prediction, Updated Daily" />
+<meta property="og:description" content="Mantra model base target $0.0078, with a 68% range of $0.0028 to $0.025. Free, updated daily. No opinions, no hopium." />
+<meta property="og:url" content="https://cryptoweeklies.com/OM_Price_Forecast_And_Analysis" />
+<meta property="og:image" content="https://cryptoweeklies.com/share/OM.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Mantra (OM) Gravity Risk score and Risk Level today, from CryptoWeeklies" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://cryptoweeklies.com/share/OM.png" />
+<meta name="twitter:image:alt" content="Mantra (OM) Gravity Risk score and Risk Level today, from CryptoWeeklies" />
+<meta name="twitter:title" content="Mantra (OM) Price Forecast and Prediction, Updated Daily" />
+<meta name="twitter:description" content="Mantra model base target $0.0078, with a 68% range of $0.0028 to $0.025. Free, updated daily. No opinions, no hopium." />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CryptoWeeklies","item":"https://cryptoweeklies.com/"},{"@type":"ListItem","position":2,"name":"Reports","item":"https://cryptoweeklies.com/reports/"},{"@type":"ListItem","position":3,"name":"Mantra","item":"https://cryptoweeklies.com/reports/OM"},{"@type":"ListItem","position":4,"name":"Price Forecast","item":"https://cryptoweeklies.com/OM_Price_Forecast_And_Analysis"}]}</script>
+<!-- /cw:seo-head -->
+</head>
+        <body>
+            <div class="container">
+                <h1 style="color: #ffffff; margin-top: 0; margin-bottom: 5px; font-size: 1.5rem; font-family: sans-serif;">OM/USD Asset Valuation</h1>
+                <p style="color: #64748b; font-size: 0.85rem; margin-top: 0; margin-bottom: 20px; font-weight: bold;">LAST UPDATE: 2026-11-21 00:59 UTC | 23-WEEK HORIZON</p>
+
+                <div class="forecast-grid">
+                    <div class="metric-card" style="border-left: 5px solid lime;">
+                        <p class="metric-title">68% Bear Target</p>
+                        <p class="metric-value">$0.002786</p>
+                    </div>
+                    <div class="metric-card" style="border-left: 5px solid pink;">
+                        <p class="metric-title">23-Week Base Target</p>
+                        <p class="metric-value">$0.007801</p>
+                    </div>
+                    <div class="metric-card" style="border-left: 5px solid yellow;">
+                        <p class="metric-title">68% Bull Target</p>
+                        <p class="metric-value">$0.0254</p>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div style="height:650px; width:100%;">                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.7.0.min.js" integrity="sha256-jvTGqxNp8AGWEcvNLVuKr+8j5dGe9Yw51LQkmDH+IYA=" crossorigin="anonymous"></script>                <div id="forecast-chart" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("forecast-chart")) {                    Plotly.newPlot(                        "forecast-chart",                        [{"hoverinfo":"skip","legendgroup":"poly-2sigma","line":{"width":0},"mode":"lines","showlegend":false,"x":["2020-08-23T00:00:00.000000000","2020-08-30T00:00:00.000000000","2020-09-06T00:00:00.000000000","2020-09-13T00:00:00.000000000","2020-09-20T00:00:00.000000000","2020-09-27T00:00:00.000000000","2020-10-04T00:00:00.000000000","2020-10-11T00:00:00.000000000","2020-10-18T00:00:00.000000000","2020-10-25T00:00:00.000000000","2020-11-01T00:00:00.000000000","2020-11-08T00:00:00.000000000","2020-11-15T00:00:00.000000000","2020-11-22T00:00:00.000000000","2020-11-29T00:00:00.000000000","2020-12-06T00:00:00.000000000","2020-12-13T00:00:00.000000000","2020-12-20T00:00:00.000000000","2020-12-27T00:00:00.000000000","2021-01-03T00:00:00.000000000","2021-01-10T00:00:00.000000000","2021-01-17T00:00:00.000000000","2021-01-24T00:00:00.000000000","2021-01-31T00:00:00.000000000","2021-02-07T00:00:00.000000000","2021-02-14T00:00:00.000000000","2021-02-21T00:00:00.000000000","2021-02-28T00:00:00.000000000","2021-03-07T00:00:00.000000000","2021-03-14T00:00:00.000000000","2021-03-21T00:00:00.000000000","2021-03-28T00:00:00.000000000","2021-04-04T00:00:00.000000000","2021-04-11T00:00:00.000000000","2021-04-18T00:00:00.000000000","2021-04-25T00:00:00.000000000","2021-05-02T00:00:00.000000000","2021-05-09T00:00:00.000000000","2021-05-16T00:00:00.000000000","2021-05-23T00:00:00.000000000","2021-05-30T00:00:00.000000000","2021-06-06T00:00:00.000000000","2021-06-13T00:00:00.000000000","2021-06-20T00:00:00.000000000","2021-06-27T00:00:00.000000000","2021-07-04T00:00:00.000000000","2021-07-11T00:00:00.000000000","2021-07-18T00:00:00.000000000","2021-07-25T00:00:00.000000000","2021-08-01T00:00:00.000000000","2021-08-08T00:00:00.000000000","2021-08-15T00:00:00.000000000","2021-08-22T00:00:00.000000000","2021-08-29T00:00:00.000000000","2021-09-05T00:00:00.000000000","2021-09-12T00:00:00.000000000","2021-09-19T00:00:00.000000000","2021-09-26T00:00:00.000000000","2021-10-03T00:00:00.000000000","2021-10-10T00:00:00.000000000","2021-10-17T00:00:00.000000000","2021-10-24T00:00:00.000000000","2021-10-31T00:00:00.000000000","2021-11-07T00:00:00.000000000","2021-11-14T00:00:00.000000000","2021-11-21T00:00:00.000000000","2021-11-28T00:00:00.000000000","2021-12-05T00:00:00.000000000","2021-12-12T00:00:00.000000000","2021-12-19T00:00:00.000000000","2021-12-26T00:00:00.000000000","2022-01-02T00:00:00.000000000","2022-01-09T00:00:00.000000000","2022-01-16T00:00:00.000000000","2022-01-23T00:00:00.000000000","2022-01-30T00:00:00.000000000","2022-02-06T00:00:00.000000000","2022-02-13T00:00:00.000000000","2022-02-20T00:00:00.000000000","2022-02-27T00:00:00.000000000","2022-03-06T00:00:00.000000000","2022-03-13T00:00:00.000000000","2022-03-20T00:00:00.000000000","2022-03-27T00:00:00.000000000","2022-04-03T00:00:00.000000000","2022-04-10T00:00:00.000000000","2022-04-17T00:00:00.000000000","2022-04-24T00:00:00.000000000","2022-05-01T00:00:00.000000000","2022-05-08T00:00:00.000000000","2022-05-15T00:00:00.000000000","2022-05-22T00:00:00.000000000","2022-05-29T00:00:00.000000000","2022-06-05T00:00:00.000000000","2022-06-12T00:00:00.000000000","2022-06-19T00:00:00.000000000","2022-06-26T00:00:00.000000000","2022-07-03T00:00:00.000000000","2022-07-10T00:00:00.000000000","2022-07-17T00:00:00.000000000","2022-07-24T00:00:00.000000000","2022-07-31T00:00:00.000000000","2022-08-07T00:00:00.000000000","2022-08-14T00:00:00.000000000","2022-08-21T00:00:00.000000000","2022-08-28T00:00:00.000000000","2022-09-04T00:00:00.000000000","2022-09-11T00:00:00.000000000","2022-09-18T00:00:00.000000000","2022-09-25T00:00:00.000000000","2022-10-02T00:00:00.000000000","2022-10-09T00:00:00.000000000","2022-10-16T00:00:00.000000000","2022-10-23T00:00:00.000000000","2022-10-30T00:00:00.000000000","2022-11-06T00:00:00.000000000","2022-11-13T00:00:00.000000000","2022-11-20T00:00:00.000000000","2022-11-27T00:00:00.000000000","2022-12-04T00:00:00.000000000","2022-12-11T00:00:00.000000000","2022-12-18T00:00:00.000000000","2022-12-25T00:00:00.000000000","2023-01-01T00:00:00.000000000","2023-01-08T00:00:00.000000000","2023-01-15T00:00:00.000000000","2023-01-22T00:00:00.000000000","2023-01-29T00:00:00.000000000","2023-02-05T00:00:00.000000000","2023-02-12T00:00:00.000000000","2023-02-19T00:00:00.000000000","2023-02-26T00:00:00.000000000","2023-03-05T00:00:00.000000000","2023-03-12T00:00:00.000000000","2023-03-19T00:00:00.000000000","2023-03-26T00:00:00.000000000","2023-04-02T00:00:00.000000000","2023-04-09T00:00:00.000000000","2023-04-16T00:00:00.000000000","2023-04-23T00:00:00.000000000","2023-04-30T00:00:00.000000000","2023-05-07T00:00:00.000000000","2023-05-14T00:00:00.000000000","2023-05-21T00:00:00.000000000","2023-05-28T00:00:00.000000000","2023-06-04T00:00:00.000000000","2023-06-11T00:00:00.000000000","2023-06-18T00:00:00.000000000","2023-06-25T00:00:00.000000000","2023-07-02T00:00:00.000000000","2023-07-09T00:00:00.000000000","2023-07-16T00:00:00.000000000","2023-07-23T00:00:00.000000000","2023-07-30T00:00:00.000000000","2023-08-06T00:00:00.000000000","2023-08-13T00:00:00.000000000","2023-08-20T00:00:00.000000000","2023-08-27T00:00:00.000000000","2023-09-03T00:00:00.000000000","2023-09-10T00:00:00.000000000","2023-09-17T00:00:00.000000000","2023-09-24T00:00:00.000000000","2023-10-01T00:00:00.000000000","2023-10-08T00:00:00.000000000","2023-10-15T00:00:00.000000000","2023-10-22T00:00:00.000000000","2023-10-29T00:00:00.000000000","2023-11-05T00:00:00.000000000","2023-11-12T00:00:00.000000000","2023-11-19T00:00:00.000000000","2023-11-26T00:00:00.000000000","2023-12-03T00:00:00.000000000","2023-12-10T00:00:00.000000000","2023-12-17T00:00:00.000000000","2023-12-24T00:00:00.000000000","2023-12-31T00:00:00.000000000","2024-01-07T00:00:00.000000000","2024-01-14T00:00:00.000000000","2024-01-21T00:00:00.000000000","2024-01-28T00:00:00.000000000","2024-02-04T00:00:00.000000000","2024-02-11T00:00:00.000000000","2024-02-18T00:00:00.000000000","2024-02-25T00:00:00.000000000","2024-03-03T00:00:00.000000000","2024-03-10T00:00:00.000000000","2024-03-17T00:00:00.000000000","2024-03-24T00:00:00.000000000","2024-03-31T00:00:00.000000000","2024-04-07T00:00:00.000000000","2024-04-14T00:00:00.000000000","2024-04-21T00:00:00.000000000","2024-04-28T00:00:00.000000000","2024-05-05T00:00:00.000000000","2024-05-12T00:00:00.000000000","2024-05-19T00:00:00.000000000","2024-05-26T00:00:00.000000000","2024-06-02T00:00:00.000000000","2024-06-09T00:00:00.000000000","2024-06-16T00:00:00.000000000","2024-06-23T00:00:00.000000000","2024-06-30T00:00:00.000000000","2024-07-07T00:00:00.000000000","2024-07-14T00:00:00.000000000","2024-07-21T00:00:00.000000000","2024-07-28T00:00:00.000000000","2024-08-04T00:00:00.000000000","2024-08-11T00:00:00.000000000","2024-08-18T00:00:00.000000000","2024-08-25T00:00:00.000000000","2024-09-01T00:00:00.000000000","2024-09-08T00:00:00.000000000","2024-09-15T00:00:00.000000000","2024-09-22T00:00:00.000000000","2024-09-29T00:00:00.000000000","2024-10-06T00:00:00.000000000","2024-10-13T00:00:00.000000000","2024-10-20T00:00:00.000000000","2024-10-27T00:00:00.000000000","2024-11-03T00:00:00.000000000","2024-11-10T00:00:00.000000000","2024-11-17T00:00:00.000000000","2024-11-24T00:00:00.000000000","2024-12-01T00:00:00.000000000","2024-12-08T00:00:00.000000000","2024-12-15T00:00:00.000000000","2024-12-22T00:00:00.000000000","2024-12-29T00:00:00.000000000","2025-01-05T00:00:00.000000000","2025-01-12T00:00:00.000000000","2025-01-19T00:00:00.000000000","2025-01-26T00:00:00.000000000","2025-02-02T00:00:00.000000000","2025-02-09T00:00:00.000000000","2025-02-16T00:00:00.000000000","2025-02-23T00:00:00.000000000","2025-03-02T00:00:00.000000000","2025-03-09T00:00:00.000000000","2025-03-16T00:00:00.000000000","2025-03-23T00:00:00.000000000","2025-03-30T00:00:00.000000000","2025-04-06T00:00:00.000000000","2025-04-13T00:00:00.000000000","2025-04-20T00:00:00.000000000","2025-04-27T00:00:00.000000000","2025-05-04T00:00:00.000000000","2025-05-11T00:00:00.000000000","2025-05-18T00:00:00.000000000","2025-05-25T00:00:00.000000000","2025-06-01T00:00:00.000000000","2025-06-08T00:00:00.000000000","2025-06-15T00:00:00.000000000","2025-06-22T00:00:00.000000000","2025-06-29T00:00:00.000000000","2025-07-06T00:00:00.000000000","2025-07-13T00:00:00.000000000","2025-07-20T00:00:00.000000000","2025-07-27T00:00:00.000000000","2025-08-03T00:00:00.000000000","2025-08-10T00:00:00.000000000","2025-08-17T00:00:00.000000000","2025-08-24T00:00:00.000000000","2025-08-31T00:00:00.000000000","2025-09-07T00:00:00.000000000","2025-09-14T00:00:00.000000000","2025-09-21T00:00:00.000000000","2025-09-28T00:00:00.000000000","2025-10-05T00:00:00.000000000","2025-10-12T00:00:00.000000000","2025-10-19T00:00:00.000000000","2025-10-26T00:00:00.000000000","2025-11-02T00:00:00.000000000","2025-11-09T00:00:00.000000000","2025-11-16T00:00:00.000000000","2025-11-23T00:00:00.000000000","2025-11-30T00:00:00.000000000","2025-12-07T00:00:00.000000000","2025-12-14T00:00:00.000000000","2025-12-21T00:00:00.000000000","2025-12-28T00:00:00.000000000","2026-01-04T00:00:00.000000000","2026-01-11T00:00:00.000000000","2026-01-18T00:00:00.000000000","2026-01-25T00:00:00.000000000","2026-02-01T00:00:00.000000000","2026-02-08T00:00:00.000000000","2026-02-15T00:00:00.000000000","2026-02-22T00:00:00.000000000","2026-03-01T00:00:00.000000000","2026-03-08T00:00:00.000000000","2026-03-15T00:00:00.000000000","2026-03-22T00:00:00.000000000","2026-03-29T00:00:00.000000000","2026-04-05T00:00:00.000000000","2026-04-12T00:00:00.000000000","2026-04-19T00:00:00.000000000","2026-04-26T00:00:00.000000000","2026-05-03T00:00:00.000000000","2026-05-10T00:00:00.000000000","2026-05-17T00:00:00.000000000","2026-05-24T00:00:00.000000000","2026-05-31T00:00:00.000000000","2026-06-07T00:00:00.000000000","2026-06-14T00:00:00.000000000","2026-06-21T00:00:00.000000000","2026-06-28T00:00:00.000000000","2026-07-05T00:00:00.000000000","2026-07-12T00:00:00.000000000","2026-07-19T00:00:00.000000000","2026-07-26T00:00:00.000000000","2026-08-02T00:00:00.000000000","2026-08-09T00:00:00.000000000","2026-08-16T00:00:00.000000000","2026-08-23T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-20T00:00:00.000000000","2026-09-27T00:00:00.000000000","2026-10-04T00:00:00.000000000","2026-10-11T00:00:00.000000000","2026-10-18T00:00:00.000000000","2026-10-25T00:00:00.000000000","2026-11-01T00:00:00.000000000","2026-11-08T00:00:00.000000000","2026-11-15T00:00:00.000000000","2026-11-22T00:00:00.000000000","2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AVUVJYWt+T\u002faI9U8MgH6PxN79\u002fxfVfo\u002fjOd4Zwyq+j+Bf71vNf\u002f6P00Pj\u002frYVPs\u002fjdIc3vSq+z\u002fCvfzhhgH8P+9dLr+MWPw\u002fUVIfIASw\u002fD\u002fzZLGg6gf9PzBGQs49YP0\u002fU++0J\u002fu4\u002fT8LsHwdIBL+P23qqRGqa\u002f4\u002fDIH4V5bF\u002fj8X+t814h\u002f\u002fP9xapeKKev8\u002fQr5uh43V\u002fz9TVKyfcxgAQO2NxotKRgBAZjauB0p0AECq7iuMcKIAQIX9Nou80ABAhmIEcCz\u002fAEDXzBafvi0BQEl2T3ZxXAFALOP\u002fTEOLAUDVhvxzMroBQPRMsDU96QFAxAcx1mEYAkB\u002fwlSTnkcCQBL4x6TxdgJAYa0kPFmmAkBSbgqF09UCQC0tN6VeBQNACQOhvPg0A0BS0JDln2QDQFa8vTRSlANAMpJpuQ3EA0Dh+X190PMDQJmLqoWYIwRAx7uD0WNTBECpnaJbMIMEQIV6xRn8sgRAFzvx\u002fMTiBEAmoZPxiBIFQFxOpt9FQgVACJbSqvlxBUDSFpYyoqEFQI4ZaFI90QVA9LHf4cgABkAIntq0QjAGQCjhpJuoXwZAqBYhY\u002fiOBkDgePHUL74GQJuYobdM7QZANcHQzkwcB0D2BF3bLUsHQB\u002fujpvteQdAps9Fy4moB0DDsSQkANcHQIHVv11OBQhAesrKLXIzCEBgEkdIaWEIQPNMs18xjwhAm+c6Jci8CEBvS+ZIK+oIQFaEy3lYFwlA\u002fVs\u002fZk1ECUAH4wa8B3EJQOliiSiFnQlA37ICWcPJCUDs6bX6v\u002fUJQGFoILt4IQpAlTItSOtMCkD2lmhQFXgKQEwZNIP0ogpA05z6kIbNCkD3xmQryfcKQGWUjQW6IQtAtRk31FZLC0CXaf9NnXQLQIiZlSuLnQtAqd7uJx7GC0ALvHsAVO4LQIE7XXUqFgxAbiqaSZ89DECTU1RDsGQMQB2v\u002fStbiwxA9IGN0J2xDEB0ZbUBdtcMQJ0wFpTh\u002fAxAxbt0YN4hDUDCd+5DakYNQKnRLSCDag1AGVye2yaODUASt6BhU7ENQGcvvqIG1A1Aww7clD72DUBSlW4z+RcOQDOWq380OQ5Akq+8gO5ZDkC+F\u002fFDJXoOQD747tzWmQ5AHVDkZQG5DkC4Vrf\u002fotcOQBFYNtK59Q5AZARHDEQTD0DuKxXkPzAPQK3gQJerTA9AYPcLa4VoD0B54Yasy4MPQJ3ZvLB8ng9Ab1zf1Ja4D0Br53B+GNIPQL33bhsA6w9Aj6E9EaYBEEBaEoKJfQ0QQB8ctroFGRBA5I6Y7T0kEEAksIhvJS8QQN68mJK7ORBAtPefrf9DEEBrQEwc8U0QQFQyMz+PVxBACcfie9lgEEApe\u002fE8z2kQQJTyDfJvchBA\u002fBkOELt6EECLw\u002f0QsIIQQGS8LHROihBAElk8vpWREECydix5hZgQQCjvZzQdnxBAU37QhFylEECxFsoEQ6sQQIWjRVTQsBBAKTfLGAS2EEDdo4P93boQQMN9QbNdvxBAiYSJ8ILDEECzc5pxTccQQD04dPi8yhBAhIreTNHNEEB76248itAQQFEEjprn0hBAtmd8QOnUEED9s1YNj9YQQJIVGebY1xBAMCmitcbYEEBlPbVsWNkQQB\u002fz+wGO2RBA9jwHcmfZEEALvU+\u002f5NgQQHaBNfIF2BBATh\u002f\u002fGMvWEEBmLNhHNNUQQPsXz5hB0xBArmLSK\u002fPQEEAdNq0mSc4QQMtcA7VDyxBAsJpMCOPHEEBqZ89XJ8QQQJ4Km+AQwBBAfxuB5Z+7EECTZA6v1LYQQHssg4uvsRBAOuXKzjCsEED9QnPSWKYQQLS7ovUnoBBAJnEOnZ6ZEECvhu8yvZIQQGbk9yaEixBAZmlG7vODEEDAjloDDXwQQCl9B+bPcxBAKZdmGz1rEEC6ecktVWIQQJd1q6wYWRBAK4OiLIhPEEB1s09HpEUQQB0gT5ttOxBADF0nzOQwEEAUbjiCCiYQQO9CqmrfGhBATLxaN2QPEECFPMuemQMQQAqNG7gA7w9AoFtjXTLWD0CNtF+1ybwPQCtFrVDIog9AioBqyC+ID0BHwA2+AW0PQMakOts\u002fUQ9ALbqW0es0D0C7aJ1aBxgPQNI2czeU+g5Ao2K4MJTcDkA22loWCb4OQFyYZ7\u002f0ng5ArWzbCVl\u002fDkC9NXPaN18OQMSTexyTPg5AmBqgwWwdDkDnCbrBxvsNQDaSnhqj2Q1Asa3szwO3DUC1k9rq6pMNQM\u002fNAnpacA1AWfUwkVRMDUCFIC5J2ycNQMEFjb\u002fwAg1Axtx1FpfdDEC9A3J00LcMQB1wNwSfkQxArvFz9ARrDEAAT5h3BEQMQDtCo8OfHAxALF3sEdn0C0Bi2+6esswLQLNpFKoupAtAOel\u002fdU97C0CNNdhFF1ILQD30EmKIKAtAq3Q\u002fE6X+CkDqplGkb9QKQDgw7WHqqQpAt6Mwmhd\u002fCkDP5YCc+VMKQNLAVLmSKApAOrEAQuX8CUC174KI89AJQGC\u002fT9+\u002fpAlAXgYemUx4CUCxNrQInEsJQIiNtYCwHglAu65vU4zxCEBioqjSMcQIQDU6bU+jlghAQOTfGeNoCEBy8AeB8zoIQJNOodLWDAhAo8nsWo\u002feB0AYxoBkH7AHQMmHGjiJgQdAtgRwHM9SB0BLSQJW8yMHQPpy8Cb49AZAuUXLzt\u002fFBkCpYGmKrJYGQIwWvJNgZwZAAO6kIf43BkCizctnhwgGQPnXdZb+2AVAK\u002ftc2mWpBUDNN4hcv3kFQK6iJEINSgVAvCRfrFEaBUBs\u002fD64juoEQLMDgX7GugRAcb1zE\u002fuKBEBVLdSGLlsEQLh8q+NiKwRA9W4tMJr7A0Dmp5dt1ssDQGbGEZgZnANAQVWOpmVsA0BmlKyKvDwDQB0cmzAgDQNAHFz7fpLdAkDe98VWFa4CQJIBMJOqfgJAHxWRCVRPAkAAVEqJEyACQEpDrtvq8AFAXYzpw9vBAUAQoez+55IBQP1DVkMRZAFAJfVeQVk1AUAuQ8WiwQYBQKYBuwpM2ABA4mPTFfqpAECf\u002fPFZzXsAQAuiOmbHTQBAujUCw+kfAEBZoIDja+T\u002fPzWeA9paif8\u002fd4u4UKMu\u002fz+cnMQgSNT+Pzh3MRVMev4\u002fI1PZ6rEg\u002fj8E11RQfMf9P22t6uWtbv0\u002f5c+APUkW\u002fT9NhI\u002faUL78P3EJFjLHZvw\u002fK++Qqq4P\u002fD8cFvKbCbn7PyBTmk\u002faYvs\u002fPLJUACMN+z94VFPa5bf6P1rkLfskY\u002fo\u002f25vhceIO+j9V19I+ILv5P9Uv0FPgZ\u002fk\u002f1hcXlCQV+T8F9VnU7sL4Pwqxx9pAcfg\u002fOrwUXxwg+D+0e4UKg8\u002f3P0wd+nd2f\u002fc\u002f+Mr7M\u002fgv9z+IN8u8CeH2PzB+cIKskvY\u002ff07M5uFE9j8TXqo9q\u002ff1P3IZ1cwJq\u002fU\u002fBY0qzP5e9T+cf7JlixP1Pym3tbWwyPQ\u002fEWHWym9+9D96limmyTT0P7b1UTu\u002f6\u002fM\u002fo0mbcFGj8z8qNxcfgVvzPy3quhJPFPM\u002fI7p9CrzN8j+7vni4yIfyP6NNB8J1QvI\u002fcVnov8P98T9uqmA+s7nxP3PpXb1EdvE\u002fzXWasHgz8T8P\u002fsF\u002fT\u002fHwP3DUlobJr\u002fA\u002fevcXFedu8D8Fx6dvqC7wP068Zp4b3u8\u002fgBW1wi5g7z\u002f9tTCRiuPuP2ly2DgvaO4\u002fBh4H0xzu7T9P0MdjU3XtP\u002foaK9rS\u002few\u002fgCKdEJuH7D\u002f4iTzNqxLsPzokMsIEn+s\u002fy1sJjqUs6z+MQwm8jbvqPw=="},"type":"scatter"},{"fill":"tonexty","fillcolor":"rgba(59,130,246,0.12)","hovertemplate":"Date: %{x|%b %d, %Y}\u003cbr\u003eLower 2\u03c3: $%{y:,.6f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"poly-2sigma","line":{"width":0},"mode":"lines","name":"Poly Channel (\u00b12\u03c3)","x":["2020-08-23T00:00:00.000000000","2020-08-30T00:00:00.000000000","2020-09-06T00:00:00.000000000","2020-09-13T00:00:00.000000000","2020-09-20T00:00:00.000000000","2020-09-27T00:00:00.000000000","2020-10-04T00:00:00.000000000","2020-10-11T00:00:00.000000000","2020-10-18T00:00:00.000000000","2020-10-25T00:00:00.000000000","2020-11-01T00:00:00.000000000","2020-11-08T00:00:00.000000000","2020-11-15T00:00:00.000000000","2020-11-22T00:00:00.000000000","2020-11-29T00:00:00.000000000","2020-12-06T00:00:00.000000000","2020-12-13T00:00:00.000000000","2020-12-20T00:00:00.000000000","2020-12-27T00:00:00.000000000","2021-01-03T00:00:00.000000000","2021-01-10T00:00:00.000000000","2021-01-17T00:00:00.000000000","2021-01-24T00:00:00.000000000","2021-01-31T00:00:00.000000000","2021-02-07T00:00:00.000000000","2021-02-14T00:00:00.000000000","2021-02-21T00:00:00.000000000","2021-02-28T00:00:00.000000000","2021-03-07T00:00:00.000000000","2021-03-14T00:00:00.000000000","2021-03-21T00:00:00.000000000","2021-03-28T00:00:00.000000000","2021-04-04T00:00:00.000000000","2021-04-11T00:00:00.000000000","2021-04-18T00:00:00.000000000","2021-04-25T00:00:00.000000000","2021-05-02T00:00:00.000000000","2021-05-09T00:00:00.000000000","2021-05-16T00:00:00.000000000","2021-05-23T00:00:00.000000000","2021-05-30T00:00:00.000000000","2021-06-06T00:00:00.000000000","2021-06-13T00:00:00.000000000","2021-06-20T00:00:00.000000000","2021-06-27T00:00:00.000000000","2021-07-04T00:00:00.000000000","2021-07-11T00:00:00.000000000","2021-07-18T00:00:00.000000000","2021-07-25T00:00:00.000000000","2021-08-01T00:00:00.000000000","2021-08-08T00:00:00.000000000","2021-08-15T00:00:00.000000000","2021-08-22T00:00:00.000000000","2021-08-29T00:00:00.000000000","2021-09-05T00:00:00.000000000","2021-09-12T00:00:00.000000000","2021-09-19T00:00:00.000000000","2021-09-26T00:00:00.000000000","2021-10-03T00:00:00.000000000","2021-10-10T00:00:00.000000000","2021-10-17T00:00:00.000000000","2021-10-24T00:00:00.000000000","2021-10-31T00:00:00.000000000","2021-11-07T00:00:00.000000000","2021-11-14T00:00:00.000000000","2021-11-21T00:00:00.000000000","2021-11-28T00:00:00.000000000","2021-12-05T00:00:00.000000000","2021-12-12T00:00:00.000000000","2021-12-19T00:00:00.000000000","2021-12-26T00:00:00.000000000","2022-01-02T00:00:00.000000000","2022-01-09T00:00:00.000000000","2022-01-16T00:00:00.000000000","2022-01-23T00:00:00.000000000","2022-01-30T00:00:00.000000000","2022-02-06T00:00:00.000000000","2022-02-13T00:00:00.000000000","2022-02-20T00:00:00.000000000","2022-02-27T00:00:00.000000000","2022-03-06T00:00:00.000000000","2022-03-13T00:00:00.000000000","2022-03-20T00:00:00.000000000","2022-03-27T00:00:00.000000000","2022-04-03T00:00:00.000000000","2022-04-10T00:00:00.000000000","2022-04-17T00:00:00.000000000","2022-04-24T00:00:00.000000000","2022-05-01T00:00:00.000000000","2022-05-08T00:00:00.000000000","2022-05-15T00:00:00.000000000","2022-05-22T00:00:00.000000000","2022-05-29T00:00:00.000000000","2022-06-05T00:00:00.000000000","2022-06-12T00:00:00.000000000","2022-06-19T00:00:00.000000000","2022-06-26T00:00:00.000000000","2022-07-03T00:00:00.000000000","2022-07-10T00:00:00.000000000","2022-07-17T00:00:00.000000000","2022-07-24T00:00:00.000000000","2022-07-31T00:00:00.000000000","2022-08-07T00:00:00.000000000","2022-08-14T00:00:00.000000000","2022-08-21T00:00:00.000000000","2022-08-28T00:00:00.000000000","2022-09-04T00:00:00.000000000","2022-09-11T00:00:00.000000000","2022-09-18T00:00:00.000000000","2022-09-25T00:00:00.000000000","2022-10-02T00:00:00.000000000","2022-10-09T00:00:00.000000000","2022-10-16T00:00:00.000000000","2022-10-23T00:00:00.000000000","2022-10-30T00:00:00.000000000","2022-11-06T00:00:00.000000000","2022-11-13T00:00:00.000000000","2022-11-20T00:00:00.000000000","2022-11-27T00:00:00.000000000","2022-12-04T00:00:00.000000000","2022-12-11T00:00:00.000000000","2022-12-18T00:00:00.000000000","2022-12-25T00:00:00.000000000","2023-01-01T00:00:00.000000000","2023-01-08T00:00:00.000000000","2023-01-15T00:00:00.000000000","2023-01-22T00:00:00.000000000","2023-01-29T00:00:00.000000000","2023-02-05T00:00:00.000000000","2023-02-12T00:00:00.000000000","2023-02-19T00:00:00.000000000","2023-02-26T00:00:00.000000000","2023-03-05T00:00:00.000000000","2023-03-12T00:00:00.000000000","2023-03-19T00:00:00.000000000","2023-03-26T00:00:00.000000000","2023-04-02T00:00:00.000000000","2023-04-09T00:00:00.000000000","2023-04-16T00:00:00.000000000","2023-04-23T00:00:00.000000000","2023-04-30T00:00:00.000000000","2023-05-07T00:00:00.000000000","2023-05-14T00:00:00.000000000","2023-05-21T00:00:00.000000000","2023-05-28T00:00:00.000000000","2023-06-04T00:00:00.000000000","2023-06-11T00:00:00.000000000","2023-06-18T00:00:00.000000000","2023-06-25T00:00:00.000000000","2023-07-02T00:00:00.000000000","2023-07-09T00:00:00.000000000","2023-07-16T00:00:00.000000000","2023-07-23T00:00:00.000000000","2023-07-30T00:00:00.000000000","2023-08-06T00:00:00.000000000","2023-08-13T00:00:00.000000000","2023-08-20T00:00:00.000000000","2023-08-27T00:00:00.000000000","2023-09-03T00:00:00.000000000","2023-09-10T00:00:00.000000000","2023-09-17T00:00:00.000000000","2023-09-24T00:00:00.000000000","2023-10-01T00:00:00.000000000","2023-10-08T00:00:00.000000000","2023-10-15T00:00:00.000000000","2023-10-22T00:00:00.000000000","2023-10-29T00:00:00.000000000","2023-11-05T00:00:00.000000000","2023-11-12T00:00:00.000000000","2023-11-19T00:00:00.000000000","2023-11-26T00:00:00.000000000","2023-12-03T00:00:00.000000000","2023-12-10T00:00:00.000000000","2023-12-17T00:00:00.000000000","2023-12-24T00:00:00.000000000","2023-12-31T00:00:00.000000000","2024-01-07T00:00:00.000000000","2024-01-14T00:00:00.000000000","2024-01-21T00:00:00.000000000","2024-01-28T00:00:00.000000000","2024-02-04T00:00:00.000000000","2024-02-11T00:00:00.000000000","2024-02-18T00:00:00.000000000","2024-02-25T00:00:00.000000000","2024-03-03T00:00:00.000000000","2024-03-10T00:00:00.000000000","2024-03-17T00:00:00.000000000","2024-03-24T00:00:00.000000000","2024-03-31T00:00:00.000000000","2024-04-07T00:00:00.000000000","2024-04-14T00:00:00.000000000","2024-04-21T00:00:00.000000000","2024-04-28T00:00:00.000000000","2024-05-05T00:00:00.000000000","2024-05-12T00:00:00.000000000","2024-05-19T00:00:00.000000000","2024-05-26T00:00:00.000000000","2024-06-02T00:00:00.000000000","2024-06-09T00:00:00.000000000","2024-06-16T00:00:00.000000000","2024-06-23T00:00:00.000000000","2024-06-30T00:00:00.000000000","2024-07-07T00:00:00.000000000","2024-07-14T00:00:00.000000000","2024-07-21T00:00:00.000000000","2024-07-28T00:00:00.000000000","2024-08-04T00:00:00.000000000","2024-08-11T00:00:00.000000000","2024-08-18T00:00:00.000000000","2024-08-25T00:00:00.000000000","2024-09-01T00:00:00.000000000","2024-09-08T00:00:00.000000000","2024-09-15T00:00:00.000000000","2024-09-22T00:00:00.000000000","2024-09-29T00:00:00.000000000","2024-10-06T00:00:00.000000000","2024-10-13T00:00:00.000000000","2024-10-20T00:00:00.000000000","2024-10-27T00:00:00.000000000","2024-11-03T00:00:00.000000000","2024-11-10T00:00:00.000000000","2024-11-17T00:00:00.000000000","2024-11-24T00:00:00.000000000","2024-12-01T00:00:00.000000000","2024-12-08T00:00:00.000000000","2024-12-15T00:00:00.000000000","2024-12-22T00:00:00.000000000","2024-12-29T00:00:00.000000000","2025-01-05T00:00:00.000000000","2025-01-12T00:00:00.000000000","2025-01-19T00:00:00.000000000","2025-01-26T00:00:00.000000000","2025-02-02T00:00:00.000000000","2025-02-09T00:00:00.000000000","2025-02-16T00:00:00.000000000","2025-02-23T00:00:00.000000000","2025-03-02T00:00:00.000000000","2025-03-09T00:00:00.000000000","2025-03-16T00:00:00.000000000","2025-03-23T00:00:00.000000000","2025-03-30T00:00:00.000000000","2025-04-06T00:00:00.000000000","2025-04-13T00:00:00.000000000","2025-04-20T00:00:00.000000000","2025-04-27T00:00:00.000000000","2025-05-04T00:00:00.000000000","2025-05-11T00:00:00.000000000","2025-05-18T00:00:00.000000000","2025-05-25T00:00:00.000000000","2025-06-01T00:00:00.000000000","2025-06-08T00:00:00.000000000","2025-06-15T00:00:00.000000000","2025-06-22T00:00:00.000000000","2025-06-29T00:00:00.000000000","2025-07-06T00:00:00.000000000","2025-07-13T00:00:00.000000000","2025-07-20T00:00:00.000000000","2025-07-27T00:00:00.000000000","2025-08-03T00:00:00.000000000","2025-08-10T00:00:00.000000000","2025-08-17T00:00:00.000000000","2025-08-24T00:00:00.000000000","2025-08-31T00:00:00.000000000","2025-09-07T00:00:00.000000000","2025-09-14T00:00:00.000000000","2025-09-21T00:00:00.000000000","2025-09-28T00:00:00.000000000","2025-10-05T00:00:00.000000000","2025-10-12T00:00:00.000000000","2025-10-19T00:00:00.000000000","2025-10-26T00:00:00.000000000","2025-11-02T00:00:00.000000000","2025-11-09T00:00:00.000000000","2025-11-16T00:00:00.000000000","2025-11-23T00:00:00.000000000","2025-11-30T00:00:00.000000000","2025-12-07T00:00:00.000000000","2025-12-14T00:00:00.000000000","2025-12-21T00:00:00.000000000","2025-12-28T00:00:00.000000000","2026-01-04T00:00:00.000000000","2026-01-11T00:00:00.000000000","2026-01-18T00:00:00.000000000","2026-01-25T00:00:00.000000000","2026-02-01T00:00:00.000000000","2026-02-08T00:00:00.000000000","2026-02-15T00:00:00.000000000","2026-02-22T00:00:00.000000000","2026-03-01T00:00:00.000000000","2026-03-08T00:00:00.000000000","2026-03-15T00:00:00.000000000","2026-03-22T00:00:00.000000000","2026-03-29T00:00:00.000000000","2026-04-05T00:00:00.000000000","2026-04-12T00:00:00.000000000","2026-04-19T00:00:00.000000000","2026-04-26T00:00:00.000000000","2026-05-03T00:00:00.000000000","2026-05-10T00:00:00.000000000","2026-05-17T00:00:00.000000000","2026-05-24T00:00:00.000000000","2026-05-31T00:00:00.000000000","2026-06-07T00:00:00.000000000","2026-06-14T00:00:00.000000000","2026-06-21T00:00:00.000000000","2026-06-28T00:00:00.000000000","2026-07-05T00:00:00.000000000","2026-07-12T00:00:00.000000000","2026-07-19T00:00:00.000000000","2026-07-26T00:00:00.000000000","2026-08-02T00:00:00.000000000","2026-08-09T00:00:00.000000000","2026-08-16T00:00:00.000000000","2026-08-23T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-20T00:00:00.000000000","2026-09-27T00:00:00.000000000","2026-10-04T00:00:00.000000000","2026-10-11T00:00:00.000000000","2026-10-18T00:00:00.000000000","2026-10-25T00:00:00.000000000","2026-11-01T00:00:00.000000000","2026-11-08T00:00:00.000000000","2026-11-15T00:00:00.000000000","2026-11-22T00:00:00.000000000","2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"QWnBIVMUZj\u002fOE5xURlxmP3yPOyiopGY\u002fVjgV5nbtZj8HkhHLsDZnP\u002fm1igdUgGc\u002fZBZMv17KZz\u002fjmZMJzxRoP8ITFPGiX2g\u002fbB35c9iqaD8JVOyDbfZoP8f+GwZgQmk\u002ftSBD062OaT+++bK3VNtpP8v5XXNSKGo\u002fFCnkuaR1aj+TCKEyScNqP6vsung9EWs\u002f4NQzG39faz\u002fcwvucC65rPzKSBHXg\u002fGs\u002fQ1NXDvtLbD+hKivIWJtsPyW2\u002ffX26mw\u002fLfms39I6bT\u002fn0JLB6YptP9rwocw4220\u002fSWmEJr0rbj9Utrvpc3xuP0tZwiVazW4\u002fyPou32webz\u002fqFdkPqW9vP\u002fwr\u002f6YLwW8\u002fkD+3xEgJcD+yKdbIGzJwP3daEEj9WnA\u002ffWChpeuDcD9KOOM\u002f5axwPzvxZXDo1XA\u002fFhEIjPP+cD+GtA\u002fjBChxP7VrRMEaUXE\u002fw9AJbjN6cT8a13osTaNxP2fRhTtmzHE\u002fYCwJ1nz1cT+U3PAyjx5yP5B8VIWbR3I\u002ftxmW\u002fJ9wcj\u002fSrIHEmplyP1o8bQWKwnI\u002fLqVZ5Gvrcj+KBxSDPhRzPy7VVwAAPXM\u002fYH3xd65lcz8stOECSI5zPytRgbfKtnM\u002f3MKlqTTfcz+qEsbqgwd0P3p2IIq2L3Q\u002fqmvglMpXdD\u002fhV0UWvn90P9WryRePp3Q\u002fvINKoTvPdD+vwS+5wfZ0P0idlGQfHnU\u002feaRwp1JFdT9EKcGEWWx1PzQXs\u002f4xk3U\u002f6SzNFtq5dT\u002fpkxrOT+B1P\u002fvSVSWRBnY\u002fNhUUHZwsdj+AwfC1blJ2P+9cufAGeHY\u002fR7OZzmKddj8lQEhRgMJ2P4zTMntd53Y\u002fsWyrT\u002fgLdz9gRRXTTjB3P4cIEgtfVHc\u002fji6v\u002fiZ4dz+MeZO2pJt3Py6MLD3Wvnc\u002f35Tcnrnhdz9xCCjqTAR4P11l4y+OJng\u002f5vpgg3tIeD88rZ76Emp4P4axc65Si3g\u002fVju+ujiseD8BFpE+w8x4P58jYVzw7Hg\u002fsrsyOr4MeT+948YBKyx5P4NbyOA0S3k\u002f83b4CNppeT\u002f5v1uwGIh5P9tZZhHvpXk\u002fgiAoa1vDeT9GfXgBXOB5P9brIR3v\u002fHk\u002fkCgNDBMZej8SA2whxjR6P5nO47UGUHo\u002flGq3J9Nqej+o3fDaKYV6P\u002ft8ijkJn3o\u002fY5qXs2+4ej\u002fVs2y\u002fW9F6P\u002fYdx9nL6Xo\u002fsST0hb4Bez8xnPdNMhl7P4LcscIlMHs\u002f9CIFfJdGez9PU\u002foYhlx7PzIU5T\u002fwcXs\u002f\u002f0CHntSGez92rDPqMZt7PyQv8N8Gr3s\u002fOvyWRFLCez+bOPfkEtV7P\u002fDO9JVH53s\u002fc3ynNO\u002f4ez\u002fKEXmmCAp8P2\u002fjQtmSGnw\u002ftGVqw4wqfD+97\u002fxj9Tl8P\u002fOhysLLSHw\u002fOWuA8A5XfD\u002fwKcEGvmR8P3fkPSjYcXw\u002f2RXNgFx+fD8WC4FFSop8P\u002f5NvbSglXw\u002fFxpLFl+gfD\u002fb2Gy7hKp8P0Ci8P4QtHw\u002ftL5BRQO9fD9IKHn8WsV8P0MIbZwXzXw\u002f4S6\u002fpjjUfD9Rg+qmvdp8P5NpTzKm4Hw\u002fuhw\u002f6PHlfD+q+wVyoOp8P7fG9IKx7nw\u002fGM1o2CTyfD+dCNM5+vR8P7smvngx93w\u002fBn7TcMr4fD+S794Hxfl8PxWz0S0h+nw\u002f9Q3E3N75fD\u002fg9PUY\u002fvh8P3GXzvB+93w\u002fcNbafGH1fD+5pMrfpfJ8Px5TbUZM73w\u002f7Mes51TrfD+HoocEwOZ8P6VMCuiN4Xw\u002fQvlG577bfD9ak0xhU9V8P0KdHL9Lznw\u002fFAKgc6jGfD+p25r7ab58P2wtn92QtXw\u002fx5f+qR2sfD8RBbv6EKJ8P0pSdnNrl3w\u002fHPdgwS2MfD9+riebWIB8P04j4MDsc3w\u002fyKP0++pmfD+F3g4fVFl8P4qsAQYpS3w\u002fZuuxlWo8fD+rav67GS18Pxfxpm83HXw\u002fvFsysMQMfD9d3NOFwvt7PwFaTwEy6ns\u002fDvjcOxTYez83yAtXasV7P1Wro3w1sns\u002fbmWG3naeez\u002f56Y+2L4p7P0HkdUZhdXs\u002f\u002f4Cm1wxgez8Ifia7M0p7P6GEbknXM3s\u002f3tNH4vgcez+lP6jsmQV7P\u002fWJjda77Xo\u002ffRvYFGDVej9RICUjiLx6P2oPqIM1o3o\u002f26ADv2mJej8sOSJkJm96P6HPDQhtVHo\u002f+FPHRT85ej+Vmh2+nh16PwHUgxeNAXo\u002fuJXn\u002fQvleT9yeoYiHch5PwdfwzvCqnk\u002frUL7BP2MeT\u002fYz1k+z255PwOUraw6UHk\u002fGuw7GUExeT\u002fZq5RR5BF5P7mFZScm8ng\u002fyTlNcAjSeD8eka4FjbF4P0Ysg8S1kHg\u002fOyoujYRveD9Drk5D+014P5ZKks0bLHg\u002fu1WHFegJeD95MG8HYud3P4uCEJKLxHc\u002fxXOJpmahdz+I5yE49X13P5bAHTw5Wnc\u002fujKPqTQ2dz9hKCl56RF3P5PBEaVZ7XY\u002fCPK0KIfIdj8YRJcAdKN2P+rFKCoifnY\u002fWSaYo5NYdj8\u002fB6ZryjJ2PxyKeIHIDHY\u002f9Bxv5I\u002fmdT\u002fOi\u002faTIsB1PwVdXY+CmXU\u002fYnyo1bFydT\u002f\u002fOmhlskt1PwWojTyGJHU\u002fzkdAWC\u002f9dD9cLbS0r9V0P8F7AE0JrnQ\u002fIFP2Gj6GdD8yLvgWUF50P6G00TdBNnQ\u002fWwaQchMOdD8IhFq6yOVzP9MYTABjvXM\u002fNwlNM+SUcz8AS+0\u002fTmxzP6xpPxCjQ3M\u002fifuzi+Qacz8xqvWWFPJyP6TSxRM1yXI\u002fiL\u002fZ4Eegcj8egbjZTndyP\u002f5lmdZLTnI\u002fJxdDrEAlcj+CWusrL\u002fxxP4V+FyMZ03E\u002fL3F9WwCqcT8fheWa5oBxPxjnDKPNV3E\u002fqcWIMbcucT\u002fLLar\u002fpAVxP4idYsKY3HA\u002fUk8pKpSzcD8BP+HimIpwP4Xqv5OoYXA\u002fd88038Q4cD8Rp9Fi7w9wP\u002fnCZm5Tzm8\u002fc8PX3+p8bz\u002f\u002f9dg2qCtvPy9h4oWO2m4\u002f0nDZ1KCJbj+1guog4jhuP5r7Y1xV6G0\u002fleSSbv2XbT8TEqEz3UdtPxvUdHz392w\u002fQTCSDk+obD+bpP2j5lhsP9NzIOvACWw\u002f8HiuhuC6az99go0NSGxrP\u002fQzvgr6HWs\u002fWmtG\u002ffjPaj+tKh1YR4JqPxgCGILnNGo\u002fM\u002frZ1dvnaT8R+8OhJptpP3Ku5ifKTmk\u002fd9r1ncgCaT+iMT0tJLdoP96VlvLea2g\u002f48ph\u002fvogaD8alX1UetZnPy5BQuxejGc\u002fE5F9sKpCZz8\u002fCnB\u002fX\u002flmP4Whyyp\u002fsGY\u002fO8CzdwtoZj\u002fOnr4eBiBmP5Pv98tw2GU\u002fItbkHk2RZT9aJomqnEplP4XlbfVgBGU\u002f+AmpeZu+ZD\u002fmcuakTXlkPxcUcth4NGQ\u002flU9DaR7wYz+YeAmgP6xjP2t5ObndaGM\u002fi5cc5fklYz+NT+BHleNiP5NDp\u002fmwoWI\u002fIzabBk5gYj+xCwBvbR9iP5vMRycQ32E\u002f2KEnGDefYT\u002fWxa0e419hP69jWAwVIWE\u002faF4tp83iYD+n+dKpDaVgPwFeqcPVZ2A\u002fQPLkmCYrYD8uBlOFAd5fP4lmTJ7JZl8\u002fmFpkg6bwXj8VIdQlmXteP90lnGGiB14\u002fgaLB\u002fcKUXT8Qjo2s+yJdP2vPzAtNslw\u002ft6URpbdCXD8QOfbtO9RbP\u002fBGYEjaZls\u002fq93FApP6Wj\u002fBGXNYZo9aPwHY0HFUJVo\u002fWFCsZF28WT8wjH80gVRZP3qrutK\u002f7Vg\u002fgOwNHxmIWD91abTnjCNYP5x\u002fv+kawFc\u002fpdNi0cJdVz8e50A6hPxWPw=="},"type":"scatter"},{"line":{"color":"white","width":2},"mode":"lines","name":"Actual","x":["2020-08-23T00:00:00.000000000","2020-08-30T00:00:00.000000000","2020-09-06T00:00:00.000000000","2020-09-13T00:00:00.000000000","2020-09-20T00:00:00.000000000","2020-09-27T00:00:00.000000000","2020-10-04T00:00:00.000000000","2020-10-11T00:00:00.000000000","2020-10-18T00:00:00.000000000","2020-10-25T00:00:00.000000000","2020-11-01T00:00:00.000000000","2020-11-08T00:00:00.000000000","2020-11-15T00:00:00.000000000","2020-11-22T00:00:00.000000000","2020-11-29T00:00:00.000000000","2020-12-06T00:00:00.000000000","2020-12-13T00:00:00.000000000","2020-12-20T00:00:00.000000000","2020-12-27T00:00:00.000000000","2021-01-03T00:00:00.000000000","2021-01-10T00:00:00.000000000","2021-01-17T00:00:00.000000000","2021-01-24T00:00:00.000000000","2021-01-31T00:00:00.000000000","2021-02-07T00:00:00.000000000","2021-02-14T00:00:00.000000000","2021-02-21T00:00:00.000000000","2021-02-28T00:00:00.000000000","2021-03-07T00:00:00.000000000","2021-03-14T00:00:00.000000000","2021-03-21T00:00:00.000000000","2021-03-28T00:00:00.000000000","2021-04-04T00:00:00.000000000","2021-04-11T00:00:00.000000000","2021-04-18T00:00:00.000000000","2021-04-25T00:00:00.000000000","2021-05-02T00:00:00.000000000","2021-05-09T00:00:00.000000000","2021-05-16T00:00:00.000000000","2021-05-23T00:00:00.000000000","2021-05-30T00:00:00.000000000","2021-06-06T00:00:00.000000000","2021-06-13T00:00:00.000000000","2021-06-20T00:00:00.000000000","2021-06-27T00:00:00.000000000","2021-07-04T00:00:00.000000000","2021-07-11T00:00:00.000000000","2021-07-18T00:00:00.000000000","2021-07-25T00:00:00.000000000","2021-08-01T00:00:00.000000000","2021-08-08T00:00:00.000000000","2021-08-15T00:00:00.000000000","2021-08-22T00:00:00.000000000","2021-08-29T00:00:00.000000000","2021-09-05T00:00:00.000000000","2021-09-12T00:00:00.000000000","2021-09-19T00:00:00.000000000","2021-09-26T00:00:00.000000000","2021-10-03T00:00:00.000000000","2021-10-10T00:00:00.000000000","2021-10-17T00:00:00.000000000","2021-10-24T00:00:00.000000000","2021-10-31T00:00:00.000000000","2021-11-07T00:00:00.000000000","2021-11-14T00:00:00.000000000","2021-11-21T00:00:00.000000000","2021-11-28T00:00:00.000000000","2021-12-05T00:00:00.000000000","2021-12-12T00:00:00.000000000","2021-12-19T00:00:00.000000000","2021-12-26T00:00:00.000000000","2022-01-02T00:00:00.000000000","2022-01-09T00:00:00.000000000","2022-01-16T00:00:00.000000000","2022-01-23T00:00:00.000000000","2022-01-30T00:00:00.000000000","2022-02-06T00:00:00.000000000","2022-02-13T00:00:00.000000000","2022-02-20T00:00:00.000000000","2022-02-27T00:00:00.000000000","2022-03-06T00:00:00.000000000","2022-03-13T00:00:00.000000000","2022-03-20T00:00:00.000000000","2022-03-27T00:00:00.000000000","2022-04-03T00:00:00.000000000","2022-04-10T00:00:00.000000000","2022-04-17T00:00:00.000000000","2022-04-24T00:00:00.000000000","2022-05-01T00:00:00.000000000","2022-05-08T00:00:00.000000000","2022-05-15T00:00:00.000000000","2022-05-22T00:00:00.000000000","2022-05-29T00:00:00.000000000","2022-06-05T00:00:00.000000000","2022-06-12T00:00:00.000000000","2022-06-19T00:00:00.000000000","2022-06-26T00:00:00.000000000","2022-07-03T00:00:00.000000000","2022-07-10T00:00:00.000000000","2022-07-17T00:00:00.000000000","2022-07-24T00:00:00.000000000","2022-07-31T00:00:00.000000000","2022-08-07T00:00:00.000000000","2022-08-14T00:00:00.000000000","2022-08-21T00:00:00.000000000","2022-08-28T00:00:00.000000000","2022-09-04T00:00:00.000000000","2022-09-11T00:00:00.000000000","2022-09-18T00:00:00.000000000","2022-09-25T00:00:00.000000000","2022-10-02T00:00:00.000000000","2022-10-09T00:00:00.000000000","2022-10-16T00:00:00.000000000","2022-10-23T00:00:00.000000000","2022-10-30T00:00:00.000000000","2022-11-06T00:00:00.000000000","2022-11-13T00:00:00.000000000","2022-11-20T00:00:00.000000000","2022-11-27T00:00:00.000000000","2022-12-04T00:00:00.000000000","2022-12-11T00:00:00.000000000","2022-12-18T00:00:00.000000000","2022-12-25T00:00:00.000000000","2023-01-01T00:00:00.000000000","2023-01-08T00:00:00.000000000","2023-01-15T00:00:00.000000000","2023-01-22T00:00:00.000000000","2023-01-29T00:00:00.000000000","2023-02-05T00:00:00.000000000","2023-02-12T00:00:00.000000000","2023-02-19T00:00:00.000000000","2023-02-26T00:00:00.000000000","2023-03-05T00:00:00.000000000","2023-03-12T00:00:00.000000000","2023-03-19T00:00:00.000000000","2023-03-26T00:00:00.000000000","2023-04-02T00:00:00.000000000","2023-04-09T00:00:00.000000000","2023-04-16T00:00:00.000000000","2023-04-23T00:00:00.000000000","2023-04-30T00:00:00.000000000","2023-05-07T00:00:00.000000000","2023-05-14T00:00:00.000000000","2023-05-21T00:00:00.000000000","2023-05-28T00:00:00.000000000","2023-06-04T00:00:00.000000000","2023-06-11T00:00:00.000000000","2023-06-18T00:00:00.000000000","2023-06-25T00:00:00.000000000","2023-07-02T00:00:00.000000000","2023-07-09T00:00:00.000000000","2023-07-16T00:00:00.000000000","2023-07-23T00:00:00.000000000","2023-07-30T00:00:00.000000000","2023-08-06T00:00:00.000000000","2023-08-13T00:00:00.000000000","2023-08-20T00:00:00.000000000","2023-08-27T00:00:00.000000000","2023-09-03T00:00:00.000000000","2023-09-10T00:00:00.000000000","2023-09-17T00:00:00.000000000","2023-09-24T00:00:00.000000000","2023-10-01T00:00:00.000000000","2023-10-08T00:00:00.000000000","2023-10-15T00:00:00.000000000","2023-10-22T00:00:00.000000000","2023-10-29T00:00:00.000000000","2023-11-05T00:00:00.000000000","2023-11-12T00:00:00.000000000","2023-11-19T00:00:00.000000000","2023-11-26T00:00:00.000000000","2023-12-03T00:00:00.000000000","2023-12-10T00:00:00.000000000","2023-12-17T00:00:00.000000000","2023-12-24T00:00:00.000000000","2023-12-31T00:00:00.000000000","2024-01-07T00:00:00.000000000","2024-01-14T00:00:00.000000000","2024-01-21T00:00:00.000000000","2024-01-28T00:00:00.000000000","2024-02-04T00:00:00.000000000","2024-02-11T00:00:00.000000000","2024-02-18T00:00:00.000000000","2024-02-25T00:00:00.000000000","2024-03-03T00:00:00.000000000","2024-03-10T00:00:00.000000000","2024-03-17T00:00:00.000000000","2024-03-24T00:00:00.000000000","2024-03-31T00:00:00.000000000","2024-04-07T00:00:00.000000000","2024-04-14T00:00:00.000000000","2024-04-21T00:00:00.000000000","2024-04-28T00:00:00.000000000","2024-05-05T00:00:00.000000000","2024-05-12T00:00:00.000000000","2024-05-19T00:00:00.000000000","2024-05-26T00:00:00.000000000","2024-06-02T00:00:00.000000000","2024-06-09T00:00:00.000000000","2024-06-16T00:00:00.000000000","2024-06-23T00:00:00.000000000","2024-06-30T00:00:00.000000000","2024-07-07T00:00:00.000000000","2024-07-14T00:00:00.000000000","2024-07-21T00:00:00.000000000","2024-07-28T00:00:00.000000000","2024-08-04T00:00:00.000000000","2024-08-11T00:00:00.000000000","2024-08-18T00:00:00.000000000","2024-08-25T00:00:00.000000000","2024-09-01T00:00:00.000000000","2024-09-08T00:00:00.000000000","2024-09-15T00:00:00.000000000","2024-09-22T00:00:00.000000000","2024-09-29T00:00:00.000000000","2024-10-06T00:00:00.000000000","2024-10-13T00:00:00.000000000","2024-10-20T00:00:00.000000000","2024-10-27T00:00:00.000000000","2024-11-03T00:00:00.000000000","2024-11-10T00:00:00.000000000","2024-11-17T00:00:00.000000000","2024-11-24T00:00:00.000000000","2024-12-01T00:00:00.000000000","2024-12-08T00:00:00.000000000","2024-12-15T00:00:00.000000000","2024-12-22T00:00:00.000000000","2024-12-29T00:00:00.000000000","2025-01-05T00:00:00.000000000","2025-01-12T00:00:00.000000000","2025-01-19T00:00:00.000000000","2025-01-26T00:00:00.000000000","2025-02-02T00:00:00.000000000","2025-02-09T00:00:00.000000000","2025-02-16T00:00:00.000000000","2025-02-23T00:00:00.000000000","2025-03-02T00:00:00.000000000","2025-03-09T00:00:00.000000000","2025-03-16T00:00:00.000000000","2025-03-23T00:00:00.000000000","2025-03-30T00:00:00.000000000","2025-04-06T00:00:00.000000000","2025-04-13T00:00:00.000000000","2025-04-20T00:00:00.000000000","2025-04-27T00:00:00.000000000","2025-05-04T00:00:00.000000000","2025-05-11T00:00:00.000000000","2025-05-18T00:00:00.000000000","2025-05-25T00:00:00.000000000","2025-06-01T00:00:00.000000000","2025-06-08T00:00:00.000000000","2025-06-15T00:00:00.000000000","2025-06-22T00:00:00.000000000","2025-06-29T00:00:00.000000000","2025-07-06T00:00:00.000000000","2025-07-13T00:00:00.000000000","2025-07-20T00:00:00.000000000","2025-07-27T00:00:00.000000000","2025-08-03T00:00:00.000000000","2025-08-10T00:00:00.000000000","2025-08-17T00:00:00.000000000","2025-08-24T00:00:00.000000000","2025-08-31T00:00:00.000000000","2025-09-07T00:00:00.000000000","2025-09-14T00:00:00.000000000","2025-09-21T00:00:00.000000000","2025-09-28T00:00:00.000000000","2025-10-05T00:00:00.000000000","2025-10-12T00:00:00.000000000","2025-10-19T00:00:00.000000000","2025-10-26T00:00:00.000000000","2025-11-02T00:00:00.000000000","2025-11-09T00:00:00.000000000","2025-11-16T00:00:00.000000000","2025-11-23T00:00:00.000000000","2025-11-30T00:00:00.000000000","2025-12-07T00:00:00.000000000","2025-12-14T00:00:00.000000000","2025-12-21T00:00:00.000000000","2025-12-28T00:00:00.000000000","2026-01-04T00:00:00.000000000","2026-01-11T00:00:00.000000000","2026-01-18T00:00:00.000000000","2026-01-25T00:00:00.000000000","2026-02-01T00:00:00.000000000","2026-02-08T00:00:00.000000000","2026-02-15T00:00:00.000000000","2026-02-22T00:00:00.000000000","2026-03-01T00:00:00.000000000","2026-03-08T00:00:00.000000000","2026-03-15T00:00:00.000000000","2026-03-22T00:00:00.000000000","2026-03-29T00:00:00.000000000","2026-04-05T00:00:00.000000000","2026-04-12T00:00:00.000000000","2026-04-19T00:00:00.000000000","2026-04-26T00:00:00.000000000","2026-05-03T00:00:00.000000000","2026-05-10T00:00:00.000000000","2026-05-17T00:00:00.000000000","2026-05-24T00:00:00.000000000","2026-05-31T00:00:00.000000000","2026-06-07T00:00:00.000000000","2026-06-14T00:00:00.000000000","2026-06-21T00:00:00.000000000","2026-06-28T00:00:00.000000000","2026-07-05T00:00:00.000000000","2026-07-12T00:00:00.000000000","2026-07-19T00:00:00.000000000","2026-07-26T00:00:00.000000000","2026-08-02T00:00:00.000000000","2026-08-09T00:00:00.000000000","2026-08-16T00:00:00.000000000","2026-08-23T00:00:00.000000000","2026-08-30T00:00:00.000000000","2026-09-06T00:00:00.000000000","2026-09-13T00:00:00.000000000","2026-09-20T00:00:00.000000000","2026-09-27T00:00:00.000000000","2026-10-04T00:00:00.000000000","2026-10-11T00:00:00.000000000","2026-10-18T00:00:00.000000000","2026-10-25T00:00:00.000000000","2026-11-01T00:00:00.000000000","2026-11-08T00:00:00.000000000","2026-11-15T00:00:00.000000000","2026-11-22T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAEDWd2D9u27atTPjdP9u2bRseLNw\u002fJUmSZEXU0j8lSZJk\u002fIXPP9u2bRt0i8c\u002f27Zt2wcgxT8AAAAg353AP27bts1YecE\u002fbtu2bep5uD9u27Yt8YSzP27bts12PLE\u002f27ZtWzx7tD9u27adkB+yPwAAACDxcLI\u002fSZIkiaOvtT\u002fbtm1b8Q21PwAAAOBkXLM\u002fAAAAcH1csD\u002fbtm0bhWWuP27btm1VmLA\u002fbtu2zVFTrj9u27bt9AG4P5IkSbIpzb8\u002fJUmSlAHhwT+SJElSy1zIP5IkSeLdC9E\u002fkiRJ8oJHzT+SJElSZK3RP7dt2zagM9w\u002fkiRJcmk94j+3bds2mfXbP9u2bRsV898\u002fAAAAYAJq3T+SJEkyJCvbP7dt27aVm9I\u002fSZIkKSRc1z8lSZLEQ9\u002fWP7dt25YhTdM\u002fAAAA4GVFyj9JkiSp7RrHP5IkSXLYvsY\u002fJUmSJMTawz9u27Zt0rbCP27bti04xLo\u002ft23bll8Guz8lSZIkPnu7P9u2bfuxy7w\u002ft23b9hBUvT9u27ZNjZfAP5IkSZKA1cQ\u002fJUmSxKqCyT9JkiTJ4zDKP27btg3KPMw\u002fJUmSJI59zz9u27ZNXI7NPwAAAMB7S9A\u002fkiRJMgcMzT9JkiRJL\u002fDMPwAAAEBVjc4\u002f27Ztm5dJzj9u27btv+LOP0mSJKmNL80\u002fJUmShJuMzj\u002fbtm176PjNP9u2bRsNXs0\u002fJUmSZA4MzT\u002fbtm07AQjMP9u2bbsFmMU\u002f27ZteysKwz+3bdt2axfEPwAAAEB7uMM\u002f27ZtK4V5wT8AAAAA9dy\u002fP7dt25ag\u002fLo\u002fkiRJMnBAtz\u002fbtm27fK65P27bti3O17o\u002fbtu2zZ\u002f5tz9JkiRJgxS0P9u2bbtgsbQ\u002fkiRJcpmSsj9JkiSp7sqyPyVJkgSo6rQ\u002fAAAAAPIhtz+3bduW67a4PwAAAICw1bY\u002fkiRJUryNuD8lSZJk6rK5P27btk2op7c\u002fAAAAYAg1qj8lSZJEdXurPyVJkkSBd6o\u002fSZIk6bCBqj9u27bt4COpP0mSJGnH2KI\u002fJUmS5Cxqoz9u27aNjm6jP27btg3HvqU\u002f27ZtO6fbpj+3bdu2uaupP27btm00Bqs\u002fkiRJMokxrD\u002fbtm1756GtP27btq3CYqs\u002fAAAAILQaqT\u002fbtm3beWSoPwAAAEATZag\u002fSZIkSecEpz8lSZKEDK+lPyVJkmSY1qU\u002fkiRJ8j8Bpj9u27atb62kP9u2bduP36Q\u002ft23b9mAVpj9JkiTJrBOmPyVJkrRuBaE\u002fSZIkSU3Hnz8lSZJkl2ugP9u2bTvukKE\u002fSZIkic5voT9u27a97yCgP9u2bVvU5p0\u002fbtu2TZNWnT8AAACAeJqdP5IkSXI1LKA\u002fAAAAcGb4oD+SJEnSkkmiP5IkSfIyDKQ\u002fJUmSZOXYpD8lSZIk1mClPyVJksR+kKc\u002fbtu27aQDpT8lSZJEloehP0mSJEmJ36E\u002fAAAA4AIVoT\u002fbtm075RKhP9u2bfsVLqI\u002fkiRJco5zoz+3bdu2xI2iP7dt2zYETaE\u002f27ZtW9A6oD8AAACgu2GcP9u2bTufvJw\u002ft23b1gYvnD8lSZLk3n6dP9u2bXvgqJg\u002fAAAAYH3\u002flT+SJEnyvUGYPwAAAGBovpc\u002fAAAA4B1WmT8AAACAayeaP0mSJMmvoZg\u002fJUmSpO+7lz\u002fbtm37kgOXP9u2bTsqgJY\u002fJUmS5GrylD+3bduW5XWTPyVJkiQfdpM\u002f27ZtexZHlD8AAACApX2SPwAAAADlrpM\u002fkiRJcswslD8lSZLEx52TPyVJkuRnZJI\u002fbtu2bexPkz8AAACghNaUP27bto1nj5U\u002fkiRJ8lmelz+3bduWRg2YP9u2bbsXW5c\u002fAAAAQK4JmD8AAADAE\u002fSZPyVJkoS1LZk\u002fbtu2beXooD\u002fbtm3bb7ioP0mSJAn+u68\u002fbtu27SA9sT\u002fbtm07xAazP27btu0zqLg\u002fJUmSRNEDvz9u27ZtsDfNP0mSJIn+DdE\u002fAAAAgIwGzD9JkiRZnDnQP0mSJCm8x9M\u002fkiRJ0jhK2j8lSZKEF7rkPwAAAAD0Nuc\u002fAAAAAJzS5T9u27bNlbnqP0mSJOmggOc\u002fSZIkaUXa5j8lSZLEou3mP7dt27bS6+Y\u002ft23blknS5j9u27bNiBfmP27bts0xXec\u002f27Zte9rj7T+3bds2l+DqP7dt2xZPO+Y\u002fAAAAgHQz5z8lSZJE7NLqP27btj0\u002fSfA\u002fJUmSRNnj9D8lSZIkWXzzP27bth1nFfI\u002ft23b1qVD8D8lSZLkhuftP0mSJOlcy+0\u002fAAAAYFnd7D9u27ZtJ43tPyVJkrRSQ\u002fE\u002ft23bFlzv8T8lSZIEHlbzP5IkSTLlxvQ\u002fAAAAYCq69j8AAACgvqX4PyVJkkRK8PU\u002fbtu27UpF9j8AAADAKwv2P27btj1oUAFAAAAA4K8jDkCSJEnyWjQMQG7bto2DLQ9AAAAAQAN3D0Bu27ZtY+sOQCVJkoRSug1A27ZtG6aVDkC3bdv2B2gPQEmSJCndNg5At23blj61DkAlSZIks\u002fQTQG7bto1juhdAbtu2DSwDGkCSJEnSPEYfQJIkSXKTTR5AkiRJsnYqG0BJkiRpR7sZQG7btq0ThBpAAAAAAG37GUBJkiTp1t4YQLdt28aygBZASZIkCe7A5D+SJEkSk+zgP0mSJMkpPt0\u002fbtu2DXyC2T8lSZIECvnZPyVJkoTIpNk\u002fbtu2DduU1j8AAABgObzTP27btu0c\u002f9E\u002fkiRJUjwuzj9JkiRJcCvLP0mSJIkqu8o\u002fAAAAgLSFyz9JkiT52jPQP0mSJCkZgtI\u002f27Zt22WGzz+SJEkSVmvRPyVJkgQV29A\u002fJUmSBJjxzj+SJEmy9n\u002fMP7dt27ZoPso\u002fJUmSJO\u002ffyz8AAABguSPLP27bti2qw8U\u002fSZIkSZQCxj9JkiRJzkDCP27btv11bsA\u002fbtu2jbETvj8lSZJEYoa7P9u2bbv\u002fTrg\u002fAAAAIIrFtj+3bdvWw5+zP0mSJKnVkLQ\u002fkiRJkmkssz9u27aN9cSyP0mSJAnx+7E\u002fAAAAgJeTsj\u002fbtm1799OyP7dt23bkTLQ\u002fbtu2jYmIsz8lSZLkkuuwP9u2bXtEC64\u002ft23btt34pz\u002fbtm17PCmqP7dt2waChrA\u002fJUmS5ELpsD9u27a95SurP7dt2wYp+pA\u002fJUmS5A2ujD\u002fbtm07pQmJP5IkSfKmW4Y\u002fbtu2bfgWhj\u002fbtm2btyuGP7dt21ZeO4U\u002fAAAAACcQhT8AAAAAj2eFP7dt2zaVeoU\u002fAAAAIMsAgz+3bdv2+4SBP0mSJAkk73w\u002fkiRJMqTLjT\u002fbtm07\u002f+ibP27btl3NCYw\u002fbtu2jRcTnT+3bdvusXKjP7dt2\u002fZe6pY\u002fAAAACMINpj9JkiRFTluiP27btlXQZ6o\u002f27Ztu05opT9JkiRlAzKgP0mSJPnBg5U\u002fJUmS5Djwmj+3bdvWLMyRPwAAAMhoXpA\u002fJUmSJL96az8AAABgk6tpP7dt28aV+G8\u002fkiRJdrwWgj8AAACMDCWFP27bto0iJpU\u002fAAAAgOOoXT8AAADMxyuBP2ZmZkYao4o\u002f"},"type":"scatter"},{"line":{"color":"pink","dash":"dot","width":2.5},"mode":"lines","name":"Base","x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"v9KZ\u002fo5Ehz+ukOI9EA2HPyQTgdTUTYU\u002fbPPYk9OJgj+ucAiqXPaCPziA83DNMoI\u002fED9sTRQ7hT+MPgVEJEWFP7EMiDQQvIg\u002f3J2nm129gD+\u002fWGxYaSyEP41n10SEBYI\u002fhCvXwBEogj+3ey\u002fd9yuCP0vM2SVE2IA\u002fuz9SrglvfT9UqS0oeBZ+PyIngyfB6Hw\u002fPsdkwBnKgD9VO1Bj1NGAPzRT\u002fGxceYM\u002fscypa3mnej8C9KPSCvR\u002fPw=="},"type":"scatter"},{"line":{"color":"lime"},"mode":"lines","name":"Bear 68%","visible":true,"x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"Z+2uhVvKgT8JwW98oU6AP\u002faXXqiEeHw\u002f+ATWJ9ezdz+n9iDaliN3P+8IJDBoXXU\u002fC3lRjsK+dz\u002f7krH2bfJ2P0NZ\u002f8BLf3k\u002f7uVO+YY9cT\u002fetB4O6txzP\u002f83WNtbaXE\u002fp5qsZ+3kcD\u002fzWMSxV1pwP\u002fIA\u002fFztlm0\u002fnFCe29FsaT83TQLoMzRpP8vBKc66qGc\u002f5YaMOg1Vaj8H2x7cmbJpP1\u002fcCPIDhmw\u002fv\u002fAXWFXoYz9sW1wTkNJmPw=="},"type":"scatter"},{"line":{"color":"yellow"},"mode":"lines","name":"Bull 68%","visible":true,"x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"tgDQH8K2jj\u002fsX9Br8IuQP+luF+1ySJA\u002fK\u002frCxEvFjT\u002fgzjOddwyQP7QxZLavGJA\u002fIfQul+3bkz81iiYtJsCUP03Q\u002fcxEdpk\u002fDeE8mBdAkT9kvtqOze+VP774fDh6DJQ\u002fEY6ocLIklT+K5ylU0QuWPz0OstJHD5U\u002fRBX2\u002f7DIkj9LpSSAMPSTP6CWuwBpvpM\u002fjc+av7c2mD8OBsuqdxaZP6b557zArp4\u002fJxk\u002fNJZ3lD\u002fBM1rz6AKaPw=="},"type":"scatter"},{"line":{"color":"green"},"mode":"lines","name":"Bear 95%","visible":"legendonly","x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"icFv\u002fGylez8PtIllSKB3Pw4tcd4Vm3M\u002fXjd1rc5mbz8OOSuZF3BtP1iNnj7gSmo\u002ftdo4v2AKbD9mZ7OShklqP41jxuGKHmw\u002f4cnmG8X\u002fYj\u002fuMKEKLxdlP5718X\u002fxM2I\u002fgKsf\u002f+wgYT8IBUMYSSNgP6+AAWe9olw\u002fPc7\u002f2LlHWD8\u002ftghe6XxXP9Rw35RWpVU\u002fa1CCnCFMVz\u002fO2F\u002f\u002f1EZWP1dvY+iq7lc\u002fiiquKVj1UD8mqmPs28hSPw=="},"type":"scatter"},{"line":{"color":"orange"},"mode":"lines","name":"Bull 95%","visible":"legendonly","x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"cEPoN6NMlD8BzBz5DeSXP068LkEfJZk\u002foEwNkYtAmD+CYTizSbWbP3tnU6b2MJ0\u002fCJjT18suoz8Y\u002fa1kYwilP2t+L5p5d6s\u002fMtVmxrmhoj8uBoXRgT2pP+nO3b+1s6c\u002faDdBDLxnqj+7JAFi\u002fO+sP+XZKu8mrqw\u002fxfzXEDs+qj9M9rrAlj6tP6armfBpBq4\u002fO1BoN5i6sz9FCnOwvVi1P2Lmd0NeCrw\u002fPHBb2ZQWsj8iqkKc0dK4Pw=="},"type":"scatter"},{"line":{"color":"blue"},"mode":"lines","name":"Bear 99%","visible":"legendonly","x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"0au2ET5rdT\u002fjgYAybBlxP9QZebEYCWs\u002fk40+4HneZD+eOac7jdViP4881TlXT2A\u002fvYa3YL++YD8omlBlU4leP5CLF9Pmjl8\u002fnZFeTutOVT\u002fRe5WXheBWP5Qlal8WeVM\u002fceQ4PdbUUT\u002fvVcl2gWdQP0Cn\u002fGg0nUw\u002fVnM8xjT7Rz\u002fFwThf7rVGP3ljuwQtmUQ\u002fj3r34RuKRT\u002f8pXn0ST1EPyJeJjYEJkU\u002f3eE15BFcPj9Ybp7BDlVAPw=="},"type":"scatter"},{"line":{"color":"red"},"mode":"lines","name":"Bull 99%","visible":"legendonly","x":["2026-11-29T00:00:00.000000000","2026-12-06T00:00:00.000000000","2026-12-13T00:00:00.000000000","2026-12-20T00:00:00.000000000","2026-12-27T00:00:00.000000000","2027-01-03T00:00:00.000000000","2027-01-10T00:00:00.000000000","2027-01-17T00:00:00.000000000","2027-01-24T00:00:00.000000000","2027-01-31T00:00:00.000000000","2027-02-07T00:00:00.000000000","2027-02-14T00:00:00.000000000","2027-02-21T00:00:00.000000000","2027-02-28T00:00:00.000000000","2027-03-07T00:00:00.000000000","2027-03-14T00:00:00.000000000","2027-03-21T00:00:00.000000000","2027-03-28T00:00:00.000000000","2027-04-04T00:00:00.000000000","2027-04-11T00:00:00.000000000","2027-04-18T00:00:00.000000000","2027-04-25T00:00:00.000000000","2027-05-02T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"Q5pbSiB0mz\u002fZ6f5RqduhPx6AK7JkUaQ\u002fUa0MiXffpD8zoE9ZBo+pP9fNs3rxlKw\u002fhQwtH8pNtD\u002f0lY3B\u002fqS3PwUYtyPOtcA\u002fjh+rjuK0tj9+RNXkF7HAP9uLs3rXPcA\u002f0Z635YN1wz9UpBodjs3GPxyzRzvWw8c\u002f6i3MoxCGxj+acN5B\u002fNPKP2sIN9bQA80\u002fJF6RHj4M1T\u002fTkhUG60HYP2YirNMKtuE\u002fS0b5hJS81T97RTkTybzgPw=="},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"tickfont":{"size":14},"title":{"text":""},"tickformat":"%b %d, %Y","fixedrange":false,"showgrid":true,"gridcolor":"#1e293b"},"yaxis":{"anchor":"x","domain":[0.0,1.0],"type":"log","tickfont":{"size":14},"title":{"text":"Price (USD) - Log Scale"},"tickformat":"~s","tickvals":[0.001,0.005,0.01,0.02,0.05,0.1,0.2,0.5,1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,500000],"fixedrange":false,"showgrid":true,"gridcolor":"#1e293b","color":"#a0aab8"},"title":{"text":""},"font":{"size":14},"margin":{"l":60,"r":40,"t":20,"b":40},"legend":{"font":{"color":"white"},"orientation":"h","yanchor":"top","y":-0.1,"xanchor":"center","x":0.5},"showlegend":true,"height":650,"plot_bgcolor":"#0b0e14","paper_bgcolor":"#0b0e14","hovermode":"x unified"},                        {"displayModeBar": true, "scrollZoom": false, "responsive": true, "displaylogo": false}                    )                };            </script>        </div>
+                </div>
+
+                <div class="table-container">
+                    <h2 style="color: #ffffff; font-size: 1.2rem; margin-top: 0;">Raw Data Matrix (USD)</h2>
+                    <table border="1" class="dataframe data-table" id="forecastTable">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Date</th>
+      <th>Bear 99.7%</th>
+      <th>Bear 95%</th>
+      <th>Bear 68%</th>
+      <th>Base</th>
+      <th>Bull 68%</th>
+      <th>Bull 95%</th>
+      <th>Bull 99.7%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2026-11-29</td>
+      <td>$0.005229</td>
+      <td>$0.00675</td>
+      <td>$0.008687</td>
+      <td>$0.01136</td>
+      <td>$0.015</td>
+      <td>$0.01982</td>
+      <td>$0.02681</td>
+    </tr>
+    <tr>
+      <td>2026-12-06</td>
+      <td>$0.004175</td>
+      <td>$0.005768</td>
+      <td>$0.007962</td>
+      <td>$0.01126</td>
+      <td>$0.01616</td>
+      <td>$0.02333</td>
+      <td>$0.03488</td>
+    </tr>
+    <tr>
+      <td>2026-12-13</td>
+      <td>$0.0033</td>
+      <td>$0.004787</td>
+      <td>$0.006951</td>
+      <td>$0.0104</td>
+      <td>$0.0159</td>
+      <td>$0.02456</td>
+      <td>$0.03968</td>
+    </tr>
+    <tr>
+      <td>2026-12-20</td>
+      <td>$0.002547</td>
+      <td>$0.003833</td>
+      <td>$0.005787</td>
+      <td>$0.009052</td>
+      <td>$0.01454</td>
+      <td>$0.02368</td>
+      <td>$0.04077</td>
+    </tr>
+    <tr>
+      <td>2026-12-27</td>
+      <td>$0.002299</td>
+      <td>$0.003593</td>
+      <td>$0.005649</td>
+      <td>$0.009259</td>
+      <td>$0.01567</td>
+      <td>$0.02706</td>
+      <td>$0.04992</td>
+    </tr>
+    <tr>
+      <td>2027-01-03</td>
+      <td>$0.001991</td>
+      <td>$0.00321</td>
+      <td>$0.005216</td>
+      <td>$0.008886</td>
+      <td>$0.01572</td>
+      <td>$0.02851</td>
+      <td>$0.05582</td>
+    </tr>
+    <tr>
+      <td>2027-01-10</td>
+      <td>$0.002044</td>
+      <td>$0.003423</td>
+      <td>$0.005797</td>
+      <td>$0.01037</td>
+      <td>$0.01939</td>
+      <td>$0.03747</td>
+      <td>$0.07931</td>
+    </tr>
+    <tr>
+      <td>2027-01-17</td>
+      <td>$0.001864</td>
+      <td>$0.003209</td>
+      <td>$0.005602</td>
+      <td>$0.01039</td>
+      <td>$0.02026</td>
+      <td>$0.04108</td>
+      <td>$0.09236</td>
+    </tr>
+    <tr>
+      <td>2027-01-24</td>
+      <td>$0.001926</td>
+      <td>$0.003433</td>
+      <td>$0.006225</td>
+      <td>$0.01208</td>
+      <td>$0.02487</td>
+      <td>$0.05365</td>
+      <td>$0.1305</td>
+    </tr>
+    <tr>
+      <td>2027-01-31</td>
+      <td>$0.001301</td>
+      <td>$0.002319</td>
+      <td>$0.004209</td>
+      <td>$0.008174</td>
+      <td>$0.01685</td>
+      <td>$0.03639</td>
+      <td>$0.0887</td>
+    </tr>
+    <tr>
+      <td>2027-02-07</td>
+      <td>$0.001396</td>
+      <td>$0.002575</td>
+      <td>$0.004849</td>
+      <td>$0.00985</td>
+      <td>$0.02142</td>
+      <td>$0.0493</td>
+      <td>$0.1304</td>
+    </tr>
+    <tr>
+      <td>2027-02-14</td>
+      <td>$0.001189</td>
+      <td>$0.002222</td>
+      <td>$0.004251</td>
+      <td>$0.0088</td>
+      <td>$0.01958</td>
+      <td>$0.04629</td>
+      <td>$0.1269</td>
+    </tr>
+    <tr>
+      <td>2027-02-21</td>
+      <td>$0.001088</td>
+      <td>$0.002091</td>
+      <td>$0.004125</td>
+      <td>$0.008865</td>
+      <td>$0.02065</td>
+      <td>$0.05157</td>
+      <td>$0.152</td>
+    </tr>
+    <tr>
+      <td>2027-02-28</td>
+      <td>$0.001001</td>
+      <td>$0.00197</td>
+      <td>$0.003992</td>
+      <td>$0.008873</td>
+      <td>$0.02153</td>
+      <td>$0.05652</td>
+      <td>$0.1781</td>
+    </tr>
+    <tr>
+      <td>2027-03-07</td>
+      <td>$0.0008732</td>
+      <td>$0.001748</td>
+      <td>$0.003612</td>
+      <td>$0.008225</td>
+      <td>$0.02057</td>
+      <td>$0.05602</td>
+      <td>$0.1857</td>
+    </tr>
+    <tr>
+      <td>2027-03-14</td>
+      <td>$0.0007319</td>
+      <td>$0.001482</td>
+      <td>$0.003104</td>
+      <td>$0.007186</td>
+      <td>$0.01834</td>
+      <td>$0.05126</td>
+      <td>$0.176</td>
+    </tr>
+    <tr>
+      <td>2027-03-21</td>
+      <td>$0.0006931</td>
+      <td>$0.001434</td>
+      <td>$0.003077</td>
+      <td>$0.007346</td>
+      <td>$0.01949</td>
+      <td>$0.05712</td>
+      <td>$0.2096</td>
+    </tr>
+    <tr>
+      <td>2027-03-28</td>
+      <td>$0.0006286</td>
+      <td>$0.001321</td>
+      <td>$0.002888</td>
+      <td>$0.007058</td>
+      <td>$0.01928</td>
+      <td>$0.05864</td>
+      <td>$0.2267</td>
+    </tr>
+    <tr>
+      <td>2027-04-04</td>
+      <td>$0.0006573</td>
+      <td>$0.001422</td>
+      <td>$0.003214</td>
+      <td>$0.008198</td>
+      <td>$0.02365</td>
+      <td>$0.07707</td>
+      <td>$0.3289</td>
+    </tr>
+    <tr>
+      <td>2027-04-11</td>
+      <td>$0.0006177</td>
+      <td>$0.00136</td>
+      <td>$0.003137</td>
+      <td>$0.008213</td>
+      <td>$0.0245</td>
+      <td>$0.08339</td>
+      <td>$0.379</td>
+    </tr>
+    <tr>
+      <td>2027-04-18</td>
+      <td>$0.0006454</td>
+      <td>$0.001461</td>
+      <td>$0.003482</td>
+      <td>$0.009509</td>
+      <td>$0.02996</td>
+      <td>$0.1095</td>
+      <td>$0.5535</td>
+    </tr>
+    <tr>
+      <td>2027-04-25</td>
+      <td>$0.0004633</td>
+      <td>$0.001035</td>
+      <td>$0.00243</td>
+      <td>$0.006507</td>
+      <td>$0.01999</td>
+      <td>$0.07066</td>
+      <td>$0.3396</td>
+    </tr>
+    <tr>
+      <td>2027-05-02</td>
+      <td>$0.0004984</td>
+      <td>$0.001147</td>
+      <td>$0.002786</td>
+      <td>$0.007801</td>
+      <td>$0.0254</td>
+      <td>$0.09697</td>
+      <td>$0.523</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+
+                <div class="text-card">
+                    <h2>SARIMAX Forecasting Methodology</h2>
+                    <p>This analysis provides a projection of <strong>OM's valuation against the US Dollar (USD)</strong> using a Seasonal ARIMA model combined with a Box-Cox transformation to normalize historical volatility.</p>
+                    <ul style="padding-left: 20px;">
+                        <li><strong><span style="color:lime">Bear Case:</span></strong> The lower bound of the confidence interval, representing a pessimistic rotation out of the asset.</li>
+                        <li><strong><span style="color:pink">Base Case:</span></strong> The mathematical mean trajectory projected by the algorithm.</li>
+                        <li><strong><span style="color:yellow">Bull Case:</span></strong> The upper bound of the confidence interval, representing an optimistic outperformance.</li>
+                        <li><strong><span style="color:#60a5fa">Poly Channel (±2σ):</span></strong> A quadratic log-price regression envelope spanning history and the full 23-week forecast horizon. Only the two-standard-deviation channel is shown.</li>
+                    </ul>
+                    <p>The confidence levels used are 68%, 95%, and 99.7%. This acts as a mathematical cone illustrating the probability that the actual price will fall within the Bear and Bull bounds over the next 23 weeks.</p>
+                    <p style="color: #64748b; font-size: 0.8rem; margin-top: 20px;">NOT FINANCIAL ADVICE. FOR EDUCATIONAL PURPOSES ONLY.</p>
+                </div>
+            </div>
+        <!-- cw:seo-footer -->
+<style>
+.cw-seo-footer{max-width:1400px;margin:32px auto 0;padding:24px;border-top:1px solid #1e293b;
+background:#0b0e14;color:#94a3b8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+font-size:14px;line-height:1.6;border-radius:12px;}
+.cw-seo-footer h2{font-size:15px;color:#e2e8f0;margin:0 0 8px;font-weight:600;}
+.cw-seo-footer a{color:#38bdf8;text-decoration:none;}
+.cw-seo-footer a:hover{text-decoration:underline;}
+.cw-seo-footer ul{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-wrap:wrap;gap:8px 18px;}
+.cw-seo-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid #1e293b;}
+.cw-seo-cta a{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);
+padding:10px 16px;border-radius:8px;font-weight:600;}
+.cw-seo-footer .cw-app-card{width:auto;margin:18px 0 0;}
+</style>
+<nav class="cw-seo-footer" aria-label="More CryptoWeeklies research">
+<h2>More Mantra research</h2>
+<ul><li><a href="om-usd_price_with_risk">20-Week SMA Risk</a></li><li><a href="OM_Summary_Risk_Analysis">200-Week Moving Average Risk</a></li><li><a href="OM_lin_reg_price_with_risk">DCA &amp; Regression Fair Value</a></li><li><a href="OM_BTC_Price_Forecast_And_Analysis">Price Forecast — BTC pair</a></li><li><a href="OM_Price_TWAP_Gravity_Analysis">TWAP / Gravity Risk — Price Twap Gravity Analysis</a></li><li><a href="OM_Price_TWAP_Risk_Analysis">TWAP / Gravity Risk — Price Twap Risk Analysis</a></li></ul>
+<h2>Related assets</h2>
+<ul><li><a href="reports/OSMO">Osmosis</a></li><li><a href="reports/PENDLE">Pendle</a></li><li><a href="reports/POL28321">Polygon</a></li><li><a href="reports/QNT">Quant</a></li></ul>
+<p>New here? <a href="price-forecast-explained">What is Price Forecast?</a> — plain-English explainer, no jargon.</p>
+<div class="cw-seo-cta">
+<a href="https://cryptoweeklies.com/reports/">See all 168 assets →</a>
+<a href="https://www.youtube.com/@cryptoweeklies" target="_blank" rel="noopener">Watch the daily breakdown →</a>
+</div>
+<!-- cw:app-card -->
+<style>
+.cw-app-card{box-sizing:border-box;width:auto;max-width:1400px;margin:24px auto;padding:16px 20px;
+display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;
+background:#0b0e14;border:1px solid #1e293b;border-radius:12px;text-align:left;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+.cw-app-card.cw-app-inset{width:min(1400px,calc(100% - 32px));}
+.cw-app-card *{box-sizing:border-box;}
+.cw-app-card .cw-app-copy{flex:1 1 300px;min-width:0;}
+.cw-app-card p{margin:0;padding:0;}
+.cw-app-card p.cw-app-kicker{font-size:12px;line-height:1.4;font-weight:700;letter-spacing:.6px;
+text-transform:uppercase;color:#38bdf8;}
+.cw-app-card p.cw-app-line{margin-top:4px;font-size:15px;line-height:1.5;font-weight:500;color:#e2e8f0;}
+.cw-app-card .cw-app-stores{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;}
+.cw-app-card a.cw-app-ios,.cw-app-card a.cw-app-play{display:inline-flex;align-items:center;gap:9px;
+min-height:44px;padding:8px 16px;border-radius:8px;font-size:15px;line-height:1;font-weight:700;
+text-decoration:none;white-space:nowrap;}
+.cw-app-card a.cw-app-ios{background:#000;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);}
+.cw-app-card a.cw-app-play{background:#3DDC84;color:#03050a;}
+.cw-app-card a.cw-app-ios:hover,.cw-app-card a.cw-app-play:hover{filter:brightness(1.12);text-decoration:none;}
+.cw-app-card a.cw-app-ios:hover{color:#fff;}
+.cw-app-card a.cw-app-play:hover{color:#03050a;}
+.cw-app-card a svg{width:20px;height:20px;flex:0 0 auto;}
+.cw-app-card a.cw-app-android{display:inline-block;padding:8px 0;font-size:13px;line-height:1.4;
+color:#94a3b8;text-decoration:underline;text-underline-offset:3px;}
+.cw-app-card a.cw-app-android:hover{color:#e2e8f0;}
+</style>
+<aside class="cw-app-card" aria-label="The CryptoWeeklies iPhone app">
+<div class="cw-app-copy">
+<p class="cw-app-kicker">In the free iPhone app</p>
+<p class="cw-app-line">The Charts tab draws TWAP, Gravity Risk, SMA, phase and forecast charts for 170+ assets, and Alerts can notify you when a reading you pick changes.</p>
+</div>
+<div class="cw-app-stores">
+<a class="cw-app-ios" href="https://apps.apple.com/us/app/cryptoweeklies-risk-alerts/id6815463434" target="_blank" rel="noopener" aria-label="Download CryptoWeeklies for iPhone on the App Store"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="1.5" width="12" height="21" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 4.4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="18.9" r="1.1" fill="currentColor"/></svg>App Store</a>
+<a class="cw-app-play" href="https://play.google.com/store/apps/details?id=com.cryptoweeklies.app" target="_blank" rel="noopener" aria-label="Get CryptoWeeklies for Android on Google Play"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#00A0FF" d="M1.6 1.4a2 2 0 0 0-.47 1.4v18.4c0 .58.17 1.05.5 1.4l.06.06L12 12.12v-.24z"/><path fill="#FFC107" d="M15.5 8.45 3.34 1.55C2.62 1.15 1.99 1.2 1.6 1.6L12 12z"/><path fill="#00E676" d="m15.4 15.6-3.4-3.48v-.24L15.4 8.4l.08.05 4.1 2.33c1.17.66 1.17 1.75 0 2.42l-4.1 2.33z"/><path fill="#FF3A44" d="M15.5 15.55 12 12 1.6 22.4c.39.4 1.02.45 1.74.05z"/></svg>Google Play</a>
+</div>
+</aside>
+<script>
+(function () {
+  try {
+    if (window.self !== window.top ||
+        String(navigator.userAgent || '').indexOf('CryptoWeekliesApp') !== -1) {
+      var card = document.currentScript && document.currentScript.previousElementSibling;
+      if (card) { card.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the card visible */ }
+})();
+</script>
+<!-- /cw:app-card -->
+</nav>
+<script>
+/* The homepage embeds this exact file in #chart-iframe. The block above is in
+   the served markup for crawlers; inside a frame it is chrome the reader did
+   not ask for, so drop it there and only there. */
+(function () {
+  try {
+    if (window.self !== window.top) {
+      var nav = document.currentScript && document.currentScript.previousElementSibling;
+      while (nav && nav.className !== 'cw-seo-footer') { nav = nav.previousElementSibling; }
+      if (nav) { nav.style.display = 'none'; }
+    }
+  } catch (err) { /* cross-origin parent: leave the block visible */ }
+})();
+</script>
+<!-- /cw:seo-footer -->
+</body>
+        </html>
+        
